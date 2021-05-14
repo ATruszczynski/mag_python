@@ -16,10 +16,11 @@ class ActFun:
 class ReLu(ActFun):
     def compute(self, arg: np.ndarray) -> np.ndarray:
         arg = arg.copy()
-        return np.max(0, arg)
+        return np.maximum(0, arg)
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
         result = arg.copy()
+        result[arg > 0] = 1
         result[arg <= 0] = 0
         return result
 
@@ -98,6 +99,11 @@ class QuadDiff(LossFun):
 
     def to_string(self):
         return "QD"
+
+
+# TODO cross entropy
+# TODO softmax
+# TODO tanh? other acts and losses
 
 
 

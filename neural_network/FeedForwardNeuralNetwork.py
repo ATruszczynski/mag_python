@@ -3,6 +3,7 @@ from math import sqrt, ceil
 
 from ann_point.AnnPoint import AnnPoint
 from ann_point.Functions import *
+from utility.Utility import *
 
 class FeedForwardNeuralNetwork:
     def __init__(self, inputSize: int, outputSize: int, hiddenLayerCount: int, neuronCount: int,
@@ -10,20 +11,20 @@ class FeedForwardNeuralNetwork:
         self.neuronCounts = [inputSize]
 
         for i in range(0, hiddenLayerCount):
-            self.neuronCounts.append(neuronCount)
+            self.neuronCounts.append(ceil(2 ** neuronCount))
 
         self.neuronCounts.append(outputSize)
 
-        self.actFun = actFun
-        self.aggrFun = aggrFun
+        # self.actFun = actFun
+        # self.aggrFun = aggrFun
         self.lossFun = lossFun
-        self.learningRate = learningRate
-        self.momCoeffL = momCoeffL
+        self.learningRate = 10 ** learningRate
+        self.momCoeffL = 10 ** momCoeffL
 
         random.seed(seed) # TODO check if this works correctly in multithread
 
         self.layerCount = hiddenLayerCount + 2
-        self.actFuns = []
+        self.actFuns = [None]
         for i in range(1, self.layerCount):
             if i is not self.layerCount - 1:
                 self.actFuns.append(actFun.copy())
@@ -68,7 +69,7 @@ class FeedForwardNeuralNetwork:
         return self.act[self.layerCount - 1].copy()
 
     def train(self, inputs: [np.ndarray], outputs: [np.ndarray], epochs: int, batchSize: int):
-        batches = self.divideIntoBatches(inputs, outputs, batchSize)
+        batches = divideIntoBatches(inputs, outputs, batchSize)
 
         for e in range(0, epochs):
             for b in range(0, len(batches)):
@@ -88,14 +89,21 @@ class FeedForwardNeuralNetwork:
                             net_result = self.run(net_input)
                             act_grad[l] = self.lossFun.computeDer(net_result, net_output)
                         else:
-                            act_grad[l] = np.dot(bias_grad[l + 1].T, self.weights[l + 1])
+                            act_grad[l] = np.dot(bias_grad[l + 1].T, self.weights[l + 1]).T
 
                         bias_grad[l] = np.multiply(self.actFuns[l].computeDer(self.inp[l]), act_grad[l])
                         weight_grad[l] = np.dot(bias_grad[l], self.act[l - 1].T)
 
                     for i in range(1, len(weight_grad)):
                         weight_change[i] += weight_grad[i]
-                        biases_change[i] += biases_change[i]
+                        biases_change[i] += bias_grad[i]
+
+                batch_count = len(batches[b])
+
+                for ind in range(1, len(weight_change)):
+                    weight_change[ind] /= batch_count
+                    biases_change[ind] /= batch_count
+
 
                 weight_step = self.get_empty_weights()
                 bias_step = self.get_empty_biases()
@@ -113,21 +121,54 @@ class FeedForwardNeuralNetwork:
                     self.weights[i] -= weight_step[i]
                     self.biases[i] -= bias_step[i]
 
+    def test(self, test_input: [np.ndarray], test_output: [np.ndarray]) -> [float, float, float, np.ndarray]:
+        out_size = self.neuronCounts[len(self.neuronCounts) - 1]
+        confusion_matrix = np.zeros((out_size, out_size))
+
+        for i in range(len(test_output)):
+            net_result = self.run(test_input[i])
+            pred_class = np.argmax(net_result)
+            corr_class = np.argmax(test_output[i])
+            confusion_matrix[corr_class, pred_class] += 1
+
+        tot_sum = np.sum(confusion_matrix)
+        diag_sum = np.sum(np.diag(confusion_matrix))
+
+        accuracy = diag_sum / tot_sum
+
+        return [accuracy, self.average_precision(confusion_matrix), self.average_recall(confusion_matrix), confusion_matrix]
+
+    def average_precision(self, conf_matrix):
+        row_sums = np.sum(conf_matrix, axis=1)
+        diag = np.diag(conf_matrix)
+
+        class_prec = np.zeros(diag.shape)
+
+        for i in range(len(class_prec)):
+            if row_sums[i] > 0:
+                class_prec[i] = diag[i] / row_sums[i]
+            else:
+                class_prec[i] = 0
+
+        return np.average(class_prec)
+
+    def average_recall(self, conf_matrix):
+        col_sums = np.sum(conf_matrix, axis=0)
+        diag = np.diag(conf_matrix)
+
+        class_recall = np.zeros(diag.shape)
+
+        for i in range(len(class_recall)):
+            if col_sums[i] > 0:
+                class_recall[i] = diag[i] / col_sums[i]
+            else:
+                class_recall[i] = 0
+
+        return np.average(class_recall)
 
 
-    def divideIntoBatches(self, inputs: [np.ndarray], outputs: [np.ndarray], batchSize: int):
-        count = len(inputs)
-        batchCount = ceil(count/batchSize)
 
-        batches = []
 
-        for i in range(0, batchCount):
-            batch = []
-            for j in range(i * batchSize, min((i + 1) * batchSize, count)):
-                batch.append((inputs[i], outputs[i]))
-            batches.append(batch)
-
-        return batches
 
     def get_empty_weights(self):
         result = [np.empty((0, 0))]
@@ -151,11 +192,11 @@ class FeedForwardNeuralNetwork:
         return result
 
 
-def network_from_point(point: AnnPoint):
+def network_from_point(point: AnnPoint, seed: int):
     return FeedForwardNeuralNetwork \
         (inputSize=point.inputSize, outputSize=point.outputSize, hiddenLayerCount=point.hiddenLayerCount,
          neuronCount=point.neuronCount, actFun=point.actFun.copy(), aggrFun=point.aggrFun.copy(),
-         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeffL=point.momCoeff)
+         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeffL=point.momCoeff, seed=seed)
 
 
 

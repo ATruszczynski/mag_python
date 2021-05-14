@@ -1,27 +1,57 @@
+from math import ceil
+from statistics import mean
+
 from ann_point.AnnPoint import *
 from ann_point.HyperparameterRange import *
+import multiprocessing as mp
+from neural_network.FeedForwardNeuralNetwork import *
 import random
+from sklearn.linear_model import LinearRegression
 
 from utility.Utility import *
 
 
 class EvolvingClassifier:
-    def __init__(self, hrange: HyperparameterRange):
-        self.hrange = hrange
+    def __init__(self, hrange: HyperparameterRange = None):
+        if hrange is None:
+            self.hrange = get_default_hrange()
+        else:
+            self.hrange = hrange
+
         self.population = []
-        self.fractions = []
+        self.fractions = [0.75, 0.5, 0.25]
         self.pop_size = -1
         self.pc = -1
         self.pm = -1
         self.tournament_size = 2
+        self.trainInputs = []
+        self.trainOutputs = []
+        self.testInputs = []
+        self.testOutputs = []
+        self.learningIts = 5
+        self.batchSize = 25
 
-    def prepare(self, popSize: int, pc: float, pm: float, tournament_size: int, seed: int):
+    def prepare(self, popSize:int, startPopSize: int, pc: float, pm: float, tournament_size: int,
+                nn_data: ([np.ndarray], [np.ndarray], [np.ndarray], [np.ndarray]), seed: int):
         random.seed(seed)
+        self.pop_size = popSize
+        self.pc = pc
+        self.pm = pm
+        self.tournament_size = tournament_size
+        self.trainInputs = nn_data[0]
+        self.trainOutputs = nn_data[1]
+        self.testInputs = nn_data[2]
+        self.testOutputs = nn_data[3]
+        input_size = self.testInputs[0].shape[0]
+        output_size = self.testOutputs[0].shape[0]
+        self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size)
 
-    def run(self, iterations: int) -> AnnPoint:
+    def run(self, iterations: int, power: int = 1) -> AnnPoint:
+        pool = mp.Pool(power)
 
         for i in range(iterations):
-            eval_pop = self.calculate_fitnesses(self.population)
+            print(f"desu - {i + 1}")
+            eval_pop = self.calculate_fitnesses(pool, self.population)
 
             crossed = []
 
@@ -43,15 +73,17 @@ class EvolvingClassifier:
 
             self.population = new_pop
 
-        eval_pop = self.calculate_fitnesses(self.population)
+        eval_pop = self.calculate_fitnesses(pool, self.population)
+        pool.close()
+
         eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
 
-        return eval_pop_sorted[0]
+        return eval_pop_sorted[0][0]
 
-    def select(self, eval_pop: [(AnnPoint, float)]):
+    def select(self, eval_pop: [[AnnPoint, float]]):
         chosen = choose_without_repetition(options=eval_pop, count=self.tournament_size)
         chosen_sorted = sorted(chosen, key=lambda x: x[1], reverse=True)
-        return chosen_sorted[0]
+        return chosen_sorted[0][0]
 
     def crossover(self, pointA: AnnPoint, pointB: AnnPoint) -> [AnnPoint]:
         pointA = pointA.copy()
@@ -99,6 +131,8 @@ class EvolvingClassifier:
             pointA.momCoeff = pointB.momCoeff
             pointB.momCoeff = tmp
 
+        return [pointA, pointB]
+
 
 
     def mutate(self, point: AnnPoint) -> AnnPoint:
@@ -128,21 +162,73 @@ class EvolvingClassifier:
         if mr < self.pm:
             point.learningRate = random.uniform(self.hrange.learningRateMin, self.hrange.learningRateMax)
 
+        # TODO radzenie sobie z błedami w obliczeniach
         mr = random.random()
         if mr < self.pm:
             point.momCoeff = random.uniform(self.hrange.momentumCoeffMin, self.hrange.momentumCoeffMax)
 
         return point
 
-    def calculate_fitnesses(self, points: [AnnPoint]) -> [(AnnPoint, float)]:
-        touches = [0] * len(points)
+    def calculate_fitnesses(self, pool: mp.Pool, points: [AnnPoint]) -> [[AnnPoint, float]]:
+        count = len(points)
+
+        touches = [0] * count
 
         fracs = [1]
-        fracs.append(self.fractions)
+        fracs.extend(self.fractions)
 
-        pass
+        estimates = [[point, 0] for point in points]
 
+        for f in range(len(fracs)):
+            frac = fracs[f]
 
+            estimates = sorted(estimates, key=lambda x: x[1], reverse=True)
+            comp_count = ceil(frac * count)
+            to_compute = [est[0] for est in estimates[0:comp_count]]
+            seeds = [random.randint(0, 1000) for i in range(len(to_compute))]
+
+            # new_fitnesses = [self.calculate_fitness(to_compute[i], seeds[i])for i in range(2, len(to_compute))]
+
+            estimating_async_results = [pool.apply_async(func=self.calculate_fitness, args=(to_compute[i], seeds[i])) for i in range(len(to_compute))]
+            [estimation_result.wait() for estimation_result in estimating_async_results]
+            new_fitnesses = [result.get() for result in estimating_async_results]
+
+            ori = 1
+
+            for i in range(comp_count):
+                new_fit = new_fitnesses[i]
+                curr_est = estimates[i][1]
+                touch = touches[i]
+
+                curr_sum = curr_est * touch
+                new_sum = curr_sum + new_fit
+                new_est = new_sum / (touch + 1)
+
+                estimates[i][1] = new_est
+                touches[i] += 1
+
+        return estimates
+
+    def calculate_fitness(self, point: AnnPoint, seed: int):
+        network = network_from_point(point, seed)
+
+        results = []
+
+        for i in range(self.learningIts):
+            network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1, batchSize=self.batchSize)
+            test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
+            result = mean(test_results[0:3])
+            results.append(result)
+
+        y = np.array(results)
+        x = np.array(list(range(0, self.learningIts)))
+
+        # x = x.reshape((-1, 1))
+        # y = y.reshape((-1, 1))
+        #
+        # reg = LinearRegression().fit(x, y)
+
+        return results[-1]
 
 
 
