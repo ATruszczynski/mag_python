@@ -24,11 +24,12 @@ if __name__ == '__main__':
     print(y)
 
     ec = EvolvingClassifier()
-    ec.hrange.neuronCountMax = 6
+    ec.hrange.neuronCountMax = 10
+    ec.hrange.batchSizeMin = -6
     ec.prepare(20, 20, 0.8, 0.02, 2, (X, y, X, y), 1001)
     npoint = ec.run(10, 12)
     network = network_from_point(npoint, 1001)
-    network.train(X, y, 20, 25)
+    network.train(X, y, 20)
     print(npoint.to_string())
     tests = network.test(X, y)
     print(network.test(X, y))

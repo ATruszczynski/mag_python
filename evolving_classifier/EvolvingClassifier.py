@@ -142,6 +142,12 @@ class EvolvingClassifier:
             pointA.momCoeff = pointB.momCoeff
             pointB.momCoeff = tmp
 
+        sr = random.random()
+        if sr < 0.5:
+            tmp = pointA.batchSize
+            pointA.batchSize = pointB.batchSize
+            pointB.batchSize = tmp
+
         return [pointA, pointB]
 
 
@@ -178,6 +184,10 @@ class EvolvingClassifier:
         if mr < self.pm:
             point.momCoeff = random.uniform(self.hrange.momentumCoeffMin, self.hrange.momentumCoeffMax)
 
+        mr = random.random()
+        if mr < self.pm:
+            point.batchSize = random.uniform(self.hrange.batchSizeMin, self.hrange.batchSizeMax)
+
         return point
 
     def calculate_fitnesses(self, pool: mp.Pool, points: [AnnPoint]) -> [[AnnPoint, float]]:
@@ -195,7 +205,7 @@ class EvolvingClassifier:
             to_compute = [est[0] for est in estimates[0:comp_count]]
             seeds = [random.randint(0, 1000) for i in range(len(to_compute))]
 
-            # new_fitnesses = [self.calculate_fitness(to_compute[i], seeds[i])for i in range(2, len(to_compute))]
+            # new_fitnesses = [self.calculate_fitness(to_compute[i], seeds[i])for i in range(len(to_compute))]
 
             estimating_async_results = [pool.apply_async(func=self.calculate_fitness, args=(to_compute[i], seeds[i])) for i in range(len(to_compute))]
             [estimation_result.wait() for estimation_result in estimating_async_results]
@@ -223,7 +233,7 @@ class EvolvingClassifier:
         results = []
 
         for i in range(self.learningIts):
-            network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1, batchSize=self.batchSize)
+            network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
             test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
             result = mean(test_results[0:3])
             results.append(result)

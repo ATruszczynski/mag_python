@@ -7,7 +7,8 @@ from utility.Utility import *
 
 class FeedForwardNeuralNetwork:
     def __init__(self, inputSize: int, outputSize: int, hiddenLayerCount: int, neuronCount: int,
-                 actFun: ActFun, aggrFun: ActFun, lossFun: LossFun, learningRate: float, momCoeffL: float, seed: int):
+                 actFun: ActFun, aggrFun: ActFun, lossFun: LossFun, learningRate: float, momCoeffL: float,
+                 batchSize: float, seed: int):
         self.neuronCounts = [inputSize]
 
         for i in range(0, hiddenLayerCount):
@@ -20,6 +21,7 @@ class FeedForwardNeuralNetwork:
         self.lossFun = lossFun
         self.learningRate = 10 ** learningRate
         self.momCoeffL = 10 ** momCoeffL
+        self.batchSize = 2 ** batchSize
 
         random.seed(seed) # TODO check if this works correctly in multithread
 
@@ -68,7 +70,8 @@ class FeedForwardNeuralNetwork:
 
         return self.act[self.layerCount - 1].copy()
 
-    def train(self, inputs: [np.ndarray], outputs: [np.ndarray], epochs: int, batchSize: int):
+    def train(self, inputs: [np.ndarray], outputs: [np.ndarray], epochs: int):
+        batchSize = ceil(len(outputs) * self.batchSize)
         batches = divideIntoBatches(inputs, outputs, batchSize)
 
         for e in range(0, epochs):
@@ -196,7 +199,8 @@ def network_from_point(point: AnnPoint, seed: int):
     return FeedForwardNeuralNetwork \
         (inputSize=point.inputSize, outputSize=point.outputSize, hiddenLayerCount=point.hiddenLayerCount,
          neuronCount=point.neuronCount, actFun=point.actFun.copy(), aggrFun=point.aggrFun.copy(),
-         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeffL=point.momCoeff, seed=seed)
+         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeffL=point.momCoeff,
+         batchSize=point.batchSize, seed=seed)
 
 
 

@@ -39,6 +39,7 @@ class EC_supervisor():
         self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
         self.desc_string += f"{details_id} lr {hrange.learningRateMin} - {hrange.learningRateMax}\n"
         self.desc_string += f"{details_id} mc {hrange.momentumCoeffMin} - {hrange.momentumCoeffMax}\n"
+        self.desc_string += f"{details_id} bs {hrange.batchSizeMin} - {hrange.batchSizeMax}\n"
 
 
     def start(self, iterations: int):

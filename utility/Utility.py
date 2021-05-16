@@ -77,14 +77,15 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         loss_fun = hrange.lossFunSet[random.randint(0, len(hrange.lossFunSet) - 1)]
         learning_rate = random.uniform(hrange.learningRateMin, hrange.learningRateMax)
         mom_coeff = random.uniform(hrange.momentumCoeffMin, hrange.momentumCoeffMax)
+        batch_size = random.uniform(hrange.batchSizeMin, hrange.batchSizeMax)
 
         result.append(AnnPoint(inputSize=input_size, outputSize=output_size, hiddenLayerCount=layer_count, neuronCount=neuron_count,
-                               actFun=act_fun, aggrFun=aggr_fun, lossFun=loss_fun, learningRate=learning_rate, momCoeff=mom_coeff))
+                               actFun=act_fun, aggrFun=aggr_fun, lossFun=loss_fun, learningRate=learning_rate, momCoeff=mom_coeff, batchSize=batch_size))
 
     return result
 
 def get_default_hrange():
-    hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid()], [ReLu(), Softmax()], [QuadDiff()], (-6, 0), (-6, 0))
+    hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid()], [ReLu(), Softmax()], [QuadDiff()], (-6, 0), (-6, 0), (-6, 0))
     return hrange
 
 def punishment_function(arg: float):
