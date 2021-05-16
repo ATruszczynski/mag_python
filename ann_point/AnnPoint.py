@@ -1,3 +1,5 @@
+from math import ceil
+
 from ann_point.Functions import *
 
 class AnnPoint():
@@ -27,5 +29,17 @@ class AnnPoint():
                   str(round(self.neuronCount, 2)) + "|" +str(self.actFun.to_string()) + "|" + str(self.aggrFun.to_string()) + "|" + \
                   str(self.lossFun.to_string()) + "|" + str(round(self.learningRate, 2)) + "|" + str(round(self.momCoeff, 2)) + "|" \
                   + str(round(self.batchSize, 2)) + "|"
+
+        return result
+
+    def size(self):
+        result = 0
+        neuron_counts = [self.inputSize]
+        for i in range(self.hiddenLayerCount):
+            neuron_counts.append(ceil(2 ** self.neuronCount))
+        neuron_counts.append(self.outputSize)
+
+        for i in range(len(neuron_counts) - 1):
+            result += neuron_counts[i] * neuron_counts[i + 1]
 
         return result

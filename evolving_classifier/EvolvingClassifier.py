@@ -225,6 +225,12 @@ class EvolvingClassifier:
                 estimates[i][1] = new_est
                 touches[i] += 1
 
+        estimates = sorted(estimates, key=lambda x: x[0].size(), reverse=True)
+
+        size_puns = np.linspace(0.95, 1, len(estimates))
+        for i in range(len(estimates)):
+            estimates[i][1] *= size_puns[i]
+
         return estimates
 
     def calculate_fitness(self, point: AnnPoint, seed: int):
