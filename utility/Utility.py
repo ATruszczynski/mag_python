@@ -96,3 +96,22 @@ def punishment_function(arg: float):
 
     return result
 
+def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
+    inputs = []
+    outputs = []
+
+    for i in range(howMany):
+        c = random.randint(0, countTo)
+
+        input = np.zeros((countTo, 1))
+        output = np.zeros((countTo + 1, 1))
+
+        to_color = choose_without_repetition(list(range(0, input.shape[0])), c)
+        input[to_color, 0] = 1
+        output[c, 0] = 1
+
+        inputs.append(input)
+        outputs.append(output)
+
+    return [inputs, outputs]
+

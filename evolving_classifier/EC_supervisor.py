@@ -17,6 +17,10 @@ class EC_supervisor():
         self.start_point = 0
         self.iterations = 0
         self.desc_string = ""
+        self.sps = 0
+        self.ps = 0
+        self.total_work = 0
+        self.work_done = 0
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -41,15 +45,22 @@ class EC_supervisor():
         self.desc_string += f"{details_id} mc {hrange.momentumCoeffMin} - {hrange.momentumCoeffMax}\n"
         self.desc_string += f"{details_id} bs {hrange.batchSizeMin} - {hrange.batchSizeMax}\n"
 
+        self.sps = sps
+        self.ps = ps
+
 
     def start(self, iterations: int):
         self.start_point = time.time()
         self.iterations = iterations
+        self.total_work = self.sps + iterations * self.ps
+
+
 
     def check_point(self, evals: [(AnnPoint, float)], iteration: int):
         # predict execution time
         elapsed_time = (time.time() - self.start_point)
-        frac_of_work_done = (iteration + 1) / self.iterations
+        self.work_done += len(evals)
+        frac_of_work_done = self.work_done / self.total_work
         frac_velocity = frac_of_work_done / elapsed_time
 
         pred_time = 1 / frac_velocity

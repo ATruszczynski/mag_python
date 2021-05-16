@@ -1,5 +1,6 @@
 from math import ceil
 from statistics import mean
+import warnings
 
 from ann_point.AnnPoint import *
 from ann_point.HyperparameterRange import *
@@ -238,20 +239,27 @@ class EvolvingClassifier:
 
         results = []
 
-        for i in range(self.learningIts):
-            network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
-            test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
-            result = mean(test_results[0:3])
-            results.append(result)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("error")
+            try:
+                for i in range(self.learningIts):
+                    network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
+                    test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
+                    result = mean(test_results[0:3])
+                    results.append(result)
 
-        y = np.array(results)
-        x = np.array(list(range(0, self.learningIts)))
+                y = np.array(results)
+                x = np.array(list(range(0, self.learningIts)))
 
-        x = x.reshape((-1, 1))
-        y = y.reshape((-1, 1))
+                x = x.reshape((-1, 1))
+                y = y.reshape((-1, 1))
 
-        reg = LinearRegression().fit(x, y)
-        slope = reg.coef_
+                reg = LinearRegression().fit(x, y)
+                slope = reg.coef_
+            except Warning:
+                print('Warning caught')
+                results = [0]
+                slope = 0
 
         return results[-1] * punishment_function(slope)
 
