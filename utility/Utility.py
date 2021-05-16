@@ -2,7 +2,7 @@ import random
 from typing import Any
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from math import ceil
+from math import ceil, exp
 from ann_point.HyperparameterRange import *
 from ann_point.AnnPoint import *
 from ann_point.Functions import *
@@ -86,3 +86,12 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
 def get_default_hrange():
     hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid()], [ReLu(), Softmax()], [QuadDiff()], (-6, 0), (-6, 0))
     return hrange
+
+def punishment_function(arg: float):
+    result = 1.5 / (1 + exp(-50 * arg))
+
+    if arg > 0:
+        result += 0.5
+
+    return result
+

@@ -4,12 +4,15 @@ from statistics import mean
 from ann_point.AnnPoint import *
 from ann_point.HyperparameterRange import *
 import multiprocessing as mp
+
+from evolving_classifier.EC_supervisor import EC_supervisor
 from neural_network.FeedForwardNeuralNetwork import *
 import random
 from sklearn.linear_model import LinearRegression
 
 from utility.Utility import *
 
+logs = "logs"
 
 class EvolvingClassifier:
     def __init__(self, hrange: HyperparameterRange = None):
@@ -19,7 +22,7 @@ class EvolvingClassifier:
             self.hrange = hrange
 
         self.population = []
-        self.fractions = [0.75, 0.5, 0.25]
+        self.fractions = [1, 0.75, 0.5, 0.25]
         self.pop_size = -1
         self.pc = -1
         self.pm = -1
@@ -30,6 +33,7 @@ class EvolvingClassifier:
         self.testOutputs = []
         self.learningIts = 5
         self.batchSize = 25
+        self.supervisor = EC_supervisor(logs)
 
     def prepare(self, popSize:int, startPopSize: int, pc: float, pm: float, tournament_size: int,
                 nn_data: ([np.ndarray], [np.ndarray], [np.ndarray], [np.ndarray]), seed: int):
@@ -46,12 +50,19 @@ class EvolvingClassifier:
         output_size = self.testOutputs[0].shape[0]
         self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size)
 
+        self.supervisor.get_algo_data(pm=self.pm, pc=self.pc, ts=self.tournament_size, sps=startPopSize,
+                                      ps=self.pop_size, fracs=self.fractions, hrange=self.hrange)
+
     def run(self, iterations: int, power: int = 1) -> AnnPoint:
         pool = mp.Pool(power)
+        self.supervisor.start(iterations)
+
+        print("start")
 
         for i in range(iterations):
-            print(f"desu - {i + 1}")
             eval_pop = self.calculate_fitnesses(pool, self.population)
+
+            self.supervisor.check_point(eval_pop, i)
 
             crossed = []
 
@@ -174,13 +185,10 @@ class EvolvingClassifier:
 
         touches = [0] * count
 
-        fracs = [1]
-        fracs.extend(self.fractions)
-
         estimates = [[point, 0] for point in points]
 
-        for f in range(len(fracs)):
-            frac = fracs[f]
+        for f in range(len(self.fractions)):
+            frac = self.fractions[f]
 
             estimates = sorted(estimates, key=lambda x: x[1], reverse=True)
             comp_count = ceil(frac * count)
@@ -223,12 +231,13 @@ class EvolvingClassifier:
         y = np.array(results)
         x = np.array(list(range(0, self.learningIts)))
 
-        # x = x.reshape((-1, 1))
-        # y = y.reshape((-1, 1))
-        #
-        # reg = LinearRegression().fit(x, y)
+        x = x.reshape((-1, 1))
+        y = y.reshape((-1, 1))
 
-        return results[-1]
+        reg = LinearRegression().fit(x, y)
+        slope = reg.coef_
+
+        return results[-1] * punishment_function(slope)
 
 
 
