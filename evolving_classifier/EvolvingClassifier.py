@@ -1,5 +1,5 @@
 from math import ceil
-from statistics import mean
+from statistics import mean, stdev
 import warnings
 
 from ann_point.AnnPoint import *
@@ -14,6 +14,7 @@ from sklearn.linear_model import LinearRegression
 from utility.Utility import *
 
 logs = "logs"
+np.seterr(over='ignore')
 
 class EvolvingClassifier:
     def __init__(self, hrange: HyperparameterRange = None):
@@ -27,14 +28,17 @@ class EvolvingClassifier:
         self.pop_size = -1
         self.pc = -1
         self.pm = -1
+        self.beg_pm = -1
         self.tournament_size = 2
         self.trainInputs = []
         self.trainOutputs = []
         self.testInputs = []
         self.testOutputs = []
-        self.learningIts = 5
+        self.learningIts = 10
         self.batchSize = 25
         self.supervisor = EC_supervisor(logs)
+        self.av_dist = 0
+        self.mut_steps = []
 
     def prepare(self, popSize:int, startPopSize: int, pc: float, pm: float, tournament_size: int,
                 nn_data: ([np.ndarray], [np.ndarray], [np.ndarray], [np.ndarray]), seed: int):
@@ -42,6 +46,7 @@ class EvolvingClassifier:
         self.pop_size = popSize
         self.pc = pc
         self.pm = pm
+        self.beg_pm = pm
         self.tournament_size = tournament_size
         self.trainInputs = nn_data[0]
         self.trainOutputs = nn_data[1]
@@ -57,11 +62,18 @@ class EvolvingClassifier:
     def run(self, iterations: int, power: int = 1) -> AnnPoint:
         pool = mp.Pool(power)
         self.supervisor.start(iterations)
+        self.mut_steps = np.logspace(1, 0, iterations, base=2)
 
         print("start")
-
+        # TODO cross entropy
         for i in range(iterations):
             eval_pop = self.calculate_fitnesses(pool, self.population)
+
+            # if self.av_dist < 1:
+            #     self.pm = self.pm * self.mut_steps[i]
+            # else:
+            #     self.pm = self.beg_pm#pm / self.mut_steps[i]
+            print(f"Av. dist.: {self.av_dist} - pm: {self.pm}")
 
             self.supervisor.check_point(eval_pop, i)
 
@@ -232,6 +244,11 @@ class EvolvingClassifier:
         for i in range(len(estimates)):
             estimates[i][1] *= size_puns[i]
 
+        dist = average_distance_between_points([e[0] for e in estimates], self.hrange)
+        self.av_dist = mean(dist)
+        print(stdev(dist))
+
+
         return estimates
 
     def calculate_fitness(self, point: AnnPoint, seed: int):
@@ -239,27 +256,42 @@ class EvolvingClassifier:
 
         results = []
 
-        with warnings.catch_warnings():
-            warnings.filterwarnings("error")
-            try:
-                for i in range(self.learningIts):
-                    network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
-                    test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
-                    result = mean(test_results[0:3])
-                    results.append(result)
+        # with warnings.catch_warnings():
+        #     warnings.filterwarnings("error")
+        #     try:
+        #         for i in range(self.learningIts):
+        #             network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
+        #             test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
+        #             result = mean(test_results[0:3])
+        #             results.append(result)
+        #
+        #         y = np.array(results)
+        #         x = np.array(list(range(0, self.learningIts)))
+        #
+        #         x = x.reshape((-1, 1))
+        #         y = y.reshape((-1, 1))
+        #
+        #         reg = LinearRegression().fit(x, y)
+        #         slope = reg.coef_
+        #     except Warning as w:
+        #         print(f'Warning caught {w}')
+        #         results = [0]
+        #         slope = 0
 
-                y = np.array(results)
-                x = np.array(list(range(0, self.learningIts)))
+        for i in range(self.learningIts):
+            network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
+            test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
+            result = mean(test_results[0:3])
+            results.append(result)
 
-                x = x.reshape((-1, 1))
-                y = y.reshape((-1, 1))
+        y = np.array(results)
+        x = np.array(list(range(0, self.learningIts)))
 
-                reg = LinearRegression().fit(x, y)
-                slope = reg.coef_
-            except Warning:
-                print('Warning caught')
-                results = [0]
-                slope = 0
+        x = x.reshape((-1, 1))
+        y = y.reshape((-1, 1))
+
+        reg = LinearRegression().fit(x, y)
+        slope = reg.coef_
 
         return results[-1] * punishment_function(slope)
 

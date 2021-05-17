@@ -6,6 +6,19 @@ from neural_network.FeedForwardNeuralNetwork import *
 from statistics import mean
 
 if __name__ == '__main__':
+
+    # x = np.exp(-10000)
+    # print(1/ (1 + x))
+
+    sg = Sigmoid()
+    sg.compute(-1000)
+
+    tanh = TanH()
+    print(tanh.compute(np.array([-1000])))
+    print(tanh.compute(np.array([1000])))
+    print(tanh.computeDer(np.array([1000])))
+    print(tanh.computeDer(np.array([-1000])))
+
     random.seed(1001)
     iris = datasets.load_iris()
     X = iris.data

@@ -2,7 +2,7 @@ import random
 from typing import Any
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from math import ceil, exp
+from math import ceil, exp, sqrt
 from ann_point.HyperparameterRange import *
 from ann_point.AnnPoint import *
 from ann_point.Functions import *
@@ -85,7 +85,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
     return result
 
 def get_default_hrange():
-    hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid()], [ReLu(), Softmax()], [QuadDiff()], (-6, 0), (-6, 0), (-6, 0))
+    hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid(), TanH()], [ReLu(), Softmax()], [QuadDiff(), CrossEntropy()], (-6, 0), (-6, 0), (-6, 0))
     return hrange
 
 def punishment_function(arg: float):
@@ -114,4 +114,48 @@ def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
         outputs.append(output)
 
     return [inputs, outputs]
+
+def average_distance_between_points(points: [AnnPoint], hrange: HyperparameterRange) -> [float]:
+    total_distance = []
+
+    for i in range(len(points) - 1):
+        for j in range(i + 1, len(points)):
+            total_distance.append(distance_between_points(points[i], points[j], hrange))
+
+    return total_distance
+
+def distance_between_points(pointA: AnnPoint, pointB: AnnPoint, hrange: HyperparameterRange) -> float:
+    distance = 0
+
+    hidLayScale = hrange.layerCountMax - hrange.layerCountMin
+    if hidLayScale != 0:
+        distance += (abs(pointA.hiddenLayerCount - pointB.hiddenLayerCount) / hidLayScale) ** 2
+
+    neuronCountScale = hrange.neuronCountMax - hrange.neuronCountMin
+    if neuronCountScale != 0:
+        distance += (abs(pointA.neuronCount - pointB.neuronCount) / neuronCountScale) ** 2
+
+    learningRateScale = hrange.learningRateMax - hrange.learningRateMin
+    if learningRateScale != 0:
+        distance += (abs(pointA.learningRate - pointB.learningRate) / learningRateScale) ** 2
+
+    momentumCoeffScale = hrange.momentumCoeffMax - hrange.momentumCoeffMin
+    if momentumCoeffScale != 0:
+        distance += (abs(pointA.momCoeff - pointB.momCoeff) / momentumCoeffScale) ** 2
+
+    batchSizeScale = hrange.batchSizeMax - hrange.batchSizeMin
+    if batchSizeScale != 0:
+        distance += (abs(pointA.batchSize - pointB.batchSize) / batchSizeScale) ** 2
+
+    if pointA.actFun.to_string() != pointB.actFun.to_string():
+        distance += 1
+
+    if pointA.aggrFun.to_string() != pointB.aggrFun.to_string():
+        distance += 1
+
+    if pointA.lossFun.to_string() != pointB.lossFun.to_string():
+        distance += 1
+
+    return sqrt(distance)
+
 

@@ -43,3 +43,4 @@ class AnnPoint():
             result += neuron_counts[i] * neuron_counts[i + 1]
 
         return result
+
