@@ -157,5 +157,14 @@ def distance_between_points(pointA: AnnPoint, pointB: AnnPoint, hrange: Hyperpar
         distance += 1
 
     return sqrt(distance)
+# TODO end algo faster if net is good
+
+def get_in_radius(current: float, min_val: float, max_val:float, radius: float) -> float:
+    scale = max_val - min_val
+    move_radius = radius * scale
+    lower_bound = max(min_val, current - move_radius)
+    upper_bound = min(max_val, current + move_radius)
+
+    return random.uniform(lower_bound, upper_bound)
 
 

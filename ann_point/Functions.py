@@ -21,9 +21,12 @@ class ReLu(ActFun):
         return np.maximum(0, arg)
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
-        result = arg.copy()
-        result[arg > 0] = 1
-        result[arg <= 0] = 0
+        result = np.zeros((arg.shape[0], arg.shape[0]))
+        diag = arg.copy()
+        diag[arg > 0] = 1
+        diag[arg <= 0] = 0
+        np.fill_diagonal(result, diag)
+
         return result
 
     def copy(self):
@@ -47,8 +50,9 @@ class TanH(ActFun):
         return result
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
-        low = 2 / (np.exp(arg) + np.exp(-arg))
-        return low ** 2
+        diag = 2 / (np.exp(arg) + np.exp(-arg))
+        diag = diag ** 2
+        return np.diagflat(diag)
 
     def copy(self):
         return TanH()
@@ -62,7 +66,9 @@ class Sigmoid(ActFun):
         return 1 / (1 + np.exp(-arg))
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
-        return self.compute(arg) * (1 - self.compute(arg))
+        com = self.compute(arg)
+        diag = com * (1 - com)
+        return np.diagflat(diag)
 
     def copy(self):
         return Sigmoid()
@@ -78,7 +84,12 @@ class Softmax(ActFun):
         return exp_a / exp_a.sum(axis=0, keepdims=True)
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
-        return self.compute(arg) * (1 - self.compute(arg)) # TODO something may be wrong here
+        diag = self.compute(arg)
+        result = np.diagflat(diag)
+
+        result = result - np.dot(diag, diag.T)
+
+        return result
 
     def copy(self):
         return Softmax()
@@ -129,7 +140,7 @@ class QuadDiff(LossFun):
 class CrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
         result = np.sum(np.multiply(corr, np.log(res + 1e-15)), axis=0)[0]
-        return result
+        return -result
 
     def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:
         return -corr / (res + 1e-15)

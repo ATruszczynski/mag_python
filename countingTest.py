@@ -12,9 +12,10 @@ if __name__ == '__main__':
     # print(sm.prec_der(np.array([[1], [2], [3]])))
     # print(sm.computeDer(np.array([[1], [2], [3]])))
 
-    count = 2000
-    x,y = generate_counting_problem(count, 10)
-    X,Y = generate_counting_problem(ceil(count/10), 10)
+    count = 1000
+    size = 10
+    x,y = generate_counting_problem(count, size)
+    X,Y = generate_counting_problem(ceil(count/5), size)
 
     ec = EvolvingClassifier()
     ec.hrange.neuronCountMin = 0
@@ -22,8 +23,8 @@ if __name__ == '__main__':
     ec.hrange.layerCountMin = 0
     ec.hrange.layerCountMax = 3
     ec.hrange.batchSizeMin = -6
-    ec.prepare(50, 50, 0.8, 0.05, 2, (x, y, X, Y), 1001)
-    npoint = ec.run(50, 12)
+    ec.prepare(20, 20, 0.8, 0.05, 2, (x, y, X, Y), 1001)
+    npoint = ec.run(20, 12)
     network = network_from_point(npoint, 1001)
     network.train(x, y, 50)
     print(npoint.to_string())
@@ -31,7 +32,6 @@ if __name__ == '__main__':
     print(tests[:3])
     print(tests[3])
     print(mean(tests[:3]))
-
 
     ori = 1
 

@@ -29,7 +29,9 @@ class EC_supervisor():
 
         self.log_path = f"{path}{os.path.sep}log_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}.txt"
 
-    def get_algo_data(self, pm: float, pc: float, ts: int, sps: int, ps: int, fracs: [float], hrange: HyperparameterRange):
+    def get_algo_data(self, input_size: int, output_size: int, pm: float, pc: float, ts: int, sps: int, ps: int, fracs: [float], hrange: HyperparameterRange):
+        self.desc_string += f"{details_id} ins {input_size}\n"
+        self.desc_string += f"{details_id} outs {output_size}\n"
         self.desc_string += f"{details_id} pm {pm}\n"
         self.desc_string += f"{details_id} pc {pc}\n"
         self.desc_string += f"{details_id} ts {ts}\n"

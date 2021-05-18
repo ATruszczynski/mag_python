@@ -94,7 +94,7 @@ class FeedForwardNeuralNetwork:
                         else:
                             act_grad[l] = np.dot(bias_grad[l + 1].T, self.weights[l + 1]).T
 
-                        bias_grad[l] = np.multiply(self.actFuns[l].computeDer(self.inp[l]), act_grad[l])
+                        bias_grad[l] = np.dot(self.actFuns[l].computeDer(self.inp[l]), act_grad[l])
                         weight_grad[l] = np.dot(bias_grad[l], self.act[l - 1].T)
 
                     for i in range(1, len(weight_grad)):

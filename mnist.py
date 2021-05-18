@@ -28,8 +28,8 @@ if __name__ == '__main__':
     ec = EvolvingClassifier()
     ec.hrange.neuronCountMax = 8
     ec.hrange.batchSizeMin = -6
-    ec.prepare(50, 50, 0.8, 0.05, 2, (train_X, train_y, test_X, test_y), 1001)
-    npoint = ec.run(30, 12)
+    ec.prepare(20, 20, 0.8, 0.05, 2, (train_X, train_y, test_X, test_y), 1001)
+    npoint = ec.run(20, 12)
     network = network_from_point(npoint, 1001)
     network.train(train_X, train_y, 50)
     print(npoint.to_string())

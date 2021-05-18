@@ -44,13 +44,13 @@ def test_determinism():
     X = [X[i] for i in perm]
     y = [y[i] for i in perm]
 
-    point = AnnPoint(4, 3, 2, 4, ReLu(), ReLu(), QuadDiff(), -3, -3)
+    point = AnnPoint(4, 3, 2, 4, ReLu(), ReLu(), QuadDiff(), -3, -3, -3)
 
     results = []
 
     for i in range(10):
         network = network_from_point(point, 1001)
-        network.train(X, y, 10, 10)
+        network.train(X, y, 10)
         res = network.test(X, y)[0:3]
         results.append(mean(res))
 
