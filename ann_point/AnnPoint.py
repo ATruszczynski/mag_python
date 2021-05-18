@@ -25,7 +25,7 @@ class AnnPoint():
 
     def to_string(self):
         result = ""
-        result += str(self.inputSize) + "|" + str(self.outputSize) + "|" + str(self.hiddenLayerCount) + "|" + \
+        result += "|" + str(self.inputSize) + "|" + str(self.outputSize) + "|" + str(self.hiddenLayerCount) + "|" + \
                   str(round(self.neuronCount, 2)) + "|" +str(self.actFun.to_string()) + "|" + str(self.aggrFun.to_string()) + "|" + \
                   str(self.lossFun.to_string()) + "|" + str(round(self.learningRate, 2)) + "|" + str(round(self.momCoeff, 2)) + "|" \
                   + str(round(self.batchSize, 2)) + "|"

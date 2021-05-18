@@ -168,8 +168,6 @@ class EvolvingClassifier:
 
         return [pointA, pointB]
 
-
-
     def mutate(self, point: AnnPoint, pm: float, radius: float, mut_probs: [float]) -> AnnPoint:
         point = point.copy()
 
@@ -252,7 +250,6 @@ class EvolvingClassifier:
         dist = average_distance_between_points([e[0] for e in estimates], self.hrange)
         self.av_dist = mean(dist)
         print(stdev(dist))
-
 
         return estimates
 
