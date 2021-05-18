@@ -21,31 +21,36 @@ if __name__ == '__main__':
 
     random.seed(1001)
     iris = datasets.load_iris()
-    X = iris.data
+    x = iris.data
     y = iris.target
 
-    X = [x.reshape((4, 1)) for x in X]
+    x = [x.reshape((4, 1)) for x in x]
     y = one_hot_endode(y)
 
     perm = list(range(0, len(y)))
     random.shuffle(perm)
 
-    X = [X[i] for i in perm]
+    x = [x[i] for i in perm]
     y = [y[i] for i in perm]
+
+    train_x = [x[i] for i in range(120)]
+    train_y = [y[i] for i in range(120)]
+    test_x = [x[i] for i in range(120, 150)]
+    test_y = [y[i] for i in range(120, 150)]
 
     # print(X)
     print(y)
 
     ec = EvolvingClassifier()
-    ec.hrange.neuronCountMax = 2
+    ec.hrange.neuronCountMax = 6
     ec.hrange.batchSizeMin = -6
-    ec.prepare(20, 20, 0.8, 0.02, 2, (X, y, X, y), 1001)
+    ec.prepare(50, 50, 0.8, 0.02, 2, (train_x, train_y, test_x, test_y), 1001)
     npoint = ec.run(20, 12)
     network = network_from_point(npoint, 1001)
-    network.train(X, y, 20)
+    network.train(train_x, train_y, 20)
     print(npoint.to_string())
-    tests = network.test(X, y)
-    print(network.test(X, y))
+    tests = network.test(test_x, test_y)
+    print(tests)
     print(mean(tests[:3]))
 
 

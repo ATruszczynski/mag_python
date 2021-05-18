@@ -19,8 +19,6 @@ def try_choose_different(current: Any, possibilities: [Any]) -> Any:
             if obj.to_string() != current.to_string():
                 options.append(i)
 
-    result = None
-
     if len(options) == 0:
         result = current
     else:

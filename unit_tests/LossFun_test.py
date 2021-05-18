@@ -7,7 +7,7 @@ def test_quad_diff():
 
     qd = QuadDiff()
 
-    assert qd.compute(res, corr) == 5
+    assert qd.compute(res, corr) == 5/3
 
 def test_quad_diff_der():
     res = np.array([[1], [0], [1]])
@@ -15,7 +15,7 @@ def test_quad_diff_der():
 
     qd = QuadDiff()
 
-    assert np.array_equal(qd.computeDer(res, corr), np.array([[0], [-4], [2]]))
+    assert np.array_equal(qd.computeDer(res, corr), np.array([[0], [-4], [2]]) / 3)
 
 def test_cross_entropy():
     res = np.array([[0.2], [0.5], [0.3]])

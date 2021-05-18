@@ -24,7 +24,7 @@ class EvolvingClassifier:
             self.hrange = hrange
 
         self.population = []
-        self.fractions = [1, 0.75, 0.5, 0.25]
+        self.fractions = [1, 0.6, 0.4, 0.25, 0.15, 0.1]
         self.pop_size = -1
         self.pc = -1
         self.pm = -1
@@ -39,6 +39,7 @@ class EvolvingClassifier:
         self.supervisor = EC_supervisor(logs)
         self.av_dist = 0
         self.mut_steps = []
+        self.enough = 3 # TODO wyrzuć
 
         self.mut_performed = 0
         self.cross_performed = 0
@@ -75,7 +76,9 @@ class EvolvingClassifier:
         # TODO cross entropy
         for i in range(iterations):
             eval_pop = self.calculate_fitnesses(pool, self.population)
-
+            curr_max = max([e[1] for e in eval_pop])
+            if curr_max >= self.enough:
+                break
 
             # if self.av_dist < 1:
             #     self.pm = self.pm * self.mut_steps[i]
@@ -94,7 +97,7 @@ class EvolvingClassifier:
 
                 if len(crossed) <= self.pop_size - 2 and cr <= pcs[i]:
                     c2 = self.select(eval_pop=eval_pop)
-                    cr_result = self.crossover(c1, c2)
+                    cr_result = self.crossover(c1, c2, [random.random() for i in range(8)])
                     crossed.extend(cr_result)
                     self.cross_performed += 1
                 else:
@@ -103,7 +106,7 @@ class EvolvingClassifier:
             new_pop = []
 
             for ind in range(len(crossed)):
-                new_pop.append(self.mutate(crossed[ind], pm=pms[i], radius=mut_radius[i]))
+                new_pop.append(self.mutate(crossed[ind], pm=pms[i], radius=mut_radius[i], mut_probs=[random.random() for i in range(8)]))
 
             self.population = new_pop
 
@@ -114,59 +117,51 @@ class EvolvingClassifier:
 
         return eval_pop_sorted[0][0]
 
-    def select(self, eval_pop: [[AnnPoint, float]]):
+    def select(self, eval_pop: [[AnnPoint, float]]) -> AnnPoint:
         chosen = choose_without_repetition(options=eval_pop, count=self.tournament_size)
         chosen_sorted = sorted(chosen, key=lambda x: x[1], reverse=True)
         return chosen_sorted[0][0]
 
-    def crossover(self, pointA: AnnPoint, pointB: AnnPoint) -> [AnnPoint]:
+    def crossover(self, pointA: AnnPoint, pointB: AnnPoint, cross_probs: [float]) -> [AnnPoint]:
         pointA = pointA.copy()
         pointB = pointB.copy()
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[0] < 0.5:
             tmp = pointA.hiddenLayerCount
             pointA.hiddenLayerCount = pointB.hiddenLayerCount
             pointB.hiddenLayerCount = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[1] < 0.5:
             tmp = pointA.neuronCount
             pointA.neuronCount = pointB.neuronCount
             pointB.neuronCount = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[2] < 0.5:
             tmp = pointA.actFun.copy()
             pointA.actFun = pointB.actFun.copy()
             pointB.actFun = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[3] < 0.5:
             tmp = pointA.aggrFun.copy()
             pointA.aggrFun = pointB.aggrFun.copy()
             pointB.aggrFun = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[4] < 0.5:
             tmp = pointA.lossFun.copy()
             pointA.lossFun = pointB.lossFun.copy()
             pointB.lossFun = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[5] < 0.5:
             tmp = pointA.learningRate
             pointA.learningRate = pointB.learningRate
             pointB.learningRate = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[6] < 0.5:
             tmp = pointA.momCoeff
             pointA.momCoeff = pointB.momCoeff
             pointB.momCoeff = tmp
 
-        sr = random.random()
-        if sr < 0.5:
+        if cross_probs[7] < 0.5:
             tmp = pointA.batchSize
             pointA.batchSize = pointB.batchSize
             pointB.batchSize = tmp
@@ -175,46 +170,41 @@ class EvolvingClassifier:
 
 
 
-    def mutate(self, point: AnnPoint, pm: float, radius: float) -> AnnPoint:
+    def mutate(self, point: AnnPoint, pm: float, radius: float, mut_probs: [float]) -> AnnPoint:
         point = point.copy()
 
-        mr = random.random()
-        if mr < pm:
-            point.hiddenLayerCount = try_choose_different(point.hiddenLayerCount, range(self.hrange.layerCountMin, self.hrange.layerCountMax + 1))
+        if mut_probs[0] < pm * radius:
+            current = point.hiddenLayerCount
+            minhl = max(current - 1, self.hrange.layerCountMin)
+            maxhl = min(current + 1, self.hrange.layerCountMax)
+            point.hiddenLayerCount = try_choose_different(point.hiddenLayerCount, range(minhl, maxhl))
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[1] < pm:
             point.neuronCount = get_in_radius(point.neuronCount, self.hrange.neuronCountMin, self.hrange.neuronCountMax, radius)
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[2] < pm * radius:
             point.actFun = try_choose_different(point.actFun, self.hrange.actFunSet)
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[3] < pm * radius:
             point.aggrFun = try_choose_different(point.aggrFun, self.hrange.aggrFunSet)
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[4] < pm * radius:
             point.lossFun = try_choose_different(point.lossFun, self.hrange.lossFunSet)
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[5] < pm:
             point.learningRate = get_in_radius(point.learningRate, self.hrange.learningRateMin, self.hrange.learningRateMax, radius)
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[6] < pm:
             point.momCoeff = get_in_radius(point.momCoeff, self.hrange.momentumCoeffMin, self.hrange.momentumCoeffMax, radius)
             self.mut_performed += 1
 
-        mr = random.random()
-        if mr < pm:
+        if mut_probs[7] < pm:
             point.batchSize = get_in_radius(point.batchSize, self.hrange.batchSizeMin, self.hrange.batchSizeMax, radius)
             self.mut_performed += 1
 
@@ -240,8 +230,6 @@ class EvolvingClassifier:
             estimating_async_results = [pool.apply_async(func=self.calculate_fitness, args=(to_compute[i], seeds[i])) for i in range(len(to_compute))]
             [estimation_result.wait() for estimation_result in estimating_async_results]
             new_fitnesses = [result.get() for result in estimating_async_results]
-
-            ori = 1
 
             for i in range(comp_count):
                 new_fit = new_fitnesses[i]
@@ -310,7 +298,7 @@ class EvolvingClassifier:
         reg = LinearRegression().fit(x, y)
         slope = reg.coef_
 
-        return results[-1] * punishment_function(slope)
+        return results[-1]# * punishment_function(slope)
 
 
 
