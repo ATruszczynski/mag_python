@@ -38,14 +38,14 @@ class EC_supervisor():
         self.desc_string += f"{details_id} sps {sps}\n"
         self.desc_string += f"{details_id} ps {ps}\n"
         self.desc_string += f"{details_id} fracs {','.join([str(f) for f in fracs])}\n"
-        self.desc_string += f"{details_id} lc {hrange.layerCountMin} - {hrange.layerCountMax}\n"
-        self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
+        # self.desc_string += f"{details_id} lc {hrange.layerCountMin} - {hrange.layerCountMax}\n"
+        # self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
         self.desc_string += f"{details_id} acfs {','.join([f.to_string() for f in hrange.actFunSet])}\n"
-        self.desc_string += f"{details_id} agfs {','.join([f.to_string() for f in hrange.aggrFunSet])}\n"
-        self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
-        self.desc_string += f"{details_id} lr {hrange.learningRateMin} - {hrange.learningRateMax}\n"
-        self.desc_string += f"{details_id} mc {hrange.momentumCoeffMin} - {hrange.momentumCoeffMax}\n"
-        self.desc_string += f"{details_id} bs {hrange.batchSizeMin} - {hrange.batchSizeMax}\n"
+        # self.desc_string += f"{details_id} agfs {','.join([f.to_string() for f in hrange.aggrFunSet])}\n"
+        # self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
+        # self.desc_string += f"{details_id} lr {hrange.learningRateMin} - {hrange.learningRateMax}\n"
+        # self.desc_string += f"{details_id} mc {hrange.momentumCoeffMin} - {hrange.momentumCoeffMax}\n"
+        # self.desc_string += f"{details_id} bs {hrange.batchSizeMin} - {hrange.batchSizeMax}\n"
 
         self.sps = sps
         self.ps = ps

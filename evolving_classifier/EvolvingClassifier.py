@@ -5,6 +5,7 @@ import warnings
 from ann_point.AnnPoint import *
 from ann_point.HyperparameterRange import *
 import multiprocessing as mp
+import time
 
 from evolving_classifier.EC_supervisor import EC_supervisor
 from neural_network.FeedForwardNeuralNetwork import *
@@ -25,6 +26,7 @@ class EvolvingClassifier:
 
         self.population = []
         self.fractions = [1, 0.6, 0.4, 0.25, 0.15, 0.1]
+        self.fractions = [1]
         self.pop_size = -1
         self.pc = -1
         self.pm = -1
@@ -64,18 +66,30 @@ class EvolvingClassifier:
                                       ts=self.tournament_size, sps=startPopSize,
                                       ps=self.pop_size, fracs=self.fractions, hrange=self.hrange)
 
-    def run(self, iterations: int, power: int = 1) -> AnnPoint:
-        pool = mp.Pool(power)
+    def run(self, iterations: int, power: int = 1) -> LooseNetwork:
+        if power > 1:
+            pool = mp.Pool(power)
+        else:
+            pool = None
+
+        tt = 0
+        mt = 0
+        ct = 0
+
         self.supervisor.start(iterations)
         self.mut_steps = np.logspace(1, 0, iterations, base=2)
-        mut_radius = np.linspace(1, 0.05, iterations)
-        pms = np.linspace(0.25, 0.005, iterations)
-        pcs = np.linspace(0.5, 1, iterations)
+        mut_radius = np.linspace(0.5, 0.1, iterations)
+        pms = np.linspace(0.0, 0.0, iterations)
+        pcs = np.linspace(0.8, 0.8, iterations)
 
         print("start")
         # TODO cross entropy
         for i in range(iterations):
+            s = time.time()
             eval_pop = self.calculate_fitnesses(pool, self.population)
+            t = time.time()
+            tt += t - s
+
             curr_max = max([e[1] for e in eval_pop])
             if curr_max >= self.enough:
                 break
@@ -91,6 +105,7 @@ class EvolvingClassifier:
 
             crossed = []
 
+            s = time.time()
             while len(crossed) < self.pop_size:
                 c1 = self.select(eval_pop=eval_pop)
                 cr = random.random()
@@ -102,18 +117,25 @@ class EvolvingClassifier:
                     self.cross_performed += 1
                 else:
                     crossed.append(c1)
+            t = time.time()
+            ct += t - s
 
             new_pop = []
 
+            s = time.time()
             for ind in range(len(crossed)):
                 new_pop.append(self.mutate(crossed[ind], pm=pms[i], radius=mut_radius[i], mut_probs=[random.random() for i in range(8)]))
+            t = time.time()
+            mt += t - s
 
             self.population = new_pop
 
         eval_pop = self.calculate_fitnesses(pool, self.population)
-        pool.close()
+        if pool is not None:
+            pool.close()
 
         eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
+        print(f"tt: {round(tt/iterations, 4)}, mt: {round(mt/iterations, 4)}, ct: {round(ct/iterations, 4)}")
 
         return eval_pop_sorted[0][0]
 
@@ -122,93 +144,108 @@ class EvolvingClassifier:
         chosen_sorted = sorted(chosen, key=lambda x: x[1], reverse=True)
         return chosen_sorted[0][0]
 
-    def crossover(self, pointA: AnnPoint, pointB: AnnPoint, cross_probs: [float]) -> [AnnPoint]:
+    def crossover(self, pointA: LooseNetwork, pointB: LooseNetwork, cross_probs: [float]) -> [LooseNetwork]:
         pointA = pointA.copy()
         pointB = pointB.copy()
 
-        if cross_probs[0] < 0.5:
-            tmp = pointA.hiddenLayerCount
-            pointA.hiddenLayerCount = pointB.hiddenLayerCount
-            pointB.hiddenLayerCount = tmp
+        div = random.randint(pointA.input_size, len(pointA.bias) - 1)
 
-        if cross_probs[1] < 0.5:
-            tmp = pointA.neuronCount
-            pointA.neuronCount = pointB.neuronCount
-            pointB.neuronCount = tmp
+        tmp = pointA.links[:, :div]
+        pointA.links[:, :div] = pointB.links[:, :div]
+        pointB.links[:, :div] = tmp
 
-        if cross_probs[2] < 0.5:
-            tmp = pointA.actFun.copy()
-            pointA.actFun = pointB.actFun.copy()
-            pointB.actFun = tmp
+        tmp = pointA.weights[:, :div]
+        pointA.weights[:, :div] = pointB.weights[:, :div]
+        pointB.weights[:, :div] = tmp
 
-        if cross_probs[3] < 0.5:
-            tmp = pointA.aggrFun.copy()
-            pointA.aggrFun = pointB.aggrFun.copy()
-            pointB.aggrFun = tmp
+        tmp = pointA.actFuns[:div]
+        pointA.actFuns[:div] = pointB.actFuns[:div]
+        pointB.actFuns[:div] = tmp
 
-        if cross_probs[4] < 0.5:
-            tmp = pointA.lossFun.copy()
-            pointA.lossFun = pointB.lossFun.copy()
-            pointB.lossFun = tmp
+        tmp = pointA.bias[:div]
+        pointA.bias[:div] = pointB.bias[:div]
+        pointB.bias[:div] = tmp
 
-        if cross_probs[5] < 0.5:
-            tmp = pointA.learningRate
-            pointA.learningRate = pointB.learningRate
-            pointB.learningRate = tmp
-
-        if cross_probs[6] < 0.5:
-            tmp = pointA.momCoeff
-            pointA.momCoeff = pointB.momCoeff
-            pointB.momCoeff = tmp
-
-        if cross_probs[7] < 0.5:
-            tmp = pointA.batchSize
-            pointA.batchSize = pointB.batchSize
-            pointB.batchSize = tmp
+        tmp = pointA.actFuns[:div]
+        pointA.actFuns[:div] = pointB.actFuns[:div]
+        pointB.actFuns[:div] = tmp
 
         return [pointA, pointB]
 
-    def mutate(self, point: AnnPoint, pm: float, radius: float, mut_probs: [float]) -> AnnPoint:
+    def mutate(self, point: LooseNetwork, pm: float, radius: float, mut_probs: [float]) -> LooseNetwork:
         point = point.copy()
 
-        if mut_probs[0] < pm * radius:
-            current = point.hiddenLayerCount
-            minhl = max(current - 1, self.hrange.layerCountMin)
-            maxhl = min(current + 1, self.hrange.layerCountMax)
-            point.hiddenLayerCount = try_choose_different(point.hiddenLayerCount, range(minhl, maxhl))
-            self.mut_performed += 1
+        mr = random.random()
 
-        if mut_probs[1] < pm:
-            point.neuronCount = get_in_radius(point.neuronCount, self.hrange.neuronCountMin, self.hrange.neuronCountMax, radius)
+        if mr < pm:
             self.mut_performed += 1
+            choices = list(range(point.input_size, len(point.bias)))
+            tot = len(choices)
+            mut_count = ceil(tot * 0.1)
+            to_mutate = choose_without_repetition(choices, mut_count)
 
-        if mut_probs[2] < pm * radius:
-            point.actFun = try_choose_different(point.actFun, self.hrange.actFunSet)
-            self.mut_performed += 1
+            for i in range(len(to_mutate)):
+                ind = to_mutate[i]
+                active = np.where(point.links[:, ind] == 0)[0]
 
-        if mut_probs[3] < pm * radius:
-            point.aggrFun = try_choose_different(point.aggrFun, self.hrange.aggrFunSet)
-            self.mut_performed += 1
+                mode = random.random()
+                if mode < 0.1 * radius:
+                    to_deactivate_prob = np.random.uniform(size=(active.shape))
+                    to_deactivate = np.where(to_deactivate_prob < 0.1)[0]
+                    point.links[active[to_deactivate]] = 0
+                    point.weights[active[to_deactivate]] = 0
+                elif mode < 0.2 * radius:
+                    weights = point.weights[active, ind]
+                    inactive = np.where(point.links[:, ind] == 1)[0]
+                    to_activate_prob = np.random.uniform(size=(inactive.shape))
+                    to_activate = np.where(to_activate_prob < 0.1)[0]
+                    avg = np.average(weights)
+                    sd = np.std(weights)
+                    point.links[inactive[to_activate], ind] = 1
+                    point.weights[inactive[to_activate], ind] += np.random.normal(avg, sd, size=(to_activate.shape))
+                elif mode < 0.3 * radius:
+                    point.actFuns[ind] = try_choose_different(point.actFuns[ind], self.hrange.actFunSet)
+                elif mode < 0.4:
+                    point.bias[ind] += random.gauss(mu=0, sigma=radius*0.1)
+                else:
+                    weights = point.weights[active, ind]
+                    sd = np.std(weights)
+                    point.weights[active, ind] = np.random.normal(0, sd * radius, size=(active.shape))
 
-        if mut_probs[4] < pm * radius:
-            point.lossFun = try_choose_different(point.lossFun, self.hrange.lossFunSet)
-            self.mut_performed += 1
 
-        if mut_probs[5] < pm:
-            point.learningRate = get_in_radius(point.learningRate, self.hrange.learningRateMin, self.hrange.learningRateMax, radius)
-            self.mut_performed += 1
 
-        if mut_probs[6] < pm:
-            point.momCoeff = get_in_radius(point.momCoeff, self.hrange.momentumCoeffMin, self.hrange.momentumCoeffMax, radius)
-            self.mut_performed += 1
 
-        if mut_probs[7] < pm:
-            point.batchSize = get_in_radius(point.batchSize, self.hrange.batchSizeMin, self.hrange.batchSizeMax, radius)
-            self.mut_performed += 1
+        # for i in range(point.input_size, len(point.bias)):
+        #     for j in range(0, i):
+        #         mr = random.random()
+        #         if mr < pm:
+        #             link = point.links[j, i]
+        #             if link == 0:
+        #                 point.links[j, i] = 1
+        #                 point.weights[j, i] = random.uniform(-0.1, 0.1) # TODO coś lepszego
+        #             else:
+        #                 mr = random.random()
+        #                 if mr < 0.5:
+        #                     point.weights[j, i] += random.gauss(0, radius * 0.1)
+        #                 else:
+        #                     point.links[j, i] = 0
+        #                     point.weights[j, i] = 0
+        #
+        #             self.mut_performed += 1
+        #
+        #     mr = random.random()
+        #     if mr < pm:
+        #         point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
+        #         self.mut_performed += 1
+        #
+        #     mr = random.random()
+        #     if mr < pm:
+        #         point.bias[i] += random.gauss(0, radius * 0.1)
+        #         self.mut_performed += 1
 
         return point
 
-    def calculate_fitnesses(self, pool: mp.Pool, points: [AnnPoint]) -> [[AnnPoint, float]]:
+    def calculate_fitnesses(self, pool: mp.Pool, points: [AnnPoint]) -> [[LooseNetwork, float]]:
         count = len(points)
 
         touches = [0] * count
@@ -223,11 +260,12 @@ class EvolvingClassifier:
             to_compute = [est[0] for est in estimates[0:comp_count]]
             seeds = [random.randint(0, 1000) for i in range(len(to_compute))]
 
-            # new_fitnesses = [self.calculate_fitness(to_compute[i], seeds[i])for i in range(len(to_compute))]
-
-            estimating_async_results = [pool.apply_async(func=self.calculate_fitness, args=(to_compute[i], seeds[i])) for i in range(len(to_compute))]
-            [estimation_result.wait() for estimation_result in estimating_async_results]
-            new_fitnesses = [result.get() for result in estimating_async_results]
+            if pool is None:
+                new_fitnesses = [self.calculate_fitness(to_compute[i], seeds[i])for i in range(len(to_compute))]
+            else:
+                estimating_async_results = [pool.apply_async(func=self.calculate_fitness, args=(to_compute[i], seeds[i])) for i in range(len(to_compute))]
+                [estimation_result.wait() for estimation_result in estimating_async_results]
+                new_fitnesses = [result.get() for result in estimating_async_results]
 
             for i in range(comp_count):
                 new_fit = new_fitnesses[i]
@@ -241,61 +279,23 @@ class EvolvingClassifier:
                 estimates[i][1] = new_est
                 touches[i] += 1
 
-        estimates = sorted(estimates, key=lambda x: x[0].size(), reverse=True)
+        # estimates = sorted(estimates, key=lambda x: x[0].size(), reverse=True)
+        #
+        # size_puns = np.linspace(0.95, 1, len(estimates))
+        # for i in range(len(estimates)):
+        #     estimates[i][1] *= size_puns[i]
 
-        size_puns = np.linspace(0.95, 1, len(estimates))
-        for i in range(len(estimates)):
-            estimates[i][1] *= size_puns[i]
-
-        dist = average_distance_between_points([e[0] for e in estimates], self.hrange)
-        self.av_dist = mean(dist)
-        print(stdev(dist))
+        # dist = average_distance_between_points([e[0] for e in estimates], self.hrange)
+        # self.av_dist = mean(dist)
+        # print(stdev(dist))
 
         return estimates
 
-    def calculate_fitness(self, point: AnnPoint, seed: int):
-        network = network_from_point(point, seed)
+    def calculate_fitness(self, network: LooseNetwork, seed: int):
+        test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
+        result = mean(test_results[0:3])
 
-        results = []
-
-        # with warnings.catch_warnings():
-        #     warnings.filterwarnings("error")
-        #     try:
-        #         for i in range(self.learningIts):
-        #             network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
-        #             test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
-        #             result = mean(test_results[0:3])
-        #             results.append(result)
-        #
-        #         y = np.array(results)
-        #         x = np.array(list(range(0, self.learningIts)))
-        #
-        #         x = x.reshape((-1, 1))
-        #         y = y.reshape((-1, 1))
-        #
-        #         reg = LinearRegression().fit(x, y)
-        #         slope = reg.coef_
-        #     except Warning as w:
-        #         print(f'Warning caught {w}')
-        #         results = [0]
-        #         slope = 0
-
-        for i in range(self.learningIts):
-            network.train(inputs=self.trainInputs, outputs=self.trainOutputs, epochs=1)
-            test_results = network.test(test_input=self.testInputs, test_output=self.testOutputs)
-            result = mean(test_results[0:3])
-            results.append(result)
-
-        y = np.array(results)
-        x = np.array(list(range(0, self.learningIts)))
-
-        x = x.reshape((-1, 1))
-        y = y.reshape((-1, 1))
-
-        reg = LinearRegression().fit(x, y)
-        slope = reg.coef_
-
-        return results[-1]# * punishment_function(slope)
+        return result
 
 
 

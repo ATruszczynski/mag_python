@@ -141,33 +141,7 @@ class FeedForwardNeuralNetwork:
 
         return [accuracy, self.average_precision(confusion_matrix), self.average_recall(confusion_matrix), confusion_matrix]
 
-    def average_precision(self, conf_matrix):
-        row_sums = np.sum(conf_matrix, axis=1)
-        diag = np.diag(conf_matrix)
 
-        class_prec = np.zeros(diag.shape)
-
-        for i in range(len(class_prec)):
-            if row_sums[i] > 0:
-                class_prec[i] = diag[i] / row_sums[i]
-            else:
-                class_prec[i] = 0
-
-        return np.average(class_prec)
-
-    def average_recall(self, conf_matrix):
-        col_sums = np.sum(conf_matrix, axis=0)
-        diag = np.diag(conf_matrix)
-
-        class_recall = np.zeros(diag.shape)
-
-        for i in range(len(class_recall)):
-            if col_sums[i] > 0:
-                class_recall[i] = diag[i] / col_sums[i]
-            else:
-                class_recall[i] = 0
-
-        return np.average(class_recall)
 
 
 

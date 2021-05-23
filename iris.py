@@ -42,16 +42,16 @@ if __name__ == '__main__':
     print(y)
 
     ec = EvolvingClassifier()
-    ec.hrange.neuronCountMax = 6
-    ec.hrange.batchSizeMin = -6
-    ec.prepare(50, 50, 0.8, 0.02, 2, (train_x, train_y, test_x, test_y), 1001)
-    npoint = ec.run(20, 12)
-    network = network_from_point(npoint, 1001)
-    network.train(train_x, train_y, 20)
-    print(npoint.to_string())
+    ec.hrange.neuronCount = 5
+    ec.prepare(10, 10, 0.8, 0.02, 2, (train_x, train_y, test_x, test_y), 1001)
+    network = ec.run(50, 12)
     tests = network.test(test_x, test_y)
-    print(tests)
+    print(tests[:3])
+    print(tests[3])
     print(mean(tests[:3]))
+
+    print(network.links)
+    print(np.round(network.weights, 2))
 
 
     ori = 1

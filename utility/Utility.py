@@ -6,6 +6,8 @@ from math import ceil, exp, sqrt
 from ann_point.HyperparameterRange import *
 from ann_point.AnnPoint import *
 from ann_point.Functions import *
+from neural_network.LooseNet import LooseNetwork
+
 
 def try_choose_different(current: Any, possibilities: [Any]) -> Any:
     options = []
@@ -64,26 +66,46 @@ def divideIntoBatches(inputs: [np.ndarray], outputs: [np.ndarray], batchSize: in
 
     return batches
 
-def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [AnnPoint]:
+def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [LooseNetwork]:
     result = []
     # TODO stabilise names
-    for i in range(count):
-        layer_count = random.randint(hrange.layerCountMin, hrange.layerCountMax)
-        neuron_count = random.uniform(hrange.neuronCountMin, hrange.neuronCountMax)
-        act_fun = hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)]
-        aggr_fun = hrange.aggrFunSet[random.randint(0, len(hrange.aggrFunSet) - 1)]
-        loss_fun = hrange.lossFunSet[random.randint(0, len(hrange.lossFunSet) - 1)]
-        learning_rate = random.uniform(hrange.learningRateMin, hrange.learningRateMax)
-        mom_coeff = random.uniform(hrange.momentumCoeffMin, hrange.momentumCoeffMax)
-        batch_size = random.uniform(hrange.batchSizeMin, hrange.batchSizeMax)
+    for _ in range(count):
+        io_neurons = input_size + output_size
+        neuron_count = io_neurons + hrange.neuronCount
+        # TODO outputy mogą być połączone krawędziami
+        # TODO jeśli tester osobno to można by też próbować regresję
 
-        result.append(AnnPoint(inputSize=input_size, outputSize=output_size, hiddenLayerCount=layer_count, neuronCount=neuron_count,
-                               actFun=act_fun, aggrFun=aggr_fun, lossFun=loss_fun, learningRate=learning_rate, momCoeff=mom_coeff, batchSize=batch_size))
+        links = np.zeros((neuron_count, neuron_count))
+        for i in range(input_size, neuron_count):
+            possible = list(range(0, i))
+            choices = choose_without_repetition(possible, random.randint(0, len(possible) - 1))
+            for j in choices:
+                linked = random.random()
+                if linked < 0.5:
+                    links[j, i] = 1
+
+        weights = np.zeros(links.shape)
+        for i in range(input_size, neuron_count):
+            prev = np.where(links[:, i] == 1)[0]
+            pre_count = len(prev)
+            for j in range(len(prev)):
+                p = prev[j]
+                weights[p, i] = random.gauss(0, 1 / sqrt(pre_count))
+
+        biases = np.zeros((neuron_count, 1))
+        actFuns = input_size * [None]
+        for i in range(input_size, neuron_count):
+            actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)].copy())
+
+        net = LooseNetwork(input_size=input_size, output_size=output_size, links=links, weights=weights,
+                           biases=biases, actFuns=actFuns)
+        result.append(net)
+
 
     return result
 
 def get_default_hrange():
-    hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid(), TanH()], [ReLu(), Softmax()], [QuadDiff(), CrossEntropy()], (-6, 0), (-6, 0), (-6, 0))
+    hrange = HyperparameterRange(neuronCount=128, actFuns=[ReLu(), Sigmoid(), TanH()])
     return hrange
 
 def punishment_function(arg: float):

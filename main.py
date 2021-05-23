@@ -4,16 +4,35 @@ from neural_network.FeedForwardNeuralNetwork import *
 from ann_point.Functions import *
 from sklearn.linear_model import LinearRegression
 
-rl = ReLu()
-print(rl.computeDer(np.array([0, 1, -2]).reshape(-1, 1)))
+from neural_network.LooseNet import LooseNetwork
 
-sm = Softmax()
-smr = sm.computeDer(np.array([1, 2, 3]).reshape(-1, 1))
-print(smr)
-print(np.sum(smr, axis=0))
-print(np.sum(smr, axis=1))
+link_mat = np.zeros((6, 6))
+link_mat[0, 2] = 1
+link_mat[1, 3] = 1
+link_mat[2, 5] = 1
+link_mat[2, 3] = 1
+link_mat[3, 5] = 1
+link_mat[4, 5] = 1
 
-sg = Sigmoid()
-sgr = sg.computeDer(np.array([1, 2, 3]).reshape(-1, 1))
+wei = np.zeros((6, 6))
+wei[0, 2] = 1
+wei[1, 3] = 1
+wei[2, 5] = 1
+wei[2, 3] = 1
+wei[3, 5] = 1
+wei[4, 5] = 1
 
-print(sgr)
+bias = np.zeros((6, 1))
+acts = [ReLu(), ReLu(), ReLu(), ReLu(), ReLu(), ReLu()]
+
+random.seed(10011010)
+
+
+net = LooseNetwork(input_size=2, output_size=1, links=link_mat, weights=wei, biases=bias, actFuns=acts)
+print(net.run(np.array([[1], [1]])))
+net.analyse()
+
+# hrange = HyperparameterRange(neuronCount=5, actFuns=[ReLu(), Sigmoid()])
+# pop = generate_population(hrange, 3, 2, 1)
+
+ori = 1
