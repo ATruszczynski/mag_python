@@ -3,6 +3,8 @@ from typing import Any
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from math import ceil, exp, sqrt
+
+from ann_point.AnnPoint2 import *
 from ann_point.HyperparameterRange import *
 from ann_point.AnnPoint import *
 from ann_point.Functions import *
@@ -64,35 +66,55 @@ def divideIntoBatches(inputs: [np.ndarray], outputs: [np.ndarray], batchSize: in
 
     return batches
 
-def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [AnnPoint]:
+def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [AnnPoint2]:
     result = []
     # TODO stabilise names
     for i in range(count):
-        layer_count = random.randint(hrange.layerCountMin, hrange.layerCountMax)
-        neuron_count = random.uniform(hrange.neuronCountMin, hrange.neuronCountMax)
-        act_fun = hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)]
-        aggr_fun = hrange.aggrFunSet[random.randint(0, len(hrange.aggrFunSet) - 1)]
-        loss_fun = hrange.lossFunSet[random.randint(0, len(hrange.lossFunSet) - 1)]
-        learning_rate = random.uniform(hrange.learningRateMin, hrange.learningRateMax)
-        mom_coeff = random.uniform(hrange.momentumCoeffMin, hrange.momentumCoeffMax)
-        batch_size = random.uniform(hrange.batchSizeMin, hrange.batchSizeMax)
+        hidden_layer_count = random.randint(hrange.layerCountMin, hrange.layerCountMax)
 
-        result.append(AnnPoint(inputSize=input_size, outputSize=output_size, hiddenLayerCount=layer_count, neuronCount=neuron_count,
-                               actFun=act_fun, aggrFun=aggr_fun, lossFun=loss_fun, learningRate=learning_rate, momCoeff=mom_coeff, batchSize=batch_size))
+        neuron_counts = [input_size]
+        for i in range(hidden_layer_count):
+            neuron_counts.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax)) # TODO test
+        neuron_counts.append(output_size)
+
+        hidden_neuron_counts = []
+
+        for i in range(1, len(neuron_counts) - 1):
+            hidden_neuron_counts.append(neuron_counts[i])
+
+        actFuns = []
+        biases = []
+        weights = []
+
+        for i in range(1, len(neuron_counts)):
+            actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
+            biases.append(np.zeros((neuron_counts[i], 1)))
+            weights.append(np.zeros((neuron_counts[i], neuron_counts[i - 1])))
+
+        for i in range(0, len(weights)):
+            for r in range(0, weights[i].shape[0]):
+                for c in range(0, weights[i].shape[1]):
+                    weights[i][r, c] = random.gauss(0, 1 / sqrt(weights[i].shape[1]))
+
+        result.append(AnnPoint2(input_size=input_size, output_size=output_size, hiddenNeuronCounts=hidden_neuron_counts, activationFuns=actFuns, weights=weights, biases=biases))
 
     return result
 
 def get_default_hrange():
-    hrange = HyperparameterRange((0,3), (0, 8), [ReLu(), Sigmoid(), TanH()], [ReLu(), Softmax()], [QuadDiff(), CrossEntropy()], (-6, 0), (-6, 0), (-6, 0))
+    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()], [QuadDiff(), CrossEntropy()])
     return hrange
 
-def punishment_function(arg: float):
-    result = 1.5 / (1 + exp(-50 * arg))
-
-    if arg > 0:
-        result += 0.5
-
-    return result
+# def punishment_function(arg: float):
+#     # result = 1.5 / (1 + exp(-50 * arg))
+#     #
+#     # if arg > 0:
+#     #     result += 0.5
+#     result = 0.75 / (1 + exp(-50 * arg))
+#
+#     if arg > 0:
+#         result += 0.25
+#
+#     return result
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
     inputs = []
@@ -164,5 +186,12 @@ def get_in_radius(current: float, min_val: float, max_val:float, radius: float) 
     upper_bound = min(max_val, current + move_radius)
 
     return random.uniform(lower_bound, upper_bound)
+
+def get_Xu_matrix(shape: (int, int), var_mul: float = 1) -> np.ndarray:
+    result = np.zeros(shape)
+    for r in range(0, result.shape[0]):
+        for c in range(0, result.shape[1]):
+            result[r, c] = random.gauss(0, var_mul / sqrt(result.shape[1]))
+    return result
 
 

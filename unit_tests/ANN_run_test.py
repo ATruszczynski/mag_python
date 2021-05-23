@@ -4,13 +4,9 @@ import numpy as np
 
 
 def test_run_relus():
-    network = FeedForwardNeuralNetwork(inputSize=2, outputSize=2, hiddenLayerCount=1, neuronCount=1, actFun=ReLu(),
-                                       aggrFun=ReLu(), lossFun=QuadDiff(), learningRate=1, momCoeffL=2, batchSize=0, seed=1001)
+    network = FeedForwardNeuralNetwork(inputSize=2, outputSize=2, hidden_neuron_counts=[2], actFuns=[ReLu(), ReLu()], weights=[np.array([[1, 1], [1, 1]]), np.array([[1, 1], [1, 1]])],
+                                       biases=[np.array([[1], [1]]), np.array([[1], [1]])], seed=1001)
 
-    network.weights[1] = np.array([[1, 1], [1, 1]])
-    network.weights[2] = np.array([[1, 1], [1, 1]])
-    network.biases[1] = np.array([[1], [1]])
-    network.biases[2] = np.array([[1], [1]])
 
     result = network.run(np.array([[2], [1]]))
 

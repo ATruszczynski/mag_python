@@ -29,11 +29,11 @@ class EC_supervisor():
 
         self.log_path = f"{path}{os.path.sep}log_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}.txt"
 
-    def get_algo_data(self, input_size: int, output_size: int, pm: float, pc: float, ts: int, sps: int, ps: int, fracs: [float], hrange: HyperparameterRange):
+    def get_algo_data(self, input_size: int, output_size: int, pmS: float, pmE: float, pcS: float, pcE: float, ts: int, sps: int, ps: int, fracs: [float], hrange: HyperparameterRange, learningIts: int):
         self.desc_string += f"{details_id} ins {input_size}\n"
         self.desc_string += f"{details_id} outs {output_size}\n"
-        self.desc_string += f"{details_id} pm {pm}\n"
-        self.desc_string += f"{details_id} pc {pc}\n"
+        self.desc_string += f"{details_id} pm {pmS}-{pmE}\n"
+        self.desc_string += f"{details_id} pc {pcS}-{pcE}\n"
         self.desc_string += f"{details_id} ts {ts}\n"
         self.desc_string += f"{details_id} sps {sps}\n"
         self.desc_string += f"{details_id} ps {ps}\n"
@@ -41,11 +41,8 @@ class EC_supervisor():
         self.desc_string += f"{details_id} lc {hrange.layerCountMin} - {hrange.layerCountMax}\n"
         self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
         self.desc_string += f"{details_id} acfs {','.join([f.to_string() for f in hrange.actFunSet])}\n"
-        self.desc_string += f"{details_id} agfs {','.join([f.to_string() for f in hrange.aggrFunSet])}\n"
         self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
-        self.desc_string += f"{details_id} lr {hrange.learningRateMin} - {hrange.learningRateMax}\n"
-        self.desc_string += f"{details_id} mc {hrange.momentumCoeffMin} - {hrange.momentumCoeffMax}\n"
-        self.desc_string += f"{details_id} bs {hrange.batchSizeMin} - {hrange.batchSizeMax}\n"
+        self.desc_string += f"{details_id} lits {learningIts}\n"
 
         self.sps = sps
         self.ps = ps
@@ -56,8 +53,6 @@ class EC_supervisor():
         self.iterations = iterations
         self.total_work = self.sps + iterations * self.ps
 
-
-
     def check_point(self, evals: [(AnnPoint, float)], iteration: int):
         # predict execution time
         elapsed_time = (time.time() - self.start_point)
@@ -67,7 +62,7 @@ class EC_supervisor():
 
         pred_time = 1 / frac_velocity
 
-        print(f"Remaining time: {round(pred_time - elapsed_time, 2)}")
+        # print(f"Remaining time: {round(pred_time - elapsed_time, 2)}")
 
         # evaluate statistics
 
@@ -101,6 +96,6 @@ class EC_supervisor():
 
 
 
-        print(f"desu - {iteration + 1} - {round(mean_eval, 2)}")
+        print(f"--- desu - {iteration + 1} - {round(mean_eval, 2)}")
 
 

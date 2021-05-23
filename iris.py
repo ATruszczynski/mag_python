@@ -6,19 +6,6 @@ from neural_network.FeedForwardNeuralNetwork import *
 from statistics import mean
 
 if __name__ == '__main__':
-
-    # x = np.exp(-10000)
-    # print(1/ (1 + x))
-
-    sg = Sigmoid()
-    sg.compute(-1000)
-
-    tanh = TanH()
-    print(tanh.compute(np.array([-1000])))
-    print(tanh.compute(np.array([1000])))
-    print(tanh.computeDer(np.array([1000])))
-    print(tanh.computeDer(np.array([-1000])))
-
     random.seed(1001)
     iris = datasets.load_iris()
     x = iris.data
@@ -39,18 +26,18 @@ if __name__ == '__main__':
     test_y = [y[i] for i in range(120, 150)]
 
     # print(X)
-    print(y)
+    # print(y)
 
     ec = EvolvingClassifier()
-    ec.hrange.neuronCountMax = 6
-    ec.hrange.batchSizeMin = -6
-    ec.prepare(50, 50, 0.8, 0.02, 2, (train_x, train_y, test_x, test_y), 1001)
-    npoint = ec.run(20, 12)
+    ec.hrange.layerCountMin = 0
+    ec.hrange.layerCountMax = 2
+    ec.prepare(100, 100, (train_x, train_y, test_x, test_y), 1542)
+    npoint = ec.run(50, 1)
     network = network_from_point(npoint, 1001)
-    network.train(train_x, train_y, 20)
     print(npoint.to_string())
     tests = network.test(test_x, test_y)
-    print(tests)
+    print(tests[:3])
+    print(tests[3])
     print(mean(tests[:3]))
 
 

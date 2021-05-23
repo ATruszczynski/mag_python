@@ -32,6 +32,15 @@ class AnnPoint():
 
         return result
 
+    def to_string_full(self): # TODO test
+        result = ""
+        result += "|" + str(self.inputSize) + "|" + str(self.outputSize) + "|" + str(self.hiddenLayerCount) + "|" + \
+                  str(self.neuronCount) + "|" +str(self.actFun.to_string()) + "|" + str(self.aggrFun.to_string()) + "|" + \
+                  str(self.lossFun.to_string()) + "|" + str(self.learningRate) + "|" + str(self.momCoeff) + "|" \
+                  + str(self.batchSize) + "|"
+
+        return result
+
     def size(self):
         result = 0
         neuron_counts = [self.inputSize]
