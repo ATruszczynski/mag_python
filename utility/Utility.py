@@ -76,13 +76,16 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         # TODO jeśli tester osobno to można by też próbować regresję
 
         links = np.zeros((neuron_count, neuron_count))
+
+        tuples = []
         for i in range(input_size, neuron_count):
-            possible = list(range(0, i))
-            choices = choose_without_repetition(possible, random.randint(0, len(possible) - 1))
-            for j in choices:
-                linked = random.random()
-                if linked < 0.5:
-                    links[j, i] = 1
+            for j in range(0, min(i, neuron_count - output_size + 1)):
+                tuples.append((j, i))
+
+        to_link = choose_without_repetition(tuples, random.randint(0, len(tuples) - 1))
+
+        for tl in to_link:
+            links[tl[0], tl[1]] = 1
 
         weights = np.zeros(links.shape)
         for i in range(input_size, neuron_count):

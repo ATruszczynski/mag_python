@@ -78,8 +78,9 @@ class EvolvingClassifier:
 
         self.supervisor.start(iterations)
         self.mut_steps = np.logspace(1, 0, iterations, base=2)
-        mut_radius = np.linspace(0.5, 0.1, iterations)
-        pms = np.linspace(0.0, 0.0, iterations)
+        mut_radius = np.linspace(0.5, 0.5, iterations)
+        pms = np.linspace(0.002, 0.002, iterations)
+        # pms = np.linspace(0.000, 0.000, iterations)
         pcs = np.linspace(0.8, 0.8, iterations)
 
         print("start")
@@ -148,69 +149,122 @@ class EvolvingClassifier:
         pointA = pointA.copy()
         pointB = pointB.copy()
 
-        div = random.randint(pointA.input_size, len(pointA.bias) - 1)
+        div = random.randint(pointA.hidden_start_index, pointA.neuron_count - 1)
 
-        tmp = pointA.links[:, :div]
-        pointA.links[:, :div] = pointB.links[:, :div]
-        pointB.links[:, :div] = tmp
+        tmp = pointA.links[:, div]
+        pointA.links[:, div] = pointB.links[:, div]
+        pointB.links[:, div] = tmp
 
-        tmp = pointA.weights[:, :div]
-        pointA.weights[:, :div] = pointB.weights[:, :div]
-        pointB.weights[:, :div] = tmp
+        tmp = pointA.weights[:, div]
+        pointA.weights[:, div] = pointB.weights[:, div]
+        pointB.weights[:, div] = tmp
 
-        tmp = pointA.actFuns[:div]
-        pointA.actFuns[:div] = pointB.actFuns[:div]
-        pointB.actFuns[:div] = tmp
+        tmp = pointA.actFuns[div]
+        pointA.actFuns[div] = pointB.actFuns[div]
+        pointB.actFuns[div] = tmp
 
-        tmp = pointA.bias[:div]
-        pointA.bias[:div] = pointB.bias[:div]
-        pointB.bias[:div] = tmp
+        tmp = pointA.bias[div]
+        pointA.bias[div] = pointB.bias[div]
+        pointB.bias[div] = tmp
 
-        tmp = pointA.actFuns[:div]
-        pointA.actFuns[:div] = pointB.actFuns[:div]
-        pointB.actFuns[:div] = tmp
+        tmp = pointA.actFuns[div]
+        pointA.actFuns[div] = pointB.actFuns[div]
+        pointB.actFuns[div] = tmp
+
+        # tmp = pointA.links[:, :div]
+        # pointA.links[:, :div] = pointB.links[:, :div]
+        # pointB.links[:, :div] = tmp
+        #
+        # tmp = pointA.weights[:, :div]
+        # pointA.weights[:, :div] = pointB.weights[:, :div]
+        # pointB.weights[:, :div] = tmp
+        #
+        # tmp = pointA.actFuns[:div]
+        # pointA.actFuns[:div] = pointB.actFuns[:div]
+        # pointB.actFuns[:div] = tmp
+        #
+        # tmp = pointA.bias[:div]
+        # pointA.bias[:div] = pointB.bias[:div]
+        # pointB.bias[:div] = tmp
+        #
+        # tmp = pointA.actFuns[:div]
+        # pointA.actFuns[:div] = pointB.actFuns[:div]
+        # pointB.actFuns[:div] = tmp
 
         return [pointA, pointB]
 
     def mutate(self, point: LooseNetwork, pm: float, radius: float, mut_probs: [float]) -> LooseNetwork:
         point = point.copy()
 
-        mr = random.random()
+        # mutate each link
+        for i in list(range(point.input_size, len(point.bias))):
+            for j in range(0, min(i, len(point.bias) - point.output_size + 1)):
+                mr = random.random()
+                if mr < pm:
+                    self.mut_performed += 1
+                    link = point.links[j, i]
+                    if link == 0:
+                        point.links[j, i] = 1
+                        point.weights[j, i] = random.gauss(mu=0, sigma=1)
+                    else:
+                        point.links[j, i] = 0
+                        point.weights[j, i] = 0
 
-        if mr < pm:
-            self.mut_performed += 1
-            choices = list(range(point.input_size, len(point.bias)))
-            tot = len(choices)
-            mut_count = ceil(tot * 0.1)
-            to_mutate = choose_without_repetition(choices, mut_count)
+        for i in list(range(point.input_size, len(point.bias))):
+            for j in range(0, min(i, len(point.bias) - point.output_size + 1)):
+                link = point.links[j, i]
+                if link == 1:
+                    mr = random.random()
+                    if mr < pm:
+                        self.mut_performed += 1
+                        point.weights[j, i] += random.gauss(mu=0, sigma=radius)
 
-            for i in range(len(to_mutate)):
-                ind = to_mutate[i]
-                active = np.where(point.links[:, ind] == 0)[0]
+        for i in point.get_col_indices():
+            mr = random.random()
+            if mr < pm:
+                point.bias[i] += random.gauss(mu=0, sigma=radius)
+            mr = random.random()
+            if mr < pm:
+                point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
 
-                mode = random.random()
-                if mode < 0.1 * radius:
-                    to_deactivate_prob = np.random.uniform(size=(active.shape))
-                    to_deactivate = np.where(to_deactivate_prob < 0.1)[0]
-                    point.links[active[to_deactivate]] = 0
-                    point.weights[active[to_deactivate]] = 0
-                elif mode < 0.2 * radius:
-                    weights = point.weights[active, ind]
-                    inactive = np.where(point.links[:, ind] == 1)[0]
-                    to_activate_prob = np.random.uniform(size=(inactive.shape))
-                    to_activate = np.where(to_activate_prob < 0.1)[0]
-                    avg = np.average(weights)
-                    sd = np.std(weights)
-                    point.links[inactive[to_activate], ind] = 1
-                    point.weights[inactive[to_activate], ind] += np.random.normal(avg, sd, size=(to_activate.shape))
-                elif mode < 0.3 * radius:
-                    point.actFuns[ind] = try_choose_different(point.actFuns[ind], self.hrange.actFunSet)
-                elif mode < 0.4:
-                    point.bias[ind] += random.gauss(mu=0, sigma=radius*0.1)
-                else:
-                    weights = point.weights[active, ind]
-                    sd = np.std(weights)
-                    point.weights[active, ind] = np.random.normal(0, sd * radius, size=(active.shape))
+        # mutate each active weight
+        # mutate each act func
+        # mutate each bias
+
+        # if mr < pm:
+        #     self.mut_performed += 1
+        #     choices = list(range(point.input_size, len(point.bias)))
+        #     tot = len(choices)
+        #     mut_count = ceil(tot * 0.1)
+        #     to_mutate = choose_without_repetition(choices, mut_count)
+        #
+        #     for i in range(len(to_mutate)):
+        #         ind = to_mutate[i]
+        #         active = np.where(point.links[:, ind] == 0)[0]
+        #
+        #         mode = random.random()
+        #         if mode < 0.1 * radius:
+        #             to_deactivate_prob = np.random.uniform(size=(active.shape))
+        #             to_deactivate = np.where(to_deactivate_prob < 0.1)[0]
+        #             point.links[active[to_deactivate]] = 0
+        #             point.weights[active[to_deactivate]] = 0
+        #         elif mode < 0.2 * radius:
+        #             weights = point.weights[active, ind]
+        #             inactive = np.where(point.links[:, ind] == 1)[0]
+        #             to_activate_prob = np.random.uniform(size=(inactive.shape))
+        #             to_activate = np.where(to_activate_prob < 0.1)[0]
+        #             avg = np.average(weights)
+        #             sd = np.std(weights)
+        #             point.links[inactive[to_activate], ind] = 1
+        #             point.weights[inactive[to_activate], ind] += np.random.normal(avg, sd, size=(to_activate.shape))
+        #         elif mode < 0.3 * radius:
+        #             point.actFuns[ind] = try_choose_different(point.actFuns[ind], self.hrange.actFunSet)
+        #         elif mode < 0.4:
+        #             point.bias[ind] += random.gauss(mu=0, sigma=radius*0.1)
+        #         else:
+        #             weights = point.weights[active, ind]
+        #             sd = np.std(weights)
+        #             point.weights[active, ind] = np.random.normal(0, sd * radius, size=(active.shape))
 
 
 
@@ -245,7 +299,9 @@ class EvolvingClassifier:
 
         return point
 
-    def calculate_fitnesses(self, pool: mp.Pool, points: [AnnPoint]) -> [[LooseNetwork, float]]:
+    def calculate_fitnesses(self, pool: mp.Pool, points: [LooseNetwork]) -> [[LooseNetwork, float]]:
+        # for l in points:
+        #     l.analyse()
         count = len(points)
 
         touches = [0] * count

@@ -101,6 +101,6 @@ class EC_supervisor():
 
 
 
-        print(f"desu - {iteration + 1} - {round(mean_eval, 2)}")
+        print(f"desu - {iteration + 1} - {round(mean_eval, 2)} - {round(best_eval[1],  2)} - {best_eval[0].to_string()}")
 
 

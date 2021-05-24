@@ -29,10 +29,15 @@ random.seed(10011010)
 
 
 net = LooseNetwork(input_size=2, output_size=1, links=link_mat, weights=wei, biases=bias, actFuns=acts)
-print(net.run(np.array([[1], [1]])))
 net.analyse()
+print(net.run(np.array([[1], [1]])))
 
-# hrange = HyperparameterRange(neuronCount=5, actFuns=[ReLu(), Sigmoid()])
-# pop = generate_population(hrange, 3, 2, 1)
+print(net.get_indices_of_no_output_neurons())
+print(net.get_indices_of_no_input_neurons())
+print(net.get_indices_of_disconnected_neurons())
+print(net.to_string())
+
+hrange = HyperparameterRange(neuronCount=5, actFuns=[ReLu(), Sigmoid()])
+pop = generate_population(hrange, 3, 2, 1)
 
 ori = 1

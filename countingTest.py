@@ -6,21 +6,22 @@ from neural_network.FeedForwardNeuralNetwork import *
 from statistics import mean
 
 if __name__ == '__main__':
-    random.seed(1001)
+    random.seed(10011111)
 
     # sm = Softmax()
     # print(sm.prec_der(np.array([[1], [2], [3]])))
     # print(sm.computeDer(np.array([[1], [2], [3]])))
 
-    count = 1000
+    count = 500
     size = 5
     x,y = generate_counting_problem(count, size)
     X,Y = generate_counting_problem(ceil(count/5), size)
 
     ec = EvolvingClassifier()
-    ec.hrange.neuronCount = 100
-    ec.prepare(100, 100, 0.8, 0.05, 2, (x, y, X, Y), 1001)
-    npoint = ec.run(20, 12)
+    ec.hrange.neuronCount = 0
+    ec.prepare(200, 200, 0.8, 0.05, 2, (x, y, X, Y), 1001)
+    npoint = ec.run(30, 12)
+    print(npoint.links)
     print(npoint.to_string())
     tests = npoint.test(X, Y)
     print(tests[:3])

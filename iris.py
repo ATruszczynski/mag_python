@@ -42,8 +42,8 @@ if __name__ == '__main__':
     print(y)
 
     ec = EvolvingClassifier()
-    ec.hrange.neuronCount = 5
-    ec.prepare(10, 10, 0.8, 0.02, 2, (train_x, train_y, test_x, test_y), 1001)
+    ec.hrange.neuronCount = 50
+    ec.prepare(100, 100, 0.8, 0.02, 2, (train_x, train_y, test_x, test_y), 1001)
     network = ec.run(50, 12)
     tests = network.test(test_x, test_y)
     print(tests[:3])
