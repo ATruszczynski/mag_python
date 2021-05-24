@@ -93,9 +93,13 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
             pre_count = len(prev)
             for j in range(len(prev)):
                 p = prev[j]
-                weights[p, i] = random.gauss(0, 1 / sqrt(pre_count))
+                weights[p, i] = random.uniform(-hrange.maxAbsWei, hrange.maxAbsWei)
 
-        biases = np.zeros((neuron_count, 1))
+        biases = np.random.normal(0, 1, (neuron_count, 1))
+        biases = input_size * [0.0]
+        for i in range(input_size, neuron_count):
+            biases.append(random.uniform(-hrange.maxAbsBia, hrange.maxAbsBia))
+        biases = np.array(biases).reshape(-1, 1)
         actFuns = input_size * [None]
         for i in range(input_size, neuron_count):
             actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)].copy())

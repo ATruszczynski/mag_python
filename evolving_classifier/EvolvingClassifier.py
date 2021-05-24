@@ -78,10 +78,10 @@ class EvolvingClassifier:
 
         self.supervisor.start(iterations)
         self.mut_steps = np.logspace(1, 0, iterations, base=2)
-        mut_radius = np.linspace(0.5, 0.5, iterations)
-        pms = np.linspace(0.002, 0.002, iterations)
+        mut_radius = np.linspace(1, 0.5, iterations)
+        pms = np.linspace(0.01, 0.01, iterations)
         # pms = np.linspace(0.000, 0.000, iterations)
-        pcs = np.linspace(0.8, 0.8, iterations)
+        pcs = np.linspace(0.8, 0.2, iterations)
 
         print("start")
         # TODO cross entropy
@@ -200,12 +200,12 @@ class EvolvingClassifier:
         for i in list(range(point.input_size, len(point.bias))):
             for j in range(0, min(i, len(point.bias) - point.output_size + 1)):
                 mr = random.random()
-                if mr < pm:
+                if mr < pm * radius:
                     self.mut_performed += 1
                     link = point.links[j, i]
                     if link == 0:
                         point.links[j, i] = 1
-                        point.weights[j, i] = random.gauss(mu=0, sigma=1)
+                        point.weights[j, i] = random.uniform(-self.hrange.maxAbsWei, self.hrange.maxAbsWei)
                     else:
                         point.links[j, i] = 0
                         point.weights[j, i] = 0
@@ -217,14 +217,22 @@ class EvolvingClassifier:
                     mr = random.random()
                     if mr < pm:
                         self.mut_performed += 1
-                        point.weights[j, i] += random.gauss(mu=0, sigma=radius)
+                        curr = point.weights[j, i]
+                        scale = 2 * self.hrange.maxAbsWei * radius
+                        maxw = min(curr + scale, self.hrange.maxAbsWei)
+                        minw = max(curr - scale, -self.hrange.maxAbsWei)
+                        point.weights[j, i] = random.uniform(minw, maxw)
 
-        for i in point.get_col_indices():
+        for i in range(point.hidden_start_index, point.neuron_count):
             mr = random.random()
             if mr < pm:
-                point.bias[i] += random.gauss(mu=0, sigma=radius)
+                curr = point.bias[i]
+                scale = 2 * self.hrange.maxAbsBia * radius
+                maxb = min(curr + scale, self.hrange.maxAbsBia)
+                minb = max(curr - scale, -self.hrange.maxAbsBia)
+                point.bias[i] = random.uniform(minb, maxb)
             mr = random.random()
-            if mr < pm:
+            if mr < pm * radius:
                 point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
 
         # mutate each active weight

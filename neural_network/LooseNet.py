@@ -30,6 +30,7 @@ class LooseNetwork:
     def run(self, input: np.ndarray):
         self.act[:self.input_size] = input
 
+        # TODO biasy powinny być zero dla wejściowych
         for i in range(self.input_size, len(self.bias)):
             # prev = np.where(self.links[:, i] == 1)
             #
@@ -158,7 +159,10 @@ class LooseNetwork:
         return result
 
     def density(self):
-        total = (self.neuron_count * self.neuron_count - self.neuron_count) / 2
+        total = 0
+        for i in range(self.input_size, self.neuron_count):
+            for j in range(0, min(i, self.neuron_count - self.output_size + 1)):
+                total += 1
         sum = np.sum(self.links)
 
         return round(sum / total, 3)
