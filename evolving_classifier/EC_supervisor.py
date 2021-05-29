@@ -62,7 +62,7 @@ class EC_supervisor():
 
         pred_time = 1 / frac_velocity
 
-        # print(f"Remaining time: {round(pred_time - elapsed_time, 2)}")
+        print(f"Remaining time: {round(pred_time - elapsed_time, 2)}")
 
         # evaluate statistics
 

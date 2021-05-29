@@ -1,5 +1,10 @@
-from evolving_classifier.EvolvingClassifier import *
+# from evolving_classifier.EvolvingClassifier import *
+import random
+
 from ann_point.AnnPoint2 import *
+from utility.Utility import choose_without_repetition, get_Xu_matrix
+from ann_point.HyperparameterRange import HyperparameterRange
+
 
 def change_amount_of_layers(point: AnnPoint2, demanded: int, hrange: HyperparameterRange) -> AnnPoint2:
     result = point.copy()
@@ -50,21 +55,19 @@ def increase_amount_of_layers(point: AnnPoint2, demanded: int, hrange: Hyperpara
     for i in range(len(new_layers)):
         pos = choose_without_repetition(list(range(len(layers) - 1)), 1)[0]
         layers.insert(pos + 1, new_layers[i])
-        # tmp = layers[:pos + 1]
-        # tmp.append(new_layers[i])
-        # tmp.extend(layers[pos + 1:])
-        # layers = tmp
 
-    for i in range(1, len(layers)):
-        layer = layers[i]
-        pre_layer = layers[i - 1]
-        if len(layer) < 4:
-            layer.append(get_Xu_matrix((layer[1], pre_layer[1])))
-            layer.append(np.zeros((layer[1], 1)))
-        elif pre_layer[1] != layer[3].shape[1]:
-            layer[3] = get_Xu_matrix((layer[1], pre_layer[1]))
-            layer[4] = np.zeros((layer[1], 1))
-        layers[i] = layer
+    # for i in range(1, len(layers)):
+    #     layer = layers[i]
+    #     pre_layer = layers[i - 1]
+    #     if len(layer) < 4:
+    #         layer.append(get_Xu_matrix((layer[1], pre_layer[1])))
+    #         layer.append(np.zeros((layer[1], 1)))
+    #     elif pre_layer[1] != layer[3].shape[1] or pre_layer[0] != layer[0] - 1:
+    #         layer[3] = get_Xu_matrix((layer[1], pre_layer[1]))
+    #         layer[4] = np.zeros((layer[1], 1))
+    #     layers[i] = layer
+
+    layers = fix_layer_sizes(layers)
 
     return point_from_layer_tuples(layers)
 
@@ -73,11 +76,11 @@ def change_neuron_count_in_layer(point: AnnPoint2, layer: int, demanded: int) ->
     result = point.copy()
 
     if demanded < curr:
-        decrease_neuron_count_in_layer(point, layer, curr - demanded)
+        result = decrease_neuron_count_in_layer(point, layer, curr - demanded)
     elif demanded > curr:
-        increase_neuron_count_in_layer(point, layer, demanded - curr)
+        result = increase_neuron_count_in_layer(point, layer, demanded - curr)
 
-    return point.copy()
+    return result
 
 def decrease_neuron_count_in_layer(point: AnnPoint2, layer: int, remove_count: int) -> AnnPoint2:
     curr = point.hidden_neuron_counts[layer]
@@ -101,7 +104,7 @@ def increase_neuron_count_in_layer(point: AnnPoint2, layer: int, add_count: int)
     next_layer = layers[layer + 2]
 
     wei_rows_to_add = get_Xu_matrix((add_count, curr_layer[3].shape[1]))
-    bias_rows_to_add = get_Xu_matrix((add_count, 1))
+    bias_rows_to_add = np.zeros((add_count, 1))
     curr_layer[3] = np.vstack([curr_layer[3], wei_rows_to_add])
     curr_layer[4] = np.vstack([curr_layer[4], bias_rows_to_add])
 
@@ -109,4 +112,20 @@ def increase_neuron_count_in_layer(point: AnnPoint2, layer: int, add_count: int)
     next_layer[3] = np.hstack([next_layer[3], wei_cols_to_add])
 
     return point_from_layer_tuples(layers)
+
+def fix_layer_sizes(layers: [[int, int, ActFun, np.ndarray, np.ndarray]]) -> [[int, int, ActFun, np.ndarray, np.ndarray]]:
+    for i in range(1, len(layers)):
+        layer = layers[i]
+        pre_layer = layers[i - 1]
+        if len(layer) < 4:
+            layer.append(get_Xu_matrix((layer[1], pre_layer[1])))
+            layer.append(np.zeros((layer[1], 1)))
+        elif pre_layer[1] != layer[3].shape[1] or pre_layer[0] != layer[0] - 1:
+            layer[3] = get_Xu_matrix((layer[1], pre_layer[1]))
+            layer[4] = np.zeros((layer[1], 1))
+        layers[i] = layer
+
+    return layers
+
+
 

@@ -7,10 +7,6 @@ class AnnPoint2():
         self.input_size = input_size
         self.output_size = output_size
 
-        self.hidden_neuron_counts = []
-        for i in range(len(hiddenNeuronCounts)):
-            self.hidden_neuron_counts.append(hiddenNeuronCounts[i])
-
         self.activation_functions = []
         for i in range(len(activationFuns)):
             self.activation_functions.append(activationFuns[i].copy())
@@ -22,6 +18,10 @@ class AnnPoint2():
         self.biases = []
         for i in range(len(biases)):
             self.biases.append(biases[i].copy()) # TODO test if deep copy
+
+        self.hidden_neuron_counts = []
+        for i in range(len(self.weights) - 1):
+            self.hidden_neuron_counts.append(self.weights[i].shape[0])
 
     def get_full_neuron_counts(self) -> [int]:
         neuron_counts = [self.input_size]

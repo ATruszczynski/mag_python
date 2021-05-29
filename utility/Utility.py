@@ -191,7 +191,7 @@ def get_Xu_matrix(shape: (int, int), var_mul: float = 1) -> np.ndarray:
     result = np.zeros(shape)
     for r in range(0, result.shape[0]):
         for c in range(0, result.shape[1]):
-            result[r, c] = random.gauss(0, var_mul / sqrt(result.shape[1]))
+            result[r, c] = random.gauss(0, var_mul / sqrt(result.shape[1])) #TODO ugh, should be made faster (Will break tests)
     return result
 
 

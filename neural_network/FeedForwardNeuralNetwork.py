@@ -121,19 +121,23 @@ class FeedForwardNeuralNetwork:
                     self.weights[i] -= weight_step[i]
                     self.biases[i] -= bias_step[i]
 
-    def test(self, test_input: [np.ndarray], test_output: [np.ndarray]) -> [float, float, float, np.ndarray]:
+    def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lossFun: LossFun = None) -> [float, float, float, np.ndarray]:
         out_size = self.neuronCounts[len(self.neuronCounts) - 1]
         confusion_matrix = np.zeros((out_size, out_size))
+
+        result = 0
 
         for i in range(len(test_output)):
             net_result = self.run(test_input[i])
             pred_class = np.argmax(net_result)
             corr_class = np.argmax(test_output[i])
             confusion_matrix[corr_class, pred_class] += 1
+            if lossFun is not None:
+                result += lossFun.compute(net_result, test_output[i])
 
         # TODO test acc, recall and precision
 
-        return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix]
+        return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, result]
 
     def get_empty_weights(self):
         result = [np.empty((0, 0))]
