@@ -45,6 +45,27 @@ class SomeStructMutationOperator(MutationOperator):
 
         return point
 
+# class SomeWBMutationOperator(MutationOperator):
+#     def __init__(self, hrange: HyperparameterRange):
+#         super().__init__(hrange)
+#
+#     def mutate(self, point: AnnPoint2, pm: float, radius: float) -> AnnPoint2:
+#         point = point.copy()
+#
+#         # Zmień wagi
+#         for i in range(len(point.weights)): #TODO can be made faster probably
+#             for r in range(point.weights[i].shape[0]):
+#                 for c in range(point.weights[i].shape[1]):
+#                     if random.random() < pm:
+#                         point.weights[i][r, c] += random.gauss(0, radius)
+#         # Zmień biasy
+#         for i in range(len(point.biases)):#TODO can be made faster probably
+#             for r in range(point.biases[i].shape[0]):
+#                 if random.random() < pm:
+#                     point.biases[i][r] += random.gauss(0, radius)
+#
+#         return point
+
 class SomeWBMutationOperator(MutationOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__(hrange)
@@ -52,16 +73,22 @@ class SomeWBMutationOperator(MutationOperator):
     def mutate(self, point: AnnPoint2, pm: float, radius: float) -> AnnPoint2:
         point = point.copy()
 
-        # Zmień wagi
-        for i in range(len(point.weights)): #TODO can be made faster probably
-            for r in range(point.weights[i].shape[0]):
-                for c in range(point.weights[i].shape[1]):
-                    if random.random() < pm:
-                        point.weights[i][r, c] += random.gauss(0, radius)
-        # Zmień biasy
-        for i in range(len(point.biases)):#TODO can be made faster probably
-            for r in range(point.biases[i].shape[0]):
-                if random.random() < pm:
-                    point.biases[i][r] += random.gauss(0, radius)
+        for i in range(len(point.weights)):
+            r = np.random.random(point.weights[i].shape)
+            to_change = np.where(r < pm)
+            multiplier = np.zeros(r.shape)
+            multiplier[to_change] = 1
+            shift = np.random.normal(0, radius, point.weights[i].shape)
+            shift = np.multiply(multiplier, shift)
+            point.weights[i] += shift
+
+        for i in range(len(point.biases)):
+            r = np.random.random(point.biases[i].shape)
+            to_change = np.where(r < pm)
+            multiplier = np.zeros(r.shape)
+            multiplier[to_change] = 1
+            shift = np.random.normal(0, radius, point.biases[i].shape)
+            shift = np.multiply(multiplier, shift)
+            point.biases[i] += shift
 
         return point

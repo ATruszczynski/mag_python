@@ -108,7 +108,7 @@ def increase_neuron_count_in_layer(point: AnnPoint2, layer: int, add_count: int)
     curr_layer[3] = np.vstack([curr_layer[3], wei_rows_to_add])
     curr_layer[4] = np.vstack([curr_layer[4], bias_rows_to_add])
 
-    wei_cols_to_add = get_Xu_matrix((next_layer[1], add_count))
+    wei_cols_to_add = get_Xu_matrix((next_layer[1], add_count), div=add_count + next_layer[3].shape[1])
     next_layer[3] = np.hstack([next_layer[3], wei_cols_to_add])
 
     return point_from_layer_tuples(layers)

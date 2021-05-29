@@ -187,11 +187,14 @@ def get_in_radius(current: float, min_val: float, max_val:float, radius: float) 
 
     return random.uniform(lower_bound, upper_bound)
 
-def get_Xu_matrix(shape: (int, int), var_mul: float = 1) -> np.ndarray:
-    result = np.zeros(shape)
-    for r in range(0, result.shape[0]):
-        for c in range(0, result.shape[1]):
-            result[r, c] = random.gauss(0, var_mul / sqrt(result.shape[1])) #TODO ugh, should be made faster (Will break tests)
+def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> np.ndarray: #TODO dodaj parametr na dzielnik
+    if div is None:
+        l = shape[1]
+    else:
+        l = div
+
+    result = np.random.normal(0, var_mul / sqrt(l), shape)
+
     return result
 
 

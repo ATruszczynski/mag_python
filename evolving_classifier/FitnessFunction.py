@@ -9,20 +9,33 @@ class FitnessFunction:
     def __init__(self):
         pass
 
-    def compute(self, point: AnnPoint2, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> float:
+    def compute(self, point: [AnnPoint2, int], trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, int]:
         pass
 
 class CrossEffFitnessFunction(FitnessFunction):
     def __init__(self):
         super().__init__()
 
-    def compute(self, point: AnnPoint2, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> float:
-        network = network_from_point(point, 1001) #TODO make sure this seed does nothing
+    def compute(self, point: [AnnPoint2, int], trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, int]:
+        network = network_from_point(point[0], 1001) #TODO make sure this seed does nothing
 
         test_results = network.test(test_input=trainInputs, test_output=trainOutputs, lossFun=QuadDiff()) #TODO DONT USE TEST SETS IN TRAINING PROCESS WTF
         result = mean(test_results[0:3])
 
         cross = -test_results[4]
 
-        return (1 - result) ** 2 * cross
+        return [(1 - result) ** 2 * cross, point[1]]
+
+
+class EffFitnessFunction(FitnessFunction):
+    def __init__(self):
+        super().__init__()
+
+    def compute(self, point: [AnnPoint2, int], trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, int]:
+        network = network_from_point(point[0], 1001) #TODO make sure this seed does nothing
+
+        test_results = network.test(test_input=trainInputs, test_output=trainOutputs, lossFun=QuadDiff()) #TODO DONT USE TEST SETS IN TRAINING PROCESS WTF
+        result = mean(test_results[0:3])
+
+        return [result, point[1]]
 

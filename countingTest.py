@@ -1,10 +1,10 @@
 from sklearn import datasets
 from sklearn.preprocessing import OneHotEncoder
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
-from evolving_classifier.FitnessFunction import CrossEffFitnessFunction
-from evolving_classifier.operators.CrossoverOperator import SomeCrossoverOperator
-from evolving_classifier.operators.MutationOperators import SomeStructMutationOperator
-from evolving_classifier.operators.SelectionOperator import TournamentSelection
+from evolving_classifier.FitnessFunction import *
+from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.MutationOperators import *
+from evolving_classifier.operators.SelectionOperator import *
 from utility.Utility import *
 from neural_network.FeedForwardNeuralNetwork import *
 from statistics import mean
@@ -24,11 +24,13 @@ if __name__ == '__main__':
 
     ec = EvolvingClassifier()
     ec.hrange.layerCountMin = 0
-    ec.hrange.layerCountMax = 2
+    ec.hrange.layerCountMax = 1
+    ec.hrange.neuronCountMax = 25
     ec.co = SomeCrossoverOperator()
-    ec.mo = SomeStructMutationOperator(ec.hrange)
+    ec.smo = SomeStructMutationOperator(ec.hrange)
+    ec.mo = SomeWBMutationOperator(ec.hrange)
     ec.so = TournamentSelection(2)
-    ec.ff = CrossEffFitnessFunction()
+    ec.ff = EffFitnessFunction()
     ec.prepare(popSize=100, startPopSize=100, nn_data=(x, y, X, Y), seed=1524)
     npoint = ec.run(100, 12)
     network = network_from_point(npoint, 1001)

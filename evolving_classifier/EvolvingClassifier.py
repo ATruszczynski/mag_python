@@ -49,6 +49,7 @@ class EvolvingClassifier:
         self.cross_performed = 0
 
         self.mo = MutationOperator(self.hrange)
+        self.smo = MutationOperator(self.hrange)
         self.co = CrossoverOperator()
         self.so = SelectionOperator(2)
         self.ff = CrossEffFitnessFunction()
@@ -74,12 +75,12 @@ class EvolvingClassifier:
         self.supervisor.start(iterations)
         mut_radius = np.linspace(1, 0.05, iterations)
 
-        pmS = 0.02
-        pmE = 0.02
-        pmsS = 0.02
-        pmsE = 0.02
-        pcS = 0.8
-        pcE = 0.8
+        pmS = 1
+        pmE = 1
+        pmsS = 0.1
+        pmsE = 0.00
+        pcS = 0.5
+        pcE = 0.00
 
         pms = np.linspace(pmS, pmE, iterations)
         pmss = np.linspace(pmsS, pmsE, iterations)
@@ -114,10 +115,15 @@ class EvolvingClassifier:
                 else:
                     crossed.append(c1)
 
-            new_pop = []
+            mutated = []
 
             for ind in range(len(crossed)):
-                new_pop.append(self.mo.mutate(crossed[ind], pm=pms[i], radius=mut_radius[i]))
+                mutated.append(self.mo.mutate(crossed[ind], pm=pms[i], radius=mut_radius[i]))
+
+            new_pop = []
+
+            for ind in range(len(mutated)):
+                new_pop.append(self.smo.mutate(mutated[ind], pm=pmss[i], radius=mut_radius[i]))
 
             self.population = new_pop
 
@@ -318,16 +324,17 @@ class EvolvingClassifier:
 
     def calculate_fitnesses(self, pool: mp.Pool, to_compute: [AnnPoint]) -> [[AnnPoint, float]]:
 
+        points = [[to_compute[i], i] for i in range(len(to_compute))]
 
         if pool is None:
-            new_fitnesses = [self.ff.compute(to_compute[i], self.trainInputs, self.trainOutputs)for i in range(len(to_compute))]
+            new_fitnesses = [self.ff.compute(points[i], self.trainInputs, self.trainOutputs)for i in range(len(points))]
         else:
-            estimating_async_results = [pool.apply_async(func=self.ff.compute, args=(to_compute[i], self.trainInputs, self.trainOutputs)) for i in range(len(to_compute))]
+            estimating_async_results = [pool.apply_async(func=self.ff.compute, args=(points[i], self.trainInputs, self.trainOutputs)) for i in range(len(points))]
             [estimation_result.wait() for estimation_result in estimating_async_results]
             new_fitnesses = [result.get() for result in estimating_async_results]
 
 
-        estimates = [[to_compute[i], new_fitnesses[i]] for i in range(len(to_compute))]
+        estimates = [[to_compute[i[1]], i[0]] for i in new_fitnesses]
 
         return estimates
 
