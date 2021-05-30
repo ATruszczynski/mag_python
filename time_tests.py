@@ -7,7 +7,7 @@ import time
 
 
 def compare_mutations():
-    smo = SomeWBMutationOperator(get_default_hrange())
+    smo = BiasedGaussianWBMutationOperator(get_default_hrange())
     smo2 = SomeWBMutationOperator2(get_default_hrange())
 
     point = AnnPoint2(10000, 1000, weights=[np.zeros((1000, 10000))], biases=[np.zeros((1000, 1))], activationFuns=[ReLu()], hiddenNeuronCounts=[])

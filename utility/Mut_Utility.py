@@ -127,5 +127,54 @@ def fix_layer_sizes(layers: [[int, int, ActFun, np.ndarray, np.ndarray]]) -> [[i
 
     return layers
 
+def resize_layer(size: (int, int), layer: [int, int, ActFun, np.ndarray, np.ndarray]) -> [int, int, ActFun, np.ndarray, np.ndarray]:
+    layer[1] = size[0]
+
+    wei = layer[3]
+    bia = layer[4]
+
+    if wei.shape[0] < size[0]:
+        nrow = size[0] - wei.shape[0]
+        rows_to_add = np.zeros((nrow, wei.shape[1]))
+        wei = np.vstack([wei, rows_to_add])
+        rows_to_add = np.zeros((nrow, 1))
+        bia = np.vstack([bia, rows_to_add])
+
+    if wei.shape[0] > size[0]:
+        wei = wei[:size[0], :]
+        bia = bia[:size[0], :]
+
+    if wei.shape[1] < size[1]:
+        ncol = size[1] - wei.shape[1]
+        cols_to_add = np.zeros((wei.shape[0], ncol))
+        wei = np.hstack([wei, cols_to_add])
+
+    if wei.shape[1] > size[1]:
+        wei = wei[:, :size[1]]
+
+    layer[3] = wei
+    layer[4] = bia
+
+    return layer
+
+def resize_given_layer(ind: int, layers: [[int, int, ActFun, np.ndarray, np.ndarray]]) -> [[int, int, ActFun, np.ndarray, np.ndarray]]:
+    layer = layers[ind]
+    row_count = layer[3].shape[0]
+    col_count = layer[3].shape[1]
+
+    if ind != 0:
+        prev_layer = layers[ind - 1]
+        col_count = prev_layer[1]
+
+    if ind != len(layers) - 1:
+        next_layer = layers[ind + 1]
+        row_count = next_layer[3].shape[1]
+
+    layer = resize_layer((row_count, col_count), layer)
+    layers[ind] = layer
+
+    return layers
+
+
 
 

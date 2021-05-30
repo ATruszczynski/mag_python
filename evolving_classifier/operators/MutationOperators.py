@@ -45,6 +45,38 @@ class SomeStructMutationOperator(MutationOperator):
 
         return point
 
+class MinimalDamageStructMutationOperator(MutationOperator):
+    def __init__(self, hrange: HyperparameterRange):
+        super().__init__(hrange)
+
+    def mutate(self, point: AnnPoint2, pm: float, radius: float) -> AnnPoint2:
+        point = point.copy()
+
+        # Zmień liczbę layerów
+        if random.random() < pm:
+            current = len(point.hidden_neuron_counts)
+            minhl = max(current - 1, self.hrange.layerCountMin)
+            maxhl = min(current + 1, self.hrange.layerCountMax)
+            new = try_choose_different(current, list(range(minhl, maxhl + 1)))
+
+            point = change_amount_of_layers(point=point, demanded=new, hrange=self.hrange)
+
+        # Zmień county neuronów
+        for i in range(len(point.hidden_neuron_counts)):
+            if random.random() < pm:
+                current = point.hidden_neuron_counts[i]
+                new = try_choose_different(current, list(range(self.hrange.neuronCountMin, self.hrange.neuronCountMax + 1))) # TODO tu można wprowadzić radius
+                point = change_neuron_count_in_layer(point=point, layer=i, demanded=new)
+
+        # Zmień funkcje
+        for i in range(len(point.weights)):
+            if random.random() < pm:
+                current = point.activation_functions[i]
+                new = try_choose_different(current, self.hrange.actFunSet)
+                point.activation_functions[i] = new.copy()
+
+        return point
+
 # class SomeWBMutationOperator(MutationOperator):
 #     def __init__(self, hrange: HyperparameterRange):
 #         super().__init__(hrange)
@@ -66,7 +98,7 @@ class SomeStructMutationOperator(MutationOperator):
 #
 #         return point
 
-class SomeWBMutationOperator(MutationOperator):
+class BiasedGaussianWBMutationOperator(MutationOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__(hrange)
 
@@ -78,7 +110,7 @@ class SomeWBMutationOperator(MutationOperator):
             to_change = np.where(r < pm)
             multiplier = np.zeros(r.shape)
             multiplier[to_change] = 1
-            shift = np.random.normal(0, radius, point.weights[i].shape)
+            shift = np.random.normal(0, 0.5 * radius, point.weights[i].shape)
             shift = np.multiply(multiplier, shift)
             point.weights[i] += shift
 
@@ -87,7 +119,34 @@ class SomeWBMutationOperator(MutationOperator):
             to_change = np.where(r < pm)
             multiplier = np.zeros(r.shape)
             multiplier[to_change] = 1
-            shift = np.random.normal(0, radius, point.biases[i].shape)
+            shift = np.random.normal(0, 0.5 * radius, point.biases[i].shape)
+            shift = np.multiply(multiplier, shift)
+            point.biases[i] += shift
+
+        return point
+
+class BiasedUniformWBMutationOperator(MutationOperator):
+    def __init__(self, hrange: HyperparameterRange):
+        super().__init__(hrange)
+
+    def mutate(self, point: AnnPoint2, pm: float, radius: float) -> AnnPoint2:
+        point = point.copy()
+
+        for i in range(len(point.weights)):
+            r = np.random.random(point.weights[i].shape)
+            to_change = np.where(r < pm)
+            multiplier = np.zeros(r.shape)
+            multiplier[to_change] = 1
+            shift = np.random.uniform(-radius, radius, point.weights[i].shape)
+            shift = np.multiply(multiplier, shift)
+            point.weights[i] += shift
+
+        for i in range(len(point.biases)):
+            r = np.random.random(point.biases[i].shape)
+            to_change = np.where(r < pm)
+            multiplier = np.zeros(r.shape)
+            multiplier[to_change] = 1
+            shift = np.random.uniform(-radius, radius, point.biases[i].shape)
             shift = np.multiply(multiplier, shift)
             point.biases[i] += shift
 

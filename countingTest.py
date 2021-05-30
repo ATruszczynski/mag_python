@@ -11,6 +11,7 @@ from statistics import mean
 
 if __name__ == '__main__':
     random.seed(1001)
+    np.random.seed(1001)
 
     # sm = Softmax()
     # print(sm.prec_der(np.array([[1], [2], [3]])))
@@ -18,7 +19,7 @@ if __name__ == '__main__':
 
     count_tr = 1000
     count_test = 500
-    size = 10
+    size = 5
     x,y = generate_counting_problem(count_tr, size)
     X,Y = generate_counting_problem(ceil(count_test), size)
 
@@ -26,13 +27,13 @@ if __name__ == '__main__':
     ec.hrange.layerCountMin = 0
     ec.hrange.layerCountMax = 1
     ec.hrange.neuronCountMax = 25
-    ec.co = SomeCrossoverOperator()
+    ec.co = MinimalDamageCrossoverOperator()
     ec.smo = SomeStructMutationOperator(ec.hrange)
-    ec.mo = SomeWBMutationOperator(ec.hrange)
-    ec.so = TournamentSelection(2)
-    ec.ff = EffFitnessFunction()
-    ec.prepare(popSize=100, startPopSize=100, nn_data=(x, y, X, Y), seed=1524)
-    npoint = ec.run(100, 12)
+    ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
+    ec.so = TournamentSelection(4)
+    ec.ff = CrossEffFitnessFunction()
+    ec.prepare(popSize=50, startPopSize=50, nn_data=(x, y, X, Y), seed=1524)
+    npoint = ec.run(50, 12)
     network = network_from_point(npoint, 1001)
     print(npoint.to_string())
     tests = network.test(X, Y)

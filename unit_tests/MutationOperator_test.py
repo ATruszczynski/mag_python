@@ -181,7 +181,7 @@ def test_some_wb_mutation():
 
     random.seed(10011101)
     np.random.seed(10011101)
-    mo = SomeWBMutationOperator(hrange)
+    mo = BiasedGaussianWBMutationOperator(hrange)
     point2 = mo.mutate(point, 0.75, 2)
 
     assert point2.input_size == 2
@@ -191,11 +191,11 @@ def test_some_wb_mutation():
     assert point2.hidden_neuron_counts[0] == 2
 
     assert len(point2.weights) == 2
-    assert np.all(np.isclose(point2.weights[0], np.array([[2.3756664, 2.28163219], [0.52291458, 4.]]), atol=1e-3))
-    assert np.all(np.isclose(point2.weights[1], np.array([[5., 2.90411931]]), atol=1e-3))
+    assert np.all(np.isclose(point2.weights[0], np.array([[1.6878332, 2.1408161], [1.76145729, 4.]]), atol=1e-3))
+    assert np.all(np.isclose(point2.weights[1], np.array([[5., 4.45205966]]), atol=1e-3))
 
     assert len(point2.biases) == 2
-    assert np.all(np.isclose(point2.biases[0], np.array([[-0.9799893], [-2.]]), atol=1e-3))
+    assert np.all(np.isclose(point2.biases[0], np.array([[-0.98999465], [-2.]]), atol=1e-3))
     assert np.all(np.isclose(point2.biases[1], np.array([[-3]]), atol=1e-3))
 
     assert len(point2.activation_functions) == 2
@@ -203,9 +203,36 @@ def test_some_wb_mutation():
     assert point2.activation_functions[1].to_string() == TanH().to_string()
 
 
+def test_bias_uni_wb_mutation():
+    wei = [np.array([[1, 2], [3, 4.0]]), np.array([[5, 6.0]])]
+    bias = [np.array([[-1], [-2.0]]), np.array([[-3.0]])]
+    acts = [ReLu(), TanH()]
+    hlc = [2]
+    point = AnnPoint2(2, 1, hlc, acts, wei, bias)
+    hrange = HyperparameterRange((0, 4), (1, 3), [ReLu(), Sigmoid(), TanH(), Softmax()], [QuadDiff(), CrossEntropy()])
 
+    random.seed(10011101)
+    np.random.seed(10011101)
+    mo = BiasedUniformWBMutationOperator(hrange)
+    point2 = mo.mutate(point, 0.75, 2)
 
+    assert point2.input_size == 2
+    assert point2.output_size == 1
 
+    assert len(point2.hidden_neuron_counts) == 1
+    assert point2.hidden_neuron_counts[0] == 2
+
+    assert len(point2.weights) == 2
+    assert np.all(np.isclose(point2.weights[0], np.array([[1.35461979, 3.7321831], [2.33946407, 4.]]), atol=1e-3))
+    assert np.all(np.isclose(point2.weights[1], np.array([[5., 5.62999707]]), atol=1e-3))
+
+    assert len(point2.biases) == 2
+    assert np.all(np.isclose(point2.biases[0], np.array([[-1.95898934], [-2.]]), atol=1e-3))
+    assert np.all(np.isclose(point2.biases[1], np.array([[-3]]), atol=1e-3))
+
+    assert len(point2.activation_functions) == 2
+    assert point2.activation_functions[0].to_string() == ReLu().to_string()
+    assert point2.activation_functions[1].to_string() == TanH().to_string()
 
 # random.seed(10011101)
 # np.random.seed(10011101)
@@ -240,50 +267,74 @@ def test_some_wb_mutation():
 #
 # test_layer_decrease_nc()
 #
-random.seed(10011101)
-np.random.seed(10011101)
-random.random()
-print(random.randint(0, 1))
-print(choose_without_repetition([1, 2, 3], 1))
-print(get_Xu_matrix((1, 2)))
-print("neuron counts")
-random.random()
-print(try_choose_different(1, [1, 2, 3, 4]))
-print(get_Xu_matrix((2, 2)))
-print(get_Xu_matrix((2, 2), div=3))
-random.random()
-print(try_choose_different(2, [1, 2, 3, 4]))
-print(get_Xu_matrix((1, 3)))
-print(get_Xu_matrix((1, 1), div=3))
-print("acts")
-random.random()
-print(try_choose_different(TanH(), [ReLu(), Sigmoid(), TanH(), Softmax()]).to_string())
-random.random()
-print(try_choose_different(Sigmoid(), [ReLu(), Sigmoid(), TanH(), Softmax()]).to_string())
-random.random()
-print(try_choose_different(TanH(), [ReLu(), Sigmoid(), TanH(), Softmax()]).to_string())
-test_some_mutation()
+# random.seed(10011101)
+# np.random.seed(10011101)
+# random.random()
+# print(random.randint(0, 1))
+# print(choose_without_repetition([1, 2, 3], 1))
+# print(get_Xu_matrix((1, 2)))
+# print("neuron counts")
+# random.random()
+# print(try_choose_different(1, [1, 2, 3, 4]))
+# print(get_Xu_matrix((2, 2)))
+# print(get_Xu_matrix((2, 2), div=3))
+# random.random()
+# print(try_choose_different(2, [1, 2, 3, 4]))
+# print(get_Xu_matrix((1, 3)))
+# print(get_Xu_matrix((1, 1), div=3))
+# print("acts")
+# random.random()
+# print(try_choose_different(TanH(), [ReLu(), Sigmoid(), TanH(), Softmax()]).to_string())
+# random.random()
+# print(try_choose_different(Sigmoid(), [ReLu(), Sigmoid(), TanH(), Softmax()]).to_string())
+# random.random()
+# print(try_choose_different(TanH(), [ReLu(), Sigmoid(), TanH(), Softmax()]).to_string())
+# test_some_mutation()
 
 # random.seed(10011101)
 # np.random.seed(10011101)
 # print(np.random.random((2, 2)))
-# shift = np.random.normal(0, 2, size=(2, 2))
+# shift = np.random.normal(0, 1, size=(2, 2))
 # shift[1, 1] = 0
 # print(np.array([[1, 2], [3, 4.0]]) + shift)
 #
 # print(np.random.random((1, 2)))
-# shift = np.random.normal(0, 2, size=(1, 2))
+# shift = np.random.normal(0, 1, size=(1, 2))
 # shift[0, 0] = 0
 # print(np.array([[5, 6.0]]) + shift)
 #
 # print(np.random.random((2, 1)))
-# shift = np.random.normal(0, 2, size=(2, 1))
+# shift = np.random.normal(0, 1, size=(2, 1))
 # shift[1, 0] = 0
 # print(np.array([[-1], [-2]]) + shift)
 #
 # print(np.random.random((1, 1)))
-# shift = np.random.normal(0, 2, size=(1, 1))
+# shift = np.random.normal(0, 1, size=(1, 1))
 # shift[0, 0] = 0
 # print(np.array([[-3]]) + shift)
 # test_some_wb_mutation()
+
+
+
+random.seed(10011101)
+np.random.seed(10011101)
+print(np.random.random((2, 2)))
+shift = np.random.uniform(-2, 2, size=(2, 2))
+shift[1, 1] = 0
+print(np.array([[1, 2], [3, 4.0]]) + shift)
+
+print(np.random.random((1, 2)))
+shift = np.random.uniform(-2, 2, size=(1, 2))
+shift[0, 0] = 0
+print(np.array([[5, 6.0]]) + shift)
+
+print(np.random.random((2, 1)))
+shift = np.random.uniform(-2, 2, size=(2, 1))
+shift[1, 0] = 0
+print(np.array([[-1], [-2]]) + shift)
+
+print(np.random.random((1, 1)))
+shift = np.random.uniform(-2, 2, size=(1, 1))
+shift[0, 0] = 0
+print(np.array([[-3]]) + shift)
 

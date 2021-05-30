@@ -73,14 +73,21 @@ class EvolvingClassifier:
         else:
             pool = None
         self.supervisor.start(iterations)
-        mut_radius = np.linspace(1, 0.05, iterations)
+        mut_radius = np.linspace(0.5, 0.5, iterations)
 
-        pmS = 1
-        pmE = 1
-        pmsS = 0.1
+        pmS = 0.75
+        pmE = 0.75
+        pmsS = 0.00
         pmsE = 0.00
         pcS = 0.5
-        pcE = 0.00
+        pcE = 0.5
+        #
+        # pmS = 0.
+        # pmE = 0.
+        # pmsS = 0.00
+        # pmsE = 0.00
+        # pcS = 0.
+        # pcE = 0.
 
         pms = np.linspace(pmS, pmE, iterations)
         pmss = np.linspace(pmsS, pmsE, iterations)
@@ -98,6 +105,12 @@ class EvolvingClassifier:
 
         for i in range(iterations):
             eval_pop = self.calculate_fitnesses(pool, self.population)
+            eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
+
+            hill_climbed = []
+            for hc in range(10):
+                for p in range(3):
+                    hill_climbed.append(self.mo.mutate(eval_pop_sorted[0][0], 1, 0.01))
 
             self.supervisor.check_point(eval_pop, i)
 
@@ -126,6 +139,7 @@ class EvolvingClassifier:
                 new_pop.append(self.smo.mutate(mutated[ind], pm=pmss[i], radius=mut_radius[i]))
 
             self.population = new_pop
+            self.population.extend(hill_climbed)
 
         eval_pop = self.calculate_fitnesses(pool, self.population)
         if power > 1:

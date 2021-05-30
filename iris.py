@@ -2,7 +2,7 @@ from sklearn import datasets
 from sklearn.preprocessing import OneHotEncoder
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
 from evolving_classifier.FitnessFunction import CrossEffFitnessFunction
-from evolving_classifier.operators.CrossoverOperator import SomeCrossoverOperator
+from evolving_classifier.operators.CrossoverOperator import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from utility.Utility import *
@@ -39,9 +39,9 @@ if __name__ == '__main__':
     ec.hrange.layerCountMin = 0
     ec.hrange.layerCountMax = 1
     ec.hrange.neuronCountMax = 100
-    ec.co = SomeCrossoverOperator()
+    ec.co = MinimalDamageCrossoverOperator()
     ec.smo = SomeStructMutationOperator(ec.hrange)
-    ec.mo = SomeWBMutationOperator(ec.hrange)
+    ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
     ec.so = TournamentSelection(2)
     ec.ff = CrossEffFitnessFunction()
     ec.prepare(50, 50, (train_x, train_y, test_x, test_y), 1542)
