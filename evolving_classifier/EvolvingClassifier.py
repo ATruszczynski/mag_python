@@ -9,6 +9,7 @@ import multiprocessing as mp
 from evolving_classifier.EC_supervisor import EC_supervisor
 from evolving_classifier.FitnessFunction import CrossEffFitnessFunction
 from evolving_classifier.operators.CrossoverOperator import CrossoverOperator
+from evolving_classifier.operators.HillClimbOperator import HillClimbOperator
 from evolving_classifier.operators.MutationOperators import MutationOperator
 from evolving_classifier.operators.SelectionOperator import SelectionOperator
 from neural_network.FeedForwardNeuralNetwork import *
@@ -50,14 +51,17 @@ class EvolvingClassifier:
 
         self.mo = MutationOperator(self.hrange)
         self.smo = MutationOperator(self.hrange)
+        self.sco = CrossoverOperator()
         self.co = CrossoverOperator()
         self.so = SelectionOperator(2)
         self.ff = CrossEffFitnessFunction()
+        self.hco = HillClimbOperator(10, 10)
 
     #TODO nn.test is not tested i think
     def prepare(self, popSize:int, startPopSize: int,
                 nn_data: ([np.ndarray], [np.ndarray], [np.ndarray], [np.ndarray]), seed: int):
         random.seed(seed)
+        np.random.seed(seed)
         self.pop_size = popSize
         self.trainInputs = nn_data[0]
         self.trainOutputs = nn_data[1]
@@ -67,79 +71,85 @@ class EvolvingClassifier:
         output_size = self.trainOutputs[0].shape[0]
         self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size)
 
-    def run(self, iterations: int, power: int = 1) -> AnnPoint:
+    def run(self, iterations: int, finetune: int, pm: float, pms: float, pc: float, power: int = 1) -> AnnPoint:
         if power > 1:
             pool = mp.Pool(power)
         else:
             pool = None
         self.supervisor.start(iterations)
-        mut_radius = np.linspace(0.5, 0.5, iterations)
-
-        pmS = 0.75
-        pmE = 0.75
-        pmsS = 0.00
-        pmsE = 0.00
-        pcS = 0.5
-        pcE = 0.5
-        #
-        # pmS = 0.
-        # pmE = 0.
-        # pmsS = 0.00
-        # pmsE = 0.00
-        # pcS = 0.
-        # pcE = 0.
-
-        pms = np.linspace(pmS, pmE, iterations)
-        pmss = np.linspace(pmsS, pmsE, iterations)
-        pcs = np.linspace(pcS, pcE, iterations)
 
         input_size = self.trainInputs[0].shape[0]
         output_size = self.trainOutputs[0].shape[0]
 
-        self.supervisor.get_algo_data(input_size=input_size, output_size=output_size, pmS=pmS, pmE=pmE,
-                                      pcS=pcS, pcE=pcE,
+        self.supervisor.get_algo_data(input_size=input_size, output_size=output_size, pmS=pm, pmE=pm,
+                                      pcS=pc, pcE=pc,
                                       ts=self.tournament_size, sps=len(self.population),
                                       ps=self.pop_size, fracs=self.fractions, hrange=self.hrange, learningIts=self.learningIts)
 
-        self.supervisor.start(iterations=iterations)
+        self.supervisor.start(iterations=iterations+finetune)
 
-        for i in range(iterations):
+        for i in range(iterations + finetune):
             eval_pop = self.calculate_fitnesses(pool, self.population)
-            eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
-
-            hill_climbed = []
-            for hc in range(10):
-                for p in range(3):
-                    hill_climbed.append(self.mo.mutate(eval_pop_sorted[0][0], 1, 0.01))
 
             self.supervisor.check_point(eval_pop, i)
+            if i < iterations:
+                crossed = []
 
-            crossed = []
+                while len(crossed) < self.pop_size:
+                    c1 = self.so.select(val_pop=eval_pop)
+                    cr = random.random()
 
-            while len(crossed) < self.pop_size:
-                c1 = self.so.select(val_pop=eval_pop)
-                cr = random.random()
+                    if len(crossed) <= self.pop_size - 2 and cr <= pc:
+                        c2 = self.so.select(val_pop=eval_pop)
+                        cr_result = self.sco.crossover(c1, c2)
+                        crossed.extend(cr_result)
+                        self.cross_performed += 1
+                    else:
+                        crossed.append(c1)
 
-                if len(crossed) <= self.pop_size - 2 and cr <= pcs[i]:
-                    c2 = self.so.select(val_pop=eval_pop)
-                    cr_result = self.co.crossover(c1, c2)
-                    crossed.extend(cr_result)
-                    self.cross_performed += 1
-                else:
-                    crossed.append(c1)
+                mutated = []
 
-            mutated = []
+                for ind in range(len(crossed)):
+                    mutated.append(self.mo.mutate(crossed[ind], pm=pm, radius=1))
 
-            for ind in range(len(crossed)):
-                mutated.append(self.mo.mutate(crossed[ind], pm=pms[i], radius=mut_radius[i]))
+                new_pop = []
 
-            new_pop = []
+                for ind in range(len(mutated)):
+                    new_pop.append(self.smo.mutate(mutated[ind], pm=pms, radius=1))
 
-            for ind in range(len(mutated)):
-                new_pop.append(self.smo.mutate(mutated[ind], pm=pmss[i], radius=mut_radius[i]))
+                self.population = new_pop
+            else:
+                # crossed = []
+                # pc = 0.8
+                #
+                # self.population = []
+                #
+                # if i != iterations:
+                #     while len(crossed) < self.pop_size:
+                #         c1 = self.so.select(val_pop=eval_pop)
+                #         cr = random.random()
+                #
+                #         if len(crossed) <= self.pop_size - 2 and cr <= pc:
+                #             c2 = self.so.select(val_pop=eval_pop)
+                #             cr_result = self.co.crossover(c1, c2)
+                #             crossed.extend(cr_result)
+                #             self.cross_performed += 1
+                #         else:
+                #             crossed.append(c1)
+                #
+                #     for ind in range(self.pop_size):
+                #         self.population.append(self.mo.mutate(crossed[ind], pm=pm, radius=0.1))
+                # else:
+                #     eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
+                #     for ind in range(self.pop_size):
+                #         self.population.append(self.mo.mutate(eval_pop_sorted[0][0], pm=pm, radius=0.1))
 
-            self.population = new_pop
-            self.population.extend(hill_climbed)
+                eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
+                self.population = []
+
+                hill_climbed = self.hco.generate_hc_population(eval_pop_sorted, 0.05)
+
+                self.population.extend(hill_climbed)
 
         eval_pop = self.calculate_fitnesses(pool, self.population)
         if power > 1:

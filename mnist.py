@@ -2,9 +2,9 @@ from statistics import mean
 
 
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier, network_from_point
-from evolving_classifier.FitnessFunction import CrossEffFitnessFunction
-from evolving_classifier.operators.CrossoverOperator import SomeCrossoverOperator
-from evolving_classifier.operators.MutationOperators import SomeStructMutationOperator
+from evolving_classifier.FitnessFunction import *
+from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from utility.Utility import *
 
@@ -31,14 +31,15 @@ if __name__ == '__main__':
 
     ec = EvolvingClassifier()
     ec.hrange.layerCountMin = 0
-    ec.hrange.layerCountMax = 2
-    ec.co = SomeCrossoverOperator()
-    ec.mo = SomeStructMutationOperator(ec.hrange)
-    ec.so = TournamentSelection(2)
+    ec.hrange.layerCountMax = 0
+    ec.sco = MinimalDamageCrossoverOperator()
+    ec.smo = SomeStructMutationOperator(ec.hrange)
+    ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
+    ec.so = TournamentSelection(4)
     ec.ff = CrossEffFitnessFunction()
     # TODO pousuwać zbędne argumenty z prepare
     ec.prepare(popSize=100, startPopSize=100, nn_data=(train_X, train_y, None, None), seed=1524)
-    npoint = ec.run(50, 12)
+    npoint = ec.run(100, 12)
     network = network_from_point(npoint, 1001)
     print(npoint.to_string())
     tests = network.test(test_X, test_y)

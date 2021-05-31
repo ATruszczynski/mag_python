@@ -1,8 +1,9 @@
 from sklearn import datasets
 from sklearn.preprocessing import OneHotEncoder
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
-from evolving_classifier.FitnessFunction import CrossEffFitnessFunction
+from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.HillClimbOperator import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from utility.Utility import *
@@ -24,10 +25,10 @@ if __name__ == '__main__':
     x = [x[i] for i in perm]
     y = [y[i] for i in perm]
 
-    train_x = [x[i] for i in range(100)]
-    train_y = [y[i] for i in range(100)]
-    test_x = [x[i] for i in range(100, 150)]
-    test_y = [y[i] for i in range(100, 150)]
+    train_x = [x[i] for i in range(125)]
+    train_y = [y[i] for i in range(125)]
+    test_x = [x[i] for i in range(125, 150)]
+    test_y = [y[i] for i in range(125, 150)]
 
     # print(X)
     # print(y)
@@ -36,16 +37,17 @@ if __name__ == '__main__':
     np.random.seed(1001)
 
     ec = EvolvingClassifier()
-    ec.hrange.layerCountMin = 0
+    ec.hrange.layerCountMin = 1
     ec.hrange.layerCountMax = 1
     ec.hrange.neuronCountMax = 100
-    ec.co = MinimalDamageCrossoverOperator()
+    ec.sco = MinimalDamageCrossoverOperator()
     ec.smo = SomeStructMutationOperator(ec.hrange)
     ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
-    ec.so = TournamentSelection(2)
-    ec.ff = CrossEffFitnessFunction()
-    ec.prepare(50, 50, (train_x, train_y, test_x, test_y), 1542)
-    npoint = ec.run(100, 12)
+    ec.so = TournamentSelection(4)
+    ec.ff = CrossEffFitnessFunction3()
+    ec.hco = HillClimbBackpropMutationOperator(1, 100, train_x, train_y)
+    ec.prepare(100, 100, (train_x, train_y, test_x, test_y), 1542)
+    npoint = ec.run(10, 10, 0.75, 0.02, 0.5, 12)
     network = network_from_point(npoint, 1001)
     print(npoint.to_string())
     tests = network.test(test_x, test_y)

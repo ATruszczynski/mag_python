@@ -91,3 +91,25 @@ class MinimalDamageCrossoverOperator(CrossoverOperator):
         pointB = point_from_layer_tuples(layersB)
 
         return [pointA, pointB]
+
+class WBCrossoverOperator(CrossoverOperator):
+    def __init__(self):
+        super().__init__()
+
+    def crossover(self, pointA: AnnPoint2, pointB: AnnPoint2) -> [AnnPoint2, AnnPoint2]:
+        pointA = pointA.copy()
+        pointB = pointB.copy()
+
+        layersA = pointA.into_numbered_layer_tuples()
+        layersB = pointB.into_numbered_layer_tuples()
+
+        ind = random.randint(1, len(layersA))
+
+        tmp = layersA[ind:]
+        layersA[ind:] = layersB[ind:]
+        layersB[ind:] = tmp
+
+        pointA = point_from_layer_tuples(layersA)
+        pointB = point_from_layer_tuples(layersB)
+
+        return [pointA, pointB]

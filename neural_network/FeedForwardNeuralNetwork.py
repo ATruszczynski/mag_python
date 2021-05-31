@@ -72,37 +72,7 @@ class FeedForwardNeuralNetwork:
 
         for e in range(0, epochs):
             for b in range(0, len(batches)):
-                weight_change = self.get_empty_weights()
-                biases_change = self.get_empty_biases()
-
-                for data in batches[b]:
-                    net_input = data[0]
-                    net_output = data[1]
-
-                    weight_grad = self.get_empty_weights()
-                    bias_grad = self.get_empty_biases()
-                    act_grad = self.get_empty_activations()
-
-                    for l in range(self.layerCount - 1, 0, -1):
-                        if l is self.layerCount - 1:
-                            net_result = self.run(net_input)
-                            act_grad[l] = self.lossFun.computeDer(net_result, net_output)
-                        else:
-                            act_grad[l] = np.dot(bias_grad[l + 1].T, self.weights[l + 1]).T
-
-
-                        bias_grad[l] = np.dot(self.actFuns[l].computeDer(self.inp[l]), act_grad[l])
-                        weight_grad[l] = np.dot(bias_grad[l], self.act[l - 1].T)
-
-                    for i in range(1, len(weight_grad)):
-                        weight_change[i] += weight_grad[i]
-                        biases_change[i] += bias_grad[i]
-
-                batch_count = len(batches[b])
-
-                for ind in range(1, len(weight_change)):
-                    weight_change[ind] /= batch_count
-                    biases_change[ind] /= batch_count
+                weight_change, biases_change = self.get_grad(batches[b])
 
 
                 weight_step = self.get_empty_weights()
@@ -159,6 +129,42 @@ class FeedForwardNeuralNetwork:
             result.append(np.zeros(self.act[i].shape))
 
         return result
+
+    def get_grad(self, batch):
+        weight_change = self.get_empty_weights()
+        biases_change = self.get_empty_biases()
+
+        for data in batch:
+            net_input = data[0]
+            net_output = data[1]
+
+            weight_grad = self.get_empty_weights()
+            bias_grad = self.get_empty_biases()
+            act_grad = self.get_empty_activations()
+
+            for l in range(self.layerCount - 1, 0, -1):
+                if l is self.layerCount - 1:
+                    net_result = self.run(net_input)
+                    act_grad[l] = self.lossFun.computeDer(net_result, net_output)
+                else:
+                    act_grad[l] = np.dot(bias_grad[l + 1].T, self.weights[l + 1]).T
+
+
+                bias_grad[l] = np.dot(self.actFuns[l].computeDer(self.inp[l]), act_grad[l])
+                weight_grad[l] = np.dot(bias_grad[l], self.act[l - 1].T)
+
+            for i in range(1, len(weight_grad)):
+                weight_change[i] += weight_grad[i]
+                biases_change[i] += bias_grad[i]
+
+        batch_count = len(batch)
+
+        for ind in range(1, len(weight_change)):
+            weight_change[ind] /= batch_count
+            biases_change[ind] /= batch_count
+
+        return weight_change, biases_change
+
 
 
 def network_from_point(point: AnnPoint2, seed: int):

@@ -41,7 +41,7 @@ class EC_supervisor():
         self.desc_string += f"{details_id} lc {hrange.layerCountMin} - {hrange.layerCountMax}\n"
         self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
         self.desc_string += f"{details_id} acfs {','.join([f.to_string() for f in hrange.actFunSet])}\n"
-        self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
+        # self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
         self.desc_string += f"{details_id} lits {learningIts}\n"
 
         self.sps = sps

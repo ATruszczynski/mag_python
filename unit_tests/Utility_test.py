@@ -118,19 +118,22 @@ def test_ohe():
     assert np.array_equal(ohe[6], np.array([[0],[0],[0],[1],[0]]))
 
 def test_generate_population():
-    hrange = HyperparameterRange((0, 4), (0, 10), [ReLu(), Sigmoid(), Softmax()],
-                                 [QuadDiff(), CrossEntropy()])
+    hrange = HyperparameterRange((0, 4), (0, 10), [ReLu(), Sigmoid(), Softmax()], 1, 2)
 
     random.seed(1111)
+    np.random.seed(1111)
     population = generate_population(hrange=hrange, count=2, input_size=2, output_size=3)
 
     assert population[0].input_size == 2
     assert population[0].output_size == 3
     assert len(population[0].hidden_neuron_counts) == 1
+    assert population[0].hidden_neuron_counts[0] == 3
     assert population[0].activation_functions[0].to_string() == Sigmoid().to_string()
     assert population[0].activation_functions[1].to_string() == Softmax().to_string()
-    assert np.all(np.isclose(population[0].weights[0], np.array([[0.483641, 0.599029], [-0.236810, -1.725193], [0.797298, 0.529931]]), atol=1e-5))
-    assert np.all(np.isclose(population[0].weights[1], np.array([[-0.148975, -0.230032, 0.799311], [1.068565, -1.3236147, -0.568780], [0.367187, -0.417647, -0.271190]]), atol=1e-5))
+    assert np.all(np.isclose(population[0].weights[0], np.array([[-0.37904612, -0.99598032], [-0.52881055, -0.52441656], [0.47183175, -0.00906385]]), atol=1e-5))
+    assert np.all(np.isclose(population[0].weights[1], np.array([[-0.06775805, -0.52573575, -0.12968164], [-0.51265697, -0.23232018, 0.67678738], [0.31036945, -0.70310665, 0.27829033]]), atol=1e-5))
+    assert np.all(np.isclose(population[0].biases[0], np.array([[-1.6178032], [1.70001481], [-0.62570631]]), atol=1e-5))
+    assert np.all(np.isclose(population[0].biases[1], np.array([[1.1377014], [-1.49397476], [0.42659728]]), atol=1e-5))
 
 # def test_pun_fun():
 #     args = [-1, -0.01, -0.0000001, 0, 0.0000001, 0.01, 1]
@@ -204,37 +207,27 @@ def test_get_in_radius():
 #     assert np.all(np.isclose(network.biases_mom[3], np.array([[0], [0], [0]]), atol=1e-5))
 
 
-# random.seed(1111)
-# print(random.randint(0, 4))
-# print("")
-#
-# print(random.randint(0, 10))
-# print("")
-#
-# print(random.randint(0, 2))
-# print(random.randint(0, 2))
-# print("")
-#
-# # 2 3 2
-# print(random.gauss(0, 1 / sqrt(2)))
-# print(random.gauss(0, 1 / sqrt(2)))
-# print(random.gauss(0, 1 / sqrt(2)))
-# print(random.gauss(0, 1 / sqrt(2)))
-# print(random.gauss(0, 1 / sqrt(2)))
-# print(random.gauss(0, 1 / sqrt(2)))
-# print("")
-#
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-# print(random.gauss(0, 1 / sqrt(3)))
-#
-# print(random.randint(0, 4))
-#
-# test_generate_population()
+random.seed(1111)
+np.random.seed(1111)
+print(random.randint(0, 4))
+print("")
+
+print(random.randint(0, 10))
+print("")
+
+print(random.randint(0, 2))
+print(random.randint(0, 2))
+print("")
+
+# 2 3 2
+print(np.random.uniform(-2, 2, size=(3, 1)))
+print(np.random.uniform(-1, 1, size=(3, 2)))
+print("")
+
+print(np.random.uniform(-2, 2, size=(3, 1)))
+print(np.random.uniform(-1, 1, size=(3, 3)))
+
+print(random.randint(0, 4))
+
+test_generate_population()
 

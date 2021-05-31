@@ -88,20 +88,15 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
 
         for i in range(1, len(neuron_counts)):
             actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
-            biases.append(np.zeros((neuron_counts[i], 1)))
-            weights.append(np.zeros((neuron_counts[i], neuron_counts[i - 1])))
-
-        for i in range(0, len(weights)):
-            for r in range(0, weights[i].shape[0]):
-                for c in range(0, weights[i].shape[1]):
-                    weights[i][r, c] = random.gauss(0, 1 / sqrt(weights[i].shape[1]))
+            biases.append(np.random.uniform(-hrange.biaAbs, hrange.biaAbs, size=(neuron_counts[i], 1)))
+            weights.append(np.random.uniform(-hrange.weiAbs, hrange.weiAbs, size=(neuron_counts[i], neuron_counts[i - 1])))
 
         result.append(AnnPoint2(input_size=input_size, output_size=output_size, hiddenNeuronCounts=hidden_neuron_counts, activationFuns=actFuns, weights=weights, biases=biases))
 
     return result
 
 def get_default_hrange():
-    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()], [QuadDiff(), CrossEntropy()])
+    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()])
     return hrange
 
 # def punishment_function(arg: float):

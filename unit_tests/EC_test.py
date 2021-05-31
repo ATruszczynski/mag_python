@@ -1,8 +1,17 @@
 from evolving_classifier.EvolvingClassifier import *
+from evolving_classifier.operators.CrossoverOperator import MinimalDamageCrossoverOperator
+from evolving_classifier.operators.MutationOperators import SomeStructMutationOperator, BiasedGaussianWBMutationOperator
+from evolving_classifier.operators.SelectionOperator import TournamentSelection
+
 
 def test_determinism():
     ec = EvolvingClassifier()
 
+    ec.sco = MinimalDamageCrossoverOperator()
+    ec.smo = SomeStructMutationOperator(ec.hrange)
+    ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
+    ec.so = TournamentSelection(4)
+    ec.ff = CrossEffFitnessFunction()
 
     count = 10
     size = 5
@@ -25,3 +34,4 @@ def test_determinism():
             assert t1[1] == t2[1]
             assert t1[2] == t2[2]
             assert np.array_equal(t1[3], t2[3])
+            assert t1[4] == t2[4]
