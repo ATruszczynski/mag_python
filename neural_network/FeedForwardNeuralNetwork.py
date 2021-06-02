@@ -8,52 +8,50 @@ from utility.Utility import *
 # import tensorflow as tf
 
 class FeedForwardNeuralNetwork:
-    def __init__(self, inputSize: int, outputSize: int, hidden_neuron_counts: [float], actFuns: [ActFun], weights: [np.ndarray], biases: [np.ndarray], seed: int):
-        self.neuronCounts = [inputSize]
+    def __init__(self, neuronCounts: [int], actFun: [ActFun], lossFun: LossFun, learningRate: float, momCoeffL: float,
+                 batchSize: float, seed: int):
+        self.neuronCounts = []
 
-        for i in range(len(hidden_neuron_counts)):
-            self.neuronCounts.append(hidden_neuron_counts[i])
+        for i in range(len(neuronCounts)):
+            self.neuronCounts.append(neuronCounts[i])
 
-        self.neuronCounts.append(outputSize)
+        self.actFuns = []
+        for i in range(len(actFun)):
+            self.actFuns.append(actFun[i].copy())
+        self.lossFun = lossFun.copy()
+        self.learningRate = 10 ** learningRate
+        self.momCoeffL = 10 ** momCoeffL
+        self.batchSize = 2 ** batchSize
 
-        random.seed(seed)# TODO check if this works correctly in multithread
+        random.seed(seed) # TODO check if this works correctly in multithread
 
-        self.layerCount = len(hidden_neuron_counts) + 2
-        self.actFuns = [None]
-        for i in range(len(actFuns)):
-            self.actFuns.append(actFuns[i].copy())
+        self.layerCount = len(self.neuronCounts)
 
-        self.weights = [np.empty((0, 0))]
-        self.biases = [np.empty((0, 0))]
-        for i in range(len(weights)):
-            self.weights.append(weights[i].copy()) # TODO check if deep copy
-            self.biases.append(biases[i].copy()) # TODO check if deep copy
+        self.weights = None
+        self.biases = None
+        self.weight_mom = None
+        self.biases_mom = None
+        self.inp = None
+        self.act = None
 
+        self.init_wb()
+
+    def init_wb(self):
+        self.weights = self.layerCount * [np.empty((0, 0))]
+        self.biases = self.layerCount * [np.empty((0, 0))]
         self.inp = self.layerCount * [np.empty((0, 0))]
         self.act = self.layerCount * [np.empty((0, 0))]
 
+        for i in range(1, self.layerCount):
+            self.weights[i] = np.zeros((self.neuronCounts[i], self.neuronCounts[i - 1]))
+            self.biases[i] = np.zeros((self.neuronCounts[i], 1))
+
+            for r in range(0, self.weights[i].shape[0]):
+                for c in range(0, self.weights[i].shape[1]):
+                    self.weights[i][r, c] = random.gauss(0, 1 / sqrt(self.neuronCounts[i - 1]))
+
         self.weight_mom = self.get_empty_weights()
         self.biases_mom = self.get_empty_biases()
-        self.lossFun = CrossEntropy()
-        self.momCoeffL = 0.01
-        self.learningRate = 0.01
-
-    # def init_wb(self):
-    #     self.weights = self.layerCount * [np.empty((0, 0))]
-    #     self.biases = self.layerCount * [np.empty((0, 0))]
-    #     self.inp = self.layerCount * [np.empty((0, 0))]
-    #     self.act = self.layerCount * [np.empty((0, 0))]
-    #
-    #     for i in range(1, self.layerCount):
-    #         self.weights[i] = np.zeros((self.neuronCounts[i], self.neuronCounts[i - 1]))
-    #         self.biases[i] = np.zeros((self.neuronCounts[i], 1))
-    #
-    #         for r in range(0, self.weights[i].shape[0]):
-    #             for c in range(0, self.weights[i].shape[1]):
-    #                 self.weights[i][r, c] = random.gauss(0, 1 / sqrt(self.neuronCounts[i - 1]))
-    #
-    #     self.weight_mom = self.get_empty_weights()
-    #     self.biases_mom = self.get_empty_biases()
 
     def run(self, arg: np.ndarray) -> np.ndarray:
         self.act[0] = arg
@@ -166,10 +164,11 @@ class FeedForwardNeuralNetwork:
         return weight_change, biases_change
 
 
-
-def network_from_point(point: AnnPoint2, seed: int):
+def network_from_point(point: AnnPoint, seed: int):
     return FeedForwardNeuralNetwork \
-        (inputSize=point.input_size, outputSize=point.output_size, hidden_neuron_counts=point.hidden_neuron_counts, actFuns=point.activation_functions, weights=point.weights, biases=point.biases, seed=seed)
+        (neuronCounts=point.neuronCounts, actFun=point.actFuns,
+         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeffL=point.momCoeff,
+         batchSize=point.batchSize, seed=seed)
 
 def accuracy(confusion_matrix: np.ndarray):
     tot_sum = np.sum(confusion_matrix)

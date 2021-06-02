@@ -2,8 +2,40 @@
 import random
 
 from ann_point.AnnPoint2 import *
-from utility.Utility import choose_without_repetition, get_Xu_matrix
+from utility.Utility import choose_without_repetition, get_Xu_matrix, AnnPoint, point_from_layers
 from ann_point.HyperparameterRange import HyperparameterRange
+
+def add_layers(point: AnnPoint, howMany: int, hrange: HyperparameterRange) -> AnnPoint:
+    layers = point.get_layer_struct()
+    new_layers = []
+    for i in howMany:
+        pass
+    pass
+
+def remove_layers(point: AnnPoint, howMany: int) -> AnnPoint:
+    layers = point.get_layer_struct()
+    to_remove = choose_without_repetition(list(range(1, len(layers) - 1)), howMany)
+
+    new_layers = []
+    for i in layers:
+        if i not in to_remove:
+            new_layers.append(layers[i])
+
+    return point_from_layers(layers=new_layers, lossFun=point.lossFun, learningRate=point.learningRate, momCoeff=point.momCoeff, batchSize=point.batchSize)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def change_amount_of_layers(point: AnnPoint2, demanded: int, hrange: HyperparameterRange) -> AnnPoint2:

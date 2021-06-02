@@ -4,5 +4,5 @@ from neural_network.FeedForwardNeuralNetwork import *
 from ann_point.Functions import *
 from sklearn.linear_model import LinearRegression
 
-arr = np.array([[1, 2], [1.9, 4], [2.1, -2]])
-print(np.minimum(arr, 2))
+lis = [1, 2, 3, 4, 5]
+print(lis[1:-1])

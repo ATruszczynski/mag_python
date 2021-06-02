@@ -99,17 +99,13 @@ def get_default_hrange():
     hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()])
     return hrange
 
-# def punishment_function(arg: float):
-#     # result = 1.5 / (1 + exp(-50 * arg))
-#     #
-#     # if arg > 0:
-#     #     result += 0.5
-#     result = 0.75 / (1 + exp(-50 * arg))
-#
-#     if arg > 0:
-#         result += 0.25
-#
-#     return result
+def punishment_function(arg: float):
+    result = 0.75 / (1 + exp(-50 * arg))
+
+    if arg > 0:
+        result += 0.25
+
+    return result
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
     inputs = []

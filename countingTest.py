@@ -28,14 +28,11 @@ if __name__ == '__main__':
     ec.hrange.layerCountMin = 0
     ec.hrange.layerCountMax = 1
     ec.hrange.neuronCountMax = 25
-    ec.sco = MinimalDamageCrossoverOperator()
-    ec.co = WBCrossoverOperator()
-    ec.smo = SomeStructMutationOperator(ec.hrange)
-    ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
+    ec.co = SimpleCrossoverOperator()
+    ec.mo = SimpleMutationOperator(ec.hrange)
     ec.so = TournamentSelection(4)
-    ec.ff = CrossEffFitnessFunction3()
-    ec.hco = HillClimbMutationOperator(1, 5, ec.mo)
-    ec.prepare(popSize=5, startPopSize=5, nn_data=(x, y, X, Y), seed=1524)
+    ec.ff = ProgressFF()
+    ec.prepare(popSize=5, startPopSize=5, nn_data=(x, y), seed=1524)
     npoint = ec.run(iterations=70, finetune=30, pm=0.75, pms=0.05, pc=0.75, power=12)
     network = network_from_point(npoint, 1001)
     print(npoint.to_string())
