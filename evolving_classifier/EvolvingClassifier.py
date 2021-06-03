@@ -7,11 +7,12 @@ from ann_point.HyperparameterRange import *
 import multiprocessing as mp
 
 from evolving_classifier.EC_supervisor import EC_supervisor
-from evolving_classifier.FitnessFunction import CrossEffFitnessFunction
-from evolving_classifier.operators.CrossoverOperator import CrossoverOperator
-from evolving_classifier.operators.HillClimbOperator import HillClimbOperator
-from evolving_classifier.operators.MutationOperators import MutationOperator
-from evolving_classifier.operators.SelectionOperator import SelectionOperator
+from evolving_classifier.FitnessCalculator import *
+from evolving_classifier.FitnessFunction import *
+from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.HillClimbOperator import *
+from evolving_classifier.operators.MutationOperators import *
+from evolving_classifier.operators.SelectionOperator import *
 from neural_network.FeedForwardNeuralNetwork import *
 import random
 from sklearn.linear_model import LinearRegression
@@ -29,8 +30,7 @@ class EvolvingClassifier:
         else:
             self.hrange = hrange
 
-        self.fractions = [1, 0.6, 0.4, 0.25, 0.15, 0.1]
-        self.fractions = [1] # TODO remove
+        # self.fractions = [1, 0.6, 0.4, 0.25, 0.15, 0.1]
         if logs_path == "":
             self.supervisor = EC_supervisor(logs)
         else:
@@ -52,7 +52,8 @@ class EvolvingClassifier:
         self.mo = MutationOperator(self.hrange)
         self.co = CrossoverOperator()
         self.so = SelectionOperator(2)
-        self.ff = CrossEffFitnessFunction()
+        self.ff = FitnessFunction(2)
+        self.fc = OnlyFitnessCalculator([])
 
     #TODO nn.test is not tested i think
     def prepare(self, popSize:int, startPopSize: int,
@@ -66,7 +67,7 @@ class EvolvingClassifier:
         output_size = self.trainOutputs[0].shape[0]
         self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size)
 
-    def run(self, iterations: int, finetune: int, pm: float, pms: float, pc: float, power: int = 1) -> AnnPoint:
+    def run(self, iterations: int, pm: float, pc: float, power: int = 1) -> AnnPoint:
         if power > 1:
             pool = mp.Pool(power)
         else:
@@ -79,12 +80,14 @@ class EvolvingClassifier:
         self.supervisor.get_algo_data(input_size=input_size, output_size=output_size, pmS=pm, pmE=pm,
                                       pcS=pc, pcE=pc,
                                       ts=self.tournament_size, sps=len(self.population),
-                                      ps=self.pop_size, fracs=self.fractions, hrange=self.hrange, learningIts=self.learningIts)
+                                      ps=self.pop_size, fracs=self.fc.fractions, hrange=self.hrange, learningIts=self.ff.learningIts)
 
-        self.supervisor.start(iterations=iterations+finetune)
+        self.supervisor.start(iterations=iterations)
 
-        for i in range(iterations + finetune):
-            eval_pop = self.calculate_fitnesses(pool, self.population)
+        for i in range(iterations):
+            # eval_pop = self.calculate_fitnesses(pool, self.population)
+            eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
+                                       trainOutputs=self.trainOutputs)
 
             self.supervisor.check_point(eval_pop, i)
             crossed = []
@@ -108,7 +111,9 @@ class EvolvingClassifier:
 
             self.population = new_pop
 
-        eval_pop = self.calculate_fitnesses(pool, self.population)
+        # eval_pop = self.calculate_fitnesses(pool, self.population)
+        eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
+                                   trainOutputs=self.trainOutputs)
         if power > 1:
             pool.close()
 
@@ -303,21 +308,65 @@ class EvolvingClassifier:
     #
     #     return point
 
-    def calculate_fitnesses(self, pool: mp.Pool, to_compute: [AnnPoint]) -> [[AnnPoint, float]]:
+    # def calculate_fitnesses(self, pool: mp.Pool, to_compute: [AnnPoint]) -> [[AnnPoint, float]]:
+    #     count = len(to_compute)
+    #
+    #     touches = [0] * count
+    #
+    #     estimates = [[point, 0] for point in to_compute]
+    #
+    #     for f in range(len(self.fractions)):
+    #         frac = self.fractions[f]
+    #
+    #         estimates = sorted(estimates, key=lambda x: x[1], reverse=True)
+    #         comp_count = ceil(frac * count)
+    #         to_compute = [est[0] for est in estimates[0:comp_count]]
+    #         seeds = [random.randint(0, 1000) for i in range(len(to_compute))]
+    #
+    #         if pool is None:
+    #             new_fitnesses = [self.ff.compute(to_compute[i], self.trainInputs, self.trainOutputs, seeds[i])for i in range(len(to_compute))]
+    #         else:
+    #             estimating_async_results = [pool.apply_async(func=self.ff.compute, args=(to_compute[i], self.trainInputs, self.trainOutputs, seeds[i])) for i in range(len(to_compute))]
+    #             [estimation_result.wait() for estimation_result in estimating_async_results]
+    #             new_fitnesses = [result.get() for result in estimating_async_results]
+    #
+    #         for i in range(comp_count):
+    #             new_fit = new_fitnesses[i]
+    #             curr_est = estimates[i][1]
+    #             touch = touches[i]
+    #
+    #             curr_sum = curr_est * touch
+    #             new_sum = curr_sum + new_fit
+    #             new_est = new_sum / (touch + 1)
+    #
+    #             estimates[i][1] = new_est
+    #             touches[i] += 1
+    #
+    #     return estimates
 
-        points = [[to_compute[i], i] for i in range(len(to_compute))]
+        # estimates = sorted(estimates, key=lambda x: x[0].size(), reverse=True)
+        # size_puns = np.linspace(0.95, 1, len(estimates))
+        # for i in range(len(estimates)):
+        #     estimates[i][1] *= size_puns[i]
 
-        if pool is None:
-            new_fitnesses = [self.ff.compute(points[i], self.trainInputs, self.trainOutputs)for i in range(len(points))]
-        else:
-            estimating_async_results = [pool.apply_async(func=self.ff.compute, args=(points[i], self.trainInputs, self.trainOutputs)) for i in range(len(points))]
-            [estimation_result.wait() for estimation_result in estimating_async_results]
-            new_fitnesses = [result.get() for result in estimating_async_results]
-
-
-        estimates = [[to_compute[i[1]], i[0]] for i in new_fitnesses]
-
-        return estimates
+        # dist = average_distance_between_points([e[0] for e in estimates], self.hrange)
+        # self.av_dist = mean(dist)
+        # print(stdev(dist))
+        #
+        #
+        # points = [[to_compute[i], i] for i in range(len(to_compute))]
+        #
+        # if pool is None:
+        #     new_fitnesses = [self.ff.compute(points[i], self.trainInputs, self.trainOutputs)for i in range(len(points))]
+        # else:
+        #     estimating_async_results = [pool.apply_async(func=self.ff.compute, args=(points[i], self.trainInputs, self.trainOutputs)) for i in range(len(points))]
+        #     [estimation_result.wait() for estimation_result in estimating_async_results]
+        #     new_fitnesses = [result.get() for result in estimating_async_results]
+        #
+        #
+        # estimates = [[to_compute[i[1]], i[0]] for i in new_fitnesses]
+        #
+        # return estimates
 
     # def calculate_fitness(self, point: AnnPoint2):
     #     network = network_from_point(point, 1001) #TODO make sure this seed does nothing

@@ -1,34 +1,33 @@
-# from neural_network.FeedForwardNeuralNetwork import *
-# from ann_point.Functions import *
-# import numpy as np
-# from sklearn import datasets
-# from sklearn.preprocessing import OneHotEncoder
-# from statistics import mean, stdev
-# import pytest
-#
-#
-# def test_run_relus():
-#     network = FeedForwardNeuralNetwork(inputSize=2, outputSize=2, hiddenLayerCount=1, neuronCount=1, actFun=ReLu(),
-#                                        aggrFun=ReLu(), lossFun=QuadDiff(), learningRate=0, momCoeffL=0, batchSize=0, seed=1001)
-#
-#     inputs = [np.array([[2], [1]])]
-#     outputs = [np.array([[1], [0]])]
-#
-#     network.weights[1] = np.array([[1, 1], [1, 1]], dtype=float)
-#     network.weights[2] = np.array([[1, 1], [1, 1]], dtype=float)
-#     network.biases[1] = np.array([[1], [1]], dtype=float)
-#     network.biases[2] = np.array([[1], [1]], dtype=float)
-#
-#     network.train(inputs, outputs, 1)
-#
-#     assert np.array_equal(network.weights[1], np.array([[-33, -16], [-33, -16]]))
-#     assert np.array_equal(network.weights[2], np.array([[-31, -31], [-35, -35]]))
-#     assert np.array_equal(network.biases[1], np.array([[-16], [-16]]))
-#     assert np.array_equal(network.biases[2], np.array([[-7], [-8]]))
-#
-#     result = network.run(inputs[0])
-#
-#     assert np.array_equal(result, np.array([[0], [0]]))
+from neural_network.FeedForwardNeuralNetwork import *
+from ann_point.Functions import *
+import numpy as np
+from sklearn import datasets
+from sklearn.preprocessing import OneHotEncoder
+from statistics import mean, stdev
+import pytest
+
+
+def test_run_relus():
+    network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=QuadDiff(), learningRate=0, momCoeffL=0, batchSize=0, seed=1001)
+
+    inputs = [np.array([[2], [1]])]
+    outputs = [np.array([[1], [0]])]
+
+    network.weights[1] = np.array([[1, 1], [1, 1]], dtype=float)
+    network.weights[2] = np.array([[1, 1], [1, 1]], dtype=float)
+    network.biases[1] = np.array([[1], [1]], dtype=float)
+    network.biases[2] = np.array([[1], [1]], dtype=float)
+
+    network.train(inputs, outputs, 1)
+
+    assert np.array_equal(network.weights[1], np.array([[-33, -16], [-33, -16]]))
+    assert np.array_equal(network.weights[2], np.array([[-31, -31], [-35, -35]]))
+    assert np.array_equal(network.biases[1], np.array([[-16], [-16]]))
+    assert np.array_equal(network.biases[2], np.array([[-7], [-8]]))
+
+    result = network.run(inputs[0])
+
+    assert np.array_equal(result, np.array([[0], [0]]))
 #
 # def test_determinism():
 #     iris = datasets.load_iris()

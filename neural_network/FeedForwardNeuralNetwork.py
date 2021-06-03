@@ -1,5 +1,6 @@
 import random
 from math import sqrt, ceil
+from statistics import mean
 
 from ann_point import AnnPoint2
 from ann_point.AnnPoint import AnnPoint
@@ -15,7 +16,7 @@ class FeedForwardNeuralNetwork:
         for i in range(len(neuronCounts)):
             self.neuronCounts.append(neuronCounts[i])
 
-        self.actFuns = []
+        self.actFuns = [None]
         for i in range(len(actFun)):
             self.actFuns.append(actFun[i].copy())
         self.lossFun = lossFun.copy()
@@ -24,6 +25,7 @@ class FeedForwardNeuralNetwork:
         self.batchSize = 2 ** batchSize
 
         random.seed(seed) # TODO check if this works correctly in multithread
+        np.random.seed(seed)
 
         self.layerCount = len(self.neuronCounts)
 
@@ -35,6 +37,7 @@ class FeedForwardNeuralNetwork:
         self.act = None
 
         self.init_wb()
+        self.cm_hist = []
 
     def init_wb(self):
         self.weights = self.layerCount * [np.empty((0, 0))]
@@ -43,12 +46,8 @@ class FeedForwardNeuralNetwork:
         self.act = self.layerCount * [np.empty((0, 0))]
 
         for i in range(1, self.layerCount):
-            self.weights[i] = np.zeros((self.neuronCounts[i], self.neuronCounts[i - 1]))
+            self.weights[i] = get_Xu_matrix((self.neuronCounts[i], self.neuronCounts[i - 1]))
             self.biases[i] = np.zeros((self.neuronCounts[i], 1))
-
-            for r in range(0, self.weights[i].shape[0]):
-                for c in range(0, self.weights[i].shape[1]):
-                    self.weights[i][r, c] = random.gauss(0, 1 / sqrt(self.neuronCounts[i - 1]))
 
         self.weight_mom = self.get_empty_weights()
         self.biases_mom = self.get_empty_biases()
@@ -89,23 +88,19 @@ class FeedForwardNeuralNetwork:
                     self.weights[i] -= weight_step[i]
                     self.biases[i] -= bias_step[i]
 
-    def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lossFun: LossFun = None) -> [float, float, float, np.ndarray]:
+    def test(self, test_input: [np.ndarray], test_output: [np.ndarray]) -> [float, float, float, np.ndarray]:
         out_size = self.neuronCounts[len(self.neuronCounts) - 1]
         confusion_matrix = np.zeros((out_size, out_size))
-
-        result = 0
 
         for i in range(len(test_output)):
             net_result = self.run(test_input[i])
             pred_class = np.argmax(net_result)
             corr_class = np.argmax(test_output[i])
             confusion_matrix[corr_class, pred_class] += 1
-            if lossFun is not None:
-                result += lossFun.compute(net_result, test_output[i])
 
         # TODO test acc, recall and precision
 
-        return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, result]
+        return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix]
 
     def get_empty_weights(self):
         result = [np.empty((0, 0))]
@@ -132,6 +127,8 @@ class FeedForwardNeuralNetwork:
         weight_change = self.get_empty_weights()
         biases_change = self.get_empty_biases()
 
+        cm = np.zeros((self.neuronCounts[-1], self.neuronCounts[-1]))
+
         for data in batch:
             net_input = data[0]
             net_output = data[1]
@@ -144,6 +141,10 @@ class FeedForwardNeuralNetwork:
                 if l is self.layerCount - 1:
                     net_result = self.run(net_input)
                     act_grad[l] = self.lossFun.computeDer(net_result, net_output)
+
+                    pred_class = np.argmax(net_result)
+                    corr_class = np.argmax(net_output)
+                    cm[corr_class, pred_class] += 1
                 else:
                     act_grad[l] = np.dot(bias_grad[l + 1].T, self.weights[l + 1]).T
 
@@ -160,6 +161,8 @@ class FeedForwardNeuralNetwork:
         for ind in range(1, len(weight_change)):
             weight_change[ind] /= batch_count
             biases_change[ind] /= batch_count
+
+        self.cm_hist.append(cm)
 
         return weight_change, biases_change
 
@@ -205,5 +208,12 @@ def average_recall(conf_matrix):
             class_recalls.append(diag[i] / row_sums[i])
 
     return np.average(class_recalls)
+
+def efficiency(conf_matrix):
+    acc = accuracy(conf_matrix)
+    prec = average_precision(conf_matrix)
+    rec = average_recall(conf_matrix)
+
+    return mean([acc, prec, rec])
 
 

@@ -70,33 +70,56 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
     result = []
     # TODO stabilise names
     for i in range(count):
-        hidden_layer_count = random.randint(hrange.layerCountMin, hrange.layerCountMax)
+        layer_count = random.randint(hrange.hiddenLayerCountMin + 2, hrange.hiddenLayerCountMax + 2)
+        layers = [[-1, input_size, None]]
+        for i in range(1, layer_count):
+            layers.append(generate_layer(hrange))
+        layers[-1][1] = output_size
+        loss_fun = hrange.lossFunSet[random.randint(0, len(hrange.lossFunSet) - 1)]
+        learning_rate = random.uniform(hrange.learningRateMin, hrange.learningRateMax)
+        mom_coeff = random.uniform(hrange.momentumCoeffMin, hrange.momentumCoeffMax)
+        batch_size = random.uniform(hrange.batchSizeMin, hrange.batchSizeMax)
 
-        neuron_counts = [input_size]
-        for i in range(hidden_layer_count):
-            neuron_counts.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax)) # TODO test
-        neuron_counts.append(output_size)
-
-        hidden_neuron_counts = []
-
-        for i in range(1, len(neuron_counts) - 1):
-            hidden_neuron_counts.append(neuron_counts[i])
-
-        actFuns = []
-        biases = []
-        weights = []
-
-        for i in range(1, len(neuron_counts)):
-            actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
-            biases.append(np.random.uniform(-hrange.biaAbs, hrange.biaAbs, size=(neuron_counts[i], 1)))
-            weights.append(np.random.uniform(-hrange.weiAbs, hrange.weiAbs, size=(neuron_counts[i], neuron_counts[i - 1])))
-
-        result.append(AnnPoint2(input_size=input_size, output_size=output_size, hiddenNeuronCounts=hidden_neuron_counts, activationFuns=actFuns, weights=weights, biases=biases))
+        result.append(point_from_layers(layers=layers, lossFun=loss_fun, learningRate=learning_rate, momCoeff=mom_coeff, batchSize=batch_size))
 
     return result
 
+    # result = []
+    # # TODO stabilise names
+    # for i in range(count):
+    #     hidden_layer_count = random.randint(hrange.layerCountMin, hrange.layerCountMax)
+    #
+    #     neuron_counts = [input_size]
+    #     for i in range(hidden_layer_count):
+    #         neuron_counts.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax)) # TODO test
+    #     neuron_counts.append(output_size)
+    #
+    #     hidden_neuron_counts = []
+    #
+    #     for i in range(1, len(neuron_counts) - 1):
+    #         hidden_neuron_counts.append(neuron_counts[i])
+    #
+    #     actFuns = []
+    #     biases = []
+    #     weights = []
+    #
+    #     for i in range(1, len(neuron_counts)):
+    #         actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
+    #         biases.append(np.random.uniform(-hrange.biaAbs, hrange.biaAbs, size=(neuron_counts[i], 1)))
+    #         weights.append(np.random.uniform(-hrange.weiAbs, hrange.weiAbs, size=(neuron_counts[i], neuron_counts[i - 1])))
+    #
+    #     result.append(AnnPoint2(input_size=input_size, output_size=output_size, hiddenNeuronCounts=hidden_neuron_counts, activationFuns=actFuns, weights=weights, biases=biases))
+
+
+def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
+    layer = [-1]
+    layer.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax))
+    layer.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)].copy())
+
+    return layer
+
 def get_default_hrange():
-    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()])
+    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()], [CrossEntropy(), QuadDiff()], (-3, 0), (-3, 0), (-5, 0))
     return hrange
 
 def punishment_function(arg: float):
@@ -138,7 +161,7 @@ def average_distance_between_points(points: [AnnPoint], hrange: HyperparameterRa
 def distance_between_points(pointA: AnnPoint, pointB: AnnPoint, hrange: HyperparameterRange) -> float:
     distance = 0
 
-    hidLayScale = hrange.layerCountMax - hrange.layerCountMin
+    hidLayScale = hrange.hiddenLayerCountMax - hrange.hiddenLayerCountMin
     if hidLayScale != 0:
         distance += (abs(pointA.hiddenLayerCount - pointB.hiddenLayerCount) / hidLayScale) ** 2
 

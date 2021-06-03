@@ -37,8 +37,8 @@ if __name__ == '__main__':
     np.random.seed(1001)
 
     ec = EvolvingClassifier()
-    ec.hrange.layerCountMin = 1
-    ec.hrange.layerCountMax = 1
+    ec.hrange.hiddenLayerCountMin = 1
+    ec.hrange.hiddenLayerCountMax = 1
     ec.hrange.neuronCountMax = 100
     ec.sco = MinimalDamageCrossoverOperator()
     ec.smo = SomeStructMutationOperator(ec.hrange)

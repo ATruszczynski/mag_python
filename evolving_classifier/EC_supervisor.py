@@ -38,7 +38,7 @@ class EC_supervisor():
         self.desc_string += f"{details_id} sps {sps}\n"
         self.desc_string += f"{details_id} ps {ps}\n"
         self.desc_string += f"{details_id} fracs {','.join([str(f) for f in fracs])}\n"
-        self.desc_string += f"{details_id} lc {hrange.layerCountMin} - {hrange.layerCountMax}\n"
+        self.desc_string += f"{details_id} lc {hrange.hiddenLayerCountMin} - {hrange.hiddenLayerCountMax}\n"
         self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
         self.desc_string += f"{details_id} acfs {','.join([f.to_string() for f in hrange.actFunSet])}\n"
         # self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
@@ -55,7 +55,8 @@ class EC_supervisor():
 
     def check_point(self, evals: [(AnnPoint, float)], iteration: int):
         # predict execution time
-        elapsed_time = (time.time() - self.start_point)
+        curr_time = time.time()
+        elapsed_time = (curr_time - self.start_point)
         self.work_done += len(evals)
         frac_of_work_done = self.work_done / self.total_work
         frac_velocity = frac_of_work_done / elapsed_time

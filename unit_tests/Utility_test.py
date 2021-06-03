@@ -109,42 +109,64 @@ def test_ohe():
     labels = [1, 2, 0, 4, 2, 1, 3]
     ohe = one_hot_endode(labels)
 
-    assert np.array_equal(ohe[0], np.array([[0],[1],[0],[0],[0]]))
-    assert np.array_equal(ohe[1], np.array([[0],[0],[1],[0],[0]]))
-    assert np.array_equal(ohe[2], np.array([[1],[0],[0],[0],[0]]))
-    assert np.array_equal(ohe[3], np.array([[0],[0],[0],[0],[1]]))
-    assert np.array_equal(ohe[4], np.array([[0],[0],[1],[0],[0]]))
-    assert np.array_equal(ohe[5], np.array([[0],[1],[0],[0],[0]]))
-    assert np.array_equal(ohe[6], np.array([[0],[0],[0],[1],[0]]))
+    assert np.array_equal(ohe[0], np.array([[0], [1], [0], [0], [0]]))
+    assert np.array_equal(ohe[1], np.array([[0], [0], [1], [0], [0]]))
+    assert np.array_equal(ohe[2], np.array([[1], [0], [0], [0], [0]]))
+    assert np.array_equal(ohe[3], np.array([[0], [0], [0], [0], [1]]))
+    assert np.array_equal(ohe[4], np.array([[0], [0], [1], [0], [0]]))
+    assert np.array_equal(ohe[5], np.array([[0], [1], [0], [0], [0]]))
+    assert np.array_equal(ohe[6], np.array([[0], [0], [0], [1], [0]]))
 
 def test_generate_population():
-    hrange = HyperparameterRange((0, 4), (0, 10), [ReLu(), Sigmoid(), Softmax()], 1, 2)
+    hrange = HyperparameterRange((0, 2), (0, 10), [ReLu(), Sigmoid(), Softmax()], [CrossEntropy(), QuadDiff()],
+                                 (-1, 0), (-3, -2), (-5, -4))
 
-    random.seed(1111)
-    np.random.seed(1111)
+    random.seed(1010)
+    np.random.seed(1010)
     population = generate_population(hrange=hrange, count=2, input_size=2, output_size=3)
 
-    assert population[0].input_size == 2
-    assert population[0].output_size == 3
-    assert len(population[0].hidden_neuron_counts) == 1
-    assert population[0].hidden_neuron_counts[0] == 3
-    assert population[0].activation_functions[0].to_string() == Sigmoid().to_string()
-    assert population[0].activation_functions[1].to_string() == Softmax().to_string()
-    assert np.all(np.isclose(population[0].weights[0], np.array([[-0.37904612, -0.99598032], [-0.52881055, -0.52441656], [0.47183175, -0.00906385]]), atol=1e-5))
-    assert np.all(np.isclose(population[0].weights[1], np.array([[-0.06775805, -0.52573575, -0.12968164], [-0.51265697, -0.23232018, 0.67678738], [0.31036945, -0.70310665, 0.27829033]]), atol=1e-5))
-    assert np.all(np.isclose(population[0].biases[0], np.array([[-1.6178032], [1.70001481], [-0.62570631]]), atol=1e-5))
-    assert np.all(np.isclose(population[0].biases[1], np.array([[1.1377014], [-1.49397476], [0.42659728]]), atol=1e-5))
+    assert len(population[0].neuronCounts) == 4
+    assert population[0].neuronCounts[0] == 2
+    assert population[0].neuronCounts[1] == 9
+    assert population[0].neuronCounts[2] == 8
+    assert population[0].neuronCounts[3] == 3
 
-# def test_pun_fun():
-#     args = [-1, -0.01, -0.0000001, 0, 0.0000001, 0.01, 1]
-#
-#     assert punishment_function(args[0]) == pytest.approx(0, abs=1e-5)
-#     assert punishment_function(args[1]) == pytest.approx(0.566311003, abs=1e-5)
-#     assert punishment_function(args[2]) == pytest.approx(0.749998125, abs=1e-5)
-#     assert punishment_function(args[3]) == pytest.approx(0.75, abs=1e-5)
-#     assert punishment_function(args[4]) == pytest.approx(1.250001875, abs=1e-5)
-#     assert punishment_function(args[5]) == pytest.approx(1.433688997, abs=1e-5)
-#     assert punishment_function(args[6]) == pytest.approx(2, abs=1e-5)
+    assert len(population[0].actFuns) == 3
+    assert population[0].actFuns[0].to_string() == ReLu().to_string()
+    assert population[0].actFuns[1].to_string() == ReLu().to_string()
+    assert population[0].actFuns[2].to_string() == Sigmoid().to_string()
+
+    assert population[0].lossFun.to_string() == QuadDiff().to_string()
+
+    assert population[0].learningRate == pytest.approx(-0.83566, abs=1e-4)
+    assert population[0].momCoeff == pytest.approx(-2.56324, abs=1e-4)
+    assert population[0].batchSize == pytest.approx(-4.27116, abs=1e-4)
+
+
+
+    assert len(population[1].neuronCounts) == 2
+    assert population[1].neuronCounts[0] == 2
+    assert population[1].neuronCounts[1] == 3
+
+    assert len(population[1].actFuns) == 1
+    assert population[1].actFuns[0].to_string() == Softmax().to_string()
+
+    assert population[1].lossFun.to_string() == QuadDiff().to_string()
+
+    assert population[1].learningRate == pytest.approx(-0.00331, abs=1e-4)
+    assert population[1].momCoeff == pytest.approx(-2.42444, abs=1e-4)
+    assert population[1].batchSize == pytest.approx(-4.85385, abs=1e-4)
+
+def test_pun_fun():
+    args = [-1, -0.01, -0.0000001, 0, 0.0000001, 0.01, 1]
+
+    assert punishment_function(args[0]) == pytest.approx(0, abs=1e-5)
+    assert punishment_function(args[1]) == pytest.approx(0.283155502, abs=1e-5)
+    assert punishment_function(args[2]) == pytest.approx(0.374999063, abs=1e-5)
+    assert punishment_function(args[3]) == pytest.approx(0.375, abs=1e-5)
+    assert punishment_function(args[4]) == pytest.approx(0.625000938, abs=1e-5)
+    assert punishment_function(args[5]) == pytest.approx(0.716844498, abs=1e-5)
+    assert punishment_function(args[6]) == pytest.approx(1, abs=1e-5)
 
 def test_get_in_radius():
     random.seed(2020)
@@ -155,79 +177,113 @@ def test_get_in_radius():
     p = get_in_radius(1, 0, 5, 0.75)
     assert p == pytest.approx(0.828988)
 
-# def test_get_network_from_point():
-#     point = AnnPoint(inputSize=2, outputSize=3, hiddenLayerCount=2, neuronCount=2, actFun=ReLu(),
-#                      aggrFun=Softmax(), lossFun=QuadDiff(), learningRate=1, momCoeff=2, batchSize=0)
-#     network = network_from_point(point, 1001)
-#     TODO fix
-#     assert len(network.neuronCounts) == 4
-#     assert network.neuronCounts[0] == 2
-#     assert network.neuronCounts[1] == 4
-#     assert network.neuronCounts[2] == 4
-#     assert network.neuronCounts[3] == 3
-#     assert len(network.actFuns) == 4
-#     assert network.actFuns[0] is None
-#     assert isinstance(network.actFuns[1], ReLu)
-#     assert isinstance(network.actFuns[2], ReLu)
-#     assert isinstance(network.actFuns[3], Softmax)
-#     assert isinstance(network.lossFun, QuadDiff)
-#     assert network.learningRate == 10
-#     assert network.momCoeffL == 100
-#     assert network.batchSize == 1
+def test_get_network_from_point():
+    point = AnnPoint(neuronCounts=[2, 4, 4, 3], actFuns=[ReLu(), ReLu(), Softmax()], lossFun=QuadDiff(), learningRate=1, momCoeff=2, batchSize=3)
+    network = network_from_point(point, 1010)
+
+    assert len(network.neuronCounts) == 4
+    assert network.neuronCounts[0] == 2
+    assert network.neuronCounts[1] == 4
+    assert network.neuronCounts[2] == 4
+    assert network.neuronCounts[3] == 3
+
+    assert len(network.actFuns) == 4
+    assert network.actFuns[0] is None
+    assert isinstance(network.actFuns[1], ReLu)
+    assert isinstance(network.actFuns[2], ReLu)
+    assert isinstance(network.actFuns[3], Softmax)
+
+    assert isinstance(network.lossFun, QuadDiff)
+    assert network.learningRate == 10
+    assert network.momCoeffL == 100
+    assert network.batchSize == 8
+
+    assert network.layerCount == 4
+
+    assert len(network.weights) == 4
+    assert np.array_equal(network.weights[0], np.empty((0, 0)))
+    assert np.all(np.isclose(network.weights[1], np.array([[-0.83116718, -0.27092632], [-1.040413, -1.27319421],[0.09199489, 1.12827275], [0.70227065, -1.67139339]]), atol=1e-5))
+    assert np.all(np.isclose(network.weights[2], np.array([[-0.23979613, -0.82519097, -0.27174483,  0.38980573],
+                                                           [-0.25130439,  0.14294476,  1.35161869, -0.03725841],
+                                                          [-0.68505133,  0.17929361,  0.29902494, -0.1533996],
+                                                            [0.38148435, -0.4994389,   0.50463211, -0.12389273]]), atol=1e-5))
+    assert np.all(np.isclose(network.weights[3], np.array([[-1.2917587,   0.37861067, -0.88823027, -0.38984775],
+                                                           [-0.45926747, -0.19749436,  0.12400293,  0.14901888],
+                                                          [ 0.14190831, -0.23561145,  0.47601405, -0.31930159]]), atol=1e-5))
+
+    assert len(network.biases) == 4
+    assert np.array_equal(network.biases[0], np.empty((0, 0)))
+    assert np.all(np.isclose(network.biases[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
+    assert np.all(np.isclose(network.biases[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
+    assert np.all(np.isclose(network.biases[3], np.array([[0], [0], [0]]), atol=1e-5))
+
+    assert len(network.weight_mom) == 4
+    assert np.array_equal(network.weight_mom[0], np.empty((0, 0)))
+    assert np.all(np.isclose(network.weight_mom[1], np.array([[0, 0], [0, 0], [0, 0], [0, 0]]), atol=1e-5))
+    assert np.all(np.isclose(network.weight_mom[2], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
+    assert np.all(np.isclose(network.weight_mom[3], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
+
+    assert len(network.biases_mom) == 4
+    assert np.array_equal(network.biases_mom[0], np.empty((0, 0)))
+    assert np.all(np.isclose(network.biases_mom[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
+    assert np.all(np.isclose(network.biases_mom[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
+    assert np.all(np.isclose(network.biases_mom[3], np.array([[0], [0], [0]]), atol=1e-5))
+
+
+# random.seed(1010)
+# np.random.seed(1010)
+# print(random.randint(0, 2))
+# print("")
 #
-#     assert network.layerCount == 4
+# print(random.randint(0, 10))
+# print(random.randint(0, 2))
 #
-#     assert len(network.weights) == 4
-#     assert np.array_equal(network.weights[0], np.empty((0, 0)))
-#     assert np.all(np.isclose(network.weights[1], np.array([[0.071019, -0.23531], [0.09059, -1.40620], [1.28162, 0.82780], [0.16157, -0.70421]]), atol=1e-5))
-#     assert np.all(np.isclose(network.weights[2], np.array([[-0.50992, 0.51331, -0.52928, 0.37987],
-#                                                            [-0.12572, -0.10110, -0.06362, -0.78248],
-#                                                            [0.69932, -0.37211, -0.45611, -0.67820],
-#                                                            [0.22578, 0.54550, 0.90252, -0.69979]]), atol=1e-5))
-#     assert np.all(np.isclose(network.weights[3], np.array([[1.01778, 0.12202, -0.33471, -0.38592],
-#                                                            [0.68398, 0.72451, -0.01598, 0.67010],
-#                                                            [0.56757, 0.29046, -0.33311, 0.26854]]), atol=1e-5))
+# print(random.randint(0, 10))
+# print(random.randint(0, 2))
 #
-#     assert len(network.biases) == 4
-#     assert np.array_equal(network.biases[0], np.empty((0, 0)))
-#     assert np.all(np.isclose(network.biases[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
-#     assert np.all(np.isclose(network.biases[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
-#     assert np.all(np.isclose(network.biases[3], np.array([[0], [0], [0]]), atol=1e-5))
+# print(random.randint(0, 10))
+# print(random.randint(0, 2))
+# print("")
 #
-#     assert len(network.weight_mom) == 4
-#     assert np.array_equal(network.weight_mom[0], np.empty((0, 0)))
-#     assert np.all(np.isclose(network.weight_mom[1], np.array([[0, 0], [0, 0], [0, 0], [0, 0]]), atol=1e-5))
-#     assert np.all(np.isclose(network.weight_mom[2], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
-#     assert np.all(np.isclose(network.weight_mom[3], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
+# print(random.randint(0, 1))
+# print(random.uniform(-1, 0))
+# print(random.uniform(-3, -2))
+# print(random.uniform(-5, -4))
+# print("")
 #
-#     assert len(network.biases_mom) == 4
-#     assert np.array_equal(network.biases_mom[0], np.empty((0, 0)))
-#     assert np.all(np.isclose(network.biases_mom[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
-#     assert np.all(np.isclose(network.biases_mom[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
-#     assert np.all(np.isclose(network.biases_mom[3], np.array([[0], [0], [0]]), atol=1e-5))
+# print("next")
+#
+# print(random.randint(0, 2))
+# print("")
+#
+# print(random.randint(0, 10))
+# print(random.randint(0, 2))
+# print("")
+#
+# print(random.randint(0, 1))
+# print(random.uniform(-1, 0))
+# print(random.uniform(-3, -2))
+# print(random.uniform(-5, -4))
+# print("")
 
 
-random.seed(1111)
-np.random.seed(1111)
-print(random.randint(0, 4))
-print("")
 
-print(random.randint(0, 10))
-print("")
+# # 2 3 2
+# print(np.random.uniform(-2, 2, size=(3, 1)))
+# print(np.random.uniform(-1, 1, size=(3, 2)))
+# print("")
+#
+# print(np.random.uniform(-2, 2, size=(3, 1)))
+# print(np.random.uniform(-1, 1, size=(3, 3)))
+#
+# print(random.randint(0, 4))
 
-print(random.randint(0, 2))
-print(random.randint(0, 2))
-print("")
+# test_generate_population()
 
-# 2 3 2
-print(np.random.uniform(-2, 2, size=(3, 1)))
-print(np.random.uniform(-1, 1, size=(3, 2)))
-print("")
-
-print(np.random.uniform(-2, 2, size=(3, 1)))
-print(np.random.uniform(-1, 1, size=(3, 3)))
-
-print(random.randint(0, 4))
-
-test_generate_population()
-
+# random.seed(1010)
+# np.random.seed(1010)
+# print(np.random.normal(0, 1 / sqrt(2), (4, 2)))
+# print(np.random.normal(0, 1 / sqrt(4), (4, 4)))
+# print(np.random.normal(0, 1 / sqrt(4), (3, 4)))
+#
+# test_get_network_from_point()

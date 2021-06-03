@@ -21,19 +21,24 @@ class SimpleMutationOperator():
         point = point.copy()
 
         if random.random() < pm * radius:
-            current = point.hiddenLayerCount
-            minhl = max(current - 1, self.hrange.layerCountMin)
-            maxhl = min(current + 1, self.hrange.layerCountMax)
-            point.hiddenLayerCount = try_choose_different(point.hiddenLayerCount, range(minhl, maxhl))
+            current = len(point.neuronCounts) - 2
+            minhl = max(current - 1, self.hrange.hiddenLayerCountMin)
+            maxhl = min(current + 1, self.hrange.hiddenLayerCountMax)
 
-        if random.random() < pm:
-            point.neuronCount = get_in_radius(point.neuronCount, self.hrange.neuronCountMin, self.hrange.neuronCountMax, radius)
+            new_lay_count = try_choose_different(current, range(minhl, maxhl + 1))
+            diff = new_lay_count - current
+            if diff > 0:
+                point = add_layers(point=point, howMany=diff, hrange=self.hrange)
+            elif diff < 0:
+                point = remove_layers(point=point, howMany=-diff)
 
-        if random.random() < pm * radius:
-            point.actFun = try_choose_different(point.actFun, self.hrange.actFunSet)
+        for i in range(1, len(point.neuronCounts) - 1):
+            if random.random() < pm:
+                point.neuronCounts[i] = round(get_in_radius(point.neuronCounts[i], self.hrange.neuronCountMin, self.hrange.neuronCountMax, radius))
 
-        if random.random() < pm * radius:
-            point.aggrFun = try_choose_different(point.aggrFun, self.hrange.aggrFunSet)
+        for i in range(len(point.actFuns)):
+            if random.random() < pm:
+                point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
 
         if random.random() < pm * radius:
             point.lossFun = try_choose_different(point.lossFun, self.hrange.lossFunSet)
@@ -47,4 +52,4 @@ class SimpleMutationOperator():
         if random.random() < pm:
             point.batchSize = get_in_radius(point.batchSize, self.hrange.batchSizeMin, self.hrange.batchSizeMax, radius)
 
-        return
+        return point

@@ -6,10 +6,10 @@ class AnnPoint():
     def __init__(self, neuronCounts: [int],
                  actFuns: [ActFun], lossFun: LossFun, learningRate: float, momCoeff: float, batchSize: float):
         self.neuronCounts = []
-        for i in neuronCounts:
+        for i in range(len(neuronCounts)):
             self.neuronCounts.append(neuronCounts[i])
         self.actFuns = []
-        for i in actFuns:
+        for i in range(len(actFuns)):
             self.actFuns.append(actFuns[i].copy())
         self.lossFun = lossFun.copy()
         self.learningRate = learningRate
@@ -18,10 +18,10 @@ class AnnPoint():
 
     def copy(self):
         neuronCounts = []
-        for i in self.neuronCounts:
+        for i in range(len(self.neuronCounts)):
             neuronCounts.append(self.neuronCounts[i])
         actFuns = []
-        for i in self.actFuns:
+        for i in range(len(self.actFuns)):
             actFuns.append(self.actFuns[i].copy())
         result = AnnPoint(neuronCounts=neuronCounts, actFuns=actFuns,
                           lossFun=self.lossFun.copy(), learningRate=self.learningRate, momCoeff=self.momCoeff, batchSize=self.batchSize)
