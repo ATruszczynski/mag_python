@@ -13,11 +13,11 @@ class AnnPoint2():
 
         self.weights = []
         for i in range(len(weights)):
-            self.weights.append(weights[i].copy()) # TODO test if deep copy
+            self.weights.append(weights[i].copy())
 
         self.biases = []
         for i in range(len(biases)):
-            self.biases.append(biases[i].copy()) # TODO test if deep copy
+            self.biases.append(biases[i].copy())
 
         self.hidden_neuron_counts = []
         for i in range(len(self.weights) - 1):
@@ -53,7 +53,7 @@ class AnnPoint2():
 
         return result
 
-    def to_string_full(self): # TODO test
+    def to_string_full(self):
         result = ""
         result += "placeholder"
 
@@ -65,10 +65,9 @@ class AnnPoint2():
         for i in range(len(self.hidden_neuron_counts) - 1):
             result += self.hidden_neuron_counts[i] * self.hidden_neuron_counts[i + 1]
 
-        # TODO fix
-
         return result
-    #TODO kiedyś się pojawił problem tego, że sieć mogła przetrwać zmianę input_size
+
+
 def point_from_layer_tuples(layer_tuples: [int, int, ActFun, np.ndarray, np.ndarray]) -> AnnPoint2:
     input_size = layer_tuples[0][1]
     output_size = layer_tuples[-1][1]

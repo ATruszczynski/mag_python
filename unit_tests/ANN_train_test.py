@@ -12,7 +12,7 @@ import pytest
 #TODO test deepcopying in general
 
 def test_run_relus():
-    network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=QuadDiff(), learningRate=0, momCoeffL=0, batchSize=0, seed=1001)
+    network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=QuadDiff(), learningRate=0, momCoeff=0, batchSize=0, seed=1001)
 
     inputs = [np.array([[2], [1]])]
     outputs = [np.array([[1], [0]])]

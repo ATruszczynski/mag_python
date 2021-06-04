@@ -65,6 +65,57 @@ def test_add_layer():
     assert pointB.momCoeff == -2.5
     assert pointB.batchSize == -4
 
+def test_simple_mutation_limits():
+    hrange = HyperparameterRange((0, 3), (1, 10), [ReLu(), Sigmoid(), Softmax()], [CrossEntropy(), QuadDiff()],
+                                 (-1, 0), (-3, -2), (-5, -4))
+    pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), Sigmoid()], lossFun=QuadDiff(), learningRate=-1,
+                      momCoeff=-2.5, batchSize=-4)
+
+    random.seed(1001)
+    mo = SimpleMutationOperator(hrange)
+    pop = []
+    for i in range(200):
+        pop.append(mo.mutate(pointA, 1, 10))
+    layers = [len(pop[i].neuronCounts) for i in range(len(pop))]
+    neurons = [pop[i].neuronCounts[j] for i in range(len(pop)) for j in range(1, len(pop[i].neuronCounts) - 1)]
+    actFuns = [pop[i].actFuns[j] for i in range(len(pop)) for j in range(len(pop[i].actFuns))]
+    lossFuns = [pop[i].lossFun for i in range(len(pop))]
+    lrs = [pop[i].learningRate for i in range(len(pop))]
+    me = [pop[i].momCoeff for i in range(len(pop))]
+    bs = [pop[i].batchSize for i in range(len(pop))]
+
+    assert max(layers) == 5
+    assert min(layers) == 3
+    assert max(neurons) == 10
+    assert min(neurons) == 1
+    assert max(lrs) <= 0
+    assert min(lrs) >= -1
+    assert max(me) <= -2
+    assert min(me) >= -3
+    assert max(bs) <= -4
+    assert min(bs) >= -5
+
+    for i in range(len(hrange.actFunSet)):
+        afh = hrange.actFunSet[i]
+        isthere = False
+        for j in range(len(actFuns)):
+            afp = actFuns[j]
+            isthere = isthere or afh.to_string() == afp.to_string()
+            if isthere == True:
+                break
+        assert isthere
+
+    hrange.lossFunSet = [CrossEntropy()]
+    for i in range(len(hrange.lossFunSet)):
+        lfh = hrange.lossFunSet[i]
+        isthere = False
+        for j in range(len(lossFuns)):
+            lfp = lossFuns[j]
+            isthere = isthere or lfh.to_string() == lfp.to_string()
+            if isthere == True:
+                break
+        assert isthere
+
 # def test_some_mutation():
 #     wei = [np.array([[1, 2], [3, 4.0]]), np.array([[5, 6.0]]), np.array([[7], [8.0]]), np.array([[9, 10.0]])]
 #     bias = [np.array([[-1], [-2.0]]), np.array([[-3.]]), np.array([[-4.], [-5]]), np.array([[-6.]])]

@@ -79,4 +79,4 @@ print()
 print(fit_1_1)
 print((fit_1_2 + fit_2_2) / 2)
 
-test_fitness_calculator_with_prog_eff()
+# test_fitness_calculator_with_prog_eff()

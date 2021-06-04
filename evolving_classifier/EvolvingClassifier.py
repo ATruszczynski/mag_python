@@ -55,7 +55,7 @@ class EvolvingClassifier:
         self.ff = FitnessFunction(2)
         self.fc = OnlyFitnessCalculator([])
 
-    #TODO nn.test is not tested i think
+
     def prepare(self, popSize:int, startPopSize: int,
                 nn_data: ([np.ndarray], [np.ndarray]), seed: int):
         random.seed(seed)
@@ -154,7 +154,7 @@ class EvolvingClassifier:
     #     layersA[layAInd] = layersB[layBInd]
     #     layersB[layBInd] = tmp
     #
-    #     for i in range(1, len(layersA)): # TODO to chyba powinna być osobna funkcja
+    #     for i in range(1, len(layersA)):
     #         layer = layersA[i]
     #         pre_layer = layersA[i - 1]
     #         if pre_layer[1] != layer[3].shape[1]:
@@ -162,7 +162,7 @@ class EvolvingClassifier:
     #             layer[4] = np.zeros((layer[1], 1))
     #         layersA[i] = layer
     #
-    #     for i in range(1, len(layersB)): # TODO to chyba powinna być osobna funkcja
+    #     for i in range(1, len(layersB)):
     #         layer = layersB[i]
     #         pre_layer = layersB[i - 1]
     #         if pre_layer[1] != layer[3].shape[1]:
@@ -236,7 +236,7 @@ class EvolvingClassifier:
     #     for i in range(len(point.hidden_neuron_counts)):
     #         if random.random() < pm_sc:
     #             current = point.hidden_neuron_counts[i]
-    #             new = try_choose_different(current, list(range(self.hrange.neuronCountMin, self.hrange.neuronCountMax + 1))) # TODO tu można wprowadzić radius
+    #             new = try_choose_different(current, list(range(self.hrange.neuronCountMin, self.hrange.neuronCountMax + 1)))
     #             point = change_neuron_count_in_layer(point=point, layer=i, demanded=new)
     #             structural = True
     #
@@ -369,7 +369,7 @@ class EvolvingClassifier:
         # return estimates
 
     # def calculate_fitness(self, point: AnnPoint2):
-    #     network = network_from_point(point, 1001) #TODO make sure this seed does nothing
+    #     network = network_from_point(point, 1001)
     #
     #
     #     test_results = network.test(test_input=self.trainInputs, test_output=self.trainOutputs) #TODO DONT USE TEST SETS IN TRAINING PROCESS WTF

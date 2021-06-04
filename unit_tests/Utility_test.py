@@ -157,6 +157,54 @@ def test_generate_population():
     assert population[1].momCoeff == pytest.approx(-2.42444, abs=1e-4)
     assert population[1].batchSize == pytest.approx(-4.85385, abs=1e-4)
 
+def test_generate_population_limits():
+    hrange = HyperparameterRange((0, 2), (0, 5), [ReLu(), Sigmoid(), Softmax()], [CrossEntropy(), QuadDiff()],
+                                 (-1, 0), (-3, -2), (-5, -4))
+
+    random.seed(1001)
+    pop = generate_population(hrange, 200, 10, 10)
+    layers = [len(pop[i].neuronCounts) for i in range(len(pop))]
+    neurons = [pop[i].neuronCounts[j] for i in range(len(pop)) for j in range(1, len(pop[i].neuronCounts) - 1)]
+    actFuns = [pop[i].actFuns[j] for i in range(len(pop)) for j in range(len(pop[i].actFuns))]
+    lossFuns = [pop[i].lossFun for i in range(len(pop))]
+    lrs = [pop[i].learningRate for i in range(len(pop))]
+    me = [pop[i].momCoeff for i in range(len(pop))]
+    bs = [pop[i].batchSize for i in range(len(pop))]
+
+    assert max(layers) == 4
+    assert min(layers) == 2
+    assert max(neurons) == 5
+    assert min(neurons) == 0
+    assert max(lrs) <= 0
+    assert min(lrs) >= -1
+    assert max(me) <= -2
+    assert min(me) >= -3
+    assert max(bs) <= -4
+    assert min(bs) >= -5
+
+    for i in range(len(hrange.actFunSet)):
+        afh = hrange.actFunSet[i]
+        isthere = False
+        for j in range(len(actFuns)):
+            afp = actFuns[j]
+            isthere = isthere or afh.to_string() == afp.to_string()
+            if isthere == True:
+                break
+        assert isthere
+
+    for i in range(len(hrange.lossFunSet)):
+        lfh = hrange.lossFunSet[i]
+        isthere = False
+        for j in range(len(lossFuns)):
+            lfp = lossFuns[j]
+            isthere = isthere or lfh.to_string() == lfp.to_string()
+            if isthere == True:
+                break
+        assert isthere
+
+
+
+
 def test_pun_fun():
     args = [-1, -0.01, -0.0000001, 0, 0.0000001, 0.01, 1]
 
@@ -177,6 +225,21 @@ def test_get_in_radius():
     p = get_in_radius(1, 0, 5, 0.75)
     assert p == pytest.approx(0.828988)
 
+
+def test_get_in_radius_limits():
+    random.seed(2020)
+
+    minB = 0
+    maxB = 5
+    radius = 5
+
+    hist = []
+    for i in range(500):
+        hist.append(get_in_radius(1, minB, maxB, radius))
+
+    assert min(hist) >= minB
+    assert max(hist) <= maxB
+
 def test_get_network_from_point():
     point = AnnPoint(neuronCounts=[2, 4, 4, 3], actFuns=[ReLu(), ReLu(), Softmax()], lossFun=QuadDiff(), learningRate=1, momCoeff=2, batchSize=3)
     network = network_from_point(point, 1010)
@@ -195,7 +258,7 @@ def test_get_network_from_point():
 
     assert isinstance(network.lossFun, QuadDiff)
     assert network.learningRate == 10
-    assert network.momCoeffL == 100
+    assert network.momCoeff == 100
     assert network.batchSize == 8
 
     assert network.layerCount == 4
@@ -287,3 +350,5 @@ def test_get_network_from_point():
 # print(np.random.normal(0, 1 / sqrt(4), (3, 4)))
 #
 # test_get_network_from_point()
+
+test_generate_population_limits()

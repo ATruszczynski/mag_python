@@ -42,7 +42,7 @@ class AnnPoint():
 
         return result
 
-    def to_string_full(self): # TODO test
+    def to_string_full(self):
         result = ""
         layer_string = "|" + str(self.neuronCounts[0]) + "|"
         for i in range(1, len(self.neuronCounts)):

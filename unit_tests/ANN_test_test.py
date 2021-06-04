@@ -11,7 +11,7 @@ def get_io():
 def test_nn_test():
     inputs, output = get_io()
     network = FeedForwardNeuralNetwork(neuronCounts=[2, 4, 3], actFun=[ReLu(), Sigmoid()], lossFun=CrossEntropy(),
-                                       learningRate=-3, momCoeffL=-3, batchSize=-2, seed=1010)
+                                       learningRate=-3, momCoeff=-3, batchSize=-2, seed=1010)
 
     res = network.test(inputs, output)
 

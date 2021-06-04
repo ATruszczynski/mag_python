@@ -2,7 +2,7 @@ import numpy as np
 from ann_point.Functions import *
 from ann_point.AnnPoint2 import *
 from evolving_classifier.operators.CrossoverOperator import *
-from utility.Mut_Utility import resize_layer
+# from utility.Mut_Utility import resize_layer
 
 def test_simple_crossover():
     pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
@@ -270,4 +270,4 @@ print(random.random())
 print(random.random())
 print(random.random())
 
-test_layer_swap_crossover()
+# test_layer_swap_crossover()

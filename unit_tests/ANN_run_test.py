@@ -5,7 +5,7 @@ import numpy as np
 
 def test_run_relus():
     network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=CrossEntropy(),
-                                       learningRate=0, momCoeffL=0, batchSize=0, seed=1001)
+                                       learningRate=0, momCoeff=0, batchSize=0, seed=1001)
 
     network.weights=[None, np.array([[1, 1], [1, 1]]), np.array([[1, 1], [1, 1]])]
     network.biases=[None, np.array([[1], [1]]), np.array([[1], [1]])]

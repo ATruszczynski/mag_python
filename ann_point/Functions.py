@@ -36,7 +36,6 @@ class ReLu(ActFun):
         return "RL"
 
 #TODO upewnij się że wszystko co można jest w hrange
-#TODO upewnij się, że wszytkie func mają inne stringi
 
 class LReLu(ActFun):
     def __init__(self, a: float=0.01):
@@ -257,11 +256,6 @@ class ChebyshevLoss(LossFun):
         return "CL"
 
 
-
-
-# TODO cross entropy
-# TODO softmax
-# TODO tanh? other acts and losses
 
 
 

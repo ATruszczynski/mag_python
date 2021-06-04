@@ -25,7 +25,7 @@ class ProgressFF(FitnessFunction):
         results = []
 
         for i in range(self.learningIts):
-            network.train(inputs=trainInputs, outputs=trainOutputs, epochs=1) #TODO could use validation probably
+            network.train(inputs=trainInputs, outputs=trainOutputs, epochs=1)
             test_results = network.test(test_input=trainInputs, test_output=trainOutputs)
             result = mean(test_results[0:3])
             results.append(result)
@@ -48,7 +48,7 @@ class ProgressFF2(FitnessFunction):
     def compute(self, point: AnnPoint, trainInputs: [np.ndarray], trainOutputs: [np.ndarray], seed: int) -> [float, float]:
         network = network_from_point(point, seed)
 
-        network.train(inputs=trainInputs, outputs=trainOutputs, epochs=self.learningIts) #TODO could use validation probably
+        network.train(inputs=trainInputs, outputs=trainOutputs, epochs=self.learningIts)
         test_results = network.test(test_input=trainInputs, test_output=trainOutputs)
         main_eff = mean(test_results[0:3])
 
@@ -77,7 +77,7 @@ class PureEfficiencyFF(FitnessFunction):
         results = []
 
         for i in range(self.learningIts):
-            network.train(inputs=trainInputs, outputs=trainOutputs, epochs=1) #TODO could use validation probably
+            network.train(inputs=trainInputs, outputs=trainOutputs, epochs=1)
             test_results = network.test(test_input=trainInputs, test_output=trainOutputs)
             result = mean(test_results[0:3])
             results.append(result)
@@ -94,7 +94,7 @@ class PureProgressFF(FitnessFunction):
         results = []
 
         for i in range(self.learningIts):
-            network.train(inputs=trainInputs, outputs=trainOutputs, epochs=1) #TODO could use validation probably
+            network.train(inputs=trainInputs, outputs=trainOutputs, epochs=1)
             test_results = network.test(test_input=trainInputs, test_output=trainOutputs)
             result = mean(test_results[0:3])
             results.append(result)

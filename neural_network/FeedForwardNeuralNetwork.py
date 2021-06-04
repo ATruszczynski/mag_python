@@ -1,4 +1,5 @@
 import random
+import threading
 from math import sqrt, ceil
 from statistics import mean
 
@@ -9,7 +10,7 @@ from utility.Utility import *
 # import tensorflow as tf
 
 class FeedForwardNeuralNetwork:
-    def __init__(self, neuronCounts: [int], actFun: [ActFun], lossFun: LossFun, learningRate: float, momCoeffL: float,
+    def __init__(self, neuronCounts: [int], actFun: [ActFun], lossFun: LossFun, learningRate: float, momCoeff: float,
                  batchSize: float, seed: int):
         self.neuronCounts = []
 
@@ -21,10 +22,10 @@ class FeedForwardNeuralNetwork:
             self.actFuns.append(actFun[i].copy())
         self.lossFun = lossFun.copy()
         self.learningRate = 10 ** learningRate
-        self.momCoeffL = 10 ** momCoeffL
+        self.momCoeff = 10 ** momCoeff
         self.batchSize = 2 ** batchSize
 
-        random.seed(seed) # TODO check if this works correctly in multithread
+        random.seed(seed)
         np.random.seed(seed)
 
         self.layerCount = len(self.neuronCounts)
@@ -76,11 +77,11 @@ class FeedForwardNeuralNetwork:
                 bias_step = self.get_empty_biases()
 
                 for i in range(1, len(self.weight_mom)):
-                    self.weight_mom[i] = self.momCoeffL * self.weight_mom[i]
+                    self.weight_mom[i] = self.momCoeff * self.weight_mom[i]
                     self.weight_mom[i] += self.learningRate * weight_change[i]
                     weight_step[i] = self.weight_mom[i].copy()
 
-                    self.biases_mom[i] = self.momCoeffL * self.biases_mom[i]
+                    self.biases_mom[i] = self.momCoeff * self.biases_mom[i]
                     self.biases_mom[i] += self.learningRate * biases_change[i]
                     bias_step[i] = self.biases_mom[i].copy()
 
@@ -97,8 +98,6 @@ class FeedForwardNeuralNetwork:
             pred_class = np.argmax(net_result)
             corr_class = np.argmax(test_output[i])
             confusion_matrix[corr_class, pred_class] += 1
-
-        # TODO test acc, recall and precision
 
         return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix]
 
@@ -170,7 +169,7 @@ class FeedForwardNeuralNetwork:
 def network_from_point(point: AnnPoint, seed: int):
     return FeedForwardNeuralNetwork \
         (neuronCounts=point.neuronCounts, actFun=point.actFuns,
-         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeffL=point.momCoeff,
+         lossFun=point.lossFun.copy(), learningRate=point.learningRate, momCoeff=point.momCoeff,
          batchSize=point.batchSize, seed=seed)
 
 def accuracy(confusion_matrix: np.ndarray):
@@ -208,6 +207,7 @@ def average_recall(conf_matrix):
             class_recalls.append(diag[i] / row_sums[i])
 
     return np.average(class_recalls)
+
 
 def efficiency(conf_matrix):
     acc = accuracy(conf_matrix)

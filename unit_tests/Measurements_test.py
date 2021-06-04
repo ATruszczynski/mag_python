@@ -28,3 +28,7 @@ def test_average_recall():
     prec = average_recall(conf)
 
     assert prec == 13 / 24
+
+def test_f1_score():
+    cm =
+

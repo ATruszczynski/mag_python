@@ -92,7 +92,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
     #
     #     neuron_counts = [input_size]
     #     for i in range(hidden_layer_count):
-    #         neuron_counts.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax)) # TODO test
+    #         neuron_counts.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax))
     #     neuron_counts.append(output_size)
     #
     #     hidden_neuron_counts = []
@@ -203,7 +203,7 @@ def get_in_radius(current: float, min_val: float, max_val:float, radius: float) 
 
     return random.uniform(lower_bound, upper_bound)
 
-def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> np.ndarray: #TODO dodaj parametr na dzielnik
+def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> np.ndarray:
     if div is None:
         l = shape[1]
     else:
@@ -212,7 +212,27 @@ def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> n
     result = np.random.normal(0, var_mul / sqrt(l), shape)
 
     return result
-#TODO leaky ReLu
+
+def test_numpy_deep_copy():
+    matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    matrixcp = matrix.copy()
+
+    assert np.array_equal(matrix, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    assert np.array_equal(matrixcp, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+
+    matrix[2, 1] = 80
+    matrix[1, 1] = 50
+    matrix[1, 0] = 40
+
+    assert np.array_equal(matrix, np.array([[1, 2, 3], [40, 50, 6], [7, 80, 9]]))
+    assert np.array_equal(matrixcp, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+
+    matrixcp[0, 1] = 20
+    matrixcp[2, 0] = 70
+
+    assert np.array_equal(matrix, np.array([[1, 2, 3], [40, 50, 6], [7, 80, 9]]))
+    assert np.array_equal(matrixcp, np.array([[1, 20, 3], [4, 5, 6], [70, 8, 9]]))
+
 
 
 

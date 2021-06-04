@@ -4,7 +4,7 @@ from ann_point.Functions import *
 
 def test_init_no_hidden():
     network = FeedForwardNeuralNetwork(neuronCounts=[2, 3], actFun=[Sigmoid()], lossFun=QuadDiff(), learningRate=-3,
-                                       momCoeffL=-2, batchSize=-4, seed=1001)
+                                       momCoeff=-2, batchSize=-4, seed=1001)
 
     assert len(network.neuronCounts) == 2
     assert network.neuronCounts[0] == 2
@@ -42,12 +42,12 @@ def test_init_no_hidden():
 
     assert network.lossFun.to_string() == QuadDiff().to_string()
     assert network.learningRate == 0.001
-    assert network.momCoeffL == 0.01
+    assert network.momCoeff == 0.01
     assert network.batchSize == 1 / 16
 
 def test_init_2_hidden():
     network = FeedForwardNeuralNetwork(neuronCounts=[2, 4, 3], actFun=[Sigmoid(), ReLu()], lossFun=CrossEntropy(), learningRate=-1,
-                                       momCoeffL=-3, batchSize=-2, seed=1001)
+                                       momCoeff=-3, batchSize=-2, seed=1001)
 
     assert len(network.neuronCounts) == 3
     assert network.neuronCounts[0] == 2
@@ -94,7 +94,7 @@ def test_init_2_hidden():
 
     assert network.lossFun.to_string() == CrossEntropy().to_string()
     assert network.learningRate == 0.1
-    assert network.momCoeffL == 0.001
+    assert network.momCoeff == 0.001
     assert network.batchSize == 1 / 4
 
 
