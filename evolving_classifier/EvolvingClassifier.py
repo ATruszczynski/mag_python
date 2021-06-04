@@ -117,7 +117,7 @@ class EvolvingClassifier:
         if power > 1:
             pool.close()
 
-        eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1], reverse=True)
+        eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1].get_eff(), reverse=True)
 
         return eval_pop_sorted[0][0]
 

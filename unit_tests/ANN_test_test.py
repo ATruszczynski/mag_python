@@ -15,6 +15,7 @@ def test_nn_test():
 
     res = network.test(inputs, output)
 
+    assert len(res) == 4
     assert res[0] == pytest.approx(0.5, abs=1e-3)
     assert res[1] == pytest.approx(0.33333, abs=1e-3)
     assert res[2] == pytest.approx(0.5, abs=1e-3)

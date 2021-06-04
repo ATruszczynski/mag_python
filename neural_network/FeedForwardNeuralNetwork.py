@@ -64,14 +64,12 @@ class FeedForwardNeuralNetwork:
         return self.act[self.layerCount - 1].copy()
 
     def train(self, inputs: [np.ndarray], outputs: [np.ndarray], epochs: int):
-        batchSize = 0.05
-        batchSize = ceil(len(outputs) * batchSize)
+        batchSize = ceil(len(outputs) * self.batchSize) #TODO test czy dobrze dzielone na batche w testowaniu
         batches = divideIntoBatches(inputs, outputs, batchSize)
 
         for e in range(0, epochs):
             for b in range(0, len(batches)):
                 weight_change, biases_change = self.get_grad(batches[b])
-
 
                 weight_step = self.get_empty_weights()
                 bias_step = self.get_empty_biases()

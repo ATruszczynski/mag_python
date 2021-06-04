@@ -67,12 +67,12 @@ class EC_supervisor():
 
         # evaluate statistics
 
-        mean_eval = mean([eval[1] for eval in evals])
+        mean_eval = mean([eval[1].get_eff() for eval in evals])
 
         best_eval = None
         for i in range(len(evals)):
             eval = evals[i]
-            if best_eval is None or eval[1] > best_eval[1]:
+            if best_eval is None or eval[1].get_eff() > best_eval[1].get_eff():
                 best_eval = eval
 
         # write down iteration results
@@ -85,18 +85,18 @@ class EC_supervisor():
 
         log.write(f"{iteration_id} Iteration {iteration + 1} \n")
 
-        evals = sorted(evals, key=lambda x: x[1], reverse=True)
+        evals = sorted(evals, key=lambda x: x[1].get_eff(), reverse=True)
 
         for i in range(len(evals)):
-            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1], 2)}\n")
+            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].get_eff(), 2)}\n")
 
         log.write(f"S Mean eval: {round(mean_eval, 2)}\n")
-        log.write(f"S Best eval: {best_eval[0].to_string()} - {round(best_eval[1], 2)}\n")
+        log.write(f"S Best eval: {best_eval[0].to_string()} - {round(best_eval[1].get_eff(), 2)}\n")
 
         log.close()
 
 
 
-        print(f"--- desu - {iteration + 1} - {round(mean_eval, 2)} - {round(best_eval[1], 2)}")
+        print(f"--- desu - {iteration + 1} - {round(mean_eval, 2)} - {round(best_eval[1].get_eff(), 2)}")
 
 

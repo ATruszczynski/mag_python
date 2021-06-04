@@ -11,7 +11,7 @@ import pytest
 #TODO test numpy copy
 #TODO test deepcopying in general
 
-def test_run_relus():
+def test_train_relus():
     network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=QuadDiff(), learningRate=0, momCoeff=0, batchSize=0, seed=1001)
 
     inputs = [np.array([[2], [1]])]
@@ -24,6 +24,8 @@ def test_run_relus():
 
     network.train(inputs, outputs, 1)
 
+    assert len(network.weights) == 3
+    assert len(network.biases) == 3
     assert np.array_equal(network.weights[1], np.array([[-33, -16], [-33, -16]]))
     assert np.array_equal(network.weights[2], np.array([[-31, -31], [-35, -35]]))
     assert np.array_equal(network.biases[1], np.array([[-16], [-16]]))
@@ -48,7 +50,7 @@ def test_nn_determinism():
     y = [y[i] for i in perm]
 
     point = AnnPoint([4, 4, 3], [ReLu(), ReLu()], QuadDiff(), -3, -3, -3)
-    # TODO nie sprawdza wag itp.
+
     results = []
     wb_matrixes = []
 
@@ -83,9 +85,62 @@ def test_nn_determinism():
             for k in range(len(wb1)):
                 assert np.array_equal(wb1[k], wb2[k])
 
+def test_train_batch_counts():
+    inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
+    output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
 
+    inputs.extend([c.copy() for c in inputs])
+    inputs.extend([c.copy() for c in inputs])
+    output.extend([c.copy() for c in output])
+    output.extend([c.copy() for c in output])
 
+    point = AnnPoint([2, 4, 3], [ReLu(), ReLu()], QuadDiff(), -3, -3, -1)
+    network = network_from_point(point, 1001)
+    network.train(inputs, output, 3)
 
+    assert len(network.cm_hist) == 6
+    #TODO is layering and delayering of point tested?
+
+def test_staggered_run():
+    inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
+    output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
+    inputs.extend([c.copy() for c in inputs])
+    inputs.extend([c.copy() for c in inputs])
+    output.extend([c.copy() for c in output])
+    output.extend([c.copy() for c in output])
+
+    point = AnnPoint([2, 4, 3], [ReLu(), ReLu()], QuadDiff(), -3, -3, -1)
+
+    network = network_from_point(point, 1001)
+
+    ep = 3
+
+    for i in range(ep):
+        network.train(inputs, output, 1)
+
+    res1 = network.test(inputs, output)
+    w1 = network.weights
+    b1 = network.biases
+
+    network = network_from_point(point, 1001)
+    network.train(inputs, output, 3)
+    res2 = network.test(inputs, output)
+    w2 = network.weights
+    b2 = network.biases
+
+    assert len(res1) == len(res2)
+    assert len(w1) == len(w2)
+    assert len(b1) == len(b2)
+    assert len(w1) == len(b1)
+
+    assert res1[0] == res2[0]
+    assert res1[1] == res2[1]
+    assert res1[2] == res2[2]
+    assert np.array_equal(res1[3], res2[3])
+
+    for i in range(len(w1)):
+        assert np.array_equal(w1[i], w2[i])
+        assert np.array_equal(b1[i], b2[i])
 
 #
 # def test_nn_staggered_run():
@@ -118,12 +173,9 @@ def test_nn_determinism():
 #
 #
 #
-# # TODO test multiple runs vs 1 longer run
 #
 # test_run_relus()
 #
 #
 #
 #
-
-test_nn_determinism()

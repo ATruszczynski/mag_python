@@ -120,8 +120,8 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
     return layer
 
 def get_default_hrange():
-    # hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-3, 0), (-3, 0), (-5, 0)) #TODO fix
-    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [MeanDiff()], (-3, 0), (-3, 0), (-5, 0)) #TODO fix
+    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-3, 0), (-3, 0), (-5, 0)) #TODO fix
+    # hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [MeanDiff()], (-3, 0), (-3, 0), (-5, 0)) #TODO fix
     return hrange
 
 def punishment_function(arg: float):

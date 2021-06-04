@@ -19,7 +19,7 @@ class TournamentSelection(SelectionOperator):
 
     def select(self, val_pop: [[AnnPoint, float]]) -> AnnPoint:
         chosen = choose_without_repetition(options=val_pop, count=self.count)
-        chosen_sorted = sorted(chosen, key=lambda x: x[1], reverse=True)
+        chosen_sorted = sorted(chosen, key=lambda x: x[1].ff, reverse=True)
         return chosen_sorted[0][0]
 
 class RoulletteSelection(SelectionOperator):
@@ -27,8 +27,8 @@ class RoulletteSelection(SelectionOperator):
         super().__init__()
 
     def select(self, val_pop: [[AnnPoint, float]]) -> AnnPoint:
-        sum_fit = sum([val_pop[i][1] for i in range(len(val_pop))])
-        roulette = [[val_pop[i][0], val_pop[i][1]/sum_fit] for i in range(len(val_pop))]
+        sum_fit = sum([val_pop[i][1].ff for i in range(len(val_pop))])
+        roulette = [[val_pop[i][0], val_pop[i][1].ff/sum_fit] for i in range(len(val_pop))]
         for i in range(1, len(roulette)):
             roulette[i][1] += roulette[i - 1][1]
         rr = random.random()

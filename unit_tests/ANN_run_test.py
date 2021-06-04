@@ -2,6 +2,8 @@ from neural_network.FeedForwardNeuralNetwork import *
 from ann_point.Functions import *
 import numpy as np
 
+#TODO test multiple runs vs single run
+#TODO ec test multiple runs vs single run?
 
 def test_run_relus():
     network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=CrossEntropy(),
