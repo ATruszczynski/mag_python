@@ -35,6 +35,7 @@ def try_choose_different(current: Any, possibilities: [Any]) -> Any:
 
 def choose_without_repetition(options: [Any], count: int) -> [Any]:
     indices = list(range(0, len(options)))
+    count = min(count, len(options))
     chosen = []
     for i in range(count):
         c = indices[random.randint(0, len(indices) - 1)]
@@ -119,7 +120,8 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
     return layer
 
 def get_default_hrange():
-    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax()], [CrossEntropy(), QuadDiff()], (-3, 0), (-3, 0), (-5, 0))
+    # hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-3, 0), (-3, 0), (-5, 0)) #TODO fix
+    hrange = HyperparameterRange((0, 3), (2, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [MeanDiff()], (-3, 0), (-3, 0), (-5, 0)) #TODO fix
     return hrange
 
 def punishment_function(arg: float):
@@ -210,5 +212,9 @@ def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> n
     result = np.random.normal(0, var_mul / sqrt(l), shape)
 
     return result
+#TODO leaky ReLu
+
+
+
 
 

@@ -20,9 +20,9 @@ def test_nn_test():
     assert res[2] == pytest.approx(0.5, abs=1e-3)
     assert np.array_equal(res[3], np.array([[1, 0, 0], [1, 1, 0], [0, 1, 0]]))
 
-input, output = get_io()
-network = FeedForwardNeuralNetwork(neuronCounts=[2, 4, 3], actFun=[ReLu(), Sigmoid()], lossFun=CrossEntropy(),
-                                   learningRate=-3, momCoeffL=-3, batchSize=-2, seed=1010)
+# input, output = get_io()
+# network = FeedForwardNeuralNetwork(neuronCounts=[2, 4, 3], actFun=[ReLu(), Sigmoid()], lossFun=CrossEntropy(),
+#                                    learningRate=-3, momCoeffL=-3, batchSize=-2, seed=1010)
 
 # res1 = network.run(input[0])
 # res2 = network.run(input[1])

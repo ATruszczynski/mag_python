@@ -49,6 +49,51 @@ def test_simple_crossover():
     assert pointD.momCoeff == -2
     assert pointD.batchSize == -3
 
+def test_layer_swap_crossover():
+    pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
+                      momCoeff=-2, batchSize=-3)
+    pointB = AnnPoint(neuronCounts=[2, 30, 5], actFuns=[TanH(), Softmax()], lossFun=CrossEntropy(), learningRate=-10,
+                      momCoeff=-20, batchSize=-30)
+
+    random.seed(1003)
+    co = LayerSwapCrossoverOperator()
+
+    pointC, pointD = co.crossover(pointA, pointB)
+
+    assert len(pointC.neuronCounts) == 3
+    assert pointC.neuronCounts[0] == 2
+    assert pointC.neuronCounts[1] == 30
+    assert pointC.neuronCounts[2] == 5
+
+    assert len(pointC.actFuns) == 2
+    assert pointC.actFuns[0].to_string() == TanH().to_string()
+    assert pointC.actFuns[1].to_string() == Softmax().to_string()
+
+    assert pointC.lossFun.to_string() == CrossEntropy().to_string()
+
+    assert pointC.learningRate == -1
+    assert pointC.momCoeff == -20
+    assert pointC.batchSize == -30
+
+
+
+    assert len(pointD.neuronCounts) == 4
+    assert pointD.neuronCounts[0] == 2
+    assert pointD.neuronCounts[1] == 3
+    assert pointD.neuronCounts[2] == 4
+    assert pointD.neuronCounts[3] == 5
+
+    assert len(pointD.actFuns) == 3
+    assert pointD.actFuns[0].to_string() == ReLu().to_string()
+    assert pointD.actFuns[1].to_string() == Sigmoid().to_string()
+    assert pointD.actFuns[2].to_string() == TanH().to_string()
+
+    assert pointD.lossFun.to_string() == QuadDiff().to_string()
+
+    assert pointD.learningRate == -10
+    assert pointD.momCoeff == -2
+    assert pointD.batchSize == -3
+
 # def test_crossover():
 #     wei = [np.array([[1, 2], [3, 4.0]]), np.array([[5, 6.0]]), np.array([[7], [8.0]]), np.array([[9, 10.0]])]
 #     bias = [np.array([[-1], [-2.0]]), np.array([[-3.]]), np.array([[-4.], [-5]]), np.array([[-6.]])]
@@ -217,11 +262,12 @@ def test_simple_crossover():
 
 # test_minimal_damage_crossover()
 
-random.seed(1001)
-print(random.randint(0, 5))
+random.seed(1003)
+# print(random.randint(0, 5))
+print(random.random())
 print(random.random())
 print(random.random())
 print(random.random())
 print(random.random())
 
-test_simple_crossover()
+test_layer_swap_crossover()

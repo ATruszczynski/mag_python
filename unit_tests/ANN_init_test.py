@@ -103,8 +103,8 @@ def test_init_2_hidden():
 # print(np.random.normal(0, 1 / sqrt(2), (3, 2)))
 # print(np.random.normal(0, 1 / sqrt(3), (3, 3)))
 
-random.seed(1001)
-np.random.seed(1001)
-print(np.random.normal(0, 1 / sqrt(2), (4, 2)))
-print(np.random.normal(0, 1 / sqrt(4), (3, 4)))
+# random.seed(1001)
+# np.random.seed(1001)
+# print(np.random.normal(0, 1 / sqrt(2), (4, 2)))
+# print(np.random.normal(0, 1 / sqrt(4), (3, 4)))
 

@@ -51,7 +51,7 @@ class EvolvingClassifier:
 
         self.mo = MutationOperator(self.hrange)
         self.co = CrossoverOperator()
-        self.so = SelectionOperator(2)
+        self.so = SelectionOperator()
         self.ff = FitnessFunction(2)
         self.fc = OnlyFitnessCalculator([])
 

@@ -117,6 +117,14 @@ def test_ann_point_string():
 
     assert string == "|1|RL|2|SM|3|QD|5|6|7|"
 
+def test_ann_point_full_string():
+    ann = AnnPoint(neuronCounts=[1, 2, 3], actFuns=[ReLu(), Softmax()],
+                   lossFun=QuadDiff(), learningRate=5.2345, momCoeff=6.3456, batchSize=7.4567)
+
+    string = ann.to_string_full()
+
+    assert string == "|1|RL|2|SM|3|QD|5.2345|6.3456|7.4567|"
+
 def test_ann_point_size():
     ann = AnnPoint(neuronCounts=[1, 4, 5, 4, 3], actFuns=[ReLu(), Sigmoid()],
                    lossFun=QuadDiff(), learningRate=5, momCoeff=6, batchSize=7)
@@ -124,6 +132,7 @@ def test_ann_point_size():
     size = ann.size()
 
     assert size == 4 + 20 + 20 + 12
+
 
 
 

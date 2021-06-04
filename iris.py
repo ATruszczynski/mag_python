@@ -1,6 +1,6 @@
 from sklearn import datasets
 from sklearn.preprocessing import OneHotEncoder
-from evolving_classifier.EvolvingClassifier import EvolvingClassifier
+from evolving_classifier.EvolvingClassifier import EvolvingClassifier, OnlyFitnessCalculator
 from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.CrossoverOperator import *
 from evolving_classifier.operators.HillClimbOperator import *
@@ -40,16 +40,17 @@ if __name__ == '__main__':
     ec.hrange.hiddenLayerCountMin = 1
     ec.hrange.hiddenLayerCountMax = 1
     ec.hrange.neuronCountMax = 100
-    ec.sco = MinimalDamageCrossoverOperator()
-    ec.smo = SomeStructMutationOperator(ec.hrange)
-    ec.mo = BiasedGaussianWBMutationOperator(ec.hrange)
+    ec.co = SimpleCrossoverOperator()
+    ec.mo = SimpleMutationOperator(ec.hrange)
     ec.so = TournamentSelection(4)
-    ec.ff = CrossEffFitnessFunction3()
+    ec.ff = ProgressFF(2)
+    ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
     ec.hco = HillClimbBackpropMutationOperator(1, 100, train_x, train_y)
     ec.prepare(100, 100, (train_x, train_y, test_x, test_y), 1542)
-    npoint = ec.run(10, 10, 0.75, 0.02, 0.5, 12)
+    npoint = ec.run(iterations=50, pm=0.05, pc=0.8, power=12)
     network = network_from_point(npoint, 1001)
     print(npoint.to_string())
+    network.train(train_x, train_y, 30)
     tests = network.test(test_x, test_y)
     print(tests[:3])
     print(tests[3])

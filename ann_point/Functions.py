@@ -35,6 +35,78 @@ class ReLu(ActFun):
     def to_string(self):
         return "RL"
 
+#TODO upewnij się że wszystko co można jest w hrange
+#TODO upewnij się, że wszytkie func mają inne stringi
+
+class LReLu(ActFun):
+    def __init__(self, a: float=0.01):
+        self.a = a
+
+    def compute(self, arg: np.ndarray) -> np.ndarray:
+        arg = arg.copy()
+        return np.maximum(self.a * arg, arg)
+
+    def computeDer(self, arg: np.ndarray) -> np.ndarray:
+        result = np.zeros((arg.shape[0], arg.shape[0]))
+        diag = arg.copy()
+        diag[arg > 0] = 1
+        diag[arg <= 0] = self.a
+        np.fill_diagonal(result, diag)
+
+        return result
+
+    def copy(self):
+        return LReLu(self.a)
+
+    def to_string(self):
+        return f"L{self.a}"
+
+
+class GaussAct(ActFun):
+    def __init__(self):
+        pass
+
+    def compute(self, arg: np.ndarray) -> np.ndarray:
+        arg = arg.copy()
+        return np.exp(-arg ** 2)
+
+    def computeDer(self, arg: np.ndarray) -> np.ndarray:
+        result = np.zeros((arg.shape[0], arg.shape[0]))
+        diag = -2 * arg * np.exp(-arg ** 2)
+        np.fill_diagonal(result, diag)
+        return result
+
+    def copy(self):
+        return GaussAct()
+
+    def to_string(self):
+        return "GS"
+
+class SincAct(ActFun):
+    def __init__(self):
+        pass
+
+    def compute(self, arg: np.ndarray) -> np.ndarray:
+        arg = arg.copy()
+        res = np.zeros(arg.shape)
+        res[arg == 0] = 1
+        res[arg != 0] = np.sin(arg[arg != 0]) / arg[arg != 0]
+        return res
+
+    def computeDer(self, arg: np.ndarray) -> np.ndarray:
+        result = np.zeros((arg.shape[0], arg.shape[0]))
+        diag = np.zeros(arg.shape)
+        diag[arg == 0] = 0
+        diag[arg != 0] = (np.cos(arg[arg != 0]) / (arg[arg != 0] + 1e-15)) - (np.sin(arg[arg != 0]) / (arg[arg != 0] ** 2 + 1e-15))
+        np.fill_diagonal(result, diag)
+        return result
+
+    def copy(self):
+        return SincAct()
+
+    def to_string(self):
+        return "SC"
+
 class TanH(ActFun):
     def compute(self, arg: np.ndarray) -> np.ndarray:
         up = np.exp(arg) - np.exp(-arg)
@@ -51,7 +123,8 @@ class TanH(ActFun):
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
         diag = 2 / (np.exp(arg) + np.exp(-arg))
-        diag = diag ** 2
+        # diqg = 1 - self.compute(arg) ** 2
+        diag = diag ** 2 #TODO is this der correct?
         return np.diagflat(diag)
 
     def copy(self):
@@ -137,6 +210,19 @@ class QuadDiff(LossFun):
     def to_string(self):
         return "QD"
 
+class MeanDiff(LossFun):
+    def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
+        return np.mean(np.abs(res - corr), axis=0)[0]
+
+    def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:
+        return np.sign(res - corr) / res.shape[0]
+
+    def copy(self):
+        return MeanDiff()
+
+    def to_string(self):
+        return "MAE"
+
 class CrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
         result = np.sum(np.multiply(corr, np.log(res + 1e-15)), axis=0)[0]
@@ -150,6 +236,25 @@ class CrossEntropy(LossFun):
 
     def to_string(self):
         return "CE"
+
+class ChebyshevLoss(LossFun):
+    def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
+        result = np.max(np.abs(res - corr), axis=0)[0]
+        return result
+
+    def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:
+        diffs = np.abs(res - corr)
+        highest = np.argmax(diffs)
+        signs = np.sign(res - corr)
+        result = np.zeros(res.shape)
+        result[highest] = signs[highest]
+        return result
+
+    def copy(self):
+        return ChebyshevLoss()
+
+    def to_string(self):
+        return "CL"
 
 
 
