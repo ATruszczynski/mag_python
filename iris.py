@@ -37,17 +37,17 @@ if __name__ == '__main__':
     np.random.seed(1001)
 
     ec = EvolvingClassifier()
-    ec.hrange.hiddenLayerCountMin = 1
-    ec.hrange.hiddenLayerCountMax = 1
-    ec.hrange.neuronCountMax = 100
+    ec.hrange.hiddenLayerCountMin = 0
+    ec.hrange.hiddenLayerCountMax = 0
+    ec.hrange.neuronCountMax = 10
     ec.co = SimpleCrossoverOperator()
     ec.mo = SimpleMutationOperator(ec.hrange)
     ec.so = TournamentSelection(4)
     ec.ff = ProgressFF(2)
     ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
     ec.hco = HillClimbBackpropMutationOperator(1, 100, train_x, train_y)
-    ec.prepare(100, 100, (train_x, train_y, test_x, test_y), 1542)
-    npoint = ec.run(iterations=50, pm=0.05, pc=0.8, power=12)
+    ec.prepare(10, 10, (train_x, train_y, test_x, test_y), 1542)
+    npoint = ec.run(iterations=5, pm=0.05, pc=0.8, power=1)
     network = network_from_point(npoint, 1001)
     print(npoint.to_string())
     network.train(train_x, train_y, 30)

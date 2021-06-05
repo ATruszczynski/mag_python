@@ -114,10 +114,11 @@ class EvolvingClassifier:
         # eval_pop = self.calculate_fitnesses(pool, self.population)
         eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                    trainOutputs=self.trainOutputs)
+        self.supervisor.check_point(eval_pop, iterations)
         if power > 1:
             pool.close()
 
-        eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1].get_eff(), reverse=True)
+        eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
 
         return eval_pop_sorted[0][0]
 
