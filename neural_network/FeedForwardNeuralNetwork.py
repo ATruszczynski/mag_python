@@ -179,6 +179,9 @@ def accuracy(confusion_matrix: np.ndarray):
     return accuracy
 
 def average_precision(conf_matrix):
+    return np.average(get_precisions(conf_matrix))
+
+def get_precisions(conf_matrix) -> [float]:
     col_sum = np.sum(conf_matrix, axis=0)
     row_sum = np.sum(conf_matrix, axis=1)
     diag = np.diag(conf_matrix)
@@ -192,9 +195,13 @@ def average_precision(conf_matrix):
             else:
                 class_prec.append(0)
 
-    return np.average(class_prec)
+    return class_prec
+
 
 def average_recall(conf_matrix):
+    return np.average(get_recalls(conf_matrix))
+
+def get_recalls(conf_matrix) -> [float]:
     row_sums = np.sum(conf_matrix, axis=1)
     diag = np.diag(conf_matrix)
 
@@ -204,7 +211,7 @@ def average_recall(conf_matrix):
         if row_sums[i] > 0:
             class_recalls.append(diag[i] / row_sums[i])
 
-    return np.average(class_recalls)
+    return class_recalls
 
 
 def efficiency(conf_matrix):
@@ -213,5 +220,19 @@ def efficiency(conf_matrix):
     rec = average_recall(conf_matrix)
 
     return mean([acc, prec, rec])
+
+
+def average_f1_score(conf_matrix):
+    precisions = get_precisions(conf_matrix)
+    recall = get_recalls(conf_matrix)
+
+    f1 = []
+    for i in range(len(precisions)):
+        prec_inv = 1 / precisions[i]
+        rec_inv = 1 / recall[i]
+        f1.append(2 / (rec_inv + prec_inv))
+
+    return mean(f1)
+
 
 

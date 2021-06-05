@@ -10,6 +10,7 @@ from neural_network.FeedForwardNeuralNetwork import efficiency
 from utility.AnnDataPoint import AnnDataPoint
 
 
+
 class FitnessCalculator:
     def __init__(self):
         pass

@@ -1,3 +1,5 @@
+import pytest
+
 from neural_network.FeedForwardNeuralNetwork import *
 
 def test_accuracy():
@@ -28,5 +30,17 @@ def test_average_recall():
     prec = average_recall(conf)
 
     assert prec == 13 / 24
+
+def test_average_f1_scores():
+    conf = np.array([[1, 0, 0, 0], [0, 1, 2, 0], [0, 0, 0, 0], [0, 2, 0, 4]])
+    prec = average_f1_score(conf)
+
+    assert prec == pytest.approx(0.71111, abs=1e-4)
+
+    conf = np.array([[1, 0, 0, 0], [0, 1, 1, 0], [0, 1, 0, 0], [0, 2, 0, 4]])
+    prec = average_f1_score(conf)
+
+    assert prec == pytest.approx(0.53333, abs=1e-4)
+
 
 

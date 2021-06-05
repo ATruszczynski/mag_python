@@ -2,23 +2,24 @@ from statistics import mean
 
 from utility.AnnDataPoint import AnnDataPoint
 
-
 mean_ff_id = "m.f."
 mean_acc_id = "m.a."
 mean_prec_id = "m.p."
 mean_rec_id = "m.r."
 mean_eff_id = "m.e."
 mean_size_id = "m.s."
+mean_f1_id = "m.f1."
+mean_lc_id = "m.lc."
 round_prec_rh = 3
 
 class RunHistory:
     def __init__(self):
         self.it_hist = []
 
-    def add_it_hist(self, data_points: [AnnDataPoint]):
+    def add_it_hist(self, data_points: [AnnDataPoint]): #TODO test
         self.it_hist.append(data_points)
 
-    def get_it_best(self, iteration: int) -> AnnDataPoint:
+    def get_it_best(self, iteration: int) -> AnnDataPoint: #TODO test
         it = self.it_hist[iteration]
 
         best_eval = None
@@ -29,7 +30,7 @@ class RunHistory:
 
         return best_eval
 
-    def get_it_summary_string(self, iteration: int):
+    def get_it_summary_string(self, iteration: int): #TODO test
         evals = self.it_hist[iteration]
 
         mean_ff = mean([eval.ff for eval in evals])
@@ -45,4 +46,27 @@ class RunHistory:
                  f"{mean_size_id}:{round(mean_size,round_prec_rh)}|{mean_eff_id}:{round(mean_eff, round_prec_rh)}"
 
         return result
+
+    def summary_dict(self, iteration: int): #TODO test
+        evals = self.it_hist[iteration]
+
+        mean_ff = mean([eval.ff for eval in evals])
+        mean_acc = mean([eval.acc for eval in evals])
+        mean_prec = mean([eval.prec for eval in evals])
+        mean_rec = mean([eval.rec for eval in evals])
+        mean_eff = mean([eval.get_eff() for eval in evals])
+        mean_size = mean([eval.point.size() for eval in evals])
+        mean_lc = mean([len(eval.point.neuronCounts)-1 for eval in evals])
+
+        res_dict = {}
+        res_dict[mean_ff_id] = mean_ff
+        res_dict[mean_acc_id] = mean_acc
+        res_dict[mean_prec_id] = mean_prec
+        res_dict[mean_rec_id] = mean_rec
+        res_dict[mean_eff_id] = mean_eff
+        res_dict[mean_f1_id] = -666
+        res_dict[mean_size_id] = mean_size
+        res_dict[mean_lc_id] = mean_lc
+
+        return res_dict
 

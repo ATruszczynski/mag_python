@@ -4,7 +4,7 @@ import numpy as np
 from neural_network.FeedForwardNeuralNetwork import *
 
 
-class AnnDataPoint():
+class AnnDataPoint(): #TODO test
     def __init__(self, point: AnnPoint):
         self.point = point.copy()
         self.ff = 0.
@@ -12,12 +12,14 @@ class AnnDataPoint():
         self.prec = 0.
         self.rec = 0.
         self.touch = 0.
+        self.f1 = 0.
 
     def add_data(self, new_ff: float, new_conf_mat: np.ndarray):
         self.ff = self.new_average(self.ff, new_ff)
         self.acc = self.new_average(self.acc, accuracy(new_conf_mat))
         self.prec = self.new_average(self.prec, average_precision(new_conf_mat))
         self.rec = self.new_average(self.rec, average_recall(new_conf_mat))
+        self.f1 = self.new_average(self.f1, average_f1_score(new_conf_mat))
         self.touch += 1
 
     def new_average(self, curr_val: float, new_val: float) -> float:

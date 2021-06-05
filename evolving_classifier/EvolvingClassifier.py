@@ -23,6 +23,8 @@ from utility.Utility import *
 logs = "logs"
 np.seterr(over='ignore')
 
+def_frac = [1, 0.6, 0.4, 0.25, 0.15, 0.1]
+
 class EvolvingClassifier:
     def __init__(self, hrange: HyperparameterRange = None, logs_path: str = ""):
         if hrange is None:
@@ -36,6 +38,7 @@ class EvolvingClassifier:
         else:
             self.supervisor = EC_supervisor(logs_path)
 
+        #TODO remove needless things from here
         self.av_dist = 0
         self.population = []
         self.pop_size = -1
@@ -49,11 +52,11 @@ class EvolvingClassifier:
         self.mut_performed = 0
         self.cross_performed = 0
 
-        self.mo = MutationOperator(self.hrange)
-        self.co = CrossoverOperator()
-        self.so = SelectionOperator()
-        self.ff = FitnessFunction(2)
-        self.fc = OnlyFitnessCalculator([])
+        self.co = SimpleCrossoverOperator()
+        self.mo = SimpleMutationOperator(self.hrange)
+        self.so = TournamentSelection(4)
+        self.ff = ProgressFF(3)
+        self.fc = PlusSizeFitnessCalculator(def_frac, 0.95)
 
 
     def prepare(self, popSize:int, startPopSize: int,
