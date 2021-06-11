@@ -5,12 +5,13 @@ from statistics import mean
 from ann_point.HyperparameterRange import *
 
 from ann_point.AnnPoint import *
+from utility.AnnDataPoint import AnnDataPoint
+from utility.RunHistory import RunHistory
 
 record_id = "R"
 summary_id = "S"
 details_id = "D"
 iteration_id = "I"
-
 
 class EC_supervisor():
     def __init__(self, path):
@@ -21,6 +22,7 @@ class EC_supervisor():
         self.ps = 0
         self.total_work = 0
         self.work_done = 0
+        self.rh = RunHistory()
 
         if not os.path.exists(path):
             os.makedirs(path)
@@ -29,23 +31,20 @@ class EC_supervisor():
 
         self.log_path = f"{path}{os.path.sep}log_{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.second}.txt"
 
-    def get_algo_data(self, input_size: int, output_size: int, pm: float, pc: float, ts: int, sps: int, ps: int, fracs: [float], hrange: HyperparameterRange):
+    def get_algo_data(self, input_size: int, output_size: int, pmS: float, pmE: float, pcS: float, pcE: float, ts: int, sps: int, ps: int, fracs: [float], hrange: HyperparameterRange, learningIts: int):
         self.desc_string += f"{details_id} ins {input_size}\n"
         self.desc_string += f"{details_id} outs {output_size}\n"
-        self.desc_string += f"{details_id} pm {pm}\n"
-        self.desc_string += f"{details_id} pc {pc}\n"
+        self.desc_string += f"{details_id} pm {pmS}-{pmE}\n"
+        self.desc_string += f"{details_id} pc {pcS}-{pcE}\n"
         self.desc_string += f"{details_id} ts {ts}\n"
         self.desc_string += f"{details_id} sps {sps}\n"
         self.desc_string += f"{details_id} ps {ps}\n"
         self.desc_string += f"{details_id} fracs {','.join([str(f) for f in fracs])}\n"
-        # self.desc_string += f"{details_id} lc {hrange.layerCountMin} - {hrange.layerCountMax}\n"
-        # self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
+        self.desc_string += f"{details_id} lc {hrange.hiddenLayerCountMin} - {hrange.hiddenLayerCountMax}\n"
+        self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
         self.desc_string += f"{details_id} acfs {','.join([f.to_string() for f in hrange.actFunSet])}\n"
-        # self.desc_string += f"{details_id} agfs {','.join([f.to_string() for f in hrange.aggrFunSet])}\n"
         # self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
-        # self.desc_string += f"{details_id} lr {hrange.learningRateMin} - {hrange.learningRateMax}\n"
-        # self.desc_string += f"{details_id} mc {hrange.momentumCoeffMin} - {hrange.momentumCoeffMax}\n"
-        # self.desc_string += f"{details_id} bs {hrange.batchSizeMin} - {hrange.batchSizeMax}\n"
+        self.desc_string += f"{details_id} lits {learningIts}\n"
 
         self.sps = sps
         self.ps = ps
@@ -56,11 +55,10 @@ class EC_supervisor():
         self.iterations = iterations
         self.total_work = self.sps + iterations * self.ps
 
-
-
-    def check_point(self, evals: [(AnnPoint, float)], iteration: int):
+    def check_point(self, evals: [(AnnPoint, AnnDataPoint)], iteration: int):
         # predict execution time
-        elapsed_time = (time.time() - self.start_point)
+        curr_time = time.time()
+        elapsed_time = (curr_time - self.start_point)
         self.work_done += len(evals)
         frac_of_work_done = self.work_done / self.total_work
         frac_velocity = frac_of_work_done / elapsed_time
@@ -71,13 +69,8 @@ class EC_supervisor():
 
         # evaluate statistics
 
-        mean_eval = mean([eval[1] for eval in evals])
-
-        best_eval = None
-        for i in range(len(evals)):
-            eval = evals[i]
-            if best_eval is None or eval[1] > best_eval[1]:
-                best_eval = eval
+        it_hist = [evals[i][1] for i in range(len(evals))]
+        self.rh.add_it_hist(it_hist)
 
         # write down iteration results
 
@@ -89,18 +82,24 @@ class EC_supervisor():
 
         log.write(f"{iteration_id} Iteration {iteration + 1} \n")
 
-        evals = sorted(evals, key=lambda x: x[1], reverse=True)
+        evals = sorted(evals, key=lambda x: x[1].ff, reverse=True)
+
+        round_prec = 3
 
         for i in range(len(evals)):
-            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1], 2)}\n")
+            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
 
-        log.write(f"S Mean eval: {round(mean_eval, 2)}\n")
-        log.write(f"S Best eval: {best_eval[0].to_string()} - {round(best_eval[1], 2)}\n")
+        best_eval = self.rh.get_it_best(iteration)
+
+        stat_string = self.rh.get_it_summary_string(iteration)
+
+        log.write(f"{summary_id} {stat_string}\n")
+        log.write(f"{summary_id} Best ff: {best_eval.point.to_string()} - {round(best_eval.ff, round_prec)}\n")
 
         log.close()
 
+        # iteration prints
 
-
-        print(f"desu - {iteration + 1} - {round(mean_eval, 2)} - {round(best_eval[1],  2)} - {best_eval[0].to_string()}")
+        print(f"--- Iteration - {iteration + 1} - {stat_string}")
 
 

@@ -2,15 +2,15 @@ from neural_network.FeedForwardNeuralNetwork import *
 from ann_point.Functions import *
 import numpy as np
 
+#TODO test multiple runs vs single run
+#TODO ec test multiple runs vs single run?
 
 def test_run_relus():
-    network = FeedForwardNeuralNetwork(inputSize=2, outputSize=2, hiddenLayerCount=1, neuronCount=1, actFun=ReLu(),
-                                       aggrFun=ReLu(), lossFun=QuadDiff(), learningRate=1, momCoeffL=2, batchSize=0, seed=1001)
+    network = FeedForwardNeuralNetwork(neuronCounts=[2, 2, 2], actFun=[ReLu(), ReLu()], lossFun=CrossEntropy(),
+                                       learningRate=0, momCoeff=0, batchSize=0, seed=1001)
 
-    network.weights[1] = np.array([[1, 1], [1, 1]])
-    network.weights[2] = np.array([[1, 1], [1, 1]])
-    network.biases[1] = np.array([[1], [1]])
-    network.biases[2] = np.array([[1], [1]])
+    network.weights=[None, np.array([[1, 1], [1, 1]]), np.array([[1, 1], [1, 1]])]
+    network.biases=[None, np.array([[1], [1]]), np.array([[1], [1]])]
 
     result = network.run(np.array([[2], [1]]))
 
