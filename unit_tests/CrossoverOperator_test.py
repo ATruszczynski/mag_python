@@ -5,94 +5,171 @@ from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
 
 def test_simple_crossover():
-    pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
-                      momCoeff=-2, batchSize=-3)
-    pointB = AnnPoint(neuronCounts=[2, 30, 5], actFuns=[TanH(), Softmax()], lossFun=CrossEntropy(), learningRate=-10,
-                      momCoeff=-20, batchSize=-30)
 
-    random.seed(1001)
+    link1 = np.array([[0, 1, 1, 0, 1],
+                      [0, 0, 1, 0, 1],
+                      [0, 0, 0, 0, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+    wei1 = np.array([[0., 1, 2, 0, 4],
+                     [0, 0, 3, 0, 5],
+                     [0, 0, 0, 0, 6],
+                     [0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0]])
+    bia1 = np.array([[-1., -2, -3, -4, -5]])
+    actFuns1 = [None, ReLu(), ReLu(), Sigmoid(), Sigmoid()]
+
+    link2 = np.array([[0, 0, 0, 0, 0],
+                      [0, 0, 1, 1, 0],
+                      [0, 0, 0, 1, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+    wei2 = np.array([[0, 0, 0, 0, 0],
+                     [0, 0, 10, 20, 0],
+                     [0, 0, 0, 30, 40],
+                     [0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0]])
+    bia2 = np.array([[-10, -20, -30, -40, -50]])
+    actFuns2 = [None, TanH(), TanH(), ReLu(), ReLu()]
+
+    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct())
+    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct())
+
     co = SimpleCrossoverOperator()
 
-    pointC, pointD = co.crossover(pointA, pointB)
+    random.seed(1002)
+    np.random.seed(1002)
+    cn3, cn4 = co.crossover(cn1, cn2)
 
-    assert len(pointC.neuronCounts) == 4
-    assert pointC.neuronCounts[0] == 2
-    assert pointC.neuronCounts[1] == 3
-    assert pointC.neuronCounts[2] == 4
-    assert pointC.neuronCounts[3] == 5
+    assert np.array_equal(cn3.links, np.array([[0, 1, 1, 0, 0],
+                                               [0, 0, 1, 0, 0],
+                                               [0, 0, 0, 0, 1],
+                                               [0, 0, 0, 0, 0],
+                                               [0, 0, 0, 0, 0]]))
+    assert np.all(np.isclose(cn3.weights, np.array([[0., 1, 2, 0, 0],
+                                                    [0, 0, 3, 0, 0],
+                                                    [0, 0, 0, 0, 40],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]), atol=1e-5))
+    assert np.all(np.isclose(cn3.bias, np.array([[-1., -2, -3, -4, -50]]), atol=1e-5))
+    assert cn3.actFuns[0] is None
+    assert cn3.actFuns[1].to_string() == ReLu().to_string()
+    assert cn3.actFuns[2].to_string() == ReLu().to_string()
+    assert cn3.actFuns[3].to_string() == Sigmoid().to_string()
+    assert cn3.actFuns[4].to_string() == ReLu().to_string()
 
-    assert len(pointC.actFuns) == 3
-    assert pointC.actFuns[0].to_string() == ReLu().to_string()
-    assert pointC.actFuns[1].to_string() == Sigmoid().to_string()
-    assert pointC.actFuns[2].to_string() == TanH().to_string()
-
-    assert pointC.lossFun.to_string() == CrossEntropy().to_string()
-
-    assert pointC.learningRate == -1
-    assert pointC.momCoeff == -20
-    assert pointC.batchSize == -30
-
-
-
-    assert len(pointD.neuronCounts) == 3
-    assert pointD.neuronCounts[0] == 2
-    assert pointD.neuronCounts[1] == 30
-    assert pointD.neuronCounts[2] == 5
-
-    assert len(pointD.actFuns) == 2
-    assert pointD.actFuns[0].to_string() == TanH().to_string()
-    assert pointD.actFuns[1].to_string() == Softmax().to_string()
-
-    assert pointD.lossFun.to_string() == QuadDiff().to_string()
-
-    assert pointD.learningRate == -10
-    assert pointD.momCoeff == -2
-    assert pointD.batchSize == -3
-
-def test_layer_swap_crossover():
-    pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
-                      momCoeff=-2, batchSize=-3)
-    pointB = AnnPoint(neuronCounts=[2, 30, 5], actFuns=[TanH(), Softmax()], lossFun=CrossEntropy(), learningRate=-10,
-                      momCoeff=-20, batchSize=-30)
-
-    random.seed(1003)
-    co = LayerSwapCrossoverOperator()
-
-    pointC, pointD = co.crossover(pointA, pointB)
-
-    assert len(pointC.neuronCounts) == 3
-    assert pointC.neuronCounts[0] == 2
-    assert pointC.neuronCounts[1] == 30
-    assert pointC.neuronCounts[2] == 5
-
-    assert len(pointC.actFuns) == 2
-    assert pointC.actFuns[0].to_string() == TanH().to_string()
-    assert pointC.actFuns[1].to_string() == Softmax().to_string()
-
-    assert pointC.lossFun.to_string() == CrossEntropy().to_string()
-
-    assert pointC.learningRate == -1
-    assert pointC.momCoeff == -20
-    assert pointC.batchSize == -30
+    assert cn3.aggrFun.to_string() == GaussAct().to_string()
 
 
 
-    assert len(pointD.neuronCounts) == 4
-    assert pointD.neuronCounts[0] == 2
-    assert pointD.neuronCounts[1] == 3
-    assert pointD.neuronCounts[2] == 4
-    assert pointD.neuronCounts[3] == 5
+    assert np.array_equal(cn4.links, np.array([[0, 0, 0, 0, 1],
+                                               [0, 0, 1, 1, 1],
+                                               [0, 0, 0, 1, 1],
+                                               [0, 0, 0, 0, 0],
+                                               [0, 0, 0, 0, 0]]))
+    assert np.all(np.isclose(cn4.weights, np.array([[0, 0, 0, 0, 4],
+                                                    [0, 0, 10, 20, 5],
+                                                    [0, 0, 0, 30, 6],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]), atol=1e-5))
+    assert np.all(np.isclose(cn4.bias, np.array([[-10., -20, -30, -40, -5]]), atol=1e-5))
+    assert cn4.actFuns[0] is None
+    assert cn4.actFuns[1].to_string() == TanH().to_string()
+    assert cn4.actFuns[2].to_string() == TanH().to_string()
+    assert cn4.actFuns[3].to_string() == ReLu().to_string()
+    assert cn4.actFuns[4].to_string() == Sigmoid().to_string()
 
-    assert len(pointD.actFuns) == 3
-    assert pointD.actFuns[0].to_string() == ReLu().to_string()
-    assert pointD.actFuns[1].to_string() == Sigmoid().to_string()
-    assert pointD.actFuns[2].to_string() == TanH().to_string()
+    assert cn4.aggrFun.to_string() == SincAct().to_string()
 
-    assert pointD.lossFun.to_string() == QuadDiff().to_string()
-
-    assert pointD.learningRate == -10
-    assert pointD.momCoeff == -2
-    assert pointD.batchSize == -3
+# def test_simple_crossover():
+#     pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
+#                       momCoeff=-2, batchSize=-3)
+#     pointB = AnnPoint(neuronCounts=[2, 30, 5], actFuns=[TanH(), Softmax()], lossFun=CrossEntropy(), learningRate=-10,
+#                       momCoeff=-20, batchSize=-30)
+#
+#     random.seed(1001)
+#     co = SimpleCrossoverOperator()
+#
+#     pointC, pointD = co.crossover(pointA, pointB)
+#
+#     assert len(pointC.neuronCounts) == 4
+#     assert pointC.neuronCounts[0] == 2
+#     assert pointC.neuronCounts[1] == 3
+#     assert pointC.neuronCounts[2] == 4
+#     assert pointC.neuronCounts[3] == 5
+#
+#     assert len(pointC.actFuns) == 3
+#     assert pointC.actFuns[0].to_string() == ReLu().to_string()
+#     assert pointC.actFuns[1].to_string() == Sigmoid().to_string()
+#     assert pointC.actFuns[2].to_string() == TanH().to_string()
+#
+#     assert pointC.lossFun.to_string() == CrossEntropy().to_string()
+#
+#     assert pointC.learningRate == -1
+#     assert pointC.momCoeff == -20
+#     assert pointC.batchSize == -30
+#
+#
+#
+#     assert len(pointD.neuronCounts) == 3
+#     assert pointD.neuronCounts[0] == 2
+#     assert pointD.neuronCounts[1] == 30
+#     assert pointD.neuronCounts[2] == 5
+#
+#     assert len(pointD.actFuns) == 2
+#     assert pointD.actFuns[0].to_string() == TanH().to_string()
+#     assert pointD.actFuns[1].to_string() == Softmax().to_string()
+#
+#     assert pointD.lossFun.to_string() == QuadDiff().to_string()
+#
+#     assert pointD.learningRate == -10
+#     assert pointD.momCoeff == -2
+#     assert pointD.batchSize == -3
+#
+# def test_layer_swap_crossover():
+#     pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
+#                       momCoeff=-2, batchSize=-3)
+#     pointB = AnnPoint(neuronCounts=[2, 30, 5], actFuns=[TanH(), Softmax()], lossFun=CrossEntropy(), learningRate=-10,
+#                       momCoeff=-20, batchSize=-30)
+#
+#     random.seed(1003)
+#     co = LayerSwapCrossoverOperator()
+#
+#     pointC, pointD = co.crossover(pointA, pointB)
+#
+#     assert len(pointC.neuronCounts) == 3
+#     assert pointC.neuronCounts[0] == 2
+#     assert pointC.neuronCounts[1] == 30
+#     assert pointC.neuronCounts[2] == 5
+#
+#     assert len(pointC.actFuns) == 2
+#     assert pointC.actFuns[0].to_string() == TanH().to_string()
+#     assert pointC.actFuns[1].to_string() == Softmax().to_string()
+#
+#     assert pointC.lossFun.to_string() == CrossEntropy().to_string()
+#
+#     assert pointC.learningRate == -1
+#     assert pointC.momCoeff == -20
+#     assert pointC.batchSize == -30
+#
+#
+#
+#     assert len(pointD.neuronCounts) == 4
+#     assert pointD.neuronCounts[0] == 2
+#     assert pointD.neuronCounts[1] == 3
+#     assert pointD.neuronCounts[2] == 4
+#     assert pointD.neuronCounts[3] == 5
+#
+#     assert len(pointD.actFuns) == 3
+#     assert pointD.actFuns[0].to_string() == ReLu().to_string()
+#     assert pointD.actFuns[1].to_string() == Sigmoid().to_string()
+#     assert pointD.actFuns[2].to_string() == TanH().to_string()
+#
+#     assert pointD.lossFun.to_string() == QuadDiff().to_string()
+#
+#     assert pointD.learningRate == -10
+#     assert pointD.momCoeff == -2
+#     assert pointD.batchSize == -3
 
 # def test_crossover():
 #     wei = [np.array([[1, 2], [3, 4.0]]), np.array([[5, 6.0]]), np.array([[7], [8.0]]), np.array([[9, 10.0]])]
@@ -261,13 +338,19 @@ def test_layer_swap_crossover():
 
 
 # test_minimal_damage_crossover()
-
-random.seed(1003)
-# print(random.randint(0, 5))
-print(random.random())
-print(random.random())
-print(random.random())
-print(random.random())
-print(random.random())
+#
+# random.seed(1003)
+# # print(random.randint(0, 5))
+# print(random.random())
+# print(random.random())
+# print(random.random())
+# print(random.random())
+# print(random.random())
 
 # test_layer_swap_crossover()
+
+# random.seed(1002)
+# np.random.seed(1002)
+# print(f"div: \n {random.randint(1, 4)}")
+#
+# test_simple_crossover()

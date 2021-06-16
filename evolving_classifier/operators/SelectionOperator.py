@@ -21,7 +21,7 @@ class TournamentSelection(SelectionOperator):
     def select(self, val_pop: [[AnnPoint, AnnDataPoint]]) -> AnnPoint:
         chosen = choose_without_repetition(options=val_pop, count=self.count)
         chosen_sorted = sorted(chosen, key=lambda x: x[1].ff, reverse=True)
-        return chosen_sorted[0][0]
+        return chosen_sorted[0][0].copy()
 
 class RoulletteSelection(SelectionOperator):
     def __init__(self):
@@ -35,4 +35,4 @@ class RoulletteSelection(SelectionOperator):
         rr = random.random()
         for i in range(len(roulette)):
             if rr < roulette[i][1]:
-                return roulette[i][0]
+                return roulette[i][0].copy()

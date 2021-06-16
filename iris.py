@@ -1,6 +1,6 @@
 from sklearn import datasets
 from sklearn.preprocessing import OneHotEncoder
-from evolving_classifier.EvolvingClassifier import EvolvingClassifier, OnlyFitnessCalculator
+from evolving_classifier.EvolvingClassifier import EvolvingClassifier, CNFitnessCalculator
 from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.CrossoverOperator import *
 from evolving_classifier.operators.HillClimbOperator import *
@@ -37,20 +37,18 @@ if __name__ == '__main__':
     np.random.seed(1001)
 
     ec = EvolvingClassifier()
-    ec.hrange.hiddenLayerCountMin = 0
-    ec.hrange.hiddenLayerCountMax = 0
-    ec.hrange.neuronCountMax = 10
+    # ec.hrange.hiddenLayerCountMin = 0
+    # ec.hrange.hiddenLayerCountMax = 0
+    # ec.hrange.neuronCountMax = 10
     ec.co = SimpleCrossoverOperator()
-    ec.mo = SimpleMutationOperator(ec.hrange)
+    ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(4)
-    ec.ff = ProgressFF(2)
-    ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
+    ec.ff = CNFF2()
+    ec.fc = CNFitnessCalculator()
     ec.hco = HillClimbBackpropMutationOperator(1, 100, train_x, train_y)
-    ec.prepare(10, 10, (train_x, train_y, test_x, test_y), 1542)
-    npoint = ec.run(iterations=5, pm=0.05, pc=0.8, power=1)
-    network = network_from_point(npoint, 1001)
-    print(npoint.to_string())
-    network.train(train_x, train_y, 30)
+    ec.prepare(250, 250, (train_x, train_y, test_x, test_y), 10, 1542)
+    network = ec.run(iterations=100, pm=0.05, pc=0.8, power=12)
+    print(network.weights)
     tests = network.test(test_x, test_y)
     print(tests[:3])
     print(tests[3])

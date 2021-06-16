@@ -111,6 +111,11 @@ class TanH(ActFun):
         up = np.exp(arg) - np.exp(-arg)
         low = np.exp(arg) + np.exp(-arg)
 
+        if not isinstance(up, np.ndarray):
+            up = np.array([[up]])
+        if not isinstance(low, np.ndarray):
+            low = np.array([[low]])
+
         low[np.where(np.isposinf(up))] = 1
         up[np.where(np.isposinf(up))] = 1
         low[np.where(np.isneginf(up))] = 1
@@ -254,6 +259,21 @@ class ChebyshevLoss(LossFun):
 
     def to_string(self):
         return "CL"
+
+class QuasiCrossEntropy(LossFun):
+    def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
+        result = np.sum(np.multiply(corr, np.abs(res - corr)))
+        return result
+
+    def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:
+        raise Exception()
+
+    def copy(self):
+        return QuasiCrossEntropy()
+
+    def to_string(self):
+        return "QCE"
+
 
 
 

@@ -228,8 +228,8 @@ def average_f1_score(conf_matrix):
 
     f1 = []
     for i in range(len(precisions)):
-        prec_inv = 1 / precisions[i]
-        rec_inv = 1 / recall[i]
+        prec_inv = 1 / (precisions[i] + 1e-15)
+        rec_inv = 1 / (recall[i] + 1e-15)
         f1.append(2 / (rec_inv + prec_inv))
 
     return mean(f1)

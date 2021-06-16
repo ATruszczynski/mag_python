@@ -10,7 +10,7 @@ mean_eff_id = "m.e."
 mean_size_id = "m.s."
 mean_f1_id = "m.f1."
 mean_lc_id = "m.lc."
-round_prec_rh = 3
+round_prec_rh = 7
 
 class RunHistory:
     def __init__(self):

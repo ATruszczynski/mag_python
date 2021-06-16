@@ -53,14 +53,14 @@ class EvolvingClassifier:
         self.cross_performed = 0
 
         self.co = SimpleCrossoverOperator()
-        self.mo = SimpleMutationOperator(self.hrange)
+        self.mo = SimpleCNMutation(self.hrange)
         self.so = TournamentSelection(4)
-        self.ff = ProgressFF(3)
-        self.fc = PlusSizeFitnessCalculator(def_frac, 0.95)
+        self.ff = CNFF()
+        self.fc = CNFitnessCalculator()
 
 
     def prepare(self, popSize:int, startPopSize: int,
-                nn_data: ([np.ndarray], [np.ndarray]), seed: int):
+                nn_data: ([np.ndarray], [np.ndarray]), hidden_size: int, seed: int):
         random.seed(seed)
         np.random.seed(seed)
         self.pop_size = popSize
@@ -68,9 +68,9 @@ class EvolvingClassifier:
         self.trainOutputs = nn_data[1]
         input_size = self.trainInputs[0].shape[0]
         output_size = self.trainOutputs[0].shape[0]
-        self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size)
+        self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size, hidden_size=hidden_size)
 
-    def run(self, iterations: int, pm: float, pc: float, power: int = 1) -> AnnPoint:
+    def run(self, iterations: int, pm: float, pc: float, power: int = 1) -> ChaosNet:
         if power > 1:
             pool = mp.Pool(power)
         else:
@@ -83,7 +83,7 @@ class EvolvingClassifier:
         self.supervisor.get_algo_data(input_size=input_size, output_size=output_size, pmS=pm, pmE=pm,
                                       pcS=pc, pcE=pc,
                                       ts=self.tournament_size, sps=len(self.population),
-                                      ps=self.pop_size, fracs=self.fc.fractions, hrange=self.hrange, learningIts=self.ff.learningIts)
+                                      ps=self.pop_size, fracs=[0], hrange=self.hrange, learningIts=self.ff.learningIts)
 
         self.supervisor.start(iterations=iterations)
 
@@ -92,8 +92,14 @@ class EvolvingClassifier:
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
+            sorted_eval = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
+            # print(sorted_eval[0][0].weights)
+
             self.supervisor.check_point(eval_pop, i)
             crossed = []
+
+            if i == 10:
+                ori = 1
 
             while len(crossed) < self.pop_size:
                 c1 = self.so.select(val_pop=eval_pop)
@@ -110,9 +116,12 @@ class EvolvingClassifier:
             new_pop = []
 
             for ind in range(len(crossed)):
-                new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=1))
+                new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=0.1))
+
 
             self.population = new_pop
+            # self.population = [sorted_eval[i][0] for i in range(5)]
+            # self.population.extend(new_pop[:-5])
 
         # eval_pop = self.calculate_fitnesses(pool, self.population)
         eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,

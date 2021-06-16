@@ -40,8 +40,8 @@ class EC_supervisor():
         self.desc_string += f"{details_id} sps {sps}\n"
         self.desc_string += f"{details_id} ps {ps}\n"
         self.desc_string += f"{details_id} fracs {','.join([str(f) for f in fracs])}\n"
-        self.desc_string += f"{details_id} lc {hrange.hiddenLayerCountMin} - {hrange.hiddenLayerCountMax}\n"
-        self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
+        # self.desc_string += f"{details_id} lc {hrange.hiddenLayerCountMin} - {hrange.hiddenLayerCountMax}\n"
+        # self.desc_string += f"{details_id} nc {hrange.neuronCountMin} - {hrange.neuronCountMax}\n"
         self.desc_string += f"{details_id} acfs {','.join([f.to_string() for f in hrange.actFunSet])}\n"
         # self.desc_string += f"{details_id} lfs {','.join([f.to_string() for f in hrange.lossFunSet])}\n"
         self.desc_string += f"{details_id} lits {learningIts}\n"
@@ -87,14 +87,15 @@ class EC_supervisor():
         round_prec = 3
 
         for i in range(len(evals)):
-            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
+            # log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
+            log.write(f"R {iteration} {i + 1} placeholder - {round(evals[i][1].ff, round_prec)}\n")
 
         best_eval = self.rh.get_it_best(iteration)
 
         stat_string = self.rh.get_it_summary_string(iteration)
 
         log.write(f"{summary_id} {stat_string}\n")
-        log.write(f"{summary_id} Best ff: {best_eval.point.to_string()} - {round(best_eval.ff, round_prec)}\n")
+        log.write(f"{summary_id} Best ff: placeholder - {round(best_eval.ff, round_prec)}\n")
 
         log.close()
 

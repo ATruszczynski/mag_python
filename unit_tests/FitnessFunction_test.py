@@ -5,11 +5,29 @@ import pytest
 from ann_point.AnnPoint import AnnPoint
 from ann_point.Functions import *
 from evolving_classifier.FitnessFunction import *
-from unit_tests.ANN_test_test import network_from_point, efficiency
+
+#TODO Softmax makes no sense on single neuron
 
 def get_point():
-    return AnnPoint(neuronCounts=[2, 3, 3], actFuns=[TanH(), Softmax()], lossFun=CrossEntropy(), learningRate=0, momCoeff=0, batchSize=-6)
+    links = np.array([[0, 0, 1, 0, 0, 0],
+                      [0, 0, 1, 1, 1, 0],
+                      [0, 0, 0, 0, 0, 1],
+                      [0, 0, 0, 0, 0, 1],
+                      [0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0]])
+    weights = np.array([[0, 0, 1, 0, 0, 0],
+                      [0, 0, 1, 1, 1, 0],
+                      [0, 0, 0, 0, 0, 1],
+                      [0, 0, 0, 0, 0, 1],
+                      [0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0]])
+    bias = np.array([[0, 0, 0.5, 0.5, 0.5, -0.5]])
+    actFuns = [None, None, Sigmoid()]
+    cn = ChaosNet(input_size=2, output_size=3, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax())
 
+    return cn
+
+# TODO is test tested?
 def get_io():
     inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
     output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
@@ -23,48 +41,58 @@ def get_io():
 
 #TODO more tests of fitness funcs
 
+#TODO pytest finds 2 tests here
+
 def test_pure_fitness_function():
     point = get_point()
     i, o = get_io()
-    ff = PureEfficiencyFF(2)
+    ff = CNFF()
     res = ff.compute(point, i, o, 1001)
 
-    assert res[0] == pytest.approx(0.3333, abs=1e-3)
-    assert np.array_equal(res[1], np.array([[0., 4., 0.],[0., 8., 0.],[0., 4., 0.]]))
+    assert res[0] == pytest.approx(0.06095, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[1., 0., 3.],
+                                            [4., 0., 4.],
+                                           [4., 0., 0.]]))
 
-def test_progress_ff():
-    point = get_point()
-    i, o = get_io()
-    ff = ProgressFF(3)
-    res = ff.compute(point, i, o, 1001)
-
-    assert res[0] == pytest.approx(0.2222 * 0.375, abs=1e-3)
-    assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
-
-def test_progress2_ff():
-    point = get_point()
-    i, o = get_io()
-    ff = ProgressFF2(3)
-    res = ff.compute(point, i, o, 1001)
-
-    assert res[0] == pytest.approx(0.2222 * 0.68899, abs=1e-3)
-    assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
-
-def test_pure_progress_ff():
-    point = get_point()
-    i, o = get_io()
-    ff = PureProgressFF(3)
-    res = ff.compute(point, i, o, 1001)
-
-    assert res[0] == pytest.approx(0.375, abs=1e-3)
-    assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
+# def test_progress_ff():
+#     point = get_point()
+#     i, o = get_io()
+#     ff = ProgressFF(3)
+#     res = ff.compute(point, i, o, 1001)
+#
+#     assert res[0] == pytest.approx(0.2222 * 0.375, abs=1e-3)
+#     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
+#
+# def test_progress2_ff():
+#     point = get_point()
+#     i, o = get_io()
+#     ff = ProgressFF2(3)
+#     res = ff.compute(point, i, o, 1001)
+#
+#     assert res[0] == pytest.approx(0.2222 * 0.68899, abs=1e-3)
+#     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
+#
+# def test_pure_progress_ff():
+#     point = get_point()
+#     i, o = get_io()
+#     ff = PureProgressFF(3)
+#     res = ff.compute(point, i, o, 1001)
+#
+#     assert res[0] == pytest.approx(0.375, abs=1e-3)
+#     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
 
 
 # seed = 1001
 # random.seed(seed)
 # np.random.seed(seed)
-# point = get_point()
+# net = get_point()
 # i, o = get_io()
+#
+# test = net.test(i, o)
+# print(efficiency(test[3]))
+# print(test[3])
+
+
 #
 # network = network_from_point(point, seed)
 # network.train(i, o, 1)

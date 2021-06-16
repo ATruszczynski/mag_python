@@ -1,12 +1,13 @@
 from ann_point.AnnPoint import *
 import numpy as np
 
+from neural_network.ChaosNet import ChaosNet
 from neural_network.FeedForwardNeuralNetwork import *
 
-
+#TODO touch should get removed
 class AnnDataPoint(): #TODO test
-    def __init__(self, point: AnnPoint):
-        self.point = point.copy()
+    def __init__(self, point: ChaosNet):
+        self.point = point #TODO copy?
         self.ff = 0.
         self.acc = 0.
         self.prec = 0.

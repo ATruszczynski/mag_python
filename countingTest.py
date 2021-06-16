@@ -21,18 +21,24 @@ if __name__ == '__main__':
 
     count_tr = 1000
     count_test = 500
-    size = 20
+    size = 5
     x,y = generate_counting_problem(count_tr, size)
     X,Y = generate_counting_problem(ceil(count_test), size)
     #TODO add sized calculator
     #TODO ec better constructor
     ec = EvolvingClassifier()
+    # ec.hrange.hiddenLayerCountMin = 0
+    # ec.hrange.hiddenLayerCountMax = 0
+    # ec.hrange.neuronCountMax = 10
+    ec.co = SimpleCrossoverOperator()
+    ec.mo = SimpleCNMutation(ec.hrange)
+    ec.so = TournamentSelection(4)
+    ec.ff = CNFF2()
+    ec.fc = CNFitnessCalculator()
     # ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
-    ec.prepare(popSize=50, startPopSize=50, nn_data=(x, y), seed=1524)
-    npoint = ec.run(iterations=50, pm=0.05, pc=0.8, power=12)
-    network = network_from_point(npoint, 1001)
-    network.train(x, y, 30)
-    print(npoint.to_string())
+    ec.prepare(250, 250, (x, y), 10, 1542)
+    network = ec.run(iterations=100, pm=0.05, pc=0.8, power=12)
+    print(network.weights)
     tests = network.test(X, Y)
     print(tests[:3])
     print(tests[3])

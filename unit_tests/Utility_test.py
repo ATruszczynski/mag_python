@@ -117,90 +117,124 @@ def test_ohe():
     assert np.array_equal(ohe[5], np.array([[0], [1], [0], [0], [0]]))
     assert np.array_equal(ohe[6], np.array([[0], [0], [0], [1], [0]]))
 
-def test_generate_population():
-    hrange = HyperparameterRange((0, 2), (0, 10), [ReLu(), Sigmoid(), Softmax()], [CrossEntropy(), QuadDiff()],
-                                 (-1, 0), (-3, -2), (-5, -4))
+# def test_generate_population():
+#     hrange = HyperparameterRange((0, 2), (0, 10), [ReLu(), Sigmoid(), Softmax()], [CrossEntropy(), QuadDiff()],
+#                                  (-1, 0), (-3, -2), (-5, -4))
+#
+#     random.seed(1010)
+#     np.random.seed(1010)
+#     population = generate_population(hrange=hrange, count=2, input_size=2, output_size=3)
+#
+#     assert len(population[0].neuronCounts) == 4
+#     assert population[0].neuronCounts[0] == 2
+#     assert population[0].neuronCounts[1] == 9
+#     assert population[0].neuronCounts[2] == 8
+#     assert population[0].neuronCounts[3] == 3
+#
+#     assert len(population[0].actFuns) == 3
+#     assert population[0].actFuns[0].to_string() == ReLu().to_string()
+#     assert population[0].actFuns[1].to_string() == ReLu().to_string()
+#     assert population[0].actFuns[2].to_string() == Sigmoid().to_string()
+#
+#     assert population[0].lossFun.to_string() == QuadDiff().to_string()
+#
+#     assert population[0].learningRate == pytest.approx(-0.83566, abs=1e-4)
+#     assert population[0].momCoeff == pytest.approx(-2.56324, abs=1e-4)
+#     assert population[0].batchSize == pytest.approx(-4.27116, abs=1e-4)
+#
+#
+#
+#     assert len(population[1].neuronCounts) == 2
+#     assert population[1].neuronCounts[0] == 2
+#     assert population[1].neuronCounts[1] == 3
+#
+#     assert len(population[1].actFuns) == 1
+#     assert population[1].actFuns[0].to_string() == Softmax().to_string()
+#
+#     assert population[1].lossFun.to_string() == QuadDiff().to_string()
+#
+#     assert population[1].learningRate == pytest.approx(-0.00331, abs=1e-4)
+#     assert population[1].momCoeff == pytest.approx(-2.42444, abs=1e-4)
+#     assert population[1].batchSize == pytest.approx(-4.85385, abs=1e-4)
 
-    random.seed(1010)
-    np.random.seed(1010)
-    population = generate_population(hrange=hrange, count=2, input_size=2, output_size=3)
-
-    assert len(population[0].neuronCounts) == 4
-    assert population[0].neuronCounts[0] == 2
-    assert population[0].neuronCounts[1] == 9
-    assert population[0].neuronCounts[2] == 8
-    assert population[0].neuronCounts[3] == 3
-
-    assert len(population[0].actFuns) == 3
-    assert population[0].actFuns[0].to_string() == ReLu().to_string()
-    assert population[0].actFuns[1].to_string() == ReLu().to_string()
-    assert population[0].actFuns[2].to_string() == Sigmoid().to_string()
-
-    assert population[0].lossFun.to_string() == QuadDiff().to_string()
-
-    assert population[0].learningRate == pytest.approx(-0.83566, abs=1e-4)
-    assert population[0].momCoeff == pytest.approx(-2.56324, abs=1e-4)
-    assert population[0].batchSize == pytest.approx(-4.27116, abs=1e-4)
-
-
-
-    assert len(population[1].neuronCounts) == 2
-    assert population[1].neuronCounts[0] == 2
-    assert population[1].neuronCounts[1] == 3
-
-    assert len(population[1].actFuns) == 1
-    assert population[1].actFuns[0].to_string() == Softmax().to_string()
-
-    assert population[1].lossFun.to_string() == QuadDiff().to_string()
-
-    assert population[1].learningRate == pytest.approx(-0.00331, abs=1e-4)
-    assert population[1].momCoeff == pytest.approx(-2.42444, abs=1e-4)
-    assert population[1].batchSize == pytest.approx(-4.85385, abs=1e-4)
-
+#TODO check if weights are properly filtered by lijnks everywhere
 def test_generate_population_limits():
-    hrange = HyperparameterRange((0, 2), (0, 5), [ReLu(), Sigmoid(), Softmax()], [CrossEntropy(), QuadDiff()],
-                                 (-1, 0), (-3, -2), (-5, -4))
+    hrange = HyperparameterRange((0, 2), (0, 5), [ReLu(), Sigmoid(), Softmax()])
 
     random.seed(1001)
-    pop = generate_population(hrange, 200, 10, 10)
-    layers = [len(pop[i].neuronCounts) for i in range(len(pop))]
-    neurons = [pop[i].neuronCounts[j] for i in range(len(pop)) for j in range(1, len(pop[i].neuronCounts) - 1)]
-    actFuns = [pop[i].actFuns[j] for i in range(len(pop)) for j in range(len(pop[i].actFuns))]
-    lossFuns = [pop[i].lossFun for i in range(len(pop))]
-    lrs = [pop[i].learningRate for i in range(len(pop))]
-    me = [pop[i].momCoeff for i in range(len(pop))]
-    bs = [pop[i].batchSize for i in range(len(pop))]
+    n = 200
+    pop = generate_population(hrange, n, 10, 20, 10)
 
-    assert max(layers) == 4
-    assert min(layers) == 2
-    assert max(neurons) == 5
-    assert min(neurons) == 0
-    assert max(lrs) <= 0
-    assert min(lrs) >= -1
-    assert max(me) <= -2
-    assert min(me) >= -3
-    assert max(bs) <= -4
-    assert min(bs) >= -5
+    input_sizes = [pop[i].input_size for i in range(len(pop))]
+    output_sizes = [pop[i].output_size for i in range(len(pop))]
+    assert max(input_sizes) == min(input_sizes)
+    assert max(input_sizes) == 10
+    assert max(output_sizes) == min(output_sizes)
+    assert max(output_sizes) == 20
+
+    all_weights = []
+    all_biases = []
+    all_act_funs = []
+    all_aggr_funs = []
+
+    for i in range(len(pop)):
+        net = pop[i]
+        links = net.links
+        non_zero_ind = np.where(links != 0)
+
+        for j in range(len(net.actFuns)):
+            if net.actFuns[j] is not None:
+                all_act_funs.append(net.actFuns[j].copy())
+        all_aggr_funs.append(net.aggrFun.copy())
+
+        weights = net.weights.copy()
+        weights[non_zero_ind] = 0
+        assert np.max(weights) == 0
+        assert np.min(weights) == 0
+
+        for j in range(net.bias.shape[1]):
+            if not np.isnan(net.bias[0, j]):
+                all_biases.append(net.bias[0, j])
+
+        for ind in range(len(non_zero_ind[0])):
+            r = non_zero_ind[0][ind]
+            c = non_zero_ind[1][ind]
+            assert c > r
+            assert c >= net.hidden_start_index
+            assert r < net.hidden_end_index
+
+            all_weights.append(net.weights[r, c])
+
+    assert max(all_weights) <= 2
+    assert max(all_weights) > 1.95
+    assert min(all_weights) >= 0
+    assert min(all_weights) < 0.05
+
+    assert np.max(all_biases) <= 5
+    assert np.max(all_biases) > 4.95
+    assert np.min(all_biases) >= 0
+    assert np.min(all_biases) < 0.05
 
     for i in range(len(hrange.actFunSet)):
         afh = hrange.actFunSet[i]
         isthere = False
-        for j in range(len(actFuns)):
-            afp = actFuns[j]
+        for j in range(len(all_act_funs)):
+            afp = all_act_funs[j]
             isthere = isthere or afh.to_string() == afp.to_string()
             if isthere == True:
                 break
         assert isthere
 
-    for i in range(len(hrange.lossFunSet)):
-        lfh = hrange.lossFunSet[i]
+    for i in range(len(hrange.actFunSet)):
+        afh = hrange.actFunSet[i]
         isthere = False
-        for j in range(len(lossFuns)):
-            lfp = lossFuns[j]
-            isthere = isthere or lfh.to_string() == lfp.to_string()
+        for j in range(len(all_aggr_funs)):
+            afp = all_act_funs[j]
+            isthere = isthere or afh.to_string() == afp.to_string()
             if isthere == True:
                 break
         assert isthere
+
 
 
 
@@ -350,5 +384,7 @@ def test_get_network_from_point():
 # print(np.random.normal(0, 1 / sqrt(4), (3, 4)))
 #
 # test_get_network_from_point()
+
+# test_generate_population_limits()
 
 test_generate_population_limits()

@@ -10,10 +10,10 @@ def test_determinism():
     ec = EvolvingClassifier()
 
     ec.co = SimpleCrossoverOperator()
-    ec.mo = SimpleMutationOperator(ec.hrange)
+    ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(2)
-    ec.ff = ProgressFF(2)
-    ec.fc = OnlyFitnessCalculator([1, 0.5])
+    ec.ff = CNFF()
+    ec.fc = CNFitnessCalculator()
 
     count = 10
     size = 5
@@ -23,9 +23,9 @@ def test_determinism():
     tests = []
 
     for i in range(5):
-        ec.prepare(4, 4, (x, y, X, Y), 1001)
+        ec.prepare(4, 4, (x, y, X, Y), 5, 1001)
         net = ec.run(3, 0.01, 0.25, 1)
-        tests.append(network_from_point(net, 1001).test(X, Y))
+        tests.append(net.test(X, Y))
 
     for i in range(len(tests) - 1):
         for j in range(i + 1, len(tests)):
@@ -37,4 +37,4 @@ def test_determinism():
             assert t1[2] == t2[2]
             assert np.array_equal(t1[3], t2[3])
 
-test_determinism()
+# test_determinism()
