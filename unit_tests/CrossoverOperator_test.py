@@ -59,6 +59,7 @@ def test_simple_crossover():
     assert cn3.actFuns[4].to_string() == ReLu().to_string()
 
     assert cn3.aggrFun.to_string() == GaussAct().to_string()
+    assert cn3.hidden_comp_order is None
 
 
 
@@ -80,6 +81,7 @@ def test_simple_crossover():
     assert cn4.actFuns[4].to_string() == Sigmoid().to_string()
 
     assert cn4.aggrFun.to_string() == SincAct().to_string()
+    assert cn4.hidden_comp_order is None
 
 # def test_simple_crossover():
 #     pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,

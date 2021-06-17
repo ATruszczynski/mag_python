@@ -11,6 +11,7 @@ mean_size_id = "m.s."
 mean_f1_id = "m.f1."
 mean_lc_id = "m.lc."
 round_prec_rh = 7
+mean_used_id="m.u."
 
 class RunHistory:
     def __init__(self):
@@ -39,11 +40,13 @@ class RunHistory:
         mean_rec = mean([eval.rec for eval in evals])
         mean_eff = mean([eval.get_eff() for eval in evals])
         mean_size = mean([eval.point.size() for eval in evals])
+        mean_used = mean([eval.point.get_number_of_used_neurons() for eval in evals])
 
         result = f"{iteration} |{mean_ff_id}:{round(mean_ff, round_prec_rh)}|" + \
                  f"{mean_acc_id}:{round(mean_acc, round_prec_rh)}|" + \
                  f"{mean_prec_id}:{round(mean_prec, round_prec_rh)}|{mean_rec_id}:{round(mean_rec, round_prec_rh)}|" + \
-                 f"{mean_size_id}:{round(mean_size,round_prec_rh)}|{mean_eff_id}:{round(mean_eff, round_prec_rh)}"
+                 f"{mean_size_id}:{round(mean_size,round_prec_rh)}|{mean_eff_id}:{round(mean_eff, round_prec_rh)}|" \
+                 f"{mean_used_id}:{round(mean_used, round_prec_rh)}"
 
         return result
 

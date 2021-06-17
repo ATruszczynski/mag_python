@@ -26,6 +26,7 @@ def test_cn_generation():
     assert nets[0].actFuns[2].to_string() == ReLu().to_string()
     assert nets[0].actFuns[3].to_string() == ReLu().to_string()
     assert nets[0].actFuns[4].to_string() == ReLu().to_string()
+    assert nets[0].hidden_comp_order is None
 
 # random.seed(1001)
 # np.random.seed(1001)

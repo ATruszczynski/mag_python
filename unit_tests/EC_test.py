@@ -26,7 +26,7 @@ def test_determinism():
         ec.prepare(4, 4, (x, y, X, Y), 5, 1001)
         net = ec.run(3, 0.01, 0.25, 1)
         tests.append(net.test(X, Y))
-
+    #TODO move eff etc to different file
     for i in range(len(tests) - 1):
         for j in range(i + 1, len(tests)):
             t1 = tests[i]

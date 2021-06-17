@@ -43,8 +43,8 @@ class SimpleCrossoverOperator:
         pointA.aggrFun = pointB.aggrFun
         pointB.aggrFun = tmp
 
-        pointA.comp_order = None
-        pointB.comp_order = None
+        pointA.hidden_comp_order = None
+        pointB.hidden_comp_order = None
 
         return pointA, pointB
 

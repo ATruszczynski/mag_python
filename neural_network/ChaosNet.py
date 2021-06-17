@@ -3,11 +3,11 @@ from statistics import mean
 
 import numpy as np
 
-from ann_point.Functions import ActFun, LossFun
+from ann_point.Functions import *
 
 
 class ChaosNet:
-    def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun, maxIt: int = 1):
+    def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
         #TODO validation
         self.input_size = input_size
         self.output_size = output_size
@@ -26,61 +26,102 @@ class ChaosNet:
             else:
                 self.actFuns.append(actFuns[i].copy())
         self.aggrFun = aggrFun
-        self.comp_order = []
-        self.max_it = maxIt
+        self.hidden_comp_order = []
         self.comp_count = np.zeros(biases.shape)
-        self.comp_order = None
+        self.hidden_comp_order = None
 
-    def run(self, input: np.ndarray):
+    def run(self, input: np.ndarray, try_faster: bool = False):
         self.act[0, :self.input_size] = input.reshape(1, -1)
-        for r in range(self.max_it):
-            for n in range(self. hidden_start_index, self.hidden_end_index):
-                wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1))
-                self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-                self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
+
+        for n in self.hidden_comp_order:
+            wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
+            self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
+            self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
 
         self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
         self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
 
         return self.act[0, self.hidden_end_index:]
 
+    def run_normal(self, input:np.ndarray):
+        self.act[0, :self.input_size] = input.reshape(1, -1)
+
+        for n in range(self. hidden_start_index, self.hidden_end_index):
+            wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
+            self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
+            self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
+
+        self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
+        self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
+
+        return self.act[0, self.hidden_end_index:]
+
+    def run_faster(self, input: np.ndarray):
+        if self.hidden_comp_order is None:
+            self.get_comp_order()
+
+        self.act[0, :self.input_size] = input.reshape(1, -1)
+        for batch in self.hidden_comp_order:
+            wei = np.multiply(self.weights[:, batch].reshape(-1, len(batch)), self.links[:, batch].reshape(-1, len(batch)))
+            self.inp[0, batch] = np.sum(np.multiply(self.act, wei.T), axis=1) + self.bias[0, batch]
+            for n in range(len(batch)):
+                self.act[0, batch[n]] = self.actFuns[batch[n]].compute(self.inp[0, batch[n]])
+
+        self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
+        self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
 
 
-        # if self.comp_order is None:
-        #     self.get_comp_order()
-        #
-        # self.act[0, :self.input_size] = input.reshape(1, -1)
-        # for batch in self.comp_order:
-        #     wei = np.multiply(self.weights[:, batch].reshape(-1, len(batch)), self.links[:, batch].reshape(-1, len(batch)))
-        #     result = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, batch]
-        #     # if isinstance(result, float):
-        #     #     result = np.array([[result]])
-        #     for n in range(len(batch)):
-        #         self.act[0, batch[n]] = self.actFuns[batch[n]].compute(result[n])
-
-
-        # return self.aggrFun.compute(self.act[0, self.hidden_end_index:])
-
-
+        return self.act[0, self.hidden_end_index:]
 
 
     def get_comp_order(self):
-        self.comp_order = []
-        computed = list(range(self.input_size))
-        links = self.links.copy()
-        links[computed, :] = 0
+        # self.hidden_comp_order = []
+        # computed = list(range(self.input_size))
+        # computed.extend(range(self.hidden_end_index, self.neuron_count))
+        # links = self.links.copy()
+        # links[computed, :] = 0
+        #
+        # while len(computed) < self.neuron_count:
+        #     in_degrees = np.sum(links, axis=0)
+        #     zero_degrees_ind = np.where(in_degrees == 0)[0]
+        #     batch = []
+        #     for zdi in zero_degrees_ind:
+        #         if zdi not in computed:
+        #             batch.append(zdi)
+        #             computed.append(zdi)
+        #             links[zdi, :] = 0
+        #
+        #     self.hidden_comp_order.append(batch)
 
-        while len(computed) < self.neuron_count:
-            in_degrees = np.sum(links, axis=0)
-            zero_degrees_ind = np.where(in_degrees == 0)[0]
-            batch = []
-            for zdi in zero_degrees_ind:
-                if zdi not in computed:
-                    batch.append(zdi)
-                    computed.append(zdi)
-                    links[zdi, :] = 0
+        # self.hidden_comp_order = []
+        # hidden_links = self.links[self.hidden_start_index:self.hidden_end_index, self.hidden_start_index:self.hidden_end_index].copy()
+        #
+        # hidden_neuron_count = self.hidden_end_index - self.hidden_start_index
+        # computed = []
+        #
+        # while len(computed) < hidden_neuron_count:
+        #     in_degrees = np.sum(hidden_links, axis=0)
+        #     zero_degrees_ind = np.where(in_degrees == 0)[0]
+        #     batch = []
+        #     for zdi in zero_degrees_ind:
+        #         if zdi not in computed:
+        #             batch.append(zdi)
+        #             computed.append(zdi)
+        #             hidden_links[zdi, :] = 0
+        #
+        #     self.hidden_comp_order.append(batch)
+        #
+        # for batch in self.hidden_comp_order:
+        #     for i in range(len(batch)):
+        #         batch[i] += self.input_size
 
-            self.comp_order.append(batch)
+        self.hidden_comp_order = []
+
+
+
+
+
+
 
     def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lf: LossFun = None) -> [float, float, float, np.ndarray]:
         out_size = self.output_size
@@ -102,8 +143,70 @@ class ChaosNet:
 
         return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, resultt]
 
+    def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
+        self.links = links.copy()
+        self.weights = weights.copy()
+        self.bias = biases.copy()
+        self.aggrFun = aggrFun.copy()
+
+        self.actFuns = []
+        for i in range(len(actFuns)):
+            if actFuns[i] is None:
+                self.actFuns.append(None)
+            else:
+                self.actFuns.append(actFuns[i].copy())
+
+        self.hidden_comp_order = None
+
+
     def size(self):
         return -666
+    
+    def get_indices_of_neurons_with_output(self):
+        row_sum = np.sum(self.links, axis=1)
+        ones = list(np.where(row_sum[:self.hidden_end_index] == 1)[0])
+        ones.extend(list(range(self.hidden_end_index, self.neuron_count)))
+        return ones
+
+    def get_indices_of_neurons_with_input(self):
+        col_sum = np.sum(self.links, axis=0)
+        ones = list(np.where(col_sum == 1)[0])
+        ones.extend(list(range(self.hidden_start_index)))
+        return ones
+
+    def get_indices_of_used_neurons(self):
+        no_output = self.get_indices_of_no_output_neurons()
+        used = []
+
+        for i in range(self.neuron_count):
+            if i not in no_output:
+                used.append(i)
+
+        return used
+
+    def get_number_of_used_neurons(self):
+        return len(self.get_indices_of_used_neurons())
+
+    def get_indices_of_no_output_neurons(self):
+        row_sum = np.sum(self.links, axis=1)
+        zeros = list(np.where(row_sum[:self.hidden_end_index] == 0)[0])
+        return zeros
+
+    def get_indices_of_no_input_neurons(self):
+        col_sum = np.sum(self.links, axis=0)
+        zeros = list(np.where(col_sum == 0)[0])
+        zeros = zeros[self.hidden_start_index:]
+        return zeros
+
+    def get_indices_of_disconnected_neurons(self):
+        no_output = self.get_indices_of_no_output_neurons()
+        no_input = self.get_indices_of_no_input_neurons()
+
+        result = []
+        for i in no_output:
+            if i in no_input:
+                result.append(i)
+        return result
 
     def copy(self):
         actFuns = []

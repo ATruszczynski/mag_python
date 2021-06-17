@@ -33,6 +33,46 @@ class SimpleCNMutation(MutationOperator):
         bia_move = np.multiply(change, bia_move)
         point.bias += bia_move
 
+        point.hidden_comp_order = None
+
+        return point
+
+
+class SimpleAndStructuralCNMutation(MutationOperator):
+    def __init__(self, hrange: HyperparameterRange):
+        super().__init__(hrange)
+
+    def mutate(self, point: ChaosNet, pm: float, radius: float) -> ChaosNet:
+        probs = np.random.random(point.weights.shape)
+        change = np.zeros(point.weights.shape)
+        change[np.where(probs <= pm)] = 1
+        wei_move = np.random.normal(0, radius, point.weights.shape)
+        wei_move = np.multiply(change, wei_move)
+        point.weights += wei_move
+        point.weights = np.multiply(point.weights, point.links)
+
+        probs = np.random.random((1, point.neuron_count))
+        change = np.zeros(probs.shape)
+        change[np.where(probs <= pm)] = 1
+        bia_move = np.random.normal(0, radius, point.bias.shape)
+        bia_move = np.multiply(change, bia_move)
+        point.bias += bia_move
+
+        probs = np.random.random(point.weights.shape)
+        to_change = np.where(probs <= pm)
+        point.links[to_change] = 1 - point.links[to_change]
+
+        for i in range(point.hidden_start_index, point.hidden_end_index):
+            pc = random.random()
+            if pm < pc:
+                point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
+
+        pc = random.random()
+        if pm < pc:
+            point.aggrFun = try_choose_different(point.aggrFun, self.hrange.actFunSet)
+
+
+        point.hidden_comp_order = None
         return point
 
 #

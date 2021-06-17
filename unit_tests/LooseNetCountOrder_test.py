@@ -2,28 +2,72 @@ from ann_point.Functions import ReLu
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
-def test_cn_comp_order():
-    links = np.array([[0, 0, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 0, 0],
-                      [0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 0, 0, 1],
-                      [0, 0, 0, 0, 0, 1],
-                      [0, 0, 0, 0, 0, 0]])
-    biases = np.array([[0, 0, 0, 0, 0, 0]])
-    cn = ChaosNet(input_size=2, output_size=1, links=links, weights=links, biases=biases, actFuns=6 *[None], aggrFun=ReLu(), maxIt=2)
+# def test_cn_comp_order():
+#     links = np.array([[0, 0, 0, 1, 0, 0],
+#                       [0, 0, 1, 0, 0, 0],
+#                       [0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 0, 0, 1],
+#                       [0, 0, 0, 0, 0, 1],
+#                       [0, 0, 0, 0, 0, 0]])
+#     biases = np.array([[0, 0, 0, 0, 0, 0]])
+#     cn = ChaosNet(input_size=2, output_size=1, links=links, weights=links, biases=biases, actFuns=6 *[None], aggrFun=ReLu())
+#     cn.get_comp_order()
+#
+#     assert len(cn.hidden_comp_order) == 2
+#
+#     assert len(cn.hidden_comp_order[0]) == 1
+#     assert cn.hidden_comp_order[0][0] == 2
+#
+#     assert len(cn.hidden_comp_order[1]) == 2
+#     assert cn.hidden_comp_order[1][0] == 3
+#     assert cn.hidden_comp_order[1][1] == 4
+#
+# def test_cn_comp_order_2():
+#     links = np.array([[0, 0, 1, 0, 0, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 0, 1, 0],
+#                       [0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0]])
+#     biases = np.array([[0, 0, 0, 0, 0, 0, 0]])
+#     cn = ChaosNet(input_size=2, output_size=3, links=links, weights=links, biases=biases, actFuns=7 *[None], aggrFun=ReLu())
+#     cn.get_comp_order()
+#
+#     assert len(cn.hidden_comp_order) == 2
+#
+#     assert len(cn.hidden_comp_order[0]) == 1
+#     assert cn.hidden_comp_order[0][0] == 2
+#
+#     assert len(cn.hidden_comp_order[1]) == 1
+#     assert cn.hidden_comp_order[1][0] == 3
+
+
+
+def test_cn_comp_order_rec():
+    links = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 1, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 1, 0, 0, 0],
+                      [0, 0, 0, 0, 1, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 1, 0, 0],
+                      [0, 0, 0, 1, 0, 0, 0, 1, 0],
+                      [0, 0, 0, 1, 0, 1, 0, 0, 1],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+
+    biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    cn = ChaosNet(input_size=2, output_size=2, links=links, weights=links, biases=biases, actFuns=9 *[None], aggrFun=ReLu())
     cn.get_comp_order()
 
-    assert len(cn.comp_order) == 3
+    assert len(cn.hidden_comp_order) == 5
 
-    assert len(cn.comp_order[0]) == 1
-    assert cn.comp_order[0][0] == 2
+    assert cn.hidden_comp_order[0] == 2
+    assert cn.hidden_comp_order[1] == 4
+    assert cn.hidden_comp_order[2] == 5
+    assert cn.hidden_comp_order[3] == 6
+    assert cn.hidden_comp_order[4] == 3
 
-    assert len(cn.comp_order[1]) == 2
-    assert cn.comp_order[1][0] == 3
-    assert cn.comp_order[1][1] == 4
 
-    assert len(cn.comp_order[2]) == 1
-    assert cn.comp_order[2][0] == 5
 
 
 # def test_ln_outgoing():
@@ -133,6 +177,8 @@ def test_cn_comp_order():
 # test_cn_comp_order()
 
 # test_cn_comp_order()
+# test_cn_comp_order_2()
+test_cn_comp_order_rec()
 
 
 

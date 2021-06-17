@@ -84,6 +84,8 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         links[conn_ind] = 1
         links = np.multiply(links, mask)
 
+        # links = np.zeros((neuron_count, neuron_count))
+
         weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
         weights = np.multiply(weights, links)
 
@@ -96,7 +98,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
 
         aggrFun = hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)]
 
-        result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights, biases=biases, actFuns=actFuns, aggrFun=aggrFun, maxIt=0))
+        result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights, biases=biases, actFuns=actFuns, aggrFun=aggrFun))
 
     return result
 
@@ -137,7 +139,7 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
     hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()])
-    hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid()])
+    # hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid()])
     return hrange
 
 def punishment_function(arg: float):

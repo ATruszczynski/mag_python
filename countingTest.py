@@ -33,7 +33,7 @@ if __name__ == '__main__':
     ec.co = SimpleCrossoverOperator()
     ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(4)
-    ec.ff = CNFF2()
+    ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
     # ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
     ec.prepare(250, 250, (x, y), 10, 1542)

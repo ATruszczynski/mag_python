@@ -60,6 +60,8 @@ def test_simple_mutation():
     assert mutant.actFuns[3].to_string() == Sigmoid().to_string()
     assert mutant.actFuns[4].to_string() == Sigmoid().to_string()
 
+    assert mutant.hidden_comp_order is None
+
     assert mutant.aggrFun.to_string() == TanH().to_string()
 
 

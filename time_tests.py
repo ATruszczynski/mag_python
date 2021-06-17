@@ -46,6 +46,8 @@ if __name__ == '__main__':
 
     hm = 10000
     train_X = train_X[:hm]
+    for i in range(len(train_X)):
+        train_X[i] = train_X[i] / 255
     train_y = train_y[:hm]
     test_X = test_X[:ceil(hm/3)]
     test_y = test_y[:ceil(hm/3)]
@@ -56,22 +58,64 @@ if __name__ == '__main__':
     wei[:784, 784:] = 1
     acts = 794 * [ReLu()]
 
-    cn = ChaosNet(input_size=784, output_size=10, links=links, weights=wei, biases=np.zeros((1, 794)), actFuns=acts, aggrFun=ReLu(), maxIt=2)
+    cn = ChaosNet(input_size=784, output_size=10, links=links, weights=wei, biases=np.zeros((1, 794)), actFuns=acts, aggrFun=ReLu())
     ff = FeedForwardNeuralNetwork([784, 10], [ReLu()], QuadDiff(), 1, 1, 1, 1001)
+
+    random.seed(1001)
+    np.random.seed(1001)
+    cns = generate_population(get_default_hrange(), 20, 784, 10, 200)
+
     print("PRM")
-    n = 10000
+    n = 10
     s = time.time()
-    for i in range(n):
-        result = cn.run(train_X[i])
+    for j in range(len(cns)):
+        # print("d")
+        ori = 1
+        for i in range(n):
+            result = cns[j].run(train_X[i])
+            inp1 = cns[j].inp.copy()
     t = time.time()
 
     print(round((t - s) / n, 7))
+
+    s = time.time()
+    for j in range(len(cns)):
+        # print("d")
+        ori = 1
+        for i in range(n):
+            result = cns[j].run(train_X[i])
+            inp2 = cns[j].inp
+    t = time.time()
+
+    print(round((t - s) / n, 7))
+
+
+    # s = time.time()
+    # for j in range(len(cns)):
+    #     # print("d")
+    #     for i in range(n):
+    #         result = cns[j].run(train_X[i])
+    # t = time.time()
+    #
+    # print(round((t - s) / n, 7))
+
+    # for i in range(len(cns)):
+    #     cns[i] = cns[i].copy()
+    #
+    # s = time.time()
+    # for j in range(len(cns)):
+    #     for i in range(n):
+    #         result = cns[j].run(train_X[i], try_faster=False)
+    # t = time.time()
+    #
+    # print(round((t - s) / n, 7))
+
     # print(result)
-
-    s = time.time()
-    for i in range(n):
-        result = ff.run(train_X[i])
-    t = time.time()
-
-    print(round((t - s) / n, 7))
+    #
+    # s = time.time()
+    # for i in range(n):
+    #     result = ff.run(train_X[i])
+    # t = time.time()
+    #
+    # print(round((t - s) / n, 7))
     # print(result)

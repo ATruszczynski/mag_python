@@ -31,7 +31,7 @@ class CNFF2(FitnessFunction):
         super().__init__(0)
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray], seed: int) -> [float, np.ndarray]:
-        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=QuasiCrossEntropy())
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=QuadDiff())
         eff = efficiency(test_results[3])
 
         return [(1 - eff) * -test_results[4], test_results[3]]
