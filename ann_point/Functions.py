@@ -260,6 +260,7 @@ class ChebyshevLoss(LossFun):
     def to_string(self):
         return "CL"
 
+#TODO test
 class QuasiCrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
         result = np.sum(np.multiply(corr, np.abs(res - corr)))

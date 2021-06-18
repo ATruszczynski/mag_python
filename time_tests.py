@@ -65,17 +65,28 @@ if __name__ == '__main__':
     np.random.seed(1001)
 
     nets = 10
-    n = 10
+    n = 100
 
     cns = generate_population(get_default_hrange(), nets, 784, 10, 200)
 
     print("PRM")
+    # s = time.time()
+    # for j in range(len(cns)):
+    #     # print("d")
+    #     ori = 1
+    #     for i in range(n):
+    #         result = cns[j].run(train_X[i])
+    # t = time.time()
+    #
+    # avg_time = (t - s) / (n * nets)
+    # print(round(avg_time, 7))
+    # print(round(avg_time * 250 * 100 / 5, 7))
+
     s = time.time()
     for j in range(len(cns)):
-        # print("d")
         ori = 1
-        for i in range(n):
-            result = cns[j].run(train_X[i])
+        input = np.hstack(train_X[:n])
+        result = cn.run(input)
     t = time.time()
 
     avg_time = (t - s) / (n * nets)

@@ -32,23 +32,58 @@ class ChaosNet:
 
         self.maxit = maxit
 
-    def run(self, input: np.ndarray, try_faster: bool = False):
-        self.act[0, :self.input_size] = input.reshape(1, -1)
+    # def run(self, input: np.ndarray, try_faster: bool = False):
+    #     self.act[0, :self.input_size] = input.reshape(1, -1)
+    #
+    #     if self.hidden_comp_order is None:
+    #         self.get_comp_order()
+    #
+    #     for i in range(self.maxit):
+    #         for n in self.hidden_comp_order:
+    #             # wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
+    #             wei = self.weights[:, n].reshape(-1, 1)
+    #             self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
+    #             self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
+    #
+    #     self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
+    #     self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
+    #
+    #     return self.act[0, self.hidden_end_index:]
 
+    def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
             self.get_comp_order()
 
+        act = np.zeros((self.neuron_count, inputs.shape[1]))
+        inp = np.zeros((self.neuron_count, inputs.shape[1]))
+
+        act[:self.input_size, :] = inputs
+
         for i in range(self.maxit):
             for n in self.hidden_comp_order:
-                # wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
                 wei = self.weights[:, n].reshape(-1, 1)
-                self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-                self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
+                inp[n, :] = np.dot(wei.T, act) + self.bias[0, n]
+                act[n, :] = self.actFuns[n].compute(inp[n, :])
 
-        self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-        self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
 
-        return self.act[0, self.hidden_end_index:]
+        inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, act) + self.bias[0, self.hidden_end_index:].reshape(-1, 1)
+        act[self.hidden_end_index:, :] = self.aggrFun.compute(inp[self.hidden_end_index:, :])
+
+        return act[self.hidden_end_index:]
+
+        # for i in range(self.maxit):
+        #     for n in self.hidden_comp_order:
+        #         # wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
+        #         wei = self.weights[:, n].reshape(-1, 1)
+        #         self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
+        #         self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
+        #
+        # self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
+        # self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
+
+        # return self.act[self.hidden_end_index:]
+
+
 
     # def run_normal(self, input:np.ndarray):
     #     self.act[0, :self.input_size] = input.reshape(1, -1)
@@ -158,15 +193,16 @@ class ChaosNet:
 
         resultt = 0
 
+        cont_inputs = np.hstack(test_input)
+        net_results = self.run(cont_inputs)
+
         for i in range(len(test_output)):
-            ti = test_input[i]
             to = test_output[i]
-            net_result = self.run(ti)
+            net_result = net_results[:, i]
             pred_class = np.argmax(net_result)
             corr_class = np.argmax(to)
             confusion_matrix[corr_class, pred_class] += 1
             if lf is not None:
-                # resultt = max(resultt, lf.compute(net_result, to))
                 resultt += lf.compute(net_result, to)
 
         return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, resultt]

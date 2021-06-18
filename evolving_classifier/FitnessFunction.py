@@ -27,11 +27,12 @@ class CNFF(FitnessFunction):
         return [eff, test_results[3]]
 
 class CNFF2(FitnessFunction):
-    def __init__(self):
+    def __init__(self, lossFun: LossFun):
         super().__init__(0)
+        self.lossFun = lossFun
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray], seed: int) -> [float, np.ndarray]:
-        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=QuadDiff())
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
         eff = efficiency(test_results[3])
 
         return [(1 - eff) * -test_results[4], test_results[3]]
