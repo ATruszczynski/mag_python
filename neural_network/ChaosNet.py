@@ -7,7 +7,7 @@ from ann_point.Functions import *
 
 
 class ChaosNet:
-    def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
+    def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun, maxit: int = 1):
         #TODO validation
         self.input_size = input_size
         self.output_size = output_size
@@ -30,50 +30,57 @@ class ChaosNet:
         self.comp_count = np.zeros(biases.shape)
         self.hidden_comp_order = None
 
+        self.maxit = maxit
+
     def run(self, input: np.ndarray, try_faster: bool = False):
         self.act[0, :self.input_size] = input.reshape(1, -1)
 
-        for n in self.hidden_comp_order:
-            wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
-            self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-            self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
-
-        self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-        self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
-
-        return self.act[0, self.hidden_end_index:]
-
-    def run_normal(self, input:np.ndarray):
-        self.act[0, :self.input_size] = input.reshape(1, -1)
-
-        for n in range(self. hidden_start_index, self.hidden_end_index):
-            wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
-            self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-            self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
-
-        self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-        self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
-
-        return self.act[0, self.hidden_end_index:]
-
-    def run_faster(self, input: np.ndarray):
         if self.hidden_comp_order is None:
             self.get_comp_order()
 
-        self.act[0, :self.input_size] = input.reshape(1, -1)
-        for batch in self.hidden_comp_order:
-            wei = np.multiply(self.weights[:, batch].reshape(-1, len(batch)), self.links[:, batch].reshape(-1, len(batch)))
-            self.inp[0, batch] = np.sum(np.multiply(self.act, wei.T), axis=1) + self.bias[0, batch]
-            for n in range(len(batch)):
-                self.act[0, batch[n]] = self.actFuns[batch[n]].compute(self.inp[0, batch[n]])
+        for i in range(self.maxit):
+            for n in self.hidden_comp_order:
+                # wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
+                wei = self.weights[:, n].reshape(-1, 1)
+                self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
+                self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
 
         self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
         self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
 
-
         return self.act[0, self.hidden_end_index:]
 
+    # def run_normal(self, input:np.ndarray):
+    #     self.act[0, :self.input_size] = input.reshape(1, -1)
+    #
+    #     for n in range(self. hidden_start_index, self.hidden_end_index):
+    #         wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
+    #         self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
+    #         self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
+    #
+    #     self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
+    #     self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
+    #
+    #     return self.act[0, self.hidden_end_index:]
+    #
+    # def run_faster(self, input: np.ndarray):
+    #     if self.hidden_comp_order is None:
+    #         self.get_comp_order()
+    #
+    #     self.act[0, :self.input_size] = input.reshape(1, -1)
+    #     for batch in self.hidden_comp_order:
+    #         wei = np.multiply(self.weights[:, batch].reshape(-1, len(batch)), self.links[:, batch].reshape(-1, len(batch)))
+    #         self.inp[0, batch] = np.sum(np.multiply(self.act, wei.T), axis=1) + self.bias[0, batch]
+    #         for n in range(len(batch)):
+    #             self.act[0, batch[n]] = self.actFuns[batch[n]].compute(self.inp[0, batch[n]])
+    #
+    #     self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
+    #     self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
+    #
+    #
+    #     return self.act[0, self.hidden_end_index:]
 
+    #TODO identify which vertices don't need to be processed
     def get_comp_order(self):
         # self.hidden_comp_order = []
         # computed = list(range(self.input_size))
@@ -117,6 +124,28 @@ class ChaosNet:
 
         self.hidden_comp_order = []
 
+        touched = list(range(self.hidden_start_index))
+        layers = [list(range(self.hidden_start_index))]
+
+        hidden_links = self.links[:self.hidden_end_index, :self.hidden_end_index].copy()
+
+        while len(touched) < self.hidden_end_index:
+            out_of_layer_edges = hidden_links[layers[-1]]
+            oole_col_sums = np.sum(out_of_layer_edges, axis=0)
+            out_of_layer_vertices = np.where(oole_col_sums > 0)[0].tolist()
+            if len(out_of_layer_vertices) == 0:
+                break
+            new_layer = []
+            for oolv in out_of_layer_vertices:
+                if oolv not in touched:
+                    new_layer.append(oolv)
+                    touched.append(oolv)
+            new_layer = sorted(new_layer)
+            layers.append(new_layer)
+
+        self.hidden_comp_order = [i for layer in layers[1:] for i in layer]
+
+
 
 
 
@@ -128,7 +157,6 @@ class ChaosNet:
         confusion_matrix = np.zeros((out_size, out_size))
 
         resultt = 0
-        # resultt = -inf
 
         for i in range(len(test_output)):
             ti = test_input[i]
@@ -218,6 +246,12 @@ class ChaosNet:
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.bias.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy())
+
+    def calculate_distance_from_input(self):
+        touched = []
+        layers = []
+
+        hidden_links = self.links
 
 
     # def get_comp_order(self):

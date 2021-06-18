@@ -159,7 +159,7 @@ def test_ohe():
 
 #TODO check if weights are properly filtered by lijnks everywhere
 def test_generate_population_limits():
-    hrange = HyperparameterRange((0, 2), (0, 5), [ReLu(), Sigmoid(), Softmax()])
+    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), [ReLu(), Sigmoid(), Softmax()])
 
     random.seed(1001)
     n = 200
@@ -167,10 +167,13 @@ def test_generate_population_limits():
 
     input_sizes = [pop[i].input_size for i in range(len(pop))]
     output_sizes = [pop[i].output_size for i in range(len(pop))]
+    its = [pop[i].maxit for i in range(len(pop))]
     assert max(input_sizes) == min(input_sizes)
     assert max(input_sizes) == 10
     assert max(output_sizes) == min(output_sizes)
     assert max(output_sizes) == 20
+    assert min(its) == 1
+    assert max(its) == 5
 
     all_weights = []
     all_biases = []
@@ -199,7 +202,7 @@ def test_generate_population_limits():
         for ind in range(len(non_zero_ind[0])):
             r = non_zero_ind[0][ind]
             c = non_zero_ind[1][ind]
-            assert c > r
+            assert c != r
             assert c >= net.hidden_start_index
             assert r < net.hidden_end_index
 
@@ -387,4 +390,4 @@ def test_get_network_from_point():
 
 # test_generate_population_limits()
 
-test_generate_population_limits()
+# test_generate_population_limits()

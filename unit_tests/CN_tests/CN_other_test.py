@@ -52,7 +52,10 @@ def test_CN_copy():
     assert net.actFuns[5] is None
     assert net.actFuns[6] is None
     assert net.aggrFun.to_string() == Softmax().to_string()
-    assert net.hidden_comp_order is None
+    assert len(net.hidden_comp_order) == 3
+    assert net.hidden_comp_order[0] == 2
+    assert net.hidden_comp_order[1] == 3
+    assert net.hidden_comp_order[2] == 4
 
     assert np.array_equal(net2.links, np.array([[0, 0, 1, 0, 0, 0, 0],
                                                [0, 0, 0, 1, 1, 0, 0],

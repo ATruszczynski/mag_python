@@ -6,7 +6,7 @@ from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 
 
-def test_determinism():
+def test_determinism(): #TODO this is (was?) broken
     ec = EvolvingClassifier()
 
     ec.co = SimpleCrossoverOperator()

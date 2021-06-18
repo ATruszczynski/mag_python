@@ -15,7 +15,7 @@ class CrossoverOperator:
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         pass
 
-
+#TODO exchanges with some probability!
 class SimpleCrossoverOperator:
     def __init__(self):
         pass
@@ -39,9 +39,15 @@ class SimpleCrossoverOperator:
         pointA.actFuns[sep:] = pointB.actFuns[sep:]
         pointB.actFuns[sep:] = tmp
 
-        tmp = pointA.aggrFun
-        pointA.aggrFun = pointB.aggrFun
-        pointB.aggrFun = tmp
+        if random.random() < 0.5:
+            tmp = pointA.aggrFun
+            pointA.aggrFun = pointB.aggrFun
+            pointB.aggrFun = tmp
+
+        if random.random() < 0.5:
+            tmp = pointA.maxit
+            pointA.maxit = pointB.maxit
+            pointB.maxit = tmp
 
         pointA.hidden_comp_order = None
         pointB.hidden_comp_order = None

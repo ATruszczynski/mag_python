@@ -34,6 +34,7 @@ class SimpleCNMutation(MutationOperator):
         point.bias += bia_move
 
         point.hidden_comp_order = None
+        point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 
         return point
 

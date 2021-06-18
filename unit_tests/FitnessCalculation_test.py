@@ -14,7 +14,7 @@ from unit_tests.ANN_test_test import get_io
 
 
 def points():
-    result = generate_population(HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid(), SincAct()]), 2, 2, 3, 2)
+    result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), [ReLu(), Sigmoid(), SincAct()]), 2, 2, 3, 2)
     return result
 
 
@@ -232,3 +232,4 @@ def test_fitness_calculator_with_pure_eff():
 # print((fit_1_3[0] + fit_2_3[0]) / 2)
 #
 # test_fitness_calculator_with_size_eff()
+# test_fitness_calculator_with_pure_eff()

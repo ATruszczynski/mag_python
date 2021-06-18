@@ -10,7 +10,8 @@ from evolving_classifier.operators.MutationOperators import *
 from utility.Mut_Utility import *
 
 def test_simple_mutation():
-    hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid(), GaussAct(), TanH()])
+    #TODO fix with it changes
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()])
     mo = SimpleCNMutation(hrange)
 
     random.seed(1001)
@@ -18,31 +19,18 @@ def test_simple_mutation():
 
     link1 = np.array([[0, 1, 1, 0, 1],
                       [0, 0, 1, 0, 1],
-                      [0, 0, 0, 0, 1],
+                      [0, 1, 0, 0, 1],
                       [0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0]])
     wei1 = np.array([[0., 1, 2, 0, 4],
                       [0, 0, 3, 0, 5],
-                      [0, 0, 0, 0, 6],
+                      [0, 7, 0, 0, 6],
                       [0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0]])
     bia1 = np.array([[-1., -2, -3, -4, -5]])
     actFuns1 = [None, ReLu(), ReLu(), Sigmoid(), Sigmoid()]
 
-    # link2 = np.array([[0, 0, 0, 0, 0],
-    #                   [0, 0, 1, 1, 0],
-    #                   [0, 0, 0, 1, 1],
-    #                   [0, 0, 0, 0, 0],
-    #                   [0, 0, 0, 0, 0]])
-    # wei2 = np.array([[0, 0, 0, 0, 0],
-    #                  [0, 0, 10, 20, 0],
-    #                  [0, 0, 0, 30, 40],
-    #                  [0, 0, 0, 0, 0],
-    #                  [0, 0, 0, 0, 0]])
-    # bia2 = np.array([[-10, -20, -30, -40, -50]])
-    # actFuns2 = [None, None, ReLu(), ReLu(), ReLu()]
-
-    cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1, aggrFun=TanH())
+    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=2)
     # cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1, aggrFun=TanH())
 
     mutant = mo.mutate(cn1, pm=0.75, radius=1)
@@ -50,7 +38,7 @@ def test_simple_mutation():
     assert np.array_equal(mutant.links, link1)
     assert np.all(np.isclose(mutant.weights, np.array([[0, 1.54176999, 1.47983043, 0, 5.20238865],
                                                        [0, 0, 2.875572, 0, 5.43418561],
-                                                       [0, 0, 0, 0, 5.97519725],
+                                                       [0, 5.39956767, 0, 0, 5.97519725],
                                                        [0, 0, 0, 0, 0],
                                                        [0, 0, 0, 0, 0]]), atol=1e-5))
     assert np.all(np.isclose(mutant.bias, np.array([[-1, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]), atol=1e-5))
@@ -63,6 +51,8 @@ def test_simple_mutation():
     assert mutant.hidden_comp_order is None
 
     assert mutant.aggrFun.to_string() == TanH().to_string()
+
+    assert mutant.maxit == 1
 
 
 
@@ -532,21 +522,22 @@ def test_simple_mutation():
 # print(random.randint(0, 2))
 # test_add_layer()
 
-# random.seed(1001)
-# np.random.seed(1001)
-# wei1 = np.array([[0, 1, 2, 0, 4],
-#                  [0, 0, 3, 0, 5],
-#                  [0, 0, 0, 0, 6],
-#                  [0, 0, 0, 0, 0],
-#                  [0, 0, 0, 0, 0]])
-# bia1 = np.array([[-1, -2, -3, -4, -5]])
-# ch1 = np.zeros((5, 5))
-# ch1[np.random.random((5, 5)) <= 0.75] = 1
-# print(f"change_prob: \n {ch1}")
-# print(f"moves: \n {np.random.normal(wei1, 1, (5,5))}")
-# ch1b = np.zeros((1, 5))
-# ch1b[np.random.random((1, 5)) <= 0.75] = 1
-# print(f"change_prob_b: \n {ch1b}")
-# print(f"moves_b: \n {np.random.normal(bia1, 1, (1, 5))}")
+random.seed(1001)
+np.random.seed(1001)
+wei1 = np.array([[0., 1, 2, 0, 4],
+                 [0, 0, 3, 0, 5],
+                 [0, 7, 0, 0, 6],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]])
+bia1 = np.array([[-1, -2, -3, -4, -5]])
+ch1 = np.zeros((5, 5))
+ch1[np.random.random((5, 5)) <= 0.75] = 1
+print(f"change_prob: \n {ch1}")
+print(f"moves: \n {np.random.normal(wei1, 1, (5,5))}")
+ch1b = np.zeros((1, 5))
+ch1b[np.random.random((1, 5)) <= 0.75] = 1
+print(f"change_prob_b: \n {ch1b}")
+print(f"moves_b: \n {np.random.normal(bia1, 1, (1, 5))}")
+print(f"it_change: \n {try_choose_different(2, list(range(1, 6)))}")
 
 

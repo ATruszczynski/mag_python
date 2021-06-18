@@ -5,15 +5,15 @@ from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
 
 def test_simple_crossover():
-
+    #TODO fix with it changes
     link1 = np.array([[0, 1, 1, 0, 1],
                       [0, 0, 1, 0, 1],
-                      [0, 0, 0, 0, 1],
+                      [0, 1, 0, 0, 1],
                       [0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0]])
     wei1 = np.array([[0., 1, 2, 0, 4],
                      [0, 0, 3, 0, 5],
-                     [0, 0, 0, 0, 6],
+                     [0, 7, 0, 0, 6],
                      [0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0]])
     bia1 = np.array([[-1., -2, -3, -4, -5]])
@@ -32,8 +32,8 @@ def test_simple_crossover():
     bia2 = np.array([[-10, -20, -30, -40, -50]])
     actFuns2 = [None, TanH(), TanH(), ReLu(), ReLu()]
 
-    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct())
-    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct())
+    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2)
+    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5)
 
     co = SimpleCrossoverOperator()
 
@@ -43,12 +43,12 @@ def test_simple_crossover():
 
     assert np.array_equal(cn3.links, np.array([[0, 1, 1, 0, 0],
                                                [0, 0, 1, 0, 0],
-                                               [0, 0, 0, 0, 1],
+                                               [0, 1, 0, 0, 1],
                                                [0, 0, 0, 0, 0],
                                                [0, 0, 0, 0, 0]]))
     assert np.all(np.isclose(cn3.weights, np.array([[0., 1, 2, 0, 0],
                                                     [0, 0, 3, 0, 0],
-                                                    [0, 0, 0, 0, 40],
+                                                    [0, 7, 0, 0, 40],
                                                     [0, 0, 0, 0, 0],
                                                     [0, 0, 0, 0, 0]]), atol=1e-5))
     assert np.all(np.isclose(cn3.bias, np.array([[-1., -2, -3, -4, -50]]), atol=1e-5))
@@ -58,8 +58,9 @@ def test_simple_crossover():
     assert cn3.actFuns[3].to_string() == Sigmoid().to_string()
     assert cn3.actFuns[4].to_string() == ReLu().to_string()
 
-    assert cn3.aggrFun.to_string() == GaussAct().to_string()
+    assert cn3.aggrFun.to_string() == SincAct().to_string()
     assert cn3.hidden_comp_order is None
+    assert cn3.maxit == 5
 
 
 
@@ -80,8 +81,91 @@ def test_simple_crossover():
     assert cn4.actFuns[3].to_string() == ReLu().to_string()
     assert cn4.actFuns[4].to_string() == Sigmoid().to_string()
 
+    assert cn4.aggrFun.to_string() == GaussAct().to_string()
+    assert cn4.hidden_comp_order is None
+    assert cn4.maxit == 2
+
+
+def test_simple_crossover_2():
+    #TODO fix with it changes
+    link1 = np.array([[0, 1, 1, 0, 1],
+                      [0, 0, 1, 0, 1],
+                      [0, 1, 0, 0, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+    wei1 = np.array([[0., 1, 2, 0, 4],
+                     [0 , 0, 3, 0, 5],
+                     [0 , 7, 0, 0, 6],
+                     [0 , 0, 0, 0, 0],
+                     [0 , 0, 0, 0, 0]])
+    bia1 = np.array([[-1., -2, -3, -4, -5]])
+    actFuns1 = [None, ReLu(), ReLu(), Sigmoid(), Sigmoid()]
+
+    link2 = np.array([[0, 0, 0, 0, 0],
+                      [0, 0, 1, 1, 0],
+                      [0, 0, 0, 1, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+    wei2 = np.array([[0, 0, 0,  0,  0 ],
+                     [0, 0, 10, 20, 0 ],
+                     [0, 0, 0,  30, 40],
+                     [0, 0, 0,  0,  0 ],
+                     [0, 0, 0,  0,  0 ]])
+    bia2 = np.array([[-10, -20, -30, -40, -50]])
+    actFuns2 = [None, TanH(), TanH(), ReLu(), ReLu()]
+
+    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2)
+    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5)
+
+    co = SimpleCrossoverOperator()
+
+    random.seed(1111)
+    np.random.seed(1111)
+    cn3, cn4 = co.crossover(cn1, cn2)
+
+    assert np.array_equal(cn3.links, np.array([[0, 1, 0, 0, 0],
+                                               [0, 0, 1, 1, 0],
+                                               [0, 1, 0, 1, 1],
+                                               [0, 0, 0, 0, 0],
+                                               [0, 0, 0, 0, 0]]))
+    assert np.all(np.isclose(cn3.weights, np.array([[0., 1, 0,  0,  0 ],
+                                                    [0,  0,  10, 20, 0 ],
+                                                    [0,  7,  0,  30, 40],
+                                                    [0,  0,  0,  0,  0 ],
+                                                    [0,  0,  0,  0,  0 ]]), atol=1e-5))
+    assert np.all(np.isclose(cn3.bias, np.array([[-1., -2, -30, -40, -50]]), atol=1e-5))
+    assert cn3.actFuns[0] is None
+    assert cn3.actFuns[1].to_string() == ReLu().to_string()
+    assert cn3.actFuns[2].to_string() == TanH().to_string()
+    assert cn3.actFuns[3].to_string() == ReLu().to_string()
+    assert cn3.actFuns[4].to_string() == ReLu().to_string()
+
+    assert cn3.aggrFun.to_string() == GaussAct().to_string()
+    assert cn3.hidden_comp_order is None
+    assert cn3.maxit == 2
+
+
+
+    assert np.array_equal(cn4.links, np.array([[0, 0, 1, 0, 1],
+                                               [0, 0, 1, 0, 1],
+                                               [0, 0, 0, 0, 1],
+                                               [0, 0, 0, 0, 0],
+                                               [0, 0, 0, 0, 0]]))
+    assert np.all(np.isclose(cn4.weights, np.array([[0, 0, 2, 0, 4],
+                                                    [0, 0, 3, 0, 5],
+                                                    [0, 0, 0, 0, 6],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]), atol=1e-5))
+    assert np.all(np.isclose(cn4.bias, np.array([[-10., -20,  -3, -4, -5]]), atol=1e-5))
+    assert cn4.actFuns[0] is None
+    assert cn4.actFuns[1].to_string() == TanH().to_string()
+    assert cn4.actFuns[2].to_string() == ReLu().to_string()
+    assert cn4.actFuns[3].to_string() == Sigmoid().to_string()
+    assert cn4.actFuns[4].to_string() == Sigmoid().to_string()
+
     assert cn4.aggrFun.to_string() == SincAct().to_string()
     assert cn4.hidden_comp_order is None
+    assert cn4.maxit == 5
 
 # def test_simple_crossover():
 #     pointA = AnnPoint(neuronCounts=[2, 3, 4, 5], actFuns=[ReLu(), Sigmoid(), TanH()], lossFun=QuadDiff(), learningRate=-1,
@@ -351,8 +435,19 @@ def test_simple_crossover():
 
 # test_layer_swap_crossover()
 
-# random.seed(1002)
-# np.random.seed(1002)
-# print(f"div: \n {random.randint(1, 4)}")
-#
+seed = 1002
+random.seed(seed)
+np.random.seed(seed)
+print(f"div: \n {random.randint(1, 4)}")
+print(f"swap_1: \n {random.random()}")
+print(f"swap_2: \n {random.random()}")
+
+
+seed = 1111
+random.seed(seed)
+np.random.seed(seed)
+print(f"div: \n {random.randint(1, 4)}")
+print(f"swap_1: \n {random.random()}")
+print(f"swap_2: \n {random.random()}")
+
 # test_simple_crossover()
