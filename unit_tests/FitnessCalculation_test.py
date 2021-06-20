@@ -14,7 +14,7 @@ from unit_tests.ANN_test_test import get_io
 
 
 def points():
-    result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), [ReLu(), Sigmoid(), SincAct()]), 2, 2, 3, 2)
+    result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), SincAct()]), 2, 2, 3)
     return result
 
 
@@ -30,52 +30,52 @@ def test_fitness_calculator_with_pure_eff():
 
     assert len(res[0]) == 2
     # assert res[0][0].to_string() == anns[1].to_string() #TODO fix this
-    assert res[0][1].ff == pytest.approx(0.3333, abs=1e-3)
-    assert res[0][1].acc == pytest.approx(0.5, abs=1e-3)
+    assert res[0][1].ff == pytest.approx(0.19444, abs=1e-3)
+    assert res[0][1].acc == pytest.approx(0.25, abs=1e-3)
     assert res[0][1].prec == pytest.approx(0.16666, abs=1e-3)
-    assert res[0][1].rec == pytest.approx(0.3333, abs=1e-3)
-    assert res[0][1].f1 == pytest.approx(0.22222, abs=1e-3)
+    assert res[0][1].rec == pytest.approx(0.16666, abs=1e-3)
+    assert res[0][1].f1 == pytest.approx(0.16666, abs=1e-3)
     assert res[0][1].touch == pytest.approx(1, abs=1e-3)
-    assert res[0][1].get_eff() == pytest.approx(0.33333, abs=1e-3)
+    assert res[0][1].get_eff() == pytest.approx(0.19444, abs=1e-3)
 
     assert len(res[1]) == 2
     # assert res[1][0].to_string() == anns[0].to_string()
-    assert res[1][1].ff == pytest.approx(0.2222, abs=1e-3)
+    assert res[1][1].ff == pytest.approx(0.175925, abs=1e-3)
     assert res[1][1].acc == pytest.approx(0.25, abs=1e-3)
-    assert res[1][1].prec == pytest.approx(0.08333, abs=1e-3)
-    assert res[1][1].rec == pytest.approx(0.33333, abs=1e-3)
+    assert res[1][1].prec == pytest.approx(0.111111, abs=1e-3)
+    assert res[1][1].rec == pytest.approx(0.1666666, abs=1e-3)
     assert res[1][1].f1 == pytest.approx(0.13333, abs=1e-3)
     assert res[1][1].touch == pytest.approx(1, abs=1e-3)
-    assert res[1][1].get_eff() == pytest.approx(0.22222, abs=1e-3)
+    assert res[1][1].get_eff() == pytest.approx(0.1759259, abs=1e-3)
 
 
-# random.seed(1002)
-# np.random.seed(1002)
-#
-# nets = points()
-# i, o = get_io()
-#
-# cff = CNFF()
-#
-# res1 = cff.compute(nets[0], i, o, 1111)
-# cm1 = res1[1]
-# print(f"f: {res1[0]}")
-# print(f"acc: {accuracy(cm1)}")
-# print(f"prec: {average_precision(cm1)}")
-# print(f"rec: {average_recall(cm1)}")
-# print(f"eff: {efficiency(cm1)}")
-# print(f"f1: {average_f1_score(cm1)}")
-#
-# print("\n\n")
-#
-# res2 = cff.compute(nets[1], i, o, 1111)
-# cm2 = res2[1]
-# print(f"f: {res2[0]}")
-# print(f"acc: {accuracy(cm2)}")
-# print(f"prec: {average_precision(cm2)}")
-# print(f"rec: {average_recall(cm2)}")
-# print(f"eff: {efficiency(cm2)}")
-# print(f"f1: {average_f1_score(cm2)}")
+random.seed(1002)
+np.random.seed(1002)
+
+nets = points()
+i, o = get_io()
+
+cff = CNFF()
+
+res1 = cff.compute(nets[0], i, o, 1111)
+cm1 = res1[1]
+print(f"f: {res1[0]}")
+print(f"acc: {accuracy(cm1)}")
+print(f"prec: {average_precision(cm1)}")
+print(f"rec: {average_recall(cm1)}")
+print(f"eff: {efficiency(cm1)}")
+print(f"f1: {average_f1_score(cm1)}")
+
+print("\n\n")
+
+res2 = cff.compute(nets[1], i, o, 1111)
+cm2 = res2[1]
+print(f"f: {res2[0]}")
+print(f"acc: {accuracy(cm2)}")
+print(f"prec: {average_precision(cm2)}")
+print(f"rec: {average_recall(cm2)}")
+print(f"eff: {efficiency(cm2)}")
+print(f"f1: {average_f1_score(cm2)}")
 
 
 

@@ -69,32 +69,37 @@ def divideIntoBatches(inputs: [np.ndarray], outputs: [np.ndarray], batchSize: in
 
     return batches
 
-def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int, hidden_size: int) -> [ChaosNet]:
+def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [ChaosNet]:
     result = []
     # TODO stabilise names
-    neuron_count = input_size + hidden_size + output_size
-    mask = np.zeros((neuron_count, neuron_count))
-    mask[:-output_size, input_size:] = 1
-    np.fill_diagonal(mask, 0)
     for i in range(count):
-        density = random.random()
-        link_prob = np.random.random((neuron_count, neuron_count))
-        conn_ind = np.where(link_prob < density)
-        links = np.zeros((neuron_count, neuron_count))
-        links[conn_ind] = 1
-        links = np.multiply(links, mask)
+        hidden_size = random.randint(hrange.min_hidden, hrange.max_hidden)
 
+        neuron_count = input_size + hidden_size + output_size
+        # mask = np.zeros((neuron_count, neuron_count))
+        # mask[:-output_size, input_size:] = 1
+        # np.fill_diagonal(mask, 0)
+        #
+        # density = random.random()
+        # link_prob = np.random.random((neuron_count, neuron_count))
+        # conn_ind = np.where(link_prob <= density)
         # links = np.zeros((neuron_count, neuron_count))
+        # links[conn_ind] = 1
+        links = get_links(input_size, output_size, neuron_count)
 
         weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
         weights = np.multiply(weights, links)
 
         biases = np.random.uniform(hrange.min_init_bia, hrange.max_init_bia, (1, neuron_count))
+        biases[0, :input_size] = 0
+
         actFuns = []
-        for j in range(input_size):
+        for j in range(input_size):#TODO shorten
             actFuns.append(None)
-        for j in range(input_size, neuron_count):
+        for j in range(input_size, input_size + hidden_size):
             actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
+        for j in range(input_size + hidden_size, neuron_count):
+            actFuns.append(None)
 
         aggrFun = hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)]
         maxit = random.randint(hrange.min_it, hrange.max_it)
@@ -102,6 +107,20 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights, biases=biases, actFuns=actFuns, aggrFun=aggrFun, maxit=maxit))
 
     return result
+
+def get_links(input_size: int, output_size: int, neuron_count: int):
+    mask = np.zeros((neuron_count, neuron_count))
+    mask[:-output_size, input_size:] = 1
+    np.fill_diagonal(mask, 0)
+
+    density = random.random()
+    link_prob = np.random.random((neuron_count, neuron_count))
+    conn_ind = np.where(link_prob <= density)
+    links = np.zeros((neuron_count, neuron_count))
+    links[conn_ind] = 1
+    links = np.multiply(links, mask)
+
+    return links
 
     # result = []
     # # TODO stabilise names
@@ -139,7 +158,7 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()])
     # hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid()])
     return hrange
 

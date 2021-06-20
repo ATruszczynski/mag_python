@@ -22,7 +22,7 @@ def get_point():
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0]])
     bias = np.array([[0, 0, 0.5, 0.5, 0.5, -0.5]])
-    actFuns = [None, None, Sigmoid()]
+    actFuns = [None, None, Sigmoid(), None, None]
     cn = ChaosNet(input_size=2, output_size=3, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax())
 
     return cn
@@ -49,9 +49,9 @@ def test_pure_fitness_function():
     ff = CNFF()
     res = ff.compute(point, i, o, 1001)
 
-    assert res[0] == pytest.approx(0.06095, abs=1e-3)
-    assert np.array_equal(res[1], np.array([[1., 0., 3.],
-                                            [4., 0., 4.],
+    assert res[0] == pytest.approx(0.22222, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
                                            [4., 0., 0.]]))
 
 # def test_progress_ff():
@@ -82,15 +82,15 @@ def test_pure_fitness_function():
 #     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
 
 
-# seed = 1001
-# random.seed(seed)
-# np.random.seed(seed)
-# net = get_point()
-# i, o = get_io()
-#
-# test = net.test(i, o)
-# print(efficiency(test[3]))
-# print(test[3])
+seed = 1001
+random.seed(seed)
+np.random.seed(seed)
+net = get_point()
+i, o = get_io()
+
+test = net.test(i, o)
+print(efficiency(test[3]))
+print(test[3])
 
 
 #

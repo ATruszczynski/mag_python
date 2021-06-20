@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # ec.hrange.hiddenLayerCountMax = 0
     # ec.hrange.neuronCountMax = 10
     ec.co = SimpleCrossoverOperator()
-    ec.mo = SimpleCNMutation(ec.hrange)
+    ec.mo = SimpleAndStructuralCNMutation(ec.hrange)
     ec.so = TournamentSelection(4)
     ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()

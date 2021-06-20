@@ -68,7 +68,7 @@ class EvolvingClassifier:
         self.trainOutputs = nn_data[1]
         input_size = self.trainInputs[0].shape[0]
         output_size = self.trainOutputs[0].shape[0]
-        self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size, hidden_size=hidden_size)
+        self.population = generate_population(self.hrange, startPopSize, input_size=input_size, output_size=output_size)
 
     def run(self, iterations: int, pm: float, pc: float, power: int = 1) -> ChaosNet:
         if power > 1:
@@ -116,7 +116,7 @@ class EvolvingClassifier:
 
             new_pop = []
 
-            mut_rad = 2
+            mut_rad = 1
 
             for ind in range(len(crossed)):
                 # new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))

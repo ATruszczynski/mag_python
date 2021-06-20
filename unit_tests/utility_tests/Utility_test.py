@@ -159,19 +159,23 @@ def test_ohe():
 
 #TODO check if weights are properly filtered by lijnks everywhere
 def test_generate_population_limits():
-    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), [ReLu(), Sigmoid(), Softmax()])
+    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()])
 
     random.seed(1001)
     n = 200
-    pop = generate_population(hrange, n, 10, 20, 10)
+    pop = generate_population(hrange, n, 10, 20)
 
     input_sizes = [pop[i].input_size for i in range(len(pop))]
     output_sizes = [pop[i].output_size for i in range(len(pop))]
+    hidden_sizes = [pop[i].hidden_end_index - pop[i].hidden_start_index for i in range(len(pop))]
     its = [pop[i].maxit for i in range(len(pop))]
+
     assert max(input_sizes) == min(input_sizes)
     assert max(input_sizes) == 10
     assert max(output_sizes) == min(output_sizes)
     assert max(output_sizes) == 20
+    assert max(hidden_sizes) == 20
+    assert min(hidden_sizes) == 10
     assert min(its) == 1
     assert max(its) == 5
 
@@ -183,6 +187,14 @@ def test_generate_population_limits():
     for i in range(len(pop)):
         net = pop[i]
         links = net.links
+
+        assert links.shape[0] == net.neuron_count
+        assert links.shape[1] == net.neuron_count
+        assert net.weights.shape[0] == net.neuron_count
+        assert net.weights.shape[1] == net.neuron_count
+        assert net.bias.shape[0] == 1
+        assert net.bias.shape[1] == net.neuron_count
+
         non_zero_ind = np.where(links != 0)
 
         for j in range(len(net.actFuns)):

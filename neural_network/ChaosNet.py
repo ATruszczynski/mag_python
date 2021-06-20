@@ -9,16 +9,11 @@ from ann_point.Functions import *
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun, maxit: int = 1):
         #TODO validation
-        self.input_size = input_size
-        self.output_size = output_size
         self.links = links.copy()
         self.weights = weights.copy()
         self.bias = biases.copy()
         self.inp = np.zeros(biases.shape)
         self.act = np.zeros(biases.shape)
-        self.neuron_count = self.bias.shape[1]
-        self.hidden_start_index = self.input_size
-        self.hidden_end_index = self.neuron_count - self.output_size
         self.actFuns = []
         for i in range(len(actFuns)):
             if actFuns[i] is None:
@@ -26,10 +21,17 @@ class ChaosNet:
             else:
                 self.actFuns.append(actFuns[i].copy())
         self.aggrFun = aggrFun
-        self.hidden_comp_order = []
-        self.comp_count = np.zeros(biases.shape)
-        self.hidden_comp_order = None
 
+        #TODO make those private
+        self.input_size = input_size
+        self.output_size = output_size
+        self.neuron_count = self.bias.shape[1]
+        self.hidden_start_index = self.input_size
+        self.hidden_end_index = self.neuron_count - self.output_size
+        self.hidden_count = self.hidden_end_index - self.hidden_start_index
+
+        self.comp_count = np.zeros(biases.shape)#TODO useless?
+        self.hidden_comp_order = None
         self.maxit = maxit
 
     # def run(self, input: np.ndarray, try_faster: bool = False):

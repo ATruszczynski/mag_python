@@ -34,14 +34,16 @@ class SimpleCNMutation(MutationOperator):
         point.bias += bia_move
 
         point.hidden_comp_order = None
-        point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
+        if random.random() <= pm:
+            point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 
         return point
 
 
 class SimpleAndStructuralCNMutation(MutationOperator):
-    def __init__(self, hrange: HyperparameterRange):
+    def __init__(self, hrange: HyperparameterRange, maxhjump: int):
         super().__init__(hrange)
+        self.maxhjump = maxhjump
 
     def mutate(self, point: ChaosNet, pm: float, radius: float) -> ChaosNet:
         probs = np.random.random(point.weights.shape)
@@ -59,19 +61,39 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         bia_move = np.multiply(change, bia_move)
         point.bias += bia_move
 
-        probs = np.random.random(point.weights.shape)
+        if random.random() <= pm * radius: #TODO radius can be larger than 1
+            point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
+
+        probs = np.random.random(point.links.shape)
         to_change = np.where(probs <= pm)
-        point.links[to_change] = 1 - point.links[to_change]
+        new_links = point.links.copy()
+        new_links[to_change] = 1 - new_links[to_change]
+        new_links[:, :point.input_size] = 0
+        new_links[point.hidden_end_index:, :] = 0
+        np.fill_diagonal(new_links, 0)
+
+        diffs = point.links - new_links
+        added_edges = np.where(diffs == -1)
+        minW = np.min(point.weights)
+        maxW = np.max(point.weights)
+        point.weights[added_edges] = np.random.uniform(minW, maxW, point.weights.shape)[added_edges]
+
+        point.links = new_links
+
+        point.weights = np.multiply(point.weights, point.links)
 
         for i in range(point.hidden_start_index, point.hidden_end_index):
-            pc = random.random()
-            if pm < pc:
+            if random.random() < pm * radius:
                 point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
 
-        pc = random.random()
-        if pm < pc:
+        if random.random() < pm * radius:
             point.aggrFun = try_choose_different(point.aggrFun, self.hrange.actFunSet)
 
+        if random.random() < pm * radius:
+            minh = max(self.hrange.min_hidden, point.hidden_count - self.maxhjump)
+            maxh = min(self.hrange.max_hidden, point.hidden_count + self.maxhjump)
+            options = list(range(minh, maxh + 1))
+            point = change_neuron_count(point, self.hrange, try_choose_different(point.hidden_count, options))
 
         point.hidden_comp_order = None
         return point

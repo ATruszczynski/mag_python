@@ -37,7 +37,7 @@ if __name__ == '__main__':
     ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
     # ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
-    ec.prepare(500, 500, (x, y), 10, 1542)
+    ec.prepare(250, 250, (x, y), 10, 1542)
     network = ec.run(iterations=100, pm=0.05, pc=0.8, power=12)
     print(network.links)
     print(network.weights)
