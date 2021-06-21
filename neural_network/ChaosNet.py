@@ -11,7 +11,7 @@ class ChaosNet:
         #TODO validation
         self.links = links.copy()
         self.weights = weights.copy()
-        self.bias = biases.copy()
+        self.biases = biases.copy()
         self.inp = np.zeros(biases.shape)
         self.act = np.zeros(biases.shape)
         self.actFuns = []
@@ -25,7 +25,7 @@ class ChaosNet:
         #TODO make those private
         self.input_size = input_size
         self.output_size = output_size
-        self.neuron_count = self.bias.shape[1]
+        self.neuron_count = self.biases.shape[1]
         self.hidden_start_index = self.input_size
         self.hidden_end_index = self.neuron_count - self.output_size
         self.hidden_count = self.hidden_end_index - self.hidden_start_index
@@ -64,11 +64,11 @@ class ChaosNet:
         for i in range(self.maxit):
             for n in self.hidden_comp_order:
                 wei = self.weights[:, n].reshape(-1, 1)
-                inp[n, :] = np.dot(wei.T, act) + self.bias[0, n]
+                inp[n, :] = np.dot(wei.T, act) + self.biases[0, n]
                 act[n, :] = self.actFuns[n].compute(inp[n, :])
 
 
-        inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, act) + self.bias[0, self.hidden_end_index:].reshape(-1, 1)
+        inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, act) + self.biases[0, self.hidden_end_index:].reshape(-1, 1)
         act[self.hidden_end_index:, :] = self.aggrFun.compute(inp[self.hidden_end_index:, :])
 
         return act[self.hidden_end_index:]
@@ -212,7 +212,7 @@ class ChaosNet:
     def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
         self.links = links.copy()
         self.weights = weights.copy()
-        self.bias = biases.copy()
+        self.biases = biases.copy()
         self.aggrFun = aggrFun.copy()
 
         self.actFuns = []
@@ -239,6 +239,21 @@ class ChaosNet:
         ones = list(np.where(col_sum == 1)[0])
         ones.extend(list(range(self.hidden_start_index)))
         return ones
+
+    def get_indices_of_connected_neurons(self):#TODO can this be faster?
+        connected_neurons = []
+        with_input = self.get_indices_of_neurons_with_input()
+
+        for i in with_input:
+            connected_neurons.append(i)
+
+        with_output = self.get_indices_of_neurons_with_output()
+        for i in with_output:
+            if i not in connected_neurons:
+                connected_neurons.append(i)
+
+        return connected_neurons
+
 
     def get_indices_of_used_neurons(self):
         no_output = self.get_indices_of_no_output_neurons()
@@ -283,7 +298,7 @@ class ChaosNet:
                 actFuns.append(self.actFuns[i].copy())
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
-                        links=self.links.copy(), biases=self.bias.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy())
+                        links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy())
 
     def calculate_distance_from_input(self):
         touched = []

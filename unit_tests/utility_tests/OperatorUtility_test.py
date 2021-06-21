@@ -52,7 +52,7 @@ def test_neuron_increase():
                                                     [0 , 0, 0, 0, 0, 0, 0],
                                                     [0 , 0, 0, 0, 0, 0, 0]])))
 
-    assert np.all(np.isclose(cn2.bias, np.array([[0., -2, -3, -0.54751109, -1.92308629, -4, -5]])))
+    assert np.all(np.isclose(cn2.biases, np.array([[0., -2, -3, -0.54751109, -1.92308629, -4, -5]])))
 
     assert np.array_equal(cn2.inp, np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     assert np.array_equal(cn2.act, np.array([[0., 0., 0., 0., 0., 0., 0.]]))
@@ -115,7 +115,7 @@ def test_neuron_decrease():
                                                     [0, 0, 0, 0],
                                                     [0, 0, 0, 0.]])))
 
-    assert np.all(np.isclose(cn2.bias, np.array([[0., -4, -5, -6]])))
+    assert np.all(np.isclose(cn2.biases, np.array([[0., -4, -5, -6]])))
 
     assert np.array_equal(cn2.inp, np.array([[0., 0., 0., 0.]]))
     assert np.array_equal(cn2.act, np.array([[0., 0., 0., 0.]]))

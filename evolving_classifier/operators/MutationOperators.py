@@ -29,9 +29,9 @@ class SimpleCNMutation(MutationOperator):
         probs = np.random.random((1, point.neuron_count))
         change = np.zeros(probs.shape)
         change[np.where(probs <= pm)] = 1
-        bia_move = np.random.normal(0, radius, point.bias.shape)
+        bia_move = np.random.normal(0, radius, point.biases.shape)
         bia_move = np.multiply(change, bia_move)
-        point.bias += bia_move
+        point.biases += bia_move
 
         point.hidden_comp_order = None
         if random.random() <= pm:
@@ -57,9 +57,10 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         probs = np.random.random((1, point.neuron_count))
         change = np.zeros(probs.shape)
         change[np.where(probs <= pm)] = 1
-        bia_move = np.random.normal(0, radius, point.bias.shape)
+        change[0, :point.input_size] = 0
+        bia_move = np.random.normal(0, radius, point.biases.shape)
         bia_move = np.multiply(change, bia_move)
-        point.bias += bia_move
+        point.biases += bia_move
 
         if random.random() <= pm * radius: #TODO radius can be larger than 1
             point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))

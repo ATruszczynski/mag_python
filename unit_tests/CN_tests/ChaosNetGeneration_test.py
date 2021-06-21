@@ -17,7 +17,7 @@ def test_cn_generation():
     assert np.all(np.isclose(nets[0].weights, np.array([[0, 0, -0.91773893],
                                                         [0, 0, -0.78179623],
                                                         [0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(nets[0].bias, np.array([[0, 0, 4.10972096]]), atol=1e-5))
+    assert np.all(np.isclose(nets[0].biases, np.array([[0, 0, 4.10972096]]), atol=1e-5))
     assert len(nets[0].actFuns) == 3
     assert nets[0].actFuns[0] is None
     assert nets[0].actFuns[1] is None
@@ -38,7 +38,7 @@ def test_cn_generation():
                                                         [0, 0, 0.32327473, 0, 0.39699364, 0.2487557],
                                                         [0, 0, 0.58691297, 0.96277274, 0, -0.68333513],
                                                         [0, 0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(nets[1].bias, np.array([[0, 0, -5.97746074, 5.44356359, 0.04376756, 5.26342884]]), atol=1e-5))
+    assert np.all(np.isclose(nets[1].biases, np.array([[0, 0, -5.97746074, 5.44356359, 0.04376756, 5.26342884]]), atol=1e-5))
     assert len(nets[1].actFuns) == 6
     assert nets[1].actFuns[0] is None
     assert nets[1].actFuns[1] is None

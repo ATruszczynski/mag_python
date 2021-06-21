@@ -42,7 +42,7 @@ def test_CN_copy():
                                                  [0, 0, 0, 0, 0, 0, 0.5],
                                                  [0, 0, 0, 0, 0, 0, 0],
                                                  [0, 0, 0, 0, 0, 0, 0]]))
-    assert np.array_equal(net.bias, np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]]))
+    assert np.array_equal(net.biases, np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]]))
     assert len(net.actFuns) == 7
     assert net.actFuns[0] is None
     assert net.actFuns[1] is None
@@ -71,7 +71,7 @@ def test_CN_copy():
                                                  [0, 0, 0, 0, 0, 0, 0.5],
                                                  [0, 0, 0, 0, 0, 0, 0],
                                                  [0, 0, 0, 0, 0, 0, 0]]))
-    assert np.array_equal(net2.bias, np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]]))
+    assert np.array_equal(net2.biases, np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]]))
     assert np.array_equal(net2.inp, np.array([[0, 0, 0, 0, 0, 0, 0]]))
     assert np.array_equal(net2.act, np.array([[0, 0, 0, 0, 0, 0, 0]]))
     assert len(net2.actFuns) == 7

@@ -192,8 +192,8 @@ def test_generate_population_limits():
         assert links.shape[1] == net.neuron_count
         assert net.weights.shape[0] == net.neuron_count
         assert net.weights.shape[1] == net.neuron_count
-        assert net.bias.shape[0] == 1
-        assert net.bias.shape[1] == net.neuron_count
+        assert net.biases.shape[0] == 1
+        assert net.biases.shape[1] == net.neuron_count
 
         non_zero_ind = np.where(links != 0)
 
@@ -207,9 +207,9 @@ def test_generate_population_limits():
         assert np.max(weights) == 0
         assert np.min(weights) == 0
 
-        for j in range(net.bias.shape[1]):
-            if not np.isnan(net.bias[0, j]):
-                all_biases.append(net.bias[0, j])
+        for j in range(net.biases.shape[1]):
+            if not np.isnan(net.biases[0, j]):
+                all_biases.append(net.biases[0, j])
 
         for ind in range(len(non_zero_ind[0])):
             r = non_zero_ind[0][ind]

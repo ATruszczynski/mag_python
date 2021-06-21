@@ -51,7 +51,7 @@ def test_simple_crossover():
                                                     [0, 7, 0, 0, 40],
                                                     [0, 0, 0, 0, 0],
                                                     [0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(cn3.bias, np.array([[-1., -2, -3, -4, -50]]), atol=1e-5))
+    assert np.all(np.isclose(cn3.biases, np.array([[-1., -2, -3, -4, -50]]), atol=1e-5))
     assert cn3.actFuns[0] is None
     assert cn3.actFuns[1].to_string() == ReLu().to_string()
     assert cn3.actFuns[2].to_string() == ReLu().to_string()
@@ -74,7 +74,7 @@ def test_simple_crossover():
                                                     [0, 0, 0, 30, 6],
                                                     [0, 0, 0, 0, 0],
                                                     [0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(cn4.bias, np.array([[-10., -20, -30, -40, -5]]), atol=1e-5))
+    assert np.all(np.isclose(cn4.biases, np.array([[-10., -20, -30, -40, -5]]), atol=1e-5))
     assert cn4.actFuns[0] is None
     assert cn4.actFuns[1].to_string() == TanH().to_string()
     assert cn4.actFuns[2].to_string() == TanH().to_string()
@@ -133,7 +133,7 @@ def test_simple_crossover_2():
                                                     [0,  7,  0,  30, 40],
                                                     [0,  0,  0,  0,  0 ],
                                                     [0,  0,  0,  0,  0 ]]), atol=1e-5))
-    assert np.all(np.isclose(cn3.bias, np.array([[-1., -2, -30, -40, -50]]), atol=1e-5))
+    assert np.all(np.isclose(cn3.biases, np.array([[-1., -2, -30, -40, -50]]), atol=1e-5))
     assert cn3.actFuns[0] is None
     assert cn3.actFuns[1].to_string() == ReLu().to_string()
     assert cn3.actFuns[2].to_string() == TanH().to_string()
@@ -156,7 +156,7 @@ def test_simple_crossover_2():
                                                     [0, 0, 0, 0, 6],
                                                     [0, 0, 0, 0, 0],
                                                     [0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(cn4.bias, np.array([[-10., -20,  -3, -4, -5]]), atol=1e-5))
+    assert np.all(np.isclose(cn4.biases, np.array([[-10., -20, -3, -4, -5]]), atol=1e-5))
     assert cn4.actFuns[0] is None
     assert cn4.actFuns[1].to_string() == TanH().to_string()
     assert cn4.actFuns[2].to_string() == ReLu().to_string()

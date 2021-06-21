@@ -31,9 +31,9 @@ class SimpleCrossoverOperator:
         pointA.links[:, sep:] = pointB.links[:, sep:]
         pointB.links[:, sep:] = tmp
 
-        tmp = pointA.bias[:, sep:].copy()
-        pointA.bias[:, sep:] = pointB.bias[:, sep:]
-        pointB.bias[:, sep:] = tmp
+        tmp = pointA.biases[:, sep:].copy()
+        pointA.biases[:, sep:] = pointB.biases[:, sep:]
+        pointB.biases[:, sep:] = tmp
 
         tmp = pointA.actFuns[sep:]
         pointA.actFuns[sep:] = pointB.actFuns[sep:]
