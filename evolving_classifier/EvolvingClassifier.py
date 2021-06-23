@@ -52,7 +52,7 @@ class EvolvingClassifier:
         self.mut_performed = 0
         self.cross_performed = 0
 
-        self.co = SimpleCrossoverOperator()
+        self.co = SimpleCrossoverOperator(self.hrange)
         self.mo = SimpleCNMutation(self.hrange)
         self.so = TournamentSelection(4)
         self.ff = CNFF()

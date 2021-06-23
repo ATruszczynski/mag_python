@@ -7,8 +7,16 @@ from ann_point.Functions import *
 
 
 class ChaosNet:
+    #TODO remove maxit as default
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun, maxit: int = 1):
         #TODO validation
+
+        assert links.shape[0] == weights.shape[0]
+        assert links.shape[1] == weights.shape[1]
+        assert biases.shape[0] == 1
+        assert biases.shape[1] == weights.shape[1]
+        assert len(actFuns) == biases.shape[1]
+
         self.links = links.copy()
         self.weights = weights.copy()
         self.biases = biases.copy()
@@ -29,6 +37,11 @@ class ChaosNet:
         self.hidden_start_index = self.input_size
         self.hidden_end_index = self.neuron_count - self.output_size
         self.hidden_count = self.hidden_end_index - self.hidden_start_index
+
+        assert self.neuron_count == weights.shape[1]
+        assert weights.shape[1] - input_size - output_size == self.hidden_count
+        assert self.neuron_count == self.links.shape[0]
+        assert self.neuron_count == self.links.shape[1]
 
         self.comp_count = np.zeros(biases.shape)#TODO useless?
         self.hidden_comp_order = None
@@ -230,13 +243,13 @@ class ChaosNet:
     
     def get_indices_of_neurons_with_output(self):
         row_sum = np.sum(self.links, axis=1)
-        ones = list(np.where(row_sum[:self.hidden_end_index] == 1)[0])
+        ones = list(np.where(row_sum[:self.hidden_end_index] > 0)[0])
         ones.extend(list(range(self.hidden_end_index, self.neuron_count)))
         return ones
 
     def get_indices_of_neurons_with_input(self):
         col_sum = np.sum(self.links, axis=0)
-        ones = list(np.where(col_sum == 1)[0])
+        ones = list(np.where(col_sum > 0)[0])
         ones.extend(list(range(self.hidden_start_index)))
         return ones
 

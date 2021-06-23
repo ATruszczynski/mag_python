@@ -341,6 +341,50 @@ def test_get_network_from_point():
     assert np.all(np.isclose(network.biases_mom[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
     assert np.all(np.isclose(network.biases_mom[3], np.array([[0], [0], [0]]), atol=1e-5))
 
+def test_numpy_deep_copy():
+    matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    matrixcp = matrix.copy()
+
+    assert np.array_equal(matrix, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    assert np.array_equal(matrixcp, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+
+    matrix[2, 1] = 80
+    matrix[1, 1] = 50
+    matrix[1, 0] = 40
+
+    assert np.array_equal(matrix, np.array([[1, 2, 3], [40, 50, 6], [7, 80, 9]]))
+    assert np.array_equal(matrixcp, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+
+    matrixcp[0, 1] = 20
+    matrixcp[2, 0] = 70
+
+    assert np.array_equal(matrix, np.array([[1, 2, 3], [40, 50, 6], [7, 80, 9]]))
+    assert np.array_equal(matrixcp, np.array([[1, 20, 3], [4, 5, 6], [70, 8, 9]]))
+
+def test_list_comparison():
+    l1 = [0, 1, 2, 3]
+    l2 = [0, 1, 2, 3]
+    assert compare_lists(l1, l2)
+
+    l2 = [0, 1, 2, 3, 4]
+    assert not compare_lists(l1, l2)
+
+    l2 = [2, 0, 1, 3]
+    assert not compare_lists(l1, l2)
+
+    l2 = []
+    assert not compare_lists(l1, l2)
+
+    l1 = []
+    l2 = [0, 1, 2, 3]
+    assert not compare_lists(l1, l2)
+
+
+
+
+
+
+
 
 # random.seed(1010)
 # np.random.seed(1010)
@@ -403,3 +447,5 @@ def test_get_network_from_point():
 # test_generate_population_limits()
 
 # test_generate_population_limits()
+
+test_list_comparison()

@@ -158,7 +158,7 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()])
     # hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid()])
     return hrange
 
@@ -251,25 +251,14 @@ def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> n
 
     return result
 
-def test_numpy_deep_copy():
-    matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    matrixcp = matrix.copy()
+def compare_lists(l1: [int], l2: [int]):
+    equal = True
+    equal = equal and len(l1) == len(l2)
 
-    assert np.array_equal(matrix, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
-    assert np.array_equal(matrixcp, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    for i in range(len(l1)):
+        equal = equal and l1[i] == l2[i]
 
-    matrix[2, 1] = 80
-    matrix[1, 1] = 50
-    matrix[1, 0] = 40
-
-    assert np.array_equal(matrix, np.array([[1, 2, 3], [40, 50, 6], [7, 80, 9]]))
-    assert np.array_equal(matrixcp, np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
-
-    matrixcp[0, 1] = 20
-    matrixcp[2, 0] = 70
-
-    assert np.array_equal(matrix, np.array([[1, 2, 3], [40, 50, 6], [7, 80, 9]]))
-    assert np.array_equal(matrixcp, np.array([[1, 20, 3], [4, 5, 6], [70, 8, 9]]))
+    return equal
 
 
 

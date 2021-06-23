@@ -30,11 +30,11 @@ if __name__ == '__main__':
     # ec.hrange.hiddenLayerCountMin = 0
     # ec.hrange.hiddenLayerCountMax = 0
     # ec.hrange.neuronCountMax = 10
-    ec.co = SimpleCrossoverOperator()
+    ec.co = SimpleCrossoverOperator(ec.hrange)
     ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(4)
-    ec.ff = CNFF2(ChebyshevLoss())
-    ec.ff = CNFF()
+    ec.ff = CNFF2(QuadDiff())
+    # ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
     # ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
     ec.prepare(250, 250, (x, y), 10, 1542)

@@ -22,7 +22,7 @@ def get_point():
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0]])
     bias = np.array([[0, 0, 0.5, 0.5, 0.5, -0.5]])
-    actFuns = [None, None, Sigmoid(), None, None]
+    actFuns = [None, None, Sigmoid(), None, None, None]
     cn = ChaosNet(input_size=2, output_size=3, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax())
 
     return cn

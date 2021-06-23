@@ -9,7 +9,7 @@ from evolving_classifier.operators.SelectionOperator import *
 def test_determinism(): #TODO this is (was?) broken
     ec = EvolvingClassifier()
 
-    ec.co = SimpleCrossoverOperator()
+    ec.co = SimpleCrossoverOperator(ec.hrange)
     ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(2)
     ec.ff = CNFF()

@@ -102,8 +102,11 @@ def inflate_network(net: ChaosNet, to_add: int):
         af = new_actFun[net.input_size + i]
         new_actFun.append(af.copy())
 
+    for i in range(net.hidden_end_index, net.neuron_count):
+        new_actFun.append(None)
+
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy())
+                    biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=2)
 
 def deflate_network(net: ChaosNet):
     ind_to_preserve = net.get_indices_of_connected_neurons()
