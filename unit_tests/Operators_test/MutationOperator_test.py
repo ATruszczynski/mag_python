@@ -8,6 +8,8 @@ from ann_point.Functions import *
 from ann_point.HyperparameterRange import HyperparameterRange
 from evolving_classifier.operators.MutationOperators import *
 from utility.Mut_Utility import *
+from utility.TestingUtility import compare_chaos_network
+
 
 def test_simple_mutation():
     #TODO fix with it changes
@@ -35,25 +37,16 @@ def test_simple_mutation():
 
     mutant = mo.mutate(cn1, pm=0.75, radius=1)
 
-    assert np.array_equal(mutant.links, link1)
-    assert np.all(np.isclose(mutant.weights, np.array([[0, 1.54176999, 1.47983043, 0, 5.20238865],
-                                                       [0, 0, 2.875572, 0, 5.43418561],
-                                                       [0, 5.39956767, 0, 0, 5.97519725],
-                                                       [0, 0, 0, 0, 0],
-                                                       [0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(mutant.biases, np.array([[-1, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]), atol=1e-5))
-    assert mutant.actFuns[0] is None
-    assert mutant.actFuns[1].to_string() == ReLu().to_string()
-    assert mutant.actFuns[2].to_string() == ReLu().to_string()
-    assert mutant.actFuns[3].to_string() == Sigmoid().to_string()
-    assert mutant.actFuns[4].to_string() == Sigmoid().to_string()
-    assert mutant.aggrFun.to_string() == TanH().to_string()
-
-    assert mutant.hidden_comp_order is None
-
-    assert mutant.aggrFun.to_string() == TanH().to_string()
-
-    assert mutant.maxit == 2
+    compare_chaos_network(mutant, desired_links=link1,
+                                  desired_weights=np.array([[0, 1.54176999, 1.47983043, 0, 5.20238865],
+                                                            [0, 0, 2.875572, 0, 5.43418561],
+                                                            [0, 5.39956767, 0, 0, 5.97519725],
+                                                            [0, 0, 0, 0, 0],
+                                                            [0, 0, 0, 0, 0]]),
+                                  desired_biases=np.array([[-1, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]),
+                                  desired_actFun=[None, ReLu(), ReLu(), Sigmoid(), Sigmoid()], #TODO ten test nie ma None'ów na końcu
+                                  desired_aggr=TanH(),
+                                  desired_maxit=2)
 
 def test_struct_mutation():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()])
@@ -79,28 +72,37 @@ def test_struct_mutation():
 
     mutant = mo.mutate(cn1, pm=0.75, radius=1)
 
-    assert np.array_equal(mutant.links, np.array([[0, 0, 0, 1, 0],
+    compare_chaos_network(net=cn1,
+                          desired_links=np.array([[0, 1, 1, 0, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 1, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0., 1, 2, 0, 4],
+                                                    [0, 0, 3, 0, 5],
+                                                    [0, 7, 0, 0, 6],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[0., -2, -3, -4, -5]]),
+                          desired_actFun=[None, ReLu(), ReLu(), None, None],
+                          desired_aggr=TanH(),
+                          desired_maxit=2)
+
+    compare_chaos_network(net=mutant,
+                          desired_links=np.array([[0, 0, 0, 1, 0],
                                                   [0, 0, 1, 1, 0],
                                                   [0, 0, 0, 1, 0],
                                                   [0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0]]))
-    assert np.all(np.isclose(mutant.weights, np.array([[0, 0, 0, 1.06135843, 0],
-                                                       [0, 0, 2.875572, 3.00067462, 0],
-                                                       [0, 0, 0, 3.67703328, 0],
-                                                       [0, 0, 0, 0, 0],
-                                                       [0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(mutant.biases, np.array([[0, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]), atol=1e-5))
-    assert len(mutant.actFuns) == 5
-    assert mutant.actFuns[0] is None
-    assert mutant.actFuns[1].to_string() == Sigmoid().to_string()
-    assert mutant.actFuns[2].to_string() == ReLu().to_string()
-    assert mutant.actFuns[3] is None
-    assert mutant.actFuns[4] is None
-    assert mutant.aggrFun.to_string() == Sigmoid().to_string()
-
-    assert mutant.hidden_comp_order is None
-
-    assert mutant.maxit == 2
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0, 1.06135843, 0],
+                                                    [0, 0, 2.875572, 3.00067462, 0],
+                                                    [0, 0, 0, 3.67703328, 0],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[0, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]),
+                          desired_actFun=[None, Sigmoid(), ReLu(), None, None],
+                          desired_aggr=Sigmoid(),
+                          desired_maxit=2)
 
 def test_struct_mutation_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()])
@@ -122,38 +124,47 @@ def test_struct_mutation_2():
     bia1 = np.array([[0., -2, -3, -4, -5]])
     actFuns1 = [None, ReLu(), ReLu(), None, None]
 
-    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=2)
+    cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1, aggrFun=TanH(), maxit=2)
 
     mutant = mo.mutate(cn1, pm=0.75, radius=1)
 
-    assert np.array_equal(mutant.links, np.array([[0., 1., 0., 1., 0., 1., 0.],
+
+    compare_chaos_network(net=cn1,
+                          desired_links=np.array([[0, 1, 1, 0, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 1, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0., 1, 2, 0, 4],
+                                                    [0, 0, 3, 0, 5],
+                                                    [0, 7, 0, 0, 6],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[0., -2, -3, -4, -5]]),
+                          desired_actFun=[None, ReLu(), ReLu(), None, None],
+                          desired_aggr=TanH(),
+                          desired_maxit=2)
+
+    compare_chaos_network(net=mutant,
+                          desired_links=np.array([[0., 1., 0., 1., 0., 1., 0.],
                                                   [0., 0., 1., 0., 0., 1., 0.],
                                                   [0., 0., 0., 0., 0., 0., 1.],
                                                   [0., 0., 1., 0., 1., 0., 0.],
                                                   [0., 0., 1., 0., 0., 1., 1.],
                                                   [0., 0., 0., 0., 0., 0., 0.],
-                                                  [0., 0., 0., 0., 0., 0., 0.]]))
-    assert np.all(np.isclose(mutant.weights, np.array([[-0.,          0.62183713,  0.,          0.02160549,  0.,          4.87977554, 0.        ],
-                                                       [ 0.,          0.,          3.,          0.,          0.,          5.12118995, 0.        ],
-                                                      [-0.,          0.,         -0.,          0.,          0.,         -0.,          5.67832716],
-                                                    [ 0.,          0.,          0.99854234,  0.,          4.3555107,   0., 0.,        ],
-                                                    [ 0.,          0.,          2.04770976,  0.,          0.,          1.4909221, 2.79087538],
-                                                    [ 0.,          0.,          0.,          0.,          0.,          0., 0.        ],
-                                                    [ 0.,          0.,          0.,          0.,          0.,          0., 0.        ]]), atol=1e-5))
-    assert np.all(np.isclose(mutant.biases, np.array([[0., -2., -1.42185604, -3.89839703, -4.75626278, -4., -5.]]), atol=1e-5))
-    assert len(mutant.actFuns) == 7
-    assert mutant.actFuns[0] is None
-    assert mutant.actFuns[1].to_string() == GaussAct().to_string()
-    assert mutant.actFuns[2].to_string() == GaussAct().to_string()
-    assert mutant.actFuns[3].to_string() == ReLu().to_string()
-    assert mutant.actFuns[4].to_string() == GaussAct().to_string()
-    assert mutant.actFuns[5] is None
-    assert mutant.actFuns[6] is None
-    assert mutant.aggrFun.to_string() == GaussAct().to_string()
+                                                  [0., 0., 0., 0., 0., 0., 0.]]),
+                          desired_weights=np.array([[-0.,0.62183713,  0.,          0.02160549,  0.,          4.87977554, 0.        ],
+                                                    [ 0.,0.,          3.,          0.,          0.,          5.12118995, 0.        ],
+                                                    [-0.,0.,         -0.,          0.,          0.,         -0.,         5.67832716],
+                                                    [ 0.,0.,          0.99854234,  0.,          4.3555107,   0.,         0.,        ],
+                                                    [ 0.,0.,          2.04770976,  0.,          0.,          1.4909221,  2.79087538],
+                                                    [ 0.,0.,          0.,          0.,          0.,          0.,         0.        ],
+                                                    [ 0.,0.,          0.,          0.,          0.,          0.,         0.        ]]),
+                          desired_biases=np.array([[0., -2., -1.42185604, -3.89839703, -4.75626278, -4., -5.]]),
+                          desired_actFun=[None, GaussAct(), GaussAct(), ReLu(), GaussAct(), None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=4)
 
-    assert mutant.hidden_comp_order is None
-
-    assert mutant.maxit == 4
 
 
 def test_struct_mutation_3():
@@ -180,6 +191,48 @@ def test_struct_mutation_3():
 
     mutant = mo.mutate(cn1, pm=0.75, radius=1)
 
+
+    assert np.array_equal(cn1.links, np.array([[0, 0, 1, 1, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 0, 0, 1, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 0, 0, 0, 0]]))
+    assert np.all(np.isclose(cn1.weights, np.array([[0, 0, 1, 4, 6],
+                                                       [0, 0, 2, 0, 7],
+                                                       [0, 0, 0, 5, 8],
+                                                       [0, 0, 3, 0, 9],
+                                                       [0, 0, 0, 0, 0.]]), atol=1e-5))
+    assert np.all(np.isclose(cn1.biases, np.array([[0., 0, -3, -4, -5]]), atol=1e-5))
+    assert len(cn1.actFuns) == 5
+    assert cn1.actFuns[0] is None
+    assert cn1.actFuns[1] is None
+    assert cn1.actFuns[2].to_string() == ReLu().to_string()
+    assert cn1.actFuns[3].to_string() == ReLu().to_string()
+    assert cn1.actFuns[4] is None
+    assert cn1.aggrFun.to_string() == TanH().to_string()
+
+    assert cn1.hidden_comp_order is None
+
+    assert cn1.maxit == 4
+
+
+    compare_chaos_network(net=cn1,
+                          desired_links=np.array([[0, 0, 1, 1, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 0, 0, 1, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 1, 4, 6],
+                                                    [0, 0, 2, 0, 7],
+                                                    [0, 0, 0, 5, 8],
+                                                    [0, 0, 3, 0, 9],
+                                                    [0, 0, 0, 0, 0.]]),
+                          desired_biases=np.array([[0., 0, -3, -4, -5]]),
+                          desired_actFun=[None, None, ReLu(), ReLu(), None],
+                          desired_aggr=TanH(),
+                          desired_maxit=4)
+
+
     assert np.array_equal(mutant.links, np.array([[0, 0, 0],
                                                   [0, 0, 1],
                                                   [0, 0, 0]]))
@@ -196,6 +249,19 @@ def test_struct_mutation_3():
     assert mutant.hidden_comp_order is None
 
     assert mutant.maxit == 2
+
+
+    compare_chaos_network(net=mutant,
+                          desired_links=np.array([[0, 0, 0],
+                                                  [0, 0, 1],
+                                                  [0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0],
+                                                    [0, 0, 6.2377573],
+                                                    [0, 0, 0]]),
+                          desired_biases=np.array([[0., 0., -5.]]),
+                          desired_actFun=[None, None, None],
+                          desired_aggr=TanH(),
+                          desired_maxit=2)
 
 
 
@@ -322,6 +388,6 @@ print(f"biases: \n {biases}")
 
 # test_struct_mutation()
 # test_struct_mutation_2()
-test_struct_mutation_3()
+# test_struct_mutation_3()
 
 

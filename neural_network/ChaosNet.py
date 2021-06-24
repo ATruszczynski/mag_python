@@ -311,7 +311,7 @@ class ChaosNet:
                 actFuns.append(self.actFuns[i].copy())
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
-                        links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy())
+                        links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy(), maxit=self.maxit)
 
     def calculate_distance_from_input(self):
         touched = []

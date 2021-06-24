@@ -3,6 +3,8 @@ from ann_point.Functions import *
 from ann_point.AnnPoint2 import *
 from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
+from utility.TestingUtility import compare_chaos_network
+
 
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()])
@@ -43,49 +45,79 @@ def test_simple_crossover():
     np.random.seed(1002)
     cn3, cn4 = co.crossover(cn1, cn2)
 
-    assert np.array_equal(cn3.links, np.array([[0, 1, 1, 0, 0],
-                                               [0, 0, 1, 1, 0],
-                                               [0, 1, 0, 1, 1],
-                                               [0, 0, 0, 0, 0],
-                                               [0, 0, 0, 0, 0]]))
-    assert np.all(np.isclose(cn3.weights, np.array([[0, 1, 2, 0, 0],
+
+
+    ##################################################################
+
+    compare_chaos_network(net=cn1,
+                          desired_links=np.array([[0, 1, 1, 0, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 1, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0., 1, 2, 0, 4],
+                                                    [0 , 0, 3, 0, 5],
+                                                    [0 , 7, 0, 0, 6],
+                                                    [0 , 0, 0, 0, 0],
+                                                    [0 , 0, 0, 0, 0]]),
+                          desired_biases=np.array([[-1., -2, -3, -4, -5]]),
+                          desired_actFun=[None, ReLu(), ReLu(), None, None],
+                          desired_aggr=SincAct(),
+                          desired_maxit=2)
+    #TODO biasy tu są źle
+    ##################################################################
+
+    compare_chaos_network(net=cn2,
+                          desired_links=np.array([[0, 0, 0, 0, 0],
+                                                  [0, 0, 1, 1, 0],
+                                                  [0, 0, 0, 1, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0,  0,  0],
+                                                    [0, 0, 10, 20, 0],
+                                                    [0, 0, 0,  30, 40],
+                                                    [0, 0, 0,  0,  0],
+                                                    [0, 0, 0,  0,  0]]),
+                          desired_biases=np.array([[-10, -20, -30, -40, -50]]),
+                          desired_actFun=[None, TanH(), TanH(), None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=5)
+
+    ##################################################################
+
+    compare_chaos_network(net=cn3,
+                          desired_links=np.array([[0, 1, 1, 0, 0],
+                                                  [0, 0, 1, 1, 0],
+                                                  [0, 1, 0, 1, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 1, 2, 0, 0],
                                                     [0, 0, 3, 20, 0],
                                                     [0, 7, 0, 30, 40],
                                                     [0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(cn3.biases, np.array([[-1., -2, -3, -40, -50]]), atol=1e-5))
-    assert cn3.actFuns[0] is None
-    assert cn3.actFuns[1].to_string() == ReLu().to_string()
-    assert cn3.actFuns[2].to_string() == ReLu().to_string()
-    assert cn3.actFuns[3] is None
-    assert cn3.actFuns[4] is None
+                                                    [0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[-1., -2, -3, -40, -50]]),
+                          desired_actFun=[None, ReLu(), ReLu(), None, None],
+                          desired_aggr=SincAct(),
+                          desired_maxit=5)
 
-    assert cn3.aggrFun.to_string() == SincAct().to_string()
-    assert cn3.hidden_comp_order is None
-    assert cn3.maxit == 5
+    ##################################################################
 
-
-
-    assert np.array_equal(cn4.links, np.array([[0, 0, 0, 0, 1],
-                                               [0, 0, 1, 0, 1],
-                                               [0, 0, 0, 0, 1],
-                                               [0, 0, 0, 0, 0],
-                                               [0, 0, 0, 0, 0]]))
-    assert np.all(np.isclose(cn4.weights, np.array([[0, 0, 0,  0, 4],
+    compare_chaos_network(net=cn4,
+                          desired_links=np.array([[0, 0, 0, 0, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 0, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0,  0, 4],
                                                     [0, 0, 10, 0, 5],
                                                     [0, 0, 0,  0, 6],
                                                     [0, 0, 0,  0, 0],
-                                                    [0, 0, 0,  0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(cn4.biases, np.array([[-10., -20, -30, -4, -5]]), atol=1e-5))
-    assert cn4.actFuns[0] is None
-    assert cn4.actFuns[1].to_string() == TanH().to_string()
-    assert cn4.actFuns[2].to_string() == TanH().to_string()
-    assert cn4.actFuns[3] is None
-    assert cn4.actFuns[4] is None
-
-    assert cn4.aggrFun.to_string() == GaussAct().to_string()
-    assert cn4.hidden_comp_order is None
-    assert cn4.maxit == 2
+                                                    [0, 0, 0,  0, 0]]),
+                          desired_biases=np.array([[-10., -20, -30, -4, -5]]),
+                          desired_actFun=[None, TanH(), TanH(), None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=2)
 
 
 def test_simple_crossover_2():
@@ -127,48 +159,76 @@ def test_simple_crossover_2():
     np.random.seed(seed)
     cn3, cn4 = co.crossover(cn1, cn2)
 
-    assert np.array_equal(cn3.links, np.array([[0, 1, 0, 0, 0],
-                                               [0, 0, 1, 1, 0],
-                                               [0, 0, 0, 1, 1],
-                                               [0, 0, 0, 0, 0],
-                                               [0, 0, 0, 0, 0]]))
-    assert np.all(np.isclose(cn3.weights, np.array([[0., 1, 0,  0,  0 ],
+
+    ##################################################################
+
+    compare_chaos_network(net=cn1,
+                          desired_links=np.array([[0, 1, 0, 1],
+                                                  [0, 0, 0, 1],
+                                                  [0, 0, 0, 0],
+                                                  [0, 0, 0, 0]]),
+                          desired_weights=np.array([[0., 1, 0, 4],
+                                                    [0 , 0, 0, 5],
+                                                    [0 , 0, 0, 0],
+                                                    [0 , 0, 0, 0]]),
+                          desired_biases=np.array([[-1., -2, -3, -4]]),
+                          desired_actFun=[None, ReLu(), None, None],
+                          desired_aggr=SincAct(),
+                          desired_maxit=2)
+
+    ##################################################################
+
+    compare_chaos_network(net=cn2,
+                          desired_links=np.array([[0, 0, 0, 0, 0],
+                                                  [0, 0, 1, 1, 0],
+                                                  [0, 0, 0, 1, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0,  0,  0 ],
+                                                    [0, 0, 10, 20, 0 ],
+                                                    [0, 0, 0,  30, 40],
+                                                    [0, 0, 0,  0,  0 ],
+                                                    [0, 0, 0,  0,  0.]]),
+                          desired_biases=np.array([[-10, -20, -30, -40, -50]]),
+                          desired_actFun=[None, TanH(), TanH(), None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=5)
+
+    #TODO biasy tu są źle
+
+    ##################################################################
+
+    compare_chaos_network(net=cn3,
+                          desired_links=np.array([[0, 1, 0, 0, 0],
+                                                  [0, 0, 1, 1, 0],
+                                                  [0, 0, 0, 1, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0., 1, 0,  0,  0 ],
                                                     [0,  0,  10, 20, 0 ],
                                                     [0,  0,  0,  30, 40],
                                                     [0,  0,  0,  0,  0 ],
-                                                    [0,  0,  0,  0,  0 ]]), atol=1e-5))
-    assert np.all(np.isclose(cn3.biases, np.array([[-1., -2, -30, -40, -50]]), atol=1e-5))
-    assert len(cn3.actFuns) == 5
-    assert cn3.actFuns[0] is None
-    assert cn3.actFuns[1].to_string() == ReLu().to_string()
-    assert cn3.actFuns[2].to_string() == TanH().to_string()
-    assert cn3.actFuns[3] is None
-    assert cn3.actFuns[4] is None
+                                                    [0,  0,  0,  0,  0 ]]),
+                          desired_biases=np.array([[-1., -2, -30, -40, -50]]),
+                          desired_actFun=[None, ReLu(), TanH(), None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=5)
 
-    assert cn3.aggrFun.to_string() == GaussAct().to_string()
-    assert cn3.hidden_comp_order is None
-    assert cn3.maxit == 5
+    ###################################################################
 
-
-
-    assert np.array_equal(cn4.links, np.array([[0, 0, 0, 1],
-                                               [0, 0, 0, 1],
-                                               [0, 0, 0, 0],
-                                               [0, 0, 0, 0]]))
-    assert np.all(np.isclose(cn4.weights, np.array([[0, 0, 0, 4],
+    compare_chaos_network(net=cn4,
+                          desired_links=np.array([[0, 0, 0, 1],
+                                                  [0, 0, 0, 1],
+                                                  [0, 0, 0, 0],
+                                                  [0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0, 4],
                                                     [0, 0, 0, 5],
                                                     [0, 0, 0, 0],
-                                                    [0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(cn4.biases, np.array([[-10., -20, -3, -4]]), atol=1e-5))
-    assert len(cn4.actFuns) == 4
-    assert cn4.actFuns[0] is None
-    assert cn4.actFuns[1].to_string() == TanH().to_string()
-    assert cn4.actFuns[2] is None
-    assert cn4.actFuns[3] is None
-
-    assert cn4.aggrFun.to_string() == SincAct().to_string()
-    assert cn4.hidden_comp_order is None
-    assert cn4.maxit == 2
+                                                    [0, 0, 0, 0]]),
+                          desired_biases=np.array([[-10., -20, -3, -4]]),
+                          desired_actFun=[None, TanH(), None, None],
+                          desired_aggr=SincAct(),
+                          desired_maxit=2)
 
 
 # link1 = np.array([[0, 1, 0, 1],

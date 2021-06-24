@@ -42,12 +42,14 @@ if __name__ == '__main__':
     # ec.hrange.neuronCountMax = 10
     ec.co = SimpleCrossoverOperator(ec.hrange)
     ec.mo = SimpleAndStructuralCNMutation(ec.hrange, 5)
-    ec.so = TournamentSelection(4)
+    ec.so = TournamentSelection(2)
     ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
+    ec.hrange.min_hidden = 10
+    ec.hrange.max_hidden = 20
     ec.hco = HillClimbBackpropMutationOperator(1, 100, train_x, train_y)
     ec.prepare(250, 250, (train_x, train_y, test_x, test_y), 50, 1542)
-    network = ec.run(iterations=20, pm=0.05, pc=0.8, power=12)
+    network = ec.run(iterations=200, pm=0.02, pc=0.8, power=12)
     print(network.links)
     print(network.weights)
     print(network.maxit)

@@ -116,11 +116,11 @@ class EvolvingClassifier:
 
             new_pop = []
 
-            mut_rad = 1
+            mut_rad = 0.1
 
             for ind in range(len(crossed)):
                 # new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))
-                new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad * (1 - mean_eff)**2))
+                new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))
 
 
             self.population = new_pop

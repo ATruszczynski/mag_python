@@ -31,6 +31,7 @@ class SimpleCNMutation(MutationOperator):
         change[np.where(probs <= pm)] = 1
         bia_move = np.random.normal(0, radius, point.biases.shape)
         bia_move = np.multiply(change, bia_move)
+        bia_move[0, :point.input_size] = 0
         point.biases += bia_move
 
         point.hidden_comp_order = None
@@ -46,6 +47,8 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         self.maxhjump = maxhjump
 
     def mutate(self, point: ChaosNet, pm: float, radius: float) -> ChaosNet:
+        point = point.copy()
+
         probs = np.random.random(point.weights.shape)
         change = np.zeros(point.weights.shape)
         change[np.where(probs <= pm)] = 1
@@ -66,7 +69,7 @@ class SimpleAndStructuralCNMutation(MutationOperator):
             point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 
         probs = np.random.random(point.links.shape)
-        to_change = np.where(probs <= pm)
+        to_change = np.where(probs <= pm * radius)
         new_links = point.links.copy()
         new_links[to_change] = 1 - new_links[to_change]
         new_links[:, :point.input_size] = 0
@@ -97,7 +100,10 @@ class SimpleAndStructuralCNMutation(MutationOperator):
             point = change_neuron_count(point, self.hrange, try_choose_different(point.hidden_count, options))
 
         point.hidden_comp_order = None
-        return point
+
+        # point = ChaosNet(point.input_size, point.output_size, links=point.links, weights=point.weights, biases=point.biases,
+        #                  actFuns=point.actFuns, aggrFun=point.aggrFun, maxit=point.maxit)
+        return point.copy()
 
 #
 # class SimpleMutationOperator():
