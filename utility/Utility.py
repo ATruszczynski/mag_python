@@ -104,7 +104,13 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         aggrFun = hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)]
         maxit = random.randint(hrange.min_it, hrange.max_it)
 
-        result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights, biases=biases, actFuns=actFuns, aggrFun=aggrFun, maxit=maxit))
+        mut_radius = random.uniform(hrange.min_mut_radius, hrange.max_mut_radius)
+        wb_mut_prob = random.uniform(hrange.min_wb_mut_prob, hrange.max_wb_mut_prob)
+        s_mut_prob = random.uniform(hrange.min_s_mut_prob, hrange.max_s_mut_prob)
+
+        result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
+                               biases=biases, actFuns=actFuns, aggrFun=aggrFun, maxit=maxit, mutation_radius=mut_radius,
+                               wb_mutation_prob=wb_mut_prob, s_mutation_prob=s_mut_prob))
 
     return result
 
@@ -158,7 +164,8 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], mut_radius=(0, 2),
+                                 wb_mut_prob=(0, 0.25), s_mut_prob=(0, 0.25))
     # hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid()])
     return hrange
 

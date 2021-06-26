@@ -2,6 +2,9 @@ from ann_point.Functions import ReLu
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
+from utility.TestingUtility import compare_chaos_network
+
+
 def test_cn_comp_order():
     links = np.array([[0, 0, 0, 1, 0, 0],
                       [0, 0, 1, 0, 0, 0],
@@ -10,13 +13,37 @@ def test_cn_comp_order():
                       [0, 0, 0, 0, 0, 1],
                       [0, 0, 0, 0, 0, 0]])
     biases = np.array([[0, 0, 0, 0, 0, 0]])
-    cn = ChaosNet(input_size=2, output_size=1, links=links, weights=links, biases=biases, actFuns=6 *[None], aggrFun=ReLu())
+    cn = ChaosNet(input_size=2, output_size=1, links=links, weights=links, biases=biases, actFuns=6 *[None], aggrFun=ReLu(),
+                  maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
     cn.get_comp_order()
 
-    assert len(cn.hidden_comp_order) == 3
-    assert cn.hidden_comp_order[0] == 2
-    assert cn.hidden_comp_order[1] == 3
-    assert cn.hidden_comp_order[2] == 4
+    compare_chaos_network(net=cn,
+                          desired_input_size=2,
+                          desited_output_size=1,
+                          desired_neuron_count=6,
+                          desired_hidden_start_index=2,
+                          desired_hidden_end_index=5,
+                          desired_hidden_count=3,
+                          desired_links=np.array([[0, 0, 0, 1, 0, 0],
+                                                  [0, 0, 1, 0, 0, 0],
+                                                  [0, 0, 0, 1, 1, 0],
+                                                  [0, 0, 0, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0, 1, 0, 0],
+                                                    [0, 0, 1, 0, 0, 0],
+                                                    [0, 0, 0, 1, 1, 0],
+                                                    [0, 0, 0, 0, 0, 1],
+                                                    [0, 0, 0, 0, 0, 1],
+                                                    [0, 0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[0, 0, 0, 0, 0, 0]]),
+                          desired_actFun=[None, None, None, None, None, None],
+                          desired_aggr=ReLu(),
+                          desired_maxit=2,
+                          desired_mut_rad=1,
+                          desired_wb_prob=2,
+                          desired_s_prob=3,
+                          desired_hidden_comp_order=[2, 3, 4])
 
 #
 # def test_cn_comp_order_2():
@@ -53,16 +80,44 @@ def test_cn_comp_order_rec():
                       [0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
-    cn = ChaosNet(input_size=2, output_size=2, links=links, weights=links, biases=biases, actFuns=9 *[None], aggrFun=ReLu())
+    cn = ChaosNet(input_size=2, output_size=2, links=links, weights=links, biases=biases, actFuns=9 *[None], aggrFun=ReLu(),
+                  maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
     cn.get_comp_order()
 
-    assert len(cn.hidden_comp_order) == 5
 
-    assert cn.hidden_comp_order[0] == 2
-    assert cn.hidden_comp_order[1] == 4
-    assert cn.hidden_comp_order[2] == 5
-    assert cn.hidden_comp_order[3] == 6
-    assert cn.hidden_comp_order[4] == 3
+    compare_chaos_network(net=cn,
+                          desired_input_size=2,
+                          desited_output_size=2,
+                          desired_neuron_count=9,
+                          desired_hidden_start_index=2,
+                          desired_hidden_end_index=7,
+                          desired_hidden_count=5,
+                          desired_links=np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0, 1, 0, 0, 0],
+                                                  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0, 0, 1, 0, 0],
+                                                  [0, 0, 0, 1, 0, 0, 0, 1, 0],
+                                                  [0, 0, 0, 1, 0, 1, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 1, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0, 1, 0, 0, 0],
+                                                    [0, 0, 0, 0, 1, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0, 0, 1, 0, 0],
+                                                    [0, 0, 0, 1, 0, 0, 0, 1, 0],
+                                                    [0, 0, 0, 1, 0, 1, 0, 0, 1],
+                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+                          desired_actFun=[None, None, None, None, None, None, None, None, None],
+                          desired_aggr=ReLu(),
+                          desired_maxit=2,
+                          desired_mut_rad=1,
+                          desired_wb_prob=2,
+                          desired_s_prob=3,
+                          desired_hidden_comp_order=[2, 4, 5, 6, 3])
 
 
 
@@ -173,9 +228,9 @@ def test_cn_comp_order_rec():
 #
 # test_cn_comp_order()
 
-# test_cn_comp_order()
 # test_cn_comp_order_2()
-test_cn_comp_order_rec()
+# test_cn_comp_order()
+# test_cn_comp_order_rec()
 
 
 

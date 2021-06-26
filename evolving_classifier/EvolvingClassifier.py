@@ -95,6 +95,10 @@ class EvolvingClassifier:
             sorted_eval = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
             # print(sorted_eval[0][0].weights)
             mean_eff = mean([x[1].get_eff() for x in eval_pop])
+            mean_mut_rad = mean([x[0].mutation_radius for x in eval_pop])
+            mean_wb_mut_prob = mean([x[0].wb_mutation_prob for x in eval_pop])
+            mean_s_mut_prob = mean([x[0].s_mutation_prob for x in eval_pop])
+            print(f"mean_mut_rad: {round(mean_mut_rad, 3)}|mean_wb_prob: {round(mean_wb_mut_prob, 3)}|mean_s_prob: {round(mean_s_mut_prob, 3)}")
 
             self.supervisor.check_point(eval_pop, i)
             crossed = []
@@ -120,7 +124,8 @@ class EvolvingClassifier:
 
             for ind in range(len(crossed)):
                 # new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))
-                new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))
+                to_mutate = crossed[ind]
+                new_pop.append(self.mo.mutate(to_mutate, wb_pm=to_mutate.wb_mutation_prob, s_pm=to_mutate.s_mutation_prob, radius=to_mutate.mutation_radius))
 
 
             self.population = new_pop

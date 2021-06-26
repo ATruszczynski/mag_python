@@ -51,7 +51,8 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
     new_af.extend(net.actFuns[net.hidden_end_index:])
 
     return ChaosNet(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit)
+                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
 
 
 def decrease_neuron_count(net: ChaosNet, to_remove: int):
@@ -71,9 +72,10 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
         new_af.append(net.actFuns[ind_to_preserve[0, i]])
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit)
+                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
 
-def inflate_network(net: ChaosNet, to_add: int):
+def inflate_network(net: ChaosNet, to_add: int): #TODO tests missed wrong maxit
     new_neuron_count = net.neuron_count + to_add
 
     new_links = np.zeros((new_neuron_count, new_neuron_count))
@@ -106,7 +108,8 @@ def inflate_network(net: ChaosNet, to_add: int):
         new_actFun.append(None)
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=2)
+                    biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=net.maxit, mutation_radius=net.mutation_radius,
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
 
 def deflate_network(net: ChaosNet):
     ind_to_preserve = net.get_indices_of_connected_neurons()
@@ -121,7 +124,8 @@ def deflate_network(net: ChaosNet):
         new_af.append(net.actFuns[ind_to_preserve[0, i]])
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit)
+                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
 
 
 

@@ -159,7 +159,8 @@ def test_ohe():
 
 #TODO check if weights are properly filtered by lijnks everywhere
 def test_generate_population_limits():
-    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()])
+    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
 
     random.seed(1001)
     n = 200

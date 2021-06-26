@@ -13,7 +13,8 @@ from utility.TestingUtility import compare_chaos_network
 
 def test_simple_mutation():
     #TODO fix with it changes
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
     mo = SimpleCNMutation(hrange)
 
     random.seed(1001)
@@ -32,24 +33,40 @@ def test_simple_mutation():
     bia1 = np.array([[-1., -2, -3, -4, -5]])
     actFuns1 = [None, ReLu(), ReLu(), Sigmoid(), Sigmoid()]
 
-    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=2)
+    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1,
+                   aggrFun=TanH(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
     # cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1, aggrFun=TanH())
 
-    mutant = mo.mutate(cn1, pm=0.75, radius=1)
+    mutant = mo.mutate(cn1, wb_pm=0.75, s_pm=0.75, radius=1)
 
-    compare_chaos_network(mutant, desired_links=link1,
-                                  desired_weights=np.array([[0, 1.54176999, 1.47983043, 0, 5.20238865],
-                                                            [0, 0, 2.875572, 0, 5.43418561],
-                                                            [0, 5.39956767, 0, 0, 5.97519725],
-                                                            [0, 0, 0, 0, 0],
-                                                            [0, 0, 0, 0, 0]]),
-                                  desired_biases=np.array([[-1, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]),
-                                  desired_actFun=[None, ReLu(), ReLu(), Sigmoid(), Sigmoid()], #TODO ten test nie ma None'ów na końcu
-                                  desired_aggr=TanH(),
-                                  desired_maxit=2)
+    compare_chaos_network(mutant,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=5,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=3,
+                          desired_hidden_count=2,
+                          desired_links=np.array([[0, 1, 1, 0, 1],
+                                                  [0, 0, 1, 0, 1],
+                                                  [0, 1, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 1.54176999, 1.47983043, 0, 5.20238865],
+                                                    [0, 0, 2.875572, 0, 5.43418561],
+                                                    [0, 5.39956767, 0, 0, 5.97519725],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[-1, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]),
+                          desired_actFun=[None, ReLu(), ReLu(), Sigmoid(), Sigmoid()], #TODO ten test nie ma None'ów na końcu
+                          desired_aggr=TanH(),
+                          desired_maxit=2,
+                          desired_mut_rad=1,
+                          desired_wb_prob=2,
+                          desired_s_prob=3)
 
 def test_struct_mutation():
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
     mo = SimpleAndStructuralCNMutation(hrange, 2)
 
     random.seed(1001)
@@ -68,11 +85,17 @@ def test_struct_mutation():
     bia1 = np.array([[0., -2, -3, -4, -5]])
     actFuns1 = [None, ReLu(), ReLu(), None, None]
 
-    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=2)
+    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
 
-    mutant = mo.mutate(cn1, pm=0.75, radius=1)
+    mutant = mo.mutate(cn1, wb_pm=0.75, s_pm=0.75, radius=1)
 
     compare_chaos_network(net=cn1,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=5,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=3,
+                          desired_hidden_count=2,
                           desired_links=np.array([[0, 1, 1, 0, 1],
                                                   [0, 0, 1, 0, 1],
                                                   [0, 1, 0, 0, 1],
@@ -86,9 +109,18 @@ def test_struct_mutation():
                           desired_biases=np.array([[0., -2, -3, -4, -5]]),
                           desired_actFun=[None, ReLu(), ReLu(), None, None],
                           desired_aggr=TanH(),
-                          desired_maxit=2)
+                          desired_maxit=2,
+                          desired_mut_rad=1,
+                          desired_wb_prob=2,
+                          desired_s_prob=3)
 
     compare_chaos_network(net=mutant,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=5,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=3,
+                          desired_hidden_count=2,
                           desired_links=np.array([[0, 0, 0, 1, 0],
                                                   [0, 0, 1, 1, 0],
                                                   [0, 0, 0, 1, 0],
@@ -102,10 +134,14 @@ def test_struct_mutation():
                           desired_biases=np.array([[0, -1.14810728, -3.75488531, -6.28762932, -4.89076131]]),
                           desired_actFun=[None, Sigmoid(), ReLu(), None, None],
                           desired_aggr=Sigmoid(),
-                          desired_maxit=2)
+                          desired_maxit=2,
+                          desired_mut_rad=0.37447,
+                          desired_wb_prob=0.070046,
+                          desired_s_prob=0.6607793)
 
 def test_struct_mutation_2():
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
     mo = SimpleAndStructuralCNMutation(hrange, 2)
 
     random.seed(1003)
@@ -124,12 +160,18 @@ def test_struct_mutation_2():
     bia1 = np.array([[0., -2, -3, -4, -5]])
     actFuns1 = [None, ReLu(), ReLu(), None, None]
 
-    cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1, aggrFun=TanH(), maxit=2)
+    cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1, aggrFun=TanH(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
 
-    mutant = mo.mutate(cn1, pm=0.75, radius=1)
+    mutant = mo.mutate(cn1, wb_pm=0.75, s_pm=0.75, radius=1)
 
 
     compare_chaos_network(net=cn1,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=5,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=3,
+                          desired_hidden_count=2,
                           desired_links=np.array([[0, 1, 1, 0, 1],
                                                   [0, 0, 1, 0, 1],
                                                   [0, 1, 0, 0, 1],
@@ -143,9 +185,18 @@ def test_struct_mutation_2():
                           desired_biases=np.array([[0., -2, -3, -4, -5]]),
                           desired_actFun=[None, ReLu(), ReLu(), None, None],
                           desired_aggr=TanH(),
-                          desired_maxit=2)
+                          desired_maxit=2,
+                          desired_mut_rad=1,
+                          desired_wb_prob=2,
+                          desired_s_prob=3)
 
     compare_chaos_network(net=mutant,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=7,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=5,
+                          desired_hidden_count=4,
                           desired_links=np.array([[0., 1., 0., 1., 0., 1., 0.],
                                                   [0., 0., 1., 0., 0., 1., 0.],
                                                   [0., 0., 0., 0., 0., 0., 1.],
@@ -163,12 +214,16 @@ def test_struct_mutation_2():
                           desired_biases=np.array([[0., -2., -1.42185604, -3.89839703, -4.75626278, -4., -5.]]),
                           desired_actFun=[None, GaussAct(), GaussAct(), ReLu(), GaussAct(), None, None],
                           desired_aggr=GaussAct(),
-                          desired_maxit=4)
+                          desired_maxit=4,
+                          desired_mut_rad=1,
+                          desired_wb_prob=0.075295,
+                          desired_s_prob=0.669351)
 
 
 
 def test_struct_mutation_3():
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()])
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
     mo = SimpleAndStructuralCNMutation(hrange, 2)
 
     random.seed(1004)
@@ -187,36 +242,40 @@ def test_struct_mutation_3():
     bia1 = np.array([[0., 0, -3, -4, -5]])
     actFuns1 = [None, None, ReLu(), ReLu(), None]
 
-    cn1 = ChaosNet(input_size=2, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=4)
+    cn1 = ChaosNet(input_size=2, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(), actFuns=actFuns1, aggrFun=TanH(), maxit=4, mutation_radius=1,
+                   wb_mutation_prob=2, s_mutation_prob=3)
 
-    mutant = mo.mutate(cn1, pm=0.75, radius=1)
+    mutant = mo.mutate(cn1, wb_pm=0.75, s_pm=0.75, radius=1)
 
 
-    assert np.array_equal(cn1.links, np.array([[0, 0, 1, 1, 1],
-                                                  [0, 0, 1, 0, 1],
-                                                  [0, 0, 0, 1, 1],
-                                                  [0, 0, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0]]))
-    assert np.all(np.isclose(cn1.weights, np.array([[0, 0, 1, 4, 6],
-                                                       [0, 0, 2, 0, 7],
-                                                       [0, 0, 0, 5, 8],
-                                                       [0, 0, 3, 0, 9],
-                                                       [0, 0, 0, 0, 0.]]), atol=1e-5))
-    assert np.all(np.isclose(cn1.biases, np.array([[0., 0, -3, -4, -5]]), atol=1e-5))
-    assert len(cn1.actFuns) == 5
-    assert cn1.actFuns[0] is None
-    assert cn1.actFuns[1] is None
-    assert cn1.actFuns[2].to_string() == ReLu().to_string()
-    assert cn1.actFuns[3].to_string() == ReLu().to_string()
-    assert cn1.actFuns[4] is None
-    assert cn1.aggrFun.to_string() == TanH().to_string()
-
-    assert cn1.hidden_comp_order is None
-
-    assert cn1.maxit == 4
-
+    # assert np.array_equal(cn1.links, np.array([[0, 0, 1, 1, 1],
+    #                                            [0, 0, 1, 0, 1],
+    #                                            [0, 0, 0, 1, 1],
+    #                                            [0, 0, 1, 0, 1],
+    #                                            [0, 0, 0, 0, 0]]))
+    # assert np.all(np.isclose(cn1.weights, np.array([[0, 0, 1, 4, 6],
+    #                                                    [0, 0, 2, 0, 7],
+    #                                                    [0, 0, 0, 5, 8],
+    #                                                    [0, 0, 3, 0, 9],
+    #                                                    [0, 0, 0, 0, 0.]]), atol=1e-5))
+    # assert np.all(np.isclose(cn1.biases, np.array([[0., 0, -3, -4, -5]]), atol=1e-5))
+    # assert len(cn1.actFuns) == 5
+    # assert cn1.actFuns[0] is None
+    # assert cn1.actFuns[1] is None
+    # assert cn1.actFuns[2].to_string() == ReLu().to_string()
+    # assert cn1.actFuns[3].to_string() == ReLu().to_string()
+    # assert cn1.actFuns[4] is None
+    # assert cn1.aggrFun.to_string() == TanH().to_string()
+    #
+    # assert cn1.hidden_comp_order is None
 
     compare_chaos_network(net=cn1,
+                          desired_input_size=2,
+                          desited_output_size=1,
+                          desired_neuron_count=5,
+                          desired_hidden_start_index=2,
+                          desired_hidden_end_index=4,
+                          desired_hidden_count=2,
                           desired_links=np.array([[0, 0, 1, 1, 1],
                                                   [0, 0, 1, 0, 1],
                                                   [0, 0, 0, 1, 1],
@@ -230,44 +289,49 @@ def test_struct_mutation_3():
                           desired_biases=np.array([[0., 0, -3, -4, -5]]),
                           desired_actFun=[None, None, ReLu(), ReLu(), None],
                           desired_aggr=TanH(),
-                          desired_maxit=4)
+                          desired_maxit=4,
+                          desired_mut_rad=1,
+                          desired_wb_prob=2,
+                          desired_s_prob=3)
 
-
-    assert np.array_equal(mutant.links, np.array([[0, 0, 0],
-                                                  [0, 0, 1],
-                                                  [0, 0, 0]]))
-    assert np.all(np.isclose(mutant.weights, np.array([[0, 0, 0],
-                                                       [0, 0, 6.2377573],
-                                                       [0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(mutant.biases, np.array([[0., 0., -5.]]), atol=1e-5))
-    assert len(mutant.actFuns) == 3
-    assert mutant.actFuns[0] is None
-    assert mutant.actFuns[1] is None
-    assert mutant.actFuns[2] is None
-    assert mutant.aggrFun.to_string() == TanH().to_string()
-
-    assert mutant.hidden_comp_order is None
-
-    assert mutant.maxit == 2
-
+    #
+    # assert np.array_equal(mutant.links, np.array([[0, 0, 0],
+    #                                               [0, 0, 1],
+    #                                               [0, 0, 0]]))
+    # assert np.all(np.isclose(mutant.weights, np.array([[0, 0, 0],
+    #                                                    [0, 0, 6.2377573],
+    #                                                    [0, 0, 0]]), atol=1e-5))
+    # assert np.all(np.isclose(mutant.biases, np.array([[0., 0., -5.]]), atol=1e-5))
+    # assert len(mutant.actFuns) == 3
+    # assert mutant.actFuns[0] is None
+    # assert mutant.actFuns[1] is None
+    # assert mutant.actFuns[2] is None
+    # assert mutant.aggrFun.to_string() == TanH().to_string()
+    #
+    # assert mutant.hidden_comp_order is None
 
     compare_chaos_network(net=mutant,
+                          desired_input_size=2,
+                          desited_output_size=1,
+                          desired_neuron_count=3,
+                          desired_hidden_start_index=2,
+                          desired_hidden_end_index=2,
+                          desired_hidden_count=0,
                           desired_links=np.array([[0, 0, 0],
                                                   [0, 0, 1],
                                                   [0, 0, 0]]),
                           desired_weights=np.array([[0, 0, 0],
                                                     [0, 0, 6.2377573],
                                                     [0, 0, 0]]),
-                          desired_biases=np.array([[0., 0., -5.]]),
+                          desired_biases=np.array([[0., 0, -5]]),
                           desired_actFun=[None, None, None],
                           desired_aggr=TanH(),
-                          desired_maxit=2)
+                          desired_maxit=2,
+                          desired_mut_rad=0.235941,
+                          desired_wb_prob=0.0857273,
+                          desired_s_prob=0.609284)
 
-
-
-
-
-seed = 1004
+seed = 1001
 random.seed(seed)
 np.random.seed(seed)
 wei1 = np.array([[0, 0, 1, 4, 6],
@@ -385,9 +449,17 @@ if hc_c <= 0.75:
 print(f"new_links: \n {links}")
 print(f"new_weights: \n{weights}")
 print(f"biases: \n {biases}")
-
-# test_struct_mutation()
-# test_struct_mutation_2()
-# test_struct_mutation_3()
+mut_rad_change = random.random()
+if mut_rad_change <= 0.75:
+    print(f"mut_rad: \n {random.uniform(0, 1)}")
+wb_prob_change = random.random()
+if wb_prob_change <= 0.75:
+    print(f"wb_prob: \n {random.uniform(0.05, 0.1)}")
+s_prob_change = random.random()
+if s_prob_change <= 0.75:
+    print(f"s_prob: \n {random.uniform(0.6, 0.7)}")
+test_struct_mutation()
+test_struct_mutation_2()
+test_struct_mutation_3()
 
 

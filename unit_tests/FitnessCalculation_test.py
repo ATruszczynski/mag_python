@@ -1,20 +1,15 @@
-import multiprocessing as mp
-import random
-
-import numpy as np
 import pytest
 
-from ann_point.AnnPoint import *
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
-from neural_network.FeedForwardNeuralNetwork import network_from_point
-from unit_tests.ANN_test_test import get_io
+from unit_tests.discarded.ANN_test_test import get_io
 
 #TODO this also counts two tests instead of one
 
 
 def points():
-    result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), SincAct()]), 2, 2, 3)
+    result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), SincAct()], mut_radius=(0, 1),
+                                                     wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7)), 2, 2, 3)
     return result
 
 

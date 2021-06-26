@@ -110,12 +110,33 @@ class SimpleCrossoverOperator:
             new_A_maxit = pointB.maxit
             new_B_maxit = pointA.maxit
 
+        new_A_mut_rad = pointA.mutation_radius
+        new_B_mut_rad = pointB.mutation_radius
+        if random.random() <= 0.5:
+            new_A_mut_rad = pointB.mutation_radius
+            new_B_mut_rad = pointA.mutation_radius
+
+        new_A_wb_prob = pointA.wb_mutation_prob
+        new_B_wb_prob = pointB.wb_mutation_prob
+        if random.random() <= 0.5:
+            new_A_wb_prob = pointB.wb_mutation_prob
+            new_B_wb_prob = pointA.wb_mutation_prob
+
+        new_A_s_prob = pointA.s_mutation_prob
+        new_B_s_prob = pointB.s_mutation_prob
+        if random.random() <= 0.5:
+            new_A_s_prob = pointB.s_mutation_prob
+            new_B_s_prob = pointA.s_mutation_prob
+
+
 
 
         pointA = ChaosNet(input_size=input_size, output_size=output_size, links=new_A_links, weights=new_A_weights,
-                          biases=new_A_bias, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit)
+                          biases=new_A_bias, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit,
+                          mutation_radius=new_A_mut_rad, wb_mutation_prob=new_A_wb_prob, s_mutation_prob=new_A_s_prob)
         pointB = ChaosNet(input_size=input_size, output_size=output_size, links=new_B_links, weights=new_B_weights,
-                          biases=new_B_bias, actFuns=new_B_func, aggrFun=new_B_aggr, maxit=new_B_maxit)
+                          biases=new_B_bias, actFuns=new_B_func, aggrFun=new_B_aggr, maxit=new_B_maxit,
+                          mutation_radius=new_B_mut_rad, wb_mutation_prob=new_B_wb_prob, s_mutation_prob=new_B_s_prob)
 
         return pointA, pointB
 
@@ -160,7 +181,8 @@ def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamete
 
     return possible_cuts
 
-
+# def conditional_swap(valA, valB):
+#
 
 # class SimpleCrossoverOperator:
 #     def __init__(self, swap_prob: float = 0.5):

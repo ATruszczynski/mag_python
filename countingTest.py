@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # print(sm.prec_der(np.array([[1], [2], [3]])))
     # print(sm.computeDer(np.array([[1], [2], [3]])))
 
-    count_tr = 1000
+    count_tr = 2000
     count_test = 500
     size = 5
     x,y = generate_counting_problem(count_tr, size)
@@ -31,15 +31,15 @@ if __name__ == '__main__':
     # ec.hrange.hiddenLayerCountMax = 0
     # ec.hrange.neuronCountMax = 10
     ec.hrange.max_hidden = 10
-    ec.hrange.min_hidden = 0
+    ec.hrange.min_hidden = 5
     ec.co = SimpleCrossoverOperator(ec.hrange)
     ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(2)
-    ec.ff = CNFF2(QuadDiff())
+    # ec.ff = CNFF2(QuadDiff())
     ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
     # ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
-    ec.prepare(500, 500, (x, y), 10, 1542)
+    ec.prepare(250, 250, (x, y), 10, 1542)
     network = ec.run(iterations=500, pm=0.05, pc=0.8, power=12)
     # [len(np.where(np.all(ec.population[i].links == 0 and ec.population[i].weights != 0))[0]) for i in range(len(ec.population))]
 

@@ -8,7 +8,9 @@ from ann_point.Functions import *
 
 class ChaosNet:
     #TODO remove maxit as default
-    def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun, maxit: int = 1):
+    def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
+                 actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
+                 s_mutation_prob: float):
         #TODO validation
 
         assert links.shape[0] == weights.shape[0]
@@ -17,26 +19,26 @@ class ChaosNet:
         assert biases.shape[1] == weights.shape[1]
         assert len(actFuns) == biases.shape[1]
 
-        self.links = links.copy()
-        self.weights = weights.copy()
-        self.biases = biases.copy()
+        self.links = links.copy()###---
+        self.weights = weights.copy()###---
+        self.biases = biases.copy()###---
         self.inp = np.zeros(biases.shape)
         self.act = np.zeros(biases.shape)
-        self.actFuns = []
+        self.actFuns = []###---
         for i in range(len(actFuns)):
             if actFuns[i] is None:
                 self.actFuns.append(None)
             else:
                 self.actFuns.append(actFuns[i].copy())
-        self.aggrFun = aggrFun
+        self.aggrFun = aggrFun###---
 
         #TODO make those private
-        self.input_size = input_size
-        self.output_size = output_size
-        self.neuron_count = self.biases.shape[1]
-        self.hidden_start_index = self.input_size
-        self.hidden_end_index = self.neuron_count - self.output_size
-        self.hidden_count = self.hidden_end_index - self.hidden_start_index
+        self.input_size = input_size###---
+        self.output_size = output_size###---
+        self.neuron_count = self.biases.shape[1]###---
+        self.hidden_start_index = self.input_size###---
+        self.hidden_end_index = self.neuron_count - self.output_size###---
+        self.hidden_count = self.hidden_end_index - self.hidden_start_index###---
 
         assert self.neuron_count == weights.shape[1]
         assert weights.shape[1] - input_size - output_size == self.hidden_count
@@ -44,8 +46,12 @@ class ChaosNet:
         assert self.neuron_count == self.links.shape[1]
 
         self.comp_count = np.zeros(biases.shape)#TODO useless?
-        self.hidden_comp_order = None
-        self.maxit = maxit
+        self.hidden_comp_order = None###---
+        self.maxit = maxit###---
+
+        self.mutation_radius = mutation_radius###---
+        self.wb_mutation_prob = wb_mutation_prob###---
+        self.s_mutation_prob = s_mutation_prob###---
 
     # def run(self, input: np.ndarray, try_faster: bool = False):
     #     self.act[0, :self.input_size] = input.reshape(1, -1)
@@ -69,22 +75,22 @@ class ChaosNet:
         if self.hidden_comp_order is None:
             self.get_comp_order()
 
-        act = np.zeros((self.neuron_count, inputs.shape[1]))
-        inp = np.zeros((self.neuron_count, inputs.shape[1]))
+        self.act = np.zeros((self.neuron_count, inputs.shape[1]))
+        self.inp = np.zeros((self.neuron_count, inputs.shape[1]))
 
-        act[:self.input_size, :] = inputs
+        self.act[:self.input_size, :] = inputs
 
         for i in range(self.maxit):
             for n in self.hidden_comp_order:
                 wei = self.weights[:, n].reshape(-1, 1)
-                inp[n, :] = np.dot(wei.T, act) + self.biases[0, n]
-                act[n, :] = self.actFuns[n].compute(inp[n, :])
+                self.inp[n, :] = np.dot(wei.T, self.act) + self.biases[0, n]
+                self.act[n, :] = self.actFuns[n].compute(self.inp[n, :])
 
 
-        inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, act) + self.biases[0, self.hidden_end_index:].reshape(-1, 1)
-        act[self.hidden_end_index:, :] = self.aggrFun.compute(inp[self.hidden_end_index:, :])
+        self.inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, self.act) + self.biases[0, self.hidden_end_index:].reshape(-1, 1)
+        self.act[self.hidden_end_index:, :] = self.aggrFun.compute(self.inp[self.hidden_end_index:, :])
 
-        return act[self.hidden_end_index:]
+        return self.act[self.hidden_end_index:]
 
         # for i in range(self.maxit):
         #     for n in self.hidden_comp_order:
@@ -302,7 +308,7 @@ class ChaosNet:
                 result.append(i)
         return result
 
-    def copy(self):
+    def copy(self):#TODO test?
         actFuns = []
         for i in range(len(self.actFuns)):
             if self.actFuns[i] is None:
@@ -311,7 +317,9 @@ class ChaosNet:
                 actFuns.append(self.actFuns[i].copy())
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
-                        links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy(), maxit=self.maxit)
+                        links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
+                        , maxit=self.maxit, mutation_radius=self.mutation_radius, wb_mutation_prob=self.wb_mutation_prob,
+                        s_mutation_prob=self.s_mutation_prob)
 
     def calculate_distance_from_input(self):
         touched = []
