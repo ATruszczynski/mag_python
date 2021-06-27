@@ -48,6 +48,9 @@ class SimpleAndStructuralCNMutation(MutationOperator):
 
     def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, radius: float) -> ChaosNet:
         point = point.copy()
+        radius = 10 ** radius
+        wb_pm = 10 ** wb_pm
+        s_pm = 10 ** s_pm
 
         probs = np.random.random(point.weights.shape)
         change = np.zeros(point.weights.shape)
@@ -56,6 +59,8 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         wei_move = np.multiply(change, wei_move)
         point.weights += wei_move
         point.weights = np.multiply(point.weights, point.links)
+        point.weights = np.minimum(point.weights, self.hrange.max_init_wei)
+        point.weights = np.maximum(point.weights, self.hrange.min_init_wei)
 
         probs = np.random.random((1, point.neuron_count))
         change = np.zeros(probs.shape)
@@ -64,6 +69,8 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         bia_move = np.random.normal(0, radius, point.biases.shape)
         bia_move = np.multiply(change, bia_move)
         point.biases += bia_move
+        point.biases = np.minimum(point.biases, self.hrange.max_init_bia)
+        point.biases = np.maximum(point.biases, self.hrange.min_init_bia)
 
         if random.random() <= s_pm: #TODO radius can be larger than 1
             point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))

@@ -375,6 +375,13 @@ class ChaosNet:
     #
     #     return to_update
 
+    def to_string(self):
+        result = ""
+        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{self.maxit}|" \
+                  f"{round(self.mutation_radius, 3)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}"
+
+        return result
+
 
 def accuracy(confusion_matrix: np.ndarray):
     tot_sum = np.sum(confusion_matrix)

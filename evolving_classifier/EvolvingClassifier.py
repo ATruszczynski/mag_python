@@ -88,6 +88,8 @@ class EvolvingClassifier:
         self.supervisor.start(iterations=iterations)
 
         for i in range(iterations):
+            if i == 20:
+                ori = 1
             # eval_pop = self.calculate_fitnesses(pool, self.population)
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
@@ -103,8 +105,6 @@ class EvolvingClassifier:
             self.supervisor.check_point(eval_pop, i)
             crossed = []
 
-            if i == 10:
-                ori = 1
 
             while len(crossed) < self.pop_size:
                 c1 = self.so.select(val_pop=eval_pop)

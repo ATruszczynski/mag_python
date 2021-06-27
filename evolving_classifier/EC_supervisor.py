@@ -88,19 +88,20 @@ class EC_supervisor():
 
         for i in range(len(evals)):
             # log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
-            log.write(f"R {iteration} {i + 1} placeholder - {round(evals[i][1].ff, round_prec)}\n")
+            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
 
         best_eval = self.rh.get_it_best(iteration)
 
         stat_string = self.rh.get_it_summary_string(iteration)
 
         log.write(f"{summary_id} {stat_string}\n")
-        log.write(f"{summary_id} Best ff: placeholder - {round(best_eval.ff, round_prec)}\n")
+        log.write(f"{summary_id} Best ff: {best_eval.point.to_string()} - {round(best_eval.ff, round_prec)}\n")
 
         log.close()
 
         # iteration prints
 
         print(f"--- Iteration - {iteration + 1} - {stat_string}")
+        print(f"--- Best point: {best_eval.point.to_string()}")
 
 

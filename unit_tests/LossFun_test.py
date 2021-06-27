@@ -1,7 +1,7 @@
 import pytest
 from ann_point.Functions import *
 
-allLossFun = [QuadDiff(), MeanDiff(), CrossEntropy(), ChebyshevLoss()]
+allLossFun = [QuadDiff(), MeanDiff(), CrossEntropy(), ChebyshevLoss(), QuasiCrossEntropy()]
 
 def test_quad_diff():
     res = np.array([[1], [0], [1]])
@@ -50,12 +50,25 @@ def test_chebyshev():
     assert cl.to_string() == "CL"
     assert isinstance(cl.copy(), ChebyshevLoss)
 
+def test_quasi_cross_entropy():
+    res = np.array([[-1], [0], [1], [2]])
+    corr = np.array([[1], [1], [1], [1]])
+
+    cl = QuasiCrossEntropy()
+
+    assert cl.compute(res=res, corr=corr) == pytest.approx(4)
+    # assert np.all(np.isclose(cl.computeDer(res=res, corr=corr), np.array([[-1], [0], [0], [0]])))
+    assert cl.to_string() == "QCE"
+    assert isinstance(cl.copy(), QuasiCrossEntropy)
+
 def test_non_rep_strings():
     for i in range(len(allLossFun)):
         for j in range(i + 1, len(allLossFun)):
             lf1 = allLossFun[i]
             lf2 = allLossFun[j]
             assert lf1.to_string() != lf2.to_string()
+
+test_quasi_cross_entropy()
 
 
 

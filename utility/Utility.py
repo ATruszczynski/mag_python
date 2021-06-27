@@ -164,8 +164,8 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 1), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], mut_radius=(0.5, 2),
-                                 wb_mut_prob=(0, 0.25), s_mut_prob=(0, 0.25))
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], mut_radius=(-2, 2),
+                                 wb_mut_prob=(-4, 0), s_mut_prob=(-4, 0))
     # hrange = HyperparameterRange((-1, 1), (-1, 1), [ReLu(), Sigmoid()])
     return hrange
 
