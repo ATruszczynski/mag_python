@@ -35,7 +35,7 @@ class CNFF2(FitnessFunction):
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
         eff = efficiency(test_results[3])
 
-        return [(1 - eff) * -test_results[4], test_results[3]]
+        return [(1 - eff)**2 * -test_results[4], test_results[3]]
         # return [-test_results[4], test_results[3]]
         # return [eff, test_results[3]]
 

@@ -35,11 +35,11 @@ if __name__ == '__main__':
     ec.co = SimpleCrossoverOperator(ec.hrange)
     ec.mo = SimpleCNMutation(ec.hrange)
     ec.so = TournamentSelection(2)
-    # ec.ff = CNFF2(QuadDiff())
-    ec.ff = CNFF()
+    ec.ff = CNFF2(QuadDiff())
+    # ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
     # ec.fc = OnlyFitnessCalculator([1, 0.6, 0.4, 0.25, 0.15, 0.1])
-    ec.prepare(250, 250, (x, y), 10, 1542)
+    ec.prepare(50, 50, (x, y), 10, 1542)
     network = ec.run(iterations=500, pm=0.05, pc=0.8, power=12)
     # [len(np.where(np.all(ec.population[i].links == 0 and ec.population[i].weights != 0))[0]) for i in range(len(ec.population))]
 
