@@ -9,7 +9,7 @@ from unit_tests.discarded.ANN_test_test import get_io
 
 def points():
     result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), SincAct()], mut_radius=(0, 1),
-                                                     wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7)), 2, 2, 3)
+                                                     wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6)), 2, 2, 3)
     return result
 
 
@@ -35,13 +35,13 @@ def test_fitness_calculator_with_pure_eff():
 
     assert len(res[1]) == 2
     # assert res[1][0].to_string() == anns[0].to_string()
-    assert res[1][1].ff == pytest.approx(0.2222222, abs=1e-3)
-    assert res[1][1].acc == pytest.approx(0.25, abs=1e-3)
-    assert res[1][1].prec == pytest.approx(0.083333, abs=1e-3)
+    assert res[1][1].ff == pytest.approx(0.3333333, abs=1e-3)
+    assert res[1][1].acc == pytest.approx(0.5, abs=1e-3)
+    assert res[1][1].prec == pytest.approx(0.166666, abs=1e-3)
     assert res[1][1].rec == pytest.approx(0.333333, abs=1e-3)
-    assert res[1][1].f1 == pytest.approx(0.1333333, abs=1e-3)
+    assert res[1][1].f1 == pytest.approx(0.222222, abs=1e-3)
     assert res[1][1].touch == pytest.approx(1, abs=1e-3)
-    assert res[1][1].get_eff() == pytest.approx(0.222222, abs=1e-3)
+    assert res[1][1].get_eff() == pytest.approx(0.333333, abs=1e-3)
 
 
 random.seed(1002)

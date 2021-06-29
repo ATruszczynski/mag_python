@@ -25,7 +25,7 @@ def test_chaos_compare_1():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -60,6 +60,7 @@ def test_chaos_compare_1():
                           desired_mut_rad=-1,
                           desired_wb_prob=2.5,
                           desired_s_prob=1,
+                          desired_p_prob=0.44,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
 
@@ -83,7 +84,7 @@ def test_chaos_compare_2():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -119,6 +120,7 @@ def test_chaos_compare_2():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -146,7 +148,7 @@ def test_chaos_compare_3():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -182,6 +184,7 @@ def test_chaos_compare_3():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -209,7 +212,7 @@ def test_chaos_compare_4():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -245,6 +248,7 @@ def test_chaos_compare_4():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -272,7 +276,7 @@ def test_chaos_compare_5():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -308,6 +312,7 @@ def test_chaos_compare_5():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -335,7 +340,7 @@ def test_chaos_compare_6():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -371,6 +376,7 @@ def test_chaos_compare_6():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -398,7 +404,7 @@ def test_chaos_compare_7():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -434,6 +440,7 @@ def test_chaos_compare_7():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -461,7 +468,7 @@ def test_chaos_compare_8():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -497,6 +504,7 @@ def test_chaos_compare_8():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -524,7 +532,7 @@ def test_chaos_compare_9():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -558,6 +566,7 @@ def test_chaos_compare_9():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -585,7 +594,7 @@ def test_chaos_compare_10():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -621,6 +630,7 @@ def test_chaos_compare_10():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -648,7 +658,7 @@ def test_chaos_compare_11():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -680,6 +690,7 @@ def test_chaos_compare_11():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except ValueError:
@@ -707,7 +718,7 @@ def test_chaos_compare_12():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -743,6 +754,7 @@ def test_chaos_compare_12():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -770,7 +782,7 @@ def test_chaos_compare_13():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -806,6 +818,7 @@ def test_chaos_compare_13():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except ValueError:
@@ -833,7 +846,7 @@ def test_chaos_compare_14():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -869,6 +882,7 @@ def test_chaos_compare_14():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -896,7 +910,7 @@ def test_chaos_compare_15():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -932,6 +946,7 @@ def test_chaos_compare_15():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -959,7 +974,7 @@ def test_chaos_compare_16():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -995,6 +1010,7 @@ def test_chaos_compare_16():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1022,7 +1038,7 @@ def test_chaos_compare_17():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1058,6 +1074,7 @@ def test_chaos_compare_17():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1085,7 +1102,7 @@ def test_chaos_compare_18():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1121,6 +1138,7 @@ def test_chaos_compare_18():
                               desired_mut_rad=-10,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1148,7 +1166,7 @@ def test_chaos_compare_19():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1184,6 +1202,7 @@ def test_chaos_compare_19():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.55,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1211,7 +1230,7 @@ def test_chaos_compare_20():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1247,6 +1266,7 @@ def test_chaos_compare_20():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=111,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1274,7 +1294,7 @@ def test_chaos_compare_21():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1310,6 +1330,7 @@ def test_chaos_compare_21():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 1.]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1337,7 +1358,7 @@ def test_chaos_compare_22():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1373,6 +1394,7 @@ def test_chaos_compare_22():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0., 0]]),
                               desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
     except ValueError:
@@ -1400,7 +1422,7 @@ def test_chaos_compare_23():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1436,6 +1458,7 @@ def test_chaos_compare_23():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., -222., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1463,7 +1486,7 @@ def test_chaos_compare_24():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1)
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1499,12 +1522,78 @@ def test_chaos_compare_24():
                               desired_mut_rad=-1,
                               desired_wb_prob=2.5,
                               desired_s_prob=1,
+                              desired_p_prob=0.44,
                               desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                               desired_act=np.array([[0., 0., 0., 0.]]))
     except ValueError:
         assert True
     else:
         assert False
+
+def test_chaos_compare_25():
+    link1 = np.array([[0, 0, 0, 0, 1, 0, 1],
+                      [0, 0, 0, 1, 0, 1, 0],
+                      [0, 0, 0, 1, 1, 0, 1],
+                      [0, 0, 0, 0, 1, 1, 0],
+                      [0, 0, 0, 1, 0, 1, 1],
+                      [0, 0, 0, 1, 1, 0, 1],
+                      [0, 0, 0, 0, 0, 0 , 0 ]])
+    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 12],
+                      [0, 0, 0, 1, 0, 9 , 0 ],
+                      [0, 0, 0, 2, 6, 0 , 13],
+                      [0, 0, 0, 0, 7, 10, 0 ],
+                      [0, 0, 0, 3, 0, 11, 14],
+                      [0, 0, 0, 4, 8, 0 , 15],
+                      [0, 0, 0, 0, 0, 0 , 0 ]])
+    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+
+    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
+                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44)
+
+    np.random.seed(1001)
+    random.seed(1001)
+
+    ##########################################################################
+
+    try:
+        compare_chaos_network(net=cn1,
+                              desired_input_size=3,
+                              desited_output_size=1,
+                              desired_neuron_count=7,
+                              desired_hidden_start_index=3,
+                              desired_hidden_end_index=6,
+                              desired_hidden_count=3,
+                              desired_links=np.array([[0, 0, 0, 0, 1, 0, 1],
+                                                      [0, 0, 0, 1, 0, 1, 0],
+                                                      [0, 0, 0, 1, 1, 0, 1],
+                                                      [0, 0, 0, 0, 1, 1, 0],
+                                                      [0, 0, 0, 1, 0, 1, 1],
+                                                      [0, 0, 0, 1, 1, 0, 1],
+                                                      [0, 0, 0, 0, 0, 0 , 0 ]]),
+                              desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 12],
+                                                        [0, 0, 0, 1, 0, 9 , 0 ],
+                                                        [0, 0, 0, 2, 6, 0 , 13],
+                                                        [0, 0, 0, 0, 7, 10, 0 ],
+                                                        [0, 0, 0, 3, 0, 11, 14],
+                                                        [0, 0, 0, 4, 8, 0 , 15],
+                                                        [0, 0, 0, 0, 0, 0 , 0 ]]),
+                              desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
+                              desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
+                              desired_aggr=Sigmoid(),
+                              desired_maxit=10,
+                              desired_mut_rad=-1,
+                              desired_wb_prob=2.5,
+                              desired_s_prob=1,
+                              desired_p_prob=0.444,
+                              desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
+                              desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
 
 #
 # test_chaos_compare_2()
@@ -1530,3 +1619,4 @@ def test_chaos_compare_24():
 # test_chaos_compare_22()
 # test_chaos_compare_23()
 # test_chaos_compare_24()
+# test_chaos_compare_25()

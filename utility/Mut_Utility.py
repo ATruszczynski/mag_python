@@ -16,6 +16,8 @@ def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hid
         result = decrease_neuron_count(net, -change_hidden)
     elif change_hidden > 0:
         result = increase_neuron_count(net, hrange, change_hidden)
+    else:
+        result = net.copy()
 
     return result
 
@@ -52,7 +54,7 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
 
     return ChaosNet(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
 
 
 def decrease_neuron_count(net: ChaosNet, to_remove: int):
@@ -73,7 +75,7 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
 
 def inflate_network(net: ChaosNet, to_add: int): #TODO tests missed wrong maxit
     new_neuron_count = net.neuron_count + to_add
@@ -109,7 +111,7 @@ def inflate_network(net: ChaosNet, to_add: int): #TODO tests missed wrong maxit
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
 
 def deflate_network(net: ChaosNet):
     ind_to_preserve = net.get_indices_of_connected_neurons()
@@ -125,7 +127,7 @@ def deflate_network(net: ChaosNet):
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
 
 
 

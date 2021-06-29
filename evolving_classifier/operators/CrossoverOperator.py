@@ -128,15 +128,157 @@ class SimpleCrossoverOperator:
             new_A_s_prob = pointB.s_mutation_prob
             new_B_s_prob = pointA.s_mutation_prob
 
+        new_A_p_prob = pointA.p_mutation_prob
+        new_B_p_prob = pointB.p_mutation_prob
+        if random.random() <= 0.5:
+            new_A_p_prob = pointB.p_mutation_prob
+            new_B_p_prob = pointA.p_mutation_prob
+
 
 
 
         pointA = ChaosNet(input_size=input_size, output_size=output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_bias, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit,
-                          mutation_radius=new_A_mut_rad, wb_mutation_prob=new_A_wb_prob, s_mutation_prob=new_A_s_prob)
+                          mutation_radius=new_A_mut_rad, wb_mutation_prob=new_A_wb_prob, s_mutation_prob=new_A_s_prob,
+                          p_mutation_prob=new_A_p_prob)
         pointB = ChaosNet(input_size=input_size, output_size=output_size, links=new_B_links, weights=new_B_weights,
                           biases=new_B_bias, actFuns=new_B_func, aggrFun=new_B_aggr, maxit=new_B_maxit,
-                          mutation_radius=new_B_mut_rad, wb_mutation_prob=new_B_wb_prob, s_mutation_prob=new_B_s_prob)
+                          mutation_radius=new_B_mut_rad, wb_mutation_prob=new_B_wb_prob, s_mutation_prob=new_B_s_prob,
+                          p_mutation_prob=new_B_p_prob)
+
+        return pointA, pointB
+
+
+#TODO exchanges with some probability!
+class SimpleCrossoverOperator2:
+    def __init__(self, hrange: HyperparameterRange):
+        self.hrange = hrange
+        pass
+
+    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+        possible_cuts = find_possible_cuts(pointA, pointB, self.hrange)
+
+        cut = possible_cuts[random.randint(0, len(possible_cuts) - 1)]
+
+        input_size = pointA.input_size
+        output_size = pointA.output_size
+
+        cut_A = cut[1]
+        cut_B = cut[2]
+        A_1 = cut[3]
+        A_2 = cut[4]
+        B_1 = cut[5]
+        B_2 = cut[6]
+
+        new_A_hidden_count = A_1 + B_2
+        new_B_hidden_count = A_2 + B_1
+        new_A_count = pointA.input_size + new_A_hidden_count + pointA.output_size
+        new_B_count = pointB.input_size + new_B_hidden_count + pointB.output_size
+
+        rows_to_copy_A_A = min(pointA.hidden_end_index, new_A_count - output_size)
+        rows_to_copy_A_B = min(pointA.hidden_end_index, new_B_count - output_size)
+        rows_to_copy_B_A = min(pointB.hidden_end_index, new_A_count - output_size)
+        rows_to_copy_B_B = min(pointB.hidden_end_index, new_B_count - output_size)
+
+        # link swap
+        new_A_links = np.zeros((new_A_count, new_A_count))
+        new_B_links = np.zeros((new_B_count, new_B_count))
+
+        new_A_links[:rows_to_copy_A_A, :cut_A] = pointA.links[:rows_to_copy_A_A, :cut_A]
+        new_A_links[:rows_to_copy_B_A, -(output_size + B_2):] = pointB.links[:rows_to_copy_B_A, -(output_size + B_2):]
+
+        new_B_links[:rows_to_copy_B_B, :cut_B] = pointB.links[:rows_to_copy_B_B, :cut_B]
+        new_B_links[:rows_to_copy_A_B, -(output_size + A_2):] = pointA.links[:rows_to_copy_A_B, -(output_size + A_2):]
+
+        # weight swap
+        new_A_weights = np.zeros((new_A_count, new_A_count))
+        new_B_weights = np.zeros((new_B_count, new_B_count))
+
+        new_A_weights[:rows_to_copy_A_A, :cut_A] = pointA.weights[:rows_to_copy_A_A, :cut_A]
+        new_A_weights[:rows_to_copy_B_A, -(output_size + B_2):] = pointB.weights[:rows_to_copy_B_A, -(output_size + B_2):]
+
+        new_B_weights[:rows_to_copy_B_B, :cut_B] = pointB.weights[:rows_to_copy_B_B, :cut_B]
+        new_B_weights[:rows_to_copy_A_B, -(output_size + A_2):] = pointA.weights[:rows_to_copy_A_B, -(output_size + A_2):]
+
+        # bias swap
+        new_A_bias = np.zeros((1, new_A_count))
+        new_B_bias = np.zeros((1, new_B_count))
+
+        new_A_bias[0, :cut_A] = pointA.biases[0, :cut_A]
+        new_A_bias[0, -(output_size + B_2):] = pointB.biases[0, -(output_size + B_2):]
+
+        new_B_bias[0, :cut_B] = pointB.biases[0, :cut_B]
+        new_B_bias[0, -(output_size + A_2):] = pointA.biases[0, -(output_size + A_2):]
+
+        # actFun swap
+        new_A_func = input_size * [None]
+        new_B_func = input_size * [None]
+
+        for i in range(A_1):
+            new_A_func.append(pointA.actFuns[input_size + i].copy())
+        for i in range(B_2):
+            new_A_func.append(pointB.actFuns[input_size + B_1 + i].copy())
+        for i in range(output_size):
+            new_A_func.append(None)
+
+        for i in range(B_1):
+            new_B_func.append(pointB.actFuns[input_size + i].copy())
+        for i in range(A_2):
+            new_B_func.append(pointA.actFuns[input_size + A_1 + i].copy())
+        for i in range(output_size):
+            new_B_func.append(None)
+
+        # aggrFun swap
+
+        new_A_aggr = pointA.aggrFun
+        new_B_aggr = pointB.aggrFun
+        if random.random() <= 0.5:
+            new_A_aggr = pointB.aggrFun
+            new_B_aggr = pointA.aggrFun
+
+        # maxIt swap
+
+        new_A_maxit = pointA.maxit
+        new_B_maxit = pointB.maxit
+        if random.random() <= 0.5:
+            new_A_maxit = pointB.maxit
+            new_B_maxit = pointA.maxit
+
+        new_A_mut_rad = pointA.mutation_radius
+        new_B_mut_rad = pointB.mutation_radius
+        # if random.random() <= 0.5:
+        #     new_A_mut_rad = pointB.mutation_radius
+        #     new_B_mut_rad = pointA.mutation_radius
+        #
+        new_A_wb_prob = pointA.wb_mutation_prob
+        new_B_wb_prob = pointB.wb_mutation_prob
+        # if random.random() <= 0.5:
+        #     new_A_wb_prob = pointB.wb_mutation_prob
+        #     new_B_wb_prob = pointA.wb_mutation_prob
+        #
+        new_A_s_prob = pointA.s_mutation_prob
+        new_B_s_prob = pointB.s_mutation_prob
+        # if random.random() <= 0.5:
+        #     new_A_s_prob = pointB.s_mutation_prob
+        #     new_B_s_prob = pointA.s_mutation_prob
+        #
+        new_A_p_prob = pointA.p_mutation_prob
+        new_B_p_prob = pointB.p_mutation_prob
+        # if random.random() <= 0.5:
+        #     new_A_p_prob = pointB.p_mutation_prob
+        #     new_B_p_prob = pointA.p_mutation_prob
+
+
+
+
+        pointA = ChaosNet(input_size=input_size, output_size=output_size, links=new_A_links, weights=new_A_weights,
+                          biases=new_A_bias, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit,
+                          mutation_radius=new_A_mut_rad, wb_mutation_prob=new_A_wb_prob, s_mutation_prob=new_A_s_prob,
+                          p_mutation_prob=new_A_p_prob)
+        pointB = ChaosNet(input_size=input_size, output_size=output_size, links=new_B_links, weights=new_B_weights,
+                          biases=new_B_bias, actFuns=new_B_func, aggrFun=new_B_aggr, maxit=new_B_maxit,
+                          mutation_radius=new_B_mut_rad, wb_mutation_prob=new_B_wb_prob, s_mutation_prob=new_B_s_prob,
+                          p_mutation_prob=new_B_p_prob)
 
         return pointA, pointB
 

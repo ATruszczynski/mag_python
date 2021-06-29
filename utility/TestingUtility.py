@@ -19,6 +19,7 @@ def compare_chaos_network(net: ChaosNet,
                           desired_mut_rad: float,
                           desired_wb_prob: float,
                           desired_s_prob: float,
+                          desired_p_prob: float,
                           desired_hidden_comp_order: [int] = None,
                           desired_inp: np.ndarray = None,
                           desired_act: np.ndarray = None):
@@ -54,3 +55,4 @@ def compare_chaos_network(net: ChaosNet,
     assert net.mutation_radius == pytest.approx(desired_mut_rad, 1e-4)
     assert net.wb_mutation_prob == pytest.approx(desired_wb_prob, 1e-4)
     assert net.s_mutation_prob == pytest.approx(desired_s_prob, 1e-4)
+    assert net.p_mutation_prob == pytest.approx(desired_p_prob, 1e-4)

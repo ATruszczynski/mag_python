@@ -25,7 +25,7 @@ def test_cn_run():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 
     #TODO różne pola w inpucie
     result = net.run(np.array([[0], [0]]))
@@ -60,6 +60,7 @@ def test_cn_run():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
+                          desired_p_prob=4,
                           desired_hidden_comp_order=[2, 3, 4],
                           desired_inp=np.array([[0, 0, 0.5, 0.5, 0.744918662, 0.122459331, 0.461494578]]).reshape(-1, 1),
                           desired_act=np.array([[0, 0, 0.622459331, 0.622459331, 0.678070495, 0.416043846, 0.583956154]]).reshape(-1, 1))
@@ -96,6 +97,7 @@ def test_cn_run():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
+                          desired_p_prob=4,
                           desired_hidden_comp_order=[2, 3, 4],
                           desired_inp=np.array([[0, 0, 0.5, 0.5, 0.744918662, 0.122459331, 0.461494578]]).reshape(-1, 1),
                           desired_act=np.array([[0, 0, 0.622459331, 0.622459331, 0.678070495, 0.416043846, 0.583956154]]).reshape(-1, 1))
@@ -118,7 +120,7 @@ def test_multiple_runs():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 
     results = []
 
@@ -153,7 +155,7 @@ def test_run_with_cycle_1_run():
     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
     actFun = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun, aggrFun=Softmax(), maxit=1,
-                  mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                  mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 
     res1 = cn.run(np.array([[-1, 0.5], [1, -2]]))
 
@@ -193,6 +195,7 @@ def test_run_with_cycle_1_run():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
+                          desired_p_prob=4,
                           desired_hidden_comp_order=[2, 4, 5, 6, 3],
                           desired_inp=np.array([[0, 0], [0, 0], [1, -0.5], [1, 1.063514312], [1, -2], [0.731058579, 0.377540669],
                                                 [-0.731058579, -0.119202922], [-0.675037527, -0.593279805], [0.324962473, 0.470234507]]),
@@ -225,7 +228,7 @@ def test_run_with_cycle_2_run():
 
     actFun = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun,
-                  aggrFun=Softmax(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                  aggrFun=Softmax(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 
     res1 = cn.run(np.array([[-1, 0.5], [1, -2]]))
 
@@ -263,6 +266,7 @@ def test_run_with_cycle_2_run():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
+                          desired_p_prob=4,
                           desired_hidden_comp_order=[2, 4, 5, 6, 3],
                           desired_inp=np.array([[0, 0],
                                                 [0, 0],
@@ -336,7 +340,7 @@ def test_faster_run():
     bias = np.array([[0, 0, 0, 0, 1, -0.5]])
     actFuns = [None, None, None, ReLu(), ReLu(), None]
     net = ChaosNet(input_size=3, output_size=1, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Sigmoid(),
-                   maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                   maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 
     res = net.run(np.array([[0, 1], [1, 0], [0, 1]]))
 
@@ -368,6 +372,7 @@ def test_faster_run():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
+                          desired_p_prob=4,
                           desired_hidden_comp_order=[3, 4],
                           desired_inp=np.array([[0, 0], [0, 0], [0, 0], [2, 1], [2, 0], [-0.5, -1.5]]),
                           desired_act=np.array([[0, 1], [1, 0], [0, 1], [2, 1], [2, 0], [0.377540669, 0.182425524]]))

@@ -10,35 +10,35 @@ class MutationOperator:
     def __init__(self, hrange: HyperparameterRange):
         self.hrange = hrange
 
-    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, radius: float) -> ChaosNet:
+    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, p_pm: float, radius: float) -> ChaosNet:
         pass
 
-class SimpleCNMutation(MutationOperator):
-    def __init__(self, hrange: HyperparameterRange):
-        super().__init__(hrange)
-
-    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, radius: float) -> ChaosNet:
-        probs = np.random.random(point.weights.shape)
-        change = np.zeros(point.weights.shape)
-        change[np.where(probs <= wb_pm)] = 1
-        wei_move = np.random.normal(0, radius, point.weights.shape)
-        wei_move = np.multiply(change, wei_move)
-        point.weights += wei_move
-        point.weights = np.multiply(point.weights, point.links)
-
-        probs = np.random.random((1, point.neuron_count))
-        change = np.zeros(probs.shape)
-        change[np.where(probs <= wb_pm)] = 1
-        bia_move = np.random.normal(0, radius, point.biases.shape)
-        bia_move = np.multiply(change, bia_move)
-        bia_move[0, :point.input_size] = 0
-        point.biases += bia_move
-
-        point.hidden_comp_order = None
-        if random.random() <= wb_pm:
-            point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
-
-        return point
+# class SimpleCNMutation(MutationOperator):
+#     def __init__(self, hrange: HyperparameterRange):
+#         super().__init__(hrange)
+#
+#     def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, radius: float) -> ChaosNet:
+#         probs = np.random.random(point.weights.shape)
+#         change = np.zeros(point.weights.shape)
+#         change[np.where(probs <= wb_pm)] = 1
+#         wei_move = np.random.normal(0, radius, point.weights.shape)
+#         wei_move = np.multiply(change, wei_move)
+#         point.weights += wei_move
+#         point.weights = np.multiply(point.weights, point.links)
+#
+#         probs = np.random.random((1, point.neuron_count))
+#         change = np.zeros(probs.shape)
+#         change[np.where(probs <= wb_pm)] = 1
+#         bia_move = np.random.normal(0, radius, point.biases.shape)
+#         bia_move = np.multiply(change, bia_move)
+#         bia_move[0, :point.input_size] = 0
+#         point.biases += bia_move
+#
+#         point.hidden_comp_order = None
+#         if random.random() <= wb_pm:
+#             point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
+#
+#         return point
 
 
 class SimpleAndStructuralCNMutation(MutationOperator):
@@ -46,11 +46,8 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         super().__init__(hrange)
         self.maxhjump = maxhjump
 
-    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, radius: float) -> ChaosNet:
+    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, p_pm: float, radius: float) -> ChaosNet:
         point = point.copy()
-        radius = 10 ** radius
-        wb_pm = 10 ** wb_pm
-        s_pm = 10 ** s_pm
 
         probs = np.random.random(point.weights.shape)
         change = np.zeros(point.weights.shape)
@@ -59,8 +56,6 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         wei_move = np.multiply(change, wei_move)
         point.weights += wei_move
         point.weights = np.multiply(point.weights, point.links)
-        point.weights = np.minimum(point.weights, self.hrange.max_init_wei)
-        point.weights = np.maximum(point.weights, self.hrange.min_init_wei)
 
         probs = np.random.random((1, point.neuron_count))
         change = np.zeros(probs.shape)
@@ -69,8 +64,6 @@ class SimpleAndStructuralCNMutation(MutationOperator):
         bia_move = np.random.normal(0, radius, point.biases.shape)
         bia_move = np.multiply(change, bia_move)
         point.biases += bia_move
-        point.biases = np.minimum(point.biases, self.hrange.max_init_bia)
-        point.biases = np.maximum(point.biases, self.hrange.min_init_bia)
 
         if random.random() <= s_pm: #TODO radius can be larger than 1
             point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
@@ -108,32 +101,115 @@ class SimpleAndStructuralCNMutation(MutationOperator):
 
         point.hidden_comp_order = None
 
-        if random.random() < s_pm:
-            current = point.mutation_radius
-            shift_rad = (self.hrange.max_mut_radius - self.hrange.min_mut_radius) / 2 * radius
-            # min_rad = max(self.hrange.min_mut_radius, current - shift_rad)
-            # max_rad = min(self.hrange.max_mut_radius, current + shift_rad)
+        if random.random() < p_pm:
             min_rad = self.hrange.min_mut_radius
             max_rad = self.hrange.max_mut_radius
             point.mutation_radius = random.uniform(min_rad, max_rad)
 
-        if random.random() < s_pm:
-            current = point.wb_mutation_prob
-            shift_wb = (self.hrange.max_wb_mut_prob - self.hrange.min_wb_mut_prob) / 2 * radius
-            # min_rad = max(self.hrange.min_wb_mut_prob, current - shift_wb)
-            # max_rad = min(self.hrange.max_wb_mut_prob, current + shift_wb)
+        if random.random() < p_pm:
             min_rad = self.hrange.min_wb_mut_prob
             max_rad = self.hrange.max_wb_mut_prob
             point.wb_mutation_prob = random.uniform(min_rad, max_rad)
 
-        if random.random() < s_pm:
-            current = point.s_mutation_prob
-            shift_s = (self.hrange.max_s_mut_prob - self.hrange.min_s_mut_prob) / 2 * radius
-            # min_rad = max(self.hrange.min_s_mut_prob, current - shift_s)
-            # max_rad = min(self.hrange.max_s_mut_prob, current + shift_s)
+        if random.random() < p_pm:
             min_rad = self.hrange.min_s_mut_prob
             max_rad = self.hrange.max_s_mut_prob
             point.s_mutation_prob = random.uniform(min_rad, max_rad)
+
+        if random.random() < p_pm:
+            min_rad = self.hrange.min_p_mut_prob
+            max_rad = self.hrange.max_p_mut_prob
+            point.p_mutation_prob = random.uniform(min_rad, max_rad)
+
+        # point = ChaosNet(point.input_size, point.output_size, links=point.links, weights=point.weights, biases=point.biases,
+        #                  actFuns=point.actFuns, aggrFun=point.aggrFun, maxit=point.maxit)
+        return point.copy()
+
+
+
+class SimpleAndStructuralCNMutation2(MutationOperator):
+    def __init__(self, hrange: HyperparameterRange, maxhjump: int):
+        super().__init__(hrange)
+        self.maxhjump = maxhjump
+
+    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, p_pm: float, radius: float) -> ChaosNet:
+        point = point.copy()
+
+        probs = np.random.random(point.weights.shape)
+        # change = np.zeros(point.weights.shape)
+        # change[np.where(probs <= wb_pm)] = 1
+        # wei_move = np.random.normal(0, radius, point.weights.shape)
+        # wei_move = np.multiply(change, wei_move)
+        # point.weights += wei_move
+        # point.weights = np.multiply(point.weights, point.links)
+        to_change = np.where(probs <= wb_pm)
+        point.weights[to_change] = np.random.uniform(self.hrange.min_init_wei, self.hrange.max_init_wei, point.weights.shape)[to_change]
+
+        probs = np.random.random((1, point.neuron_count))
+        # change = np.zeros(probs.shape)
+        # change[np.where(probs <= wb_pm)] = 1
+        # change[0, :point.input_size] = 0
+        # bia_move = np.random.normal(0, radius, point.biases.shape)
+        # bia_move = np.multiply(change, bia_move)
+        # point.biases += bia_move
+        to_change = np.where(probs <= wb_pm)
+        point.biases[to_change] = np.random.uniform(self.hrange.min_init_wei, self.hrange.max_init_wei, point.biases.shape)[to_change]
+
+        if random.random() <= s_pm: #TODO radius can be larger than 1
+            point.maxit = try_choose_different(point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
+
+        probs = np.random.random(point.links.shape)
+        to_change = np.where(probs <= s_pm)
+        new_links = point.links.copy()
+        new_links[to_change] = 1 - new_links[to_change]
+        new_links[:, :point.input_size] = 0
+        new_links[point.hidden_end_index:, :] = 0
+        np.fill_diagonal(new_links, 0)
+
+        diffs = point.links - new_links
+        added_edges = np.where(diffs == -1)
+        minW = np.min(point.weights)
+        maxW = np.max(point.weights)
+        point.weights[added_edges] = np.random.uniform(minW, maxW, point.weights.shape)[added_edges]
+
+        point.links = new_links
+
+        point.weights = np.multiply(point.weights, point.links)
+
+        for i in range(point.hidden_start_index, point.hidden_end_index):
+            if random.random() < s_pm:
+                point.actFuns[i] = try_choose_different(point.actFuns[i], self.hrange.actFunSet)
+
+        if random.random() < s_pm:
+            point.aggrFun = try_choose_different(point.aggrFun, self.hrange.actFunSet)
+
+        if random.random() < s_pm:
+            minh = max(self.hrange.min_hidden, point.hidden_count - self.maxhjump)
+            maxh = min(self.hrange.max_hidden, point.hidden_count + self.maxhjump)
+            options = list(range(minh, maxh + 1))
+            point = change_neuron_count(point, self.hrange, try_choose_different(point.hidden_count, options))
+
+        point.hidden_comp_order = None
+
+        if random.random() < p_pm:
+            min_rad = self.hrange.min_mut_radius
+            max_rad = self.hrange.max_mut_radius
+            point.mutation_radius = random.uniform(min_rad, max_rad)
+
+        if random.random() < p_pm:
+            min_rad = self.hrange.min_wb_mut_prob
+            max_rad = self.hrange.max_wb_mut_prob
+            point.wb_mutation_prob = random.uniform(min_rad, max_rad)
+
+        if random.random() < p_pm:
+            min_rad = self.hrange.min_s_mut_prob
+            max_rad = self.hrange.max_s_mut_prob
+            point.s_mutation_prob = random.uniform(min_rad, max_rad)
+
+        if random.random() < p_pm:
+            min_rad = self.hrange.min_p_mut_prob
+            max_rad = self.hrange.max_p_mut_prob
+            point.p_mutation_prob = random.uniform(min_rad, max_rad)
 
         # point = ChaosNet(point.input_size, point.output_size, links=point.links, weights=point.weights, biases=point.biases,
         #                  actFuns=point.actFuns, aggrFun=point.aggrFun, maxit=point.maxit)

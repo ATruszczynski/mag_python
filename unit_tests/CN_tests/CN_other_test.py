@@ -23,7 +23,7 @@ def test_CN_copy():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), TanH(), ReLu(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 
 
     net.run(np.array([[0], [1]]))
@@ -57,6 +57,7 @@ def test_CN_copy():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
+                          desired_p_prob=4,
                           desired_hidden_comp_order=[2, 3, 4],
                           desired_inp=np.array([[0, 0, 0.5, -0.5, -0.924234315, 0.122459331, -0.962117157]]).reshape(-1, 1),
                           desired_act=np.array([[0, 1, 0.622459331, -0.462117157, 0, 0.747359064, 0.252640936]]).reshape(-1, 1))
@@ -90,5 +91,6 @@ def test_CN_copy():
                           desired_maxit=2,
                           desired_mut_rad=1,
                           desired_wb_prob=2,
-                          desired_s_prob=3)
+                          desired_s_prob=3,
+                          desired_p_prob=4)
 

@@ -10,7 +10,7 @@ def test_determinism(): #TODO this is (was?) broken
     ec = EvolvingClassifier()
 
     ec.co = SimpleCrossoverOperator(ec.hrange)
-    ec.mo = SimpleCNMutation(ec.hrange)
+    ec.mo = SimpleAndStructuralCNMutation(ec.hrange, maxhjump=5)
     ec.so = TournamentSelection(2)
     ec.ff = CNFF()
     ec.fc = CNFitnessCalculator()
@@ -37,4 +37,4 @@ def test_determinism(): #TODO this is (was?) broken
             assert t1[2] == t2[2]
             assert np.array_equal(t1[3], t2[3])
 
-# test_determinism()
+test_determinism()

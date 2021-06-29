@@ -10,7 +10,7 @@ class ChaosNet:
     #TODO remove maxit as default
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
                  actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
-                 s_mutation_prob: float):
+                 s_mutation_prob: float, p_mutation_prob: float):
         #TODO validation
 
         assert links.shape[0] == weights.shape[0]
@@ -52,6 +52,7 @@ class ChaosNet:
         self.mutation_radius = mutation_radius###---
         self.wb_mutation_prob = wb_mutation_prob###---
         self.s_mutation_prob = s_mutation_prob###---
+        self.p_mutation_prob = p_mutation_prob###---
 
     # def run(self, input: np.ndarray, try_faster: bool = False):
     #     self.act[0, :self.input_size] = input.reshape(1, -1)
@@ -81,7 +82,7 @@ class ChaosNet:
         self.act[:self.input_size, :] = inputs
 
         for i in range(self.maxit):
-            for n in self.hidden_comp_order:
+            for n in self.hidden_comp_order: #TODO czy w komp order jest output neurons? chyba nie
                 wei = self.weights[:, n].reshape(-1, 1)
                 self.inp[n, :] = np.dot(wei.T, self.act) + self.biases[0, n]
                 self.act[n, :] = self.actFuns[n].compute(self.inp[n, :])
@@ -177,7 +178,7 @@ class ChaosNet:
         # for batch in self.hidden_comp_order:
         #     for i in range(len(batch)):
         #         batch[i] += self.input_size
-
+        #TODO jak to reaguje na wierzchołek ukryyt bez wejścia?
         self.hidden_comp_order = []
 
         touched = list(range(self.hidden_start_index))
@@ -185,8 +186,9 @@ class ChaosNet:
 
         hidden_links = self.links[:self.hidden_end_index, :self.hidden_end_index].copy()
 
+        #TODO wyznaczanie które wierzch mają stopień wejśćia jest chyba bez sensu
         while len(touched) < self.hidden_end_index:
-            out_of_layer_edges = hidden_links[layers[-1]]
+            out_of_layer_edges = hidden_links[layers[-1], :]
             oole_col_sums = np.sum(out_of_layer_edges, axis=0)
             out_of_layer_vertices = np.where(oole_col_sums > 0)[0].tolist()
             if len(out_of_layer_vertices) == 0:
@@ -319,13 +321,28 @@ class ChaosNet:
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
                         , maxit=self.maxit, mutation_radius=self.mutation_radius, wb_mutation_prob=self.wb_mutation_prob,
-                        s_mutation_prob=self.s_mutation_prob)
+                        s_mutation_prob=self.s_mutation_prob, p_mutation_prob=self.p_mutation_prob)
 
     def calculate_distance_from_input(self):
         touched = []
         layers = []
 
         hidden_links = self.links
+
+    def get_mask(self) -> np.ndarray:
+        mask = np.ones((self.neuron_count, self.neuron_count))
+        mask[:, self.input_size] = 0
+        mask[-self.output_size:, :] = 0
+        np.fill_diagonal(mask, 0)
+
+        return mask
+
+    def density(self):
+        how_many = np.sum(self.links)
+        maxi = np.sum(self.get_mask())
+
+        return how_many/maxi
+
 
 
     # def get_comp_order(self):
@@ -378,7 +395,8 @@ class ChaosNet:
     def to_string(self):
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{self.maxit}|" \
-                  f"{round(self.mutation_radius, 3)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}"
+                  f"{round(self.mutation_radius, 3)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}" \
+                  f"|{round(self.p_mutation_prob, 5)}"
 
         return result
 
@@ -432,10 +450,13 @@ def efficiency(conf_matrix):
     prec = average_precision(conf_matrix)
     rec = average_recall(conf_matrix)
 
-    return mean([acc, prec, rec])
+    prec = min(get_precisions(conf_matrix))
+    rec = min(get_recalls(conf_matrix))
+    f1 = min(get_f1_scores(conf_matrix))
 
+    return min([acc, prec, rec, f1])
 
-def average_f1_score(conf_matrix):
+def get_f1_scores(conf_matrix):
     precisions = get_precisions(conf_matrix)
     recall = get_recalls(conf_matrix)
 
@@ -444,6 +465,11 @@ def average_f1_score(conf_matrix):
         prec_inv = 1 / precisions[i]
         rec_inv = 1 / recall[i]
         f1.append(2 / (rec_inv + prec_inv))
+
+    return f1
+
+def average_f1_score(conf_matrix):
+    f1 = get_f1_scores(conf_matrix)
 
     return mean(f1)
 

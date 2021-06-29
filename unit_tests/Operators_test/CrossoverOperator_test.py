@@ -8,7 +8,7 @@ from utility.TestingUtility import compare_chaos_network
 
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
 
     #TODO fix with it changes
     link1 = np.array([[0, 1, 1, 0, 1],
@@ -38,9 +38,9 @@ def test_simple_crossover():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+                   aggrFun=SincAct(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20, s_mutation_prob=30)
+                   aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20, s_mutation_prob=30, p_mutation_prob=40)
 
     co = SimpleCrossoverOperator(hrange)
 
@@ -75,7 +75,8 @@ def test_simple_crossover():
                           desired_maxit=2,
                           desired_mut_rad=1,
                           desired_wb_prob=2,
-                          desired_s_prob=3)
+                          desired_s_prob=3,
+                          desired_p_prob=4)
     #TODO biasy tu są źle
     ##################################################################
 
@@ -102,7 +103,8 @@ def test_simple_crossover():
                           desired_maxit=5,
                           desired_mut_rad=10,
                           desired_wb_prob=20,
-                          desired_s_prob=30)
+                          desired_s_prob=30,
+                          desired_p_prob=40)
 
     ##################################################################
 
@@ -129,7 +131,8 @@ def test_simple_crossover():
                           desired_maxit=5,
                           desired_mut_rad=10,
                           desired_wb_prob=20,
-                          desired_s_prob=3)
+                          desired_s_prob=3,
+                          desired_p_prob=40)
 
     ##################################################################
 
@@ -156,14 +159,15 @@ def test_simple_crossover():
                           desired_maxit=2,
                           desired_mut_rad=1,
                           desired_wb_prob=2,
-                          desired_s_prob=30)
+                          desired_s_prob=30,
+                          desired_p_prob=4)
 
 
 def test_simple_crossover_2():
     #TODO fix with it changes
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
 
     link1 = np.array([[0, 1, 0, 1],
                       [0, 0, 0, 1],
@@ -189,8 +193,8 @@ def test_simple_crossover_2():
     bia2 = np.array([[0, -20, -30, -40, -50]])
     actFuns2 = [None, TanH(), TanH(), None, None]
 
-    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
-    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20, s_mutation_prob=30)
+    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20, s_mutation_prob=30, p_mutation_prob=40)
 
     co = SimpleCrossoverOperator(hrange)
 
@@ -223,7 +227,8 @@ def test_simple_crossover_2():
                           desired_maxit=2,
                           desired_mut_rad=1,
                           desired_wb_prob=2,
-                          desired_s_prob=3)
+                          desired_s_prob=3,
+                          desired_p_prob=4)
 
     ##################################################################
 
@@ -250,7 +255,8 @@ def test_simple_crossover_2():
                           desired_maxit=5,
                           desired_mut_rad=10,
                           desired_wb_prob=20,
-                          desired_s_prob=30)
+                          desired_s_prob=30,
+                          desired_p_prob=40)
 
     #TODO biasy tu są źle
 
@@ -279,7 +285,8 @@ def test_simple_crossover_2():
                           desired_maxit=5,
                           desired_mut_rad=10,
                           desired_wb_prob=2,
-                          desired_s_prob=3)
+                          desired_s_prob=3,
+                          desired_p_prob=4)
 
     ###################################################################
 
@@ -304,7 +311,8 @@ def test_simple_crossover_2():
                           desired_maxit=2,
                           desired_mut_rad=1,
                           desired_wb_prob=20,
-                          desired_s_prob=30)
+                          desired_s_prob=30,
+                          desired_p_prob=40)
 
 
 # link1 = np.array([[0, 1, 0, 1],
@@ -339,7 +347,7 @@ def test_simple_crossover_2():
 
 
 hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                             wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7))
+                             wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.3, 0.5))
 link1 = np.array([[0, 1, 1, 0, 1],
                   [0, 0, 1, 0, 1],
                   [0, 1, 0, 0, 1],
@@ -367,9 +375,9 @@ bia2 = np.array([[-10, -20, -30, -40, -50]])
 actFuns2 = [None, TanH(), TanH(), None, None]
 
 cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(),
-               maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3)
+               maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
 cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(),
-               maxit=5, mutation_radius=4, wb_mutation_prob=5, s_mutation_prob=6)
+               maxit=5, mutation_radius=4, wb_mutation_prob=5, s_mutation_prob=6, p_mutation_prob=7)
 
 
 random.seed(1002)
@@ -380,7 +388,8 @@ print(f"prob_swap_maxit: {random.random()}")
 print(f"swap_mut_rad: \n {random.random()}")
 print(f"swap_wb_prob: \n {random.random()}")
 print(f"swap_s_prob: \n {random.random()}")
-test_simple_crossover()
+print(f"swap_p_prob: \n {random.random()}")
+# test_simple_crossover()
 
 
 

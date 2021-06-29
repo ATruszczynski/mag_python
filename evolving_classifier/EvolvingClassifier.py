@@ -53,7 +53,7 @@ class EvolvingClassifier:
         self.cross_performed = 0
 
         self.co = SimpleCrossoverOperator(self.hrange)
-        self.mo = SimpleCNMutation(self.hrange)
+        self.mo = SimpleAndStructuralCNMutation(self.hrange, 2)
         self.so = TournamentSelection(4)
         self.ff = CNFF()
         self.fc = CNFitnessCalculator()
@@ -95,6 +95,7 @@ class EvolvingClassifier:
                                        trainOutputs=self.trainOutputs)
 
             sorted_eval = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
+            eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i][1].ff)]
             # print(sorted_eval[0][0].weights)
             mean_eff = mean([x[1].get_eff() for x in eval_pop])
             mean_mut_rad = mean([x[0].mutation_radius for x in eval_pop])
@@ -124,11 +125,20 @@ class EvolvingClassifier:
 
             for ind in range(len(crossed)):
                 # new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))
-                to_mutate = crossed[ind]
-                new_pop.append(self.mo.mutate(to_mutate, wb_pm=to_mutate.wb_mutation_prob, s_pm=to_mutate.s_mutation_prob, radius=to_mutate.mutation_radius))
+                to_mutate = crossed[ind] #TODO to podawanie argumentów tutaj nie ma sensu
+                new_pop.append(self.mo.mutate(to_mutate, wb_pm=to_mutate.wb_mutation_prob, s_pm=to_mutate.s_mutation_prob, p_pm=to_mutate.p_mutation_prob, radius=to_mutate.mutation_radius))
 
 
             self.population = new_pop
+
+
+            # if i % 75 == 0:
+            #     for dd in range(len(self.population)):
+            #         self.population[dd].mutation_radius = random.uniform(self.hrange.min_mut_radius, self.hrange.max_mut_radius)
+            #         self.population[dd].wb_mutation_prob = random.uniform(self.hrange.min_wb_mut_prob, self.hrange.max_wb_mut_prob)
+            #         self.population[dd].s_mutation_prob = random.uniform(self.hrange.min_s_mut_prob, self.hrange.max_s_mut_prob)
+            #         self.population[dd].p_mutation_prob = random.uniform(self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob)
+
             # self.population = [sorted_eval[i][0] for i in range(5)]
             # self.population.extend(new_pop[:-5])
 
