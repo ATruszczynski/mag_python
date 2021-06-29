@@ -3,6 +3,9 @@ import numpy as np
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
 from utility.TestingUtility import compare_chaos_network
+import random
+
+from utility.Utility import generate_counting_problem
 
 
 def test_CN_copy():
@@ -94,3 +97,39 @@ def test_CN_copy():
                           desired_s_prob=3,
                           desired_p_prob=4)
 
+def test_cn_test_5():
+    seed = 1001
+    random.seed(1001)
+    np.random.seed(1001)
+
+    fives = generate_counting_problem(1000, 5)
+
+    links = np.zeros((11, 11))
+    links[:5, 5:] = 1
+    print(links)
+
+    wei = np.array([[-10.04604658, -9.74799651, -9.86356132, -9.65934997, -10.00416797],
+                    [-4.22234218,  -4.20543259, -4.03250108, -4.15155717, -4.30413714],
+                    [-0.38323539,  -0.26812115, -0.20560072, -0.30525856, -0.58350255],
+                    [2.01047055,   2.39063375, 2.32230205, 2.40134387, 2.25093187],
+                    [4.61636766,   4.41484224, 4.5685952, 4.60406886, 4.28679621],
+                    [7.32939472,   7.52108442, 7.63706206, 7.50769173, 7.39856456]])
+
+    weights = np.zeros((11, 11))
+    weights[:5, 5:] = wei.T
+
+    biases = np.zeros((1, 11))
+    biases[0, 5:] = np.array([[14.18236634 ],
+                              [11.33332699 ],
+                              [5.72165648  ],
+                              [-0.84340657 ],
+                              [-8.69929589 ],
+                              [-21.69464734]]).T
+
+    print(weights)
+    print(biases)
+
+    # ChaosNet(input_size=5, output_size=6, links=)
+
+
+test_cn_test_5()
