@@ -3,7 +3,9 @@ import random
 import pytest
 
 from ann_point.AnnPoint import AnnPoint
-from evolving_classifier.EvolvingClassifier import *
+from ann_point.Functions import *
+from evolving_classifier.operators.SelectionOperator import *
+from utility.AnnDataPoint import AnnDataPoint
 
 
 def test_roullette_select():

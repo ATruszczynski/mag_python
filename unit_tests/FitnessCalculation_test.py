@@ -2,7 +2,11 @@ import pytest
 
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
+from neural_network.ChaosNet import *
 from unit_tests.discarded.ANN_test_test import get_io
+from utility.Utility import generate_population, HyperparameterRange
+from ann_point.Functions import *
+
 
 #TODO this also counts two tests instead of one
 
@@ -228,3 +232,5 @@ print(f"f1: {average_f1_score(cm2)}")
 #
 # test_fitness_calculator_with_size_eff()
 # test_fitness_calculator_with_pure_eff()
+
+test_fitness_calculator_with_pure_eff()

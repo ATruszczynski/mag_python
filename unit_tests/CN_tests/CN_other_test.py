@@ -102,7 +102,7 @@ def test_cn_test_5():
     random.seed(1001)
     np.random.seed(1001)
 
-    fives = generate_counting_problem(1000, 5)
+    fives_i, fives_o = generate_counting_problem(1000, 5)
 
     links = np.zeros((11, 11))
     links[:5, 5:] = 1
@@ -129,7 +129,11 @@ def test_cn_test_5():
     print(weights)
     print(biases)
 
-    # ChaosNet(input_size=5, output_size=6, links=)
+    net = ChaosNet(input_size=5, output_size=6, links=links, weights=weights, biases=biases, actFuns=11 * [None], aggrFun=Softmax(), maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+    test_res = net.test(fives_i, fives_o, QuadDiff())
+
+    print(test_res)
+
 
 
 test_cn_test_5()

@@ -1,8 +1,8 @@
 from ann_point.AnnPoint import *
 import numpy as np
 
-from neural_network.ChaosNet import ChaosNet
-from neural_network.FeedForwardNeuralNetwork import *
+from neural_network.ChaosNet import *
+from ann_point.Functions import *
 
 #TODO touch should get removed
 class AnnDataPoint(): #TODO test

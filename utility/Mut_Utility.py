@@ -5,6 +5,7 @@ from ann_point.AnnPoint2 import *
 from neural_network.ChaosNet import ChaosNet
 from utility.Utility import choose_without_repetition, get_Xu_matrix, AnnPoint, point_from_layers, generate_layer, \
     get_links
+from utility.Utility2 import *
 from ann_point.HyperparameterRange import HyperparameterRange
 
 def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hidden: int):
@@ -35,7 +36,8 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
     new_links = get_links(input_size, output_size, new_neuron_count)
     new_links[:net.hidden_end_index, :net.hidden_end_index] = net.links[:net.hidden_end_index, :net.hidden_end_index]
     new_links[:net.hidden_end_index, -output_size:] = net.links[:net.hidden_end_index, -output_size:]
-
+    new_links = np.multiply(new_links, get_mask(input_size=input_size, output_size=output_size,
+                                                neuron_count=new_neuron_count))
 
     new_weights = np.random.uniform(min_wei, max_wei, new_links.shape)
     new_weights[:net.hidden_end_index, :net.hidden_end_index] = net.weights[:net.hidden_end_index, :net.hidden_end_index]

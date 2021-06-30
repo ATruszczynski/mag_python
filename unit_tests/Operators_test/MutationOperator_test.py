@@ -468,8 +468,8 @@ if s_prob_change <= 0.75:
 p_prob_change = random.random()
 if p_prob_change <= 0.75:
     print(f"p_prob: \n {random.uniform(0.8, 1)}")
-# test_struct_mutation()
-# test_struct_mutation_2()
-# test_struct_mutation_3()
+test_struct_mutation()
+test_struct_mutation_2()
+test_struct_mutation_3()
 
 

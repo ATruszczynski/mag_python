@@ -1,4 +1,3 @@
-from neural_network.FeedForwardNeuralNetwork import network_from_point
 from utility.Utility import *
 import pytest
 
@@ -291,57 +290,57 @@ def test_get_in_radius_limits():
     assert min(hist) >= minB
     assert max(hist) <= maxB
 
-def test_get_network_from_point():
-    point = AnnPoint(neuronCounts=[2, 4, 4, 3], actFuns=[ReLu(), ReLu(), Softmax()], lossFun=QuadDiff(), learningRate=1, momCoeff=2, batchSize=3)
-    network = network_from_point(point, 1010)
-
-    assert len(network.neuronCounts) == 4
-    assert network.neuronCounts[0] == 2
-    assert network.neuronCounts[1] == 4
-    assert network.neuronCounts[2] == 4
-    assert network.neuronCounts[3] == 3
-
-    assert len(network.actFuns) == 4
-    assert network.actFuns[0] is None
-    assert isinstance(network.actFuns[1], ReLu)
-    assert isinstance(network.actFuns[2], ReLu)
-    assert isinstance(network.actFuns[3], Softmax)
-
-    assert isinstance(network.lossFun, QuadDiff)
-    assert network.learningRate == 10
-    assert network.momCoeff == 100
-    assert network.batchSize == 8
-
-    assert network.layerCount == 4
-
-    assert len(network.weights) == 4
-    assert np.array_equal(network.weights[0], np.empty((0, 0)))
-    assert np.all(np.isclose(network.weights[1], np.array([[-0.83116718, -0.27092632], [-1.040413, -1.27319421],[0.09199489, 1.12827275], [0.70227065, -1.67139339]]), atol=1e-5))
-    assert np.all(np.isclose(network.weights[2], np.array([[-0.23979613, -0.82519097, -0.27174483,  0.38980573],
-                                                           [-0.25130439,  0.14294476,  1.35161869, -0.03725841],
-                                                          [-0.68505133,  0.17929361,  0.29902494, -0.1533996],
-                                                            [0.38148435, -0.4994389,   0.50463211, -0.12389273]]), atol=1e-5))
-    assert np.all(np.isclose(network.weights[3], np.array([[-1.2917587,   0.37861067, -0.88823027, -0.38984775],
-                                                           [-0.45926747, -0.19749436,  0.12400293,  0.14901888],
-                                                          [ 0.14190831, -0.23561145,  0.47601405, -0.31930159]]), atol=1e-5))
-
-    assert len(network.biases) == 4
-    assert np.array_equal(network.biases[0], np.empty((0, 0)))
-    assert np.all(np.isclose(network.biases[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
-    assert np.all(np.isclose(network.biases[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
-    assert np.all(np.isclose(network.biases[3], np.array([[0], [0], [0]]), atol=1e-5))
-
-    assert len(network.weight_mom) == 4
-    assert np.array_equal(network.weight_mom[0], np.empty((0, 0)))
-    assert np.all(np.isclose(network.weight_mom[1], np.array([[0, 0], [0, 0], [0, 0], [0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(network.weight_mom[2], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
-    assert np.all(np.isclose(network.weight_mom[3], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
-
-    assert len(network.biases_mom) == 4
-    assert np.array_equal(network.biases_mom[0], np.empty((0, 0)))
-    assert np.all(np.isclose(network.biases_mom[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
-    assert np.all(np.isclose(network.biases_mom[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
-    assert np.all(np.isclose(network.biases_mom[3], np.array([[0], [0], [0]]), atol=1e-5))
+# def test_get_network_from_point():
+#     point = AnnPoint(neuronCounts=[2, 4, 4, 3], actFuns=[ReLu(), ReLu(), Softmax()], lossFun=QuadDiff(), learningRate=1, momCoeff=2, batchSize=3)
+#     network = network_from_point(point, 1010)
+#
+#     assert len(network.neuronCounts) == 4
+#     assert network.neuronCounts[0] == 2
+#     assert network.neuronCounts[1] == 4
+#     assert network.neuronCounts[2] == 4
+#     assert network.neuronCounts[3] == 3
+#
+#     assert len(network.actFuns) == 4
+#     assert network.actFuns[0] is None
+#     assert isinstance(network.actFuns[1], ReLu)
+#     assert isinstance(network.actFuns[2], ReLu)
+#     assert isinstance(network.actFuns[3], Softmax)
+#
+#     assert isinstance(network.lossFun, QuadDiff)
+#     assert network.learningRate == 10
+#     assert network.momCoeff == 100
+#     assert network.batchSize == 8
+#
+#     assert network.layerCount == 4
+#
+#     assert len(network.weights) == 4
+#     assert np.array_equal(network.weights[0], np.empty((0, 0)))
+#     assert np.all(np.isclose(network.weights[1], np.array([[-0.83116718, -0.27092632], [-1.040413, -1.27319421],[0.09199489, 1.12827275], [0.70227065, -1.67139339]]), atol=1e-5))
+#     assert np.all(np.isclose(network.weights[2], np.array([[-0.23979613, -0.82519097, -0.27174483,  0.38980573],
+#                                                            [-0.25130439,  0.14294476,  1.35161869, -0.03725841],
+#                                                           [-0.68505133,  0.17929361,  0.29902494, -0.1533996],
+#                                                             [0.38148435, -0.4994389,   0.50463211, -0.12389273]]), atol=1e-5))
+#     assert np.all(np.isclose(network.weights[3], np.array([[-1.2917587,   0.37861067, -0.88823027, -0.38984775],
+#                                                            [-0.45926747, -0.19749436,  0.12400293,  0.14901888],
+#                                                           [ 0.14190831, -0.23561145,  0.47601405, -0.31930159]]), atol=1e-5))
+#
+#     assert len(network.biases) == 4
+#     assert np.array_equal(network.biases[0], np.empty((0, 0)))
+#     assert np.all(np.isclose(network.biases[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
+#     assert np.all(np.isclose(network.biases[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
+#     assert np.all(np.isclose(network.biases[3], np.array([[0], [0], [0]]), atol=1e-5))
+#
+#     assert len(network.weight_mom) == 4
+#     assert np.array_equal(network.weight_mom[0], np.empty((0, 0)))
+#     assert np.all(np.isclose(network.weight_mom[1], np.array([[0, 0], [0, 0], [0, 0], [0, 0]]), atol=1e-5))
+#     assert np.all(np.isclose(network.weight_mom[2], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
+#     assert np.all(np.isclose(network.weight_mom[3], np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]), atol=1e-5))
+#
+#     assert len(network.biases_mom) == 4
+#     assert np.array_equal(network.biases_mom[0], np.empty((0, 0)))
+#     assert np.all(np.isclose(network.biases_mom[1], np.array([[0], [0], [0], [0]]), atol=1e-5))
+#     assert np.all(np.isclose(network.biases_mom[2], np.array([[0], [0], [0], [0]]), atol=1e-5))
+#     assert np.all(np.isclose(network.biases_mom[3], np.array([[0], [0], [0]]), atol=1e-5))
 
 def test_numpy_deep_copy():
     matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])

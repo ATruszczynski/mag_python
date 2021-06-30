@@ -4,6 +4,7 @@ from statistics import mean
 import numpy as np
 
 from ann_point.Functions import *
+from utility.Utility2 import *
 
 
 class ChaosNet:
@@ -329,17 +330,17 @@ class ChaosNet:
 
         hidden_links = self.links
 
-    def get_mask(self) -> np.ndarray:
-        mask = np.ones((self.neuron_count, self.neuron_count))
-        mask[:, self.input_size] = 0
-        mask[-self.output_size:, :] = 0
-        np.fill_diagonal(mask, 0)
-
-        return mask
+    # def get_mask(self) -> np.ndarray:
+    #     mask = np.ones((self.neuron_count, self.neuron_count))
+    #     mask[:, self.input_size] = 0
+    #     mask[-self.output_size:, :] = 0
+    #     np.fill_diagonal(mask, 0)
+    #
+    #     return mask
 
     def density(self):
         how_many = np.sum(self.links)
-        maxi = np.sum(self.get_mask())
+        maxi = np.sum(get_mask(self.input_size, self.output_size, self.neuron_count))
 
         return how_many/maxi
 
@@ -449,12 +450,13 @@ def efficiency(conf_matrix):
     acc = accuracy(conf_matrix)
     prec = average_precision(conf_matrix)
     rec = average_recall(conf_matrix)
+    f1 = average_f1_score(conf_matrix)
 
-    prec = min(get_precisions(conf_matrix))
-    rec = min(get_recalls(conf_matrix))
-    f1 = min(get_f1_scores(conf_matrix))
+    # prec = min(get_precisions(conf_matrix))
+    # rec = min(get_recalls(conf_matrix))
+    # f1 = min(get_f1_scores(conf_matrix))
 
-    return min([acc, prec, rec, f1])
+    return mean([acc, prec, rec])
 
 def get_f1_scores(conf_matrix):
     precisions = get_precisions(conf_matrix)
@@ -462,9 +464,19 @@ def get_f1_scores(conf_matrix):
 
     f1 = []
     for i in range(len(precisions)):
-        prec_inv = 1 / precisions[i]
-        rec_inv = 1 / recall[i]
-        f1.append(2 / (rec_inv + prec_inv))
+        prec = precisions[i]
+        rec = recall[i]
+        numerator = 2 * prec * rec
+        denominator = prec + rec
+
+        if denominator == 0:
+            f1.append(0)
+        else:
+            f1.append(numerator / denominator)
+
+        # prec_inv = 1 / precisions[i]
+        # rec_inv = 1 / recall[i]
+        # f1.append(2 / (rec_inv + prec_inv))
 
     return f1
 

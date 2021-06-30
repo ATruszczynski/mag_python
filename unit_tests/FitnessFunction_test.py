@@ -2,11 +2,13 @@ import random
 import numpy as np
 import pytest
 
-from ann_point.AnnPoint import AnnPoint
 from ann_point.Functions import *
 from evolving_classifier.FitnessFunction import *
+from ann_point.Functions import *
 
 #TODO Softmax makes no sense on single neuron
+from neural_network.ChaosNet import efficiency
+
 
 def get_point():
     links = np.array([[0, 0, 1, 0, 0, 0],

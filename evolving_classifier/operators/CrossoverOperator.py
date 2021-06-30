@@ -4,6 +4,7 @@ from ann_point.AnnPoint import AnnPoint
 from ann_point.AnnPoint2 import AnnPoint2, point_from_layer_tuples
 from neural_network.ChaosNet import ChaosNet
 from utility.Mut_Utility import *
+from utility.Utility2 import *
 from utility.Utility import get_Xu_matrix
 import numpy as np
 
@@ -186,9 +187,11 @@ class SimpleCrossoverOperator2:
 
         new_A_links[:rows_to_copy_A_A, :cut_A] = pointA.links[:rows_to_copy_A_A, :cut_A]
         new_A_links[:rows_to_copy_B_A, -(output_size + B_2):] = pointB.links[:rows_to_copy_B_A, -(output_size + B_2):]
+        new_A_links = np.multiply(new_A_links, get_mask(input_size=input_size, output_size=output_size, neuron_count=new_A_count))
 
         new_B_links[:rows_to_copy_B_B, :cut_B] = pointB.links[:rows_to_copy_B_B, :cut_B]
         new_B_links[:rows_to_copy_A_B, -(output_size + A_2):] = pointA.links[:rows_to_copy_A_B, -(output_size + A_2):]
+        new_B_links = np.multiply(new_B_links, get_mask(input_size=input_size, output_size=output_size, neuron_count=new_B_count))
 
         # weight swap
         new_A_weights = np.zeros((new_A_count, new_A_count))
@@ -246,30 +249,27 @@ class SimpleCrossoverOperator2:
 
         new_A_mut_rad = pointA.mutation_radius
         new_B_mut_rad = pointB.mutation_radius
-        # if random.random() <= 0.5:
-        #     new_A_mut_rad = pointB.mutation_radius
-        #     new_B_mut_rad = pointA.mutation_radius
+        if random.random() <= 0.5:
+            new_A_mut_rad = pointB.mutation_radius
+            new_B_mut_rad = pointA.mutation_radius
         #
         new_A_wb_prob = pointA.wb_mutation_prob
         new_B_wb_prob = pointB.wb_mutation_prob
-        # if random.random() <= 0.5:
-        #     new_A_wb_prob = pointB.wb_mutation_prob
-        #     new_B_wb_prob = pointA.wb_mutation_prob
+        if random.random() <= 0.5:
+            new_A_wb_prob = pointB.wb_mutation_prob
+            new_B_wb_prob = pointA.wb_mutation_prob
         #
         new_A_s_prob = pointA.s_mutation_prob
         new_B_s_prob = pointB.s_mutation_prob
-        # if random.random() <= 0.5:
-        #     new_A_s_prob = pointB.s_mutation_prob
-        #     new_B_s_prob = pointA.s_mutation_prob
+        if random.random() <= 0.5:
+            new_A_s_prob = pointB.s_mutation_prob
+            new_B_s_prob = pointA.s_mutation_prob
         #
         new_A_p_prob = pointA.p_mutation_prob
         new_B_p_prob = pointB.p_mutation_prob
-        # if random.random() <= 0.5:
-        #     new_A_p_prob = pointB.p_mutation_prob
-        #     new_B_p_prob = pointA.p_mutation_prob
-
-
-
+        if random.random() <= 0.5:
+            new_A_p_prob = pointB.p_mutation_prob
+            new_B_p_prob = pointA.p_mutation_prob
 
         pointA = ChaosNet(input_size=input_size, output_size=output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_bias, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit,

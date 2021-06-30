@@ -7,7 +7,6 @@ from evolving_classifier import FitnessFunction
 import numpy as np
 
 from neural_network.ChaosNet import ChaosNet
-from neural_network.FeedForwardNeuralNetwork import efficiency
 from utility.AnnDataPoint import AnnDataPoint
 
 

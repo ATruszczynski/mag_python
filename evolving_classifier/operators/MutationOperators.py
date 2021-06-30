@@ -49,6 +49,8 @@ class SimpleAndStructuralCNMutation(MutationOperator):
     def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, p_pm: float, radius: float) -> ChaosNet:
         point = point.copy()
 
+        # mask = get_mask(input_size=point.input_size, output_size=point.output_size, neuron_count=point.neuron_count)
+
         probs = np.random.random(point.weights.shape)
         change = np.zeros(point.weights.shape)
         change[np.where(probs <= wb_pm)] = 1

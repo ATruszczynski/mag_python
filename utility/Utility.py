@@ -9,6 +9,7 @@ from ann_point.HyperparameterRange import *
 from ann_point.AnnPoint import *
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
+from utility.Utility2 import get_mask
 
 
 def try_choose_different(current: Any, possibilities: [Any]) -> Any:
@@ -116,9 +117,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
     return result
 
 def get_links(input_size: int, output_size: int, neuron_count: int):
-    mask = np.zeros((neuron_count, neuron_count))
-    mask[:-output_size, input_size:] = 1
-    np.fill_diagonal(mask, 0)
+    mask = get_mask(input_size, output_size, neuron_count)
 
     density = random.random()
     link_prob = np.random.random((neuron_count, neuron_count))
@@ -128,6 +127,14 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
     links = np.multiply(links, mask)
 
     return links
+
+# def get_mask(input_size: int, output_size: int, neuron_count: int) -> np.ndarray:
+#     mask = np.zeros((neuron_count, neuron_count))
+#     mask[:-output_size, input_size:] = 1
+#     mask = np.triu(mask)
+#     np.fill_diagonal(mask, 0)
+#
+#     return mask
 
     # result = []
     # # TODO stabilise names
@@ -165,8 +172,8 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(0.1, 2), wb_mut_prob=(0.001, 0.25), s_mut_prob=(0.01, 0.01), p_mutation_prob=(0.05, 0.25))
+    hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+                                 mut_radius=(0.1, 10), wb_mut_prob=(0.001, 0.25), s_mut_prob=(0.01, 0.01), p_mutation_prob=(0.05, 0.25))
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
     #                              mut_radius=(0.1, 2), wb_mut_prob=(0.001, 0.25), s_mut_prob=(0.01, 0.01), p_mutation_prob=(0.01, 0.5)) #76
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
