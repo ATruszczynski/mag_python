@@ -49,7 +49,7 @@ class TestMutationOperator(MutationOperator):
         if radius <= 0:
             probs = np.random.random(point.weights.shape)
             to_replace = np.where(probs <= wb_pm)
-            wei_move = np.random.uniform(self.hrange.min_init_wei, self.hrange.max_wb_mut_prob, point.weights.shape)
+            wei_move = np.random.uniform(self.hrange.min_init_wei, self.hrange.max_init_wei, point.weights.shape)
             point.weights[to_replace] = wei_move[to_replace]
 
             probs = np.random.random(point.biases.shape)
