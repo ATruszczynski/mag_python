@@ -1,7 +1,7 @@
 import numpy as np
 
 from ann_point.Functions import *
-from neural_network.ChaosNet import ChaosNet
+from neural_network.ChaosNet import ChaosNet, efficiency
 from utility.TestingUtility import compare_chaos_network
 import random
 
@@ -99,14 +99,14 @@ def test_CN_copy():
 
 def test_cn_test_5():
     seed = 1001
-    random.seed(1001)
-    np.random.seed(1001)
+    random.seed(seed)
+    np.random.seed(seed)
 
     fives_i, fives_o = generate_counting_problem(1000, 5)
 
     links = np.zeros((11, 11))
     links[:5, 5:] = 1
-    print(links)
+    # print(links)
 
     wei = np.array([[-10.04604658, -9.74799651, -9.86356132, -9.65934997, -10.00416797],
                     [-4.22234218,  -4.20543259, -4.03250108, -4.15155717, -4.30413714],
@@ -126,13 +126,16 @@ def test_cn_test_5():
                               [-8.69929589 ],
                               [-21.69464734]]).T
 
+    weights = weights / 100
+    biases = biases / 100
+
     print(weights)
     print(biases)
 
     net = ChaosNet(input_size=5, output_size=6, links=links, weights=weights, biases=biases, actFuns=11 * [None], aggrFun=Softmax(), maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
     test_res = net.test(fives_i, fives_o, QuadDiff())
 
-    print(test_res)
+    assert efficiency(test_res[3]) == 1.0
 
 
 

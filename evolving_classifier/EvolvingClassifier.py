@@ -1,3 +1,4 @@
+import math
 from math import ceil
 from statistics import mean, stdev
 import warnings
@@ -87,6 +88,11 @@ class EvolvingClassifier:
 
         self.supervisor.start(iterations=iterations)
 
+        wb = np.linspace(0.1, 0.001, iterations)
+        wbrr = 0.05
+        # p = np.linspace(0.25, 0.01)
+        best = [self.population[0], -math.inf]
+
         for i in range(iterations):
             if i == 20:
                 ori = 1
@@ -95,6 +101,11 @@ class EvolvingClassifier:
                                        trainOutputs=self.trainOutputs)
 
             sorted_eval = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
+
+            if sorted_eval[0][1].ff >= best[1]:
+                best = [sorted_eval[0][0].copy(), sorted_eval[0][1].ff]
+
+
             eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i][1].ff)]
             # print(sorted_eval[0][0].weights)
             mean_eff = mean([x[1].get_eff() for x in eval_pop])
@@ -121,15 +132,29 @@ class EvolvingClassifier:
 
             new_pop = []
 
-            mut_rad = 0.1
-
             for ind in range(len(crossed)):
                 # new_pop.append(self.mo.mutate(crossed[ind], pm=pm, radius=mut_rad))
                 to_mutate = crossed[ind] #TODO to podawanie argumentów tutaj nie ma sensu
                 new_pop.append(self.mo.mutate(to_mutate, wb_pm=to_mutate.wb_mutation_prob, s_pm=to_mutate.s_mutation_prob, p_pm=to_mutate.p_mutation_prob, radius=to_mutate.mutation_radius))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=to_mutate.edge_count() * to_mutate.wb_mutation_prob,
+                #                                          s_pm=to_mutate.s_mutation_prob / self.pop_size,
+                #                                          p_pm=to_mutate.p_mutation_prob / self.pop_size,
+                #                                          radius=to_mutate.mutation_radius))
+
+
+
+
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=wb[i], s_pm=0, p_pm=0, radius=0))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=wb[i] * (1 - mean_eff), s_pm=0, p_pm=0, radius=0))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=1/to_mutate.edge_count() * (1 - mean_eff), s_pm=0, p_pm=0, radius=0))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=3/to_mutate.edge_count() * (1 - mean_eff)**2, s_pm=0, p_pm=0, radius=0))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=0.01, s_pm=0, p_pm=0, radius=0))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=wbrr * (1 - mean_eff), s_pm=0, p_pm=0, radius=0))
+                # new_pop.append(self.mo.mutate(to_mutate, wb_pm=0.1 * (1 - mean_eff), s_pm=0, p_pm=0, radius=0))
 
 
             self.population = new_pop
+            print(f"best ff: {best[1]}")
 
 
             # if i % 75 == 0:
@@ -149,9 +174,11 @@ class EvolvingClassifier:
         if power > 1:
             pool.close()
 
-        eval_pop_sorted = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
+        sorted_eval = sorted(eval_pop, key=lambda x: x[1].ff, reverse=True)
+        if sorted_eval[0][1].ff >= best[1]:
+            best = [sorted_eval[0][0].copy(), sorted_eval[0][1].ff]
 
-        return eval_pop_sorted[0][0]
+        return best[0]
 
     # def select(self, eval_pop: [[AnnPoint, float]]) -> AnnPoint2:
     #     chosen = choose_without_repetition(options=eval_pop, count=self.tournament_size)

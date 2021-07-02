@@ -31,5 +31,5 @@ class AnnDataPoint(): #TODO test
         return result
 
     def get_eff(self): #TODO check if av of av if same as other av of av
-        return mean([self.acc, self.prec, self.rec])
+        return mean([self.acc, self.prec, self.rec, self.f1])
 

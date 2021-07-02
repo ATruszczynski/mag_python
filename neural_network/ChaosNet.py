@@ -50,6 +50,8 @@ class ChaosNet:
         self.hidden_comp_order = None###---
         self.maxit = maxit###---
 
+        if mutation_radius == 0:
+            raise Exception()
         self.mutation_radius = mutation_radius###---
         self.wb_mutation_prob = wb_mutation_prob###---
         self.s_mutation_prob = s_mutation_prob###---
@@ -222,12 +224,13 @@ class ChaosNet:
 
         for i in range(len(test_output)):
             to = test_output[i]
-            net_result = net_results[:, i]
+            net_result = net_results[:, i].reshape(-1, 1)
             pred_class = np.argmax(net_result)
             corr_class = np.argmax(to)
             confusion_matrix[corr_class, pred_class] += 1
             if lf is not None:
-                resultt += lf.compute(net_result, to)
+                lfcc = lf.compute(net_result, to)
+                resultt += lfcc
 
         return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, resultt]
 
@@ -338,6 +341,11 @@ class ChaosNet:
     #
     #     return mask
 
+    def edge_count(self):
+        how_many = np.sum(self.links)
+        return how_many
+
+
     def density(self):
         how_many = np.sum(self.links)
         maxi = np.sum(get_mask(self.input_size, self.output_size, self.neuron_count))
@@ -394,9 +402,21 @@ class ChaosNet:
     #     return to_update
 
     def to_string(self):
+        actFunsString = ""
+        for i in range(len(self.actFuns)):
+            fun = self.actFuns[i]
+            if fun is None:
+                actFunsString += "-"
+            else:
+                actFunsString += self.actFuns[i].to_string()
+            if i != len(self.actFuns) - 1:
+                actFunsString += "|"
+
+
         result = ""
-        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{self.maxit}|" \
-                  f"{round(self.mutation_radius, 3)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}" \
+        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(np.sum(self.links))}|{self.maxit}|" \
+                  f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
+                  f"{round(self.mutation_radius, 5)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}" \
                   f"|{round(self.p_mutation_prob, 5)}"
 
         return result
@@ -456,7 +476,7 @@ def efficiency(conf_matrix):
     # rec = min(get_recalls(conf_matrix))
     # f1 = min(get_f1_scores(conf_matrix))
 
-    return mean([acc, prec, rec])
+    return mean([acc, prec, rec, f1])
 
 def get_f1_scores(conf_matrix):
     precisions = get_precisions(conf_matrix)

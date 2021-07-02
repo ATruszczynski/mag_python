@@ -16,6 +16,105 @@ class CrossoverOperator:
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         pass
 
+class TestCrossoverOperator(CrossoverOperator):
+    def __init__(self):
+        super().__init__()
+
+    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+        cut_ori = random.randint(0, 1)
+
+
+        if pointA.mutation_radius == 0:
+            raise Exception()
+        if pointB.mutation_radius == 0:
+            raise Exception()
+
+        if cut_ori == 0: #vertical cut
+            cut = random.randint(pointA.hidden_start_index + 1, pointA.neuron_count - 1)
+
+            # links
+            new_A_links = pointA.links.copy()
+            new_A_links[:, cut:] = pointB.links[:, cut:].copy()
+
+            new_B_links = pointB.links.copy()
+            new_B_links[:, cut:] = pointA.links[:, cut:].copy()
+
+
+            # weights
+            new_A_weights = pointA.weights.copy()
+            new_A_weights[:, cut:] = pointB.weights[:, cut:].copy()
+
+            new_B_weights = pointB.weights.copy()
+            new_B_weights[:, cut:] = pointA.weights[:, cut:].copy()
+
+            # biases
+
+            new_A_biases = pointA.biases.copy()
+            new_A_biases[0, cut:] = pointB.biases[0, cut:].copy()
+
+            new_B_biases = pointB.biases.copy()
+            new_B_biases[0, cut:] = pointA.biases[0, cut:].copy()
+
+
+
+            # acts
+
+            # new_A_acts = []
+            # new_B_acts = []
+            # for i in range(pointA.input_size):
+            #     new_A_acts.append(None)
+            #     new_B_acts.append(None)
+            #
+            # for i in range(pointA.hidden_start_index, pointA.neuron_count):
+            #     if i < cut:
+            #         new_A_acts.append(pointA.actFuns[i].copy())
+            #         new_B_acts.append(pointB.actFuns[i].copy())
+            #     else:
+            #         new_A_acts.append(pointB.actFuns[i].copy())
+            #         new_B_acts.append(pointA.actFuns[i].copy())
+
+            pass
+        else: #horizontal cut
+            cut = random.randint(1, pointA.hidden_end_index - 1)
+
+            # links
+            new_A_links = pointA.links.copy()
+            new_A_links[cut:, :] = pointB.links[cut:, :].copy()
+
+            new_B_links = pointB.links.copy()
+            new_B_links[cut:, :] = pointA.links[cut:, :].copy()
+
+
+            # weights
+            new_A_weights = pointA.weights.copy()
+            new_A_weights[cut:, :] = pointB.weights[cut:, :].copy()
+
+            new_B_weights = pointB.weights.copy()
+            new_B_weights[cut:, :] = pointA.weights[cut:, :].copy()
+
+            # new_A_acts = pointA.actFuns
+            # new_B_acts = pointB.actFuns
+
+            new_A_biases = pointA.biases.copy()
+            new_B_biases = pointB.biases.copy()
+
+        if pointA.mutation_radius == 0:
+            raise Exception()
+        if pointB.mutation_radius == 0:
+            raise Exception()
+
+        pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
+                          biases=new_A_biases, actFuns=pointA.actFuns, aggrFun=pointA.aggrFun, maxit=pointA.maxit, mutation_radius=pointA.mutation_radius,
+                          wb_mutation_prob=pointA.wb_mutation_prob, s_mutation_prob=pointA.s_mutation_prob, p_mutation_prob=pointA.p_mutation_prob)
+
+        pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
+                          biases=new_B_biases, actFuns=pointB.actFuns, aggrFun=pointB.aggrFun, maxit=pointB.maxit, mutation_radius=pointB.mutation_radius,
+                          wb_mutation_prob=pointB.wb_mutation_prob, s_mutation_prob=pointB.s_mutation_prob, p_mutation_prob=pointB.p_mutation_prob)
+
+        return pointA, pointB
+
+
+
 #TODO exchanges with some probability!
 class SimpleCrossoverOperator:
     def __init__(self, hrange: HyperparameterRange):
