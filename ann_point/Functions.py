@@ -174,6 +174,47 @@ class Softmax(ActFun):
     def to_string(self):
         return "SM"
 
+class Identity(ActFun):
+    def compute(self, arg: np.ndarray) -> np.ndarray:
+        return arg
+
+    def computeDer(self, arg: np.ndarray) -> np.ndarray:
+        pass
+
+    def copy(self):
+        return Identity()
+
+    def to_string(self):
+        return "ID"
+
+
+class Poly2(ActFun):
+    def compute(self, arg: np.ndarray) -> np.ndarray:
+        return arg ** 2
+
+    def computeDer(self, arg: np.ndarray) -> np.ndarray:
+        pass
+
+    def copy(self):
+        return Poly2()
+
+    def to_string(self):
+        return "P2"
+
+
+class Poly3(ActFun):
+    def compute(self, arg: np.ndarray) -> np.ndarray:
+        return arg ** 3
+
+    def computeDer(self, arg: np.ndarray) -> np.ndarray:
+        pass
+
+    def copy(self):
+        return Poly3()
+
+    def to_string(self):
+        return "P3"
+
 
 
 

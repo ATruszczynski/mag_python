@@ -4,7 +4,7 @@ import random
 from ann_point.AnnPoint2 import *
 from neural_network.ChaosNet import ChaosNet
 from utility.Utility import choose_without_repetition, get_Xu_matrix, AnnPoint, point_from_layers, generate_layer, \
-    get_links
+    get_links, try_choose_different
 from utility.Utility2 import *
 from ann_point.HyperparameterRange import HyperparameterRange
 
@@ -36,8 +36,8 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
     new_links = get_links(input_size, output_size, new_neuron_count)
     new_links[:net.hidden_end_index, :net.hidden_end_index] = net.links[:net.hidden_end_index, :net.hidden_end_index]
     new_links[:net.hidden_end_index, -output_size:] = net.links[:net.hidden_end_index, -output_size:]
-    new_links = np.multiply(new_links, get_mask(input_size=input_size, output_size=output_size,
-                                                neuron_count=new_neuron_count))
+    new_links = np.multiply(new_links, get_weight_mask(input_size=input_size, output_size=output_size,
+                                                       neuron_count=new_neuron_count))
 
     new_weights = np.random.uniform(min_wei, max_wei, new_links.shape)
     new_weights[:net.hidden_end_index, :net.hidden_end_index] = net.weights[:net.hidden_end_index, :net.hidden_end_index]
@@ -56,7 +56,8 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
 
     return ChaosNet(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, r_prob=net.r_prob)
 
 
 def decrease_neuron_count(net: ChaosNet, to_remove: int):
@@ -77,7 +78,8 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, r_prob=net.r_prob)
 
 def inflate_network(net: ChaosNet, to_add: int): #TODO tests missed wrong maxit
     new_neuron_count = net.neuron_count + to_add
@@ -113,7 +115,8 @@ def inflate_network(net: ChaosNet, to_add: int): #TODO tests missed wrong maxit
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, r_prob=net.r_prob)
 
 def deflate_network(net: ChaosNet):
     ind_to_preserve = net.get_indices_of_connected_neurons()
@@ -129,7 +132,77 @@ def deflate_network(net: ChaosNet):
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob)
+                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, r_prob=net.r_prob)
+
+
+def gaussian_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, radius: float) -> np.ndarray:
+    result = matrix.copy()
+
+    probs = np.random.random(matrix.shape)
+    to_change = np.where(probs <= prob)
+    change = np.zeros(matrix.shape)
+    change[to_change] = 1
+    shift = np.random.normal(0, radius, matrix.shape)
+    shift = np.multiply(change, shift)
+    result += shift
+    result = np.multiply(result, mask)
+
+    return result
+
+
+def uniform_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, minS: float, maxS: float) -> np.ndarray:
+    result = matrix.copy()
+
+    probs = np.random.random(matrix.shape)
+    to_change = np.where(probs <= prob)
+    change = np.zeros(matrix.shape)
+    change[to_change] = 1
+    shift = np.random.uniform(minS, maxS, matrix.shape)
+    shift = np.multiply(change, shift)
+    result += shift
+    result = np.multiply(result, mask)
+
+    return result
+
+def reroll_matrix(matrix: np.ndarray, mask: float, prob: float, minV: float, maxV: float):
+    result = matrix.copy()
+
+    probs = np.random.random(matrix.shape)
+    to_change = np.where(probs <= prob)
+    result[to_change] = np.random.uniform(minV, maxV, matrix.shape)[to_change]
+    result = np.multiply(result, mask)
+
+    return result
+
+def reroll_value(p: float, value: float, minV: float, maxV: float):
+    result = value
+
+    if p <= random.random():
+        result = random.uniform(minV, maxV)
+
+    return result
+
+def conditional_try_choose_different(p: float, current, options):
+    result = current
+
+    if p <= random.random():
+        result = try_choose_different(current, options)
+
+    return result
+
+def conditional_value_swap(prob: float, val1, val2):
+    res1 = val1
+    res2 = val2
+
+    if prob <= random.random():
+        tmp = res1
+        res1 = res2
+        res2 = tmp
+
+    return res1, res2
+
+
 
 
 

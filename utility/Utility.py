@@ -9,7 +9,7 @@ from ann_point.HyperparameterRange import *
 from ann_point.AnnPoint import *
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
-from utility.Utility2 import get_mask
+from utility.Utility2 import get_weight_mask
 
 
 def try_choose_different(current: Any, possibilities: [Any]) -> Any:
@@ -102,15 +102,19 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         wb_mut_prob = random.uniform(hrange.min_wb_mut_prob, hrange.max_wb_mut_prob)
         s_mut_prob = random.uniform(hrange.min_s_mut_prob, hrange.max_s_mut_prob)
         p_mut_prob = random.uniform(hrange.min_p_mut_prob, hrange.max_p_mut_prob)
+        c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
+        r_prob = random.uniform(hrange.min_r_prob, hrange.max_r_prob)
+
 
         result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
                                biases=biases, actFuns=actFuns, aggrFun=aggrFun, maxit=maxit, mutation_radius=mut_radius,
-                               wb_mutation_prob=wb_mut_prob, s_mutation_prob=s_mut_prob, p_mutation_prob=p_mut_prob))
+                               wb_mutation_prob=wb_mut_prob, s_mutation_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
+                               c_prob=c_prob, r_prob=r_prob))
 
     return result
 
 def get_links(input_size: int, output_size: int, neuron_count: int):
-    mask = get_mask(input_size, output_size, neuron_count)
+    mask = get_weight_mask(input_size, output_size, neuron_count)
 
     density = random.random()
     link_prob = np.random.random((neuron_count, neuron_count))
@@ -166,7 +170,8 @@ def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
 def get_default_hrange():
     # hrange = HyperparameterRange((0, 3), (1, 256), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()], [CrossEntropy(), QuadDiff(), MeanDiff(), ChebyshevLoss()], (-5, 0), (-5, 0), (-10, 0))
     hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 1), (0, 0), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(0.0, 0), wb_mut_prob=(0.001, 0.1), s_mut_prob=(0, 0), p_mutation_prob=(0.05, 0.01))
+                                 mut_radius=(0.0, 1), wb_mut_prob=(0.001, 0.1), s_mut_prob=(0, 1), p_mutation_prob=(0.05, 0.01), c_prob=(0.2, 1),
+                                 r_prob=(0, 1))
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
     #                              mut_radius=(0.1, 2), wb_mut_prob=(0.001, 0.25), s_mut_prob=(0.01, 0.01), p_mutation_prob=(0.01, 0.5)) #76
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 50), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
@@ -200,6 +205,27 @@ def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
         outputs.append(output)
 
     return [inputs, outputs]
+
+def generate_square_problem(howMany, minV, maxV) -> [np.ndarray]:
+    inputs = []
+    outputs = []
+
+    for i in range(howMany):
+        x = random.uniform(minV, maxV)
+        y = x ** 2
+        # y = 2 * x
+
+        input = np.zeros((1, 1))
+        output = np.zeros((1, 1))
+
+        input[0, 0] = x
+        output[0, 0] = y
+
+        inputs.append(input)
+        outputs.append(output)
+
+    return [inputs, outputs]
+
 
 def average_distance_between_points(points: [AnnPoint], hrange: HyperparameterRange) -> [float]:
     total_distance = []

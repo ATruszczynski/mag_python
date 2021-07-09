@@ -132,7 +132,7 @@ def test_cn_test_5():
     print(weights)
     print(biases)
 
-    net = ChaosNet(input_size=5, output_size=6, links=links, weights=weights, biases=biases, actFuns=11 * [None], aggrFun=Softmax(), maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+    net = ChaosNet(input_size=5, output_size=6, links=links, weights=weights, biases=biases, actFuns=11 * [None], aggrFun=Softmax(), maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
     test_res = net.test(fives_i, fives_o, QuadDiff())
 
     assert efficiency(test_res[3]) == 1.0

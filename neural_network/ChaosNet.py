@@ -11,7 +11,7 @@ class ChaosNet:
     #TODO remove maxit as default
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
                  actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
-                 s_mutation_prob: float, p_mutation_prob: float):
+                 s_mutation_prob: float, p_mutation_prob: float, c_prob: float, r_prob: float):
         #TODO validation
 
         assert links.shape[0] == weights.shape[0]
@@ -56,6 +56,8 @@ class ChaosNet:
         self.wb_mutation_prob = wb_mutation_prob###---
         self.s_mutation_prob = s_mutation_prob###---
         self.p_mutation_prob = p_mutation_prob###---
+        self.c_prob = c_prob
+        self.r_prob = r_prob
 
     # def run(self, input: np.ndarray, try_faster: bool = False):
     #     self.act[0, :self.input_size] = input.reshape(1, -1)
@@ -325,7 +327,8 @@ class ChaosNet:
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
                         , maxit=self.maxit, mutation_radius=self.mutation_radius, wb_mutation_prob=self.wb_mutation_prob,
-                        s_mutation_prob=self.s_mutation_prob, p_mutation_prob=self.p_mutation_prob)
+                        s_mutation_prob=self.s_mutation_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
+                        r_prob=self.r_prob)
 
     def calculate_distance_from_input(self):
         touched = []
@@ -348,7 +351,7 @@ class ChaosNet:
 
     def density(self):
         how_many = np.sum(self.links)
-        maxi = np.sum(get_mask(self.input_size, self.output_size, self.neuron_count))
+        maxi = np.sum(get_weight_mask(self.input_size, self.output_size, self.neuron_count))
 
         return how_many/maxi
 
@@ -417,7 +420,7 @@ class ChaosNet:
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(np.sum(self.links))}|{self.maxit}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
                   f"{round(self.mutation_radius, 5)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}" \
-                  f"|{round(self.p_mutation_prob, 5)}"
+                  f"|{round(self.p_mutation_prob, 5)}|{round(self.c_prob, 5)}"
 
         return result
 

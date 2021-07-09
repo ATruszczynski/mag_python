@@ -15,12 +15,14 @@ class SelectionOperator:
 
 
 class TournamentSelection(SelectionOperator):
-    def __init__(self, count: int):
+    def __init__(self, frac: float):
         super().__init__()
-        self.count = count
+        self.frac = frac
 
     def select(self, val_pop: [[ChaosNet, AnnDataPoint]]) -> ChaosNet:
-        chosen = choose_without_repetition(options=val_pop, count=self.count)
+        count = max(round(len(val_pop) * self.frac), 2)
+
+        chosen = choose_without_repetition(options=val_pop, count=count)
         chosen_sorted = sorted(chosen, key=lambda x: x[1].ff, reverse=True)
         return chosen_sorted[0][0].copy()
 

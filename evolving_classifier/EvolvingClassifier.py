@@ -122,7 +122,7 @@ class EvolvingClassifier:
                 c1 = self.so.select(val_pop=eval_pop)
                 cr = random.random()
 
-                if len(crossed) <= self.pop_size - 2 and cr <= pc:
+                if len(crossed) <= self.pop_size - 2 and cr <= c1.c_prob:
                     c2 = self.so.select(val_pop=eval_pop)
                     cr_result = self.co.crossover(c1, c2)
                     crossed.extend(cr_result)

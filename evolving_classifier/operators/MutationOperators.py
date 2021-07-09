@@ -14,6 +14,68 @@ class MutationOperator:
     def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, p_pm: float, radius: float) -> ChaosNet:
         pass
 
+class FinalMutationOperator:
+    def __init__(self, hrange: HyperparameterRange):
+        self.hrange = hrange
+
+    def mutate(self, point: ChaosNet, wb_pm: float, s_pm: float, p_pm: float, radius: float) -> ChaosNet:
+        point = point.copy()
+
+        point.weights = gaussian_shift(point.weights, point.links, wb_pm, radius)
+
+        point.weights = reroll_matrix(point.weights, point.links, point.r_prob, self.hrange.min_init_wei, self.hrange.max_init_wei) # TODO zmień
+
+        point.biases = gaussian_shift(point.biases, get_bias_mask(point.input_size, point.neuron_count), wb_pm, radius)
+
+        for i in range(point.hidden_start_index, point.hidden_end_index):
+            point.actFuns[i] = conditional_try_choose_different(s_pm, point.actFuns[i], self.hrange.actFunSet)
+
+        point.aggrFun = conditional_try_choose_different(s_pm, point.aggrFun, self.hrange.actFunSet)
+
+        minh = max(self.hrange.min_hidden, point.hidden_count - 5) #TODO zrób coś z tym
+        maxh = min(self.hrange.max_hidden, point.hidden_count + 5)
+        options = list(range(minh, maxh + 1))
+        point = change_neuron_count(point, self.hrange, conditional_try_choose_different(s_pm, point.hidden_count, options))
+
+        # TODO zmienić to jakoś
+        # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        probs = np.random.random(point.links.shape)
+        to_change = np.where(probs <= s_pm)
+        new_links = point.links.copy()
+        new_links[to_change] = 1 - new_links[to_change]
+        new_links[:, :point.input_size] = 0
+        new_links[point.hidden_end_index:, :] = 0
+        np.fill_diagonal(new_links, 0)
+
+        diffs = point.links - new_links
+        added_edges = np.where(diffs == -1)
+        minW = np.min(point.weights)
+        maxW = np.max(point.weights)
+        point.weights[added_edges] = np.random.uniform(minW, maxW, point.weights.shape)[added_edges]
+
+        point.links = new_links
+
+        point.weights = np.multiply(point.weights, point.links)
+        # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+        point.maxit = conditional_try_choose_different(s_pm, point.maxit, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
+
+        point.mutation_radius = reroll_value(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius)
+
+        point.wb_mutation_prob = reroll_value(p_pm, point.wb_mutation_prob, self.hrange.min_wb_mut_prob, self.hrange.max_wb_mut_prob)
+
+        point.s_mutation_prob = reroll_value(p_pm, point.s_mutation_prob, self.hrange.min_s_mut_prob, self.hrange.max_s_mut_prob)
+
+        point.p_mutation_prob = reroll_value(p_pm, point.p_mutation_prob, self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob)
+
+        point.c_prob = reroll_value(p_pm, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob)
+
+        point.r_prob = reroll_value(p_pm, point.r_prob, self.hrange.min_r_prob, self.hrange.max_r_prob)
+
+        return point
+
+
+
 # class SimpleCNMutation(MutationOperator):
 #     def __init__(self, hrange: HyperparameterRange):
 #         super().__init__(hrange)
@@ -110,15 +172,18 @@ class TestMutationOperator(MutationOperator):
         if random.random() <= p_pm:
             point.p_mutation_prob = random.uniform(self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob)
 
-        net = ChaosNet(input_size=point.input_size, output_size=point.output_size, links=point.links, weights=point.weights,
-                                 biases=point.biases, actFuns=point.actFuns, aggrFun=point.aggrFun, maxit=point.maxit, mutation_radius=point.mutation_radius,
-                                 wb_mutation_prob=point.wb_mutation_prob, s_mutation_prob=point.s_mutation_prob, p_mutation_prob=point.p_mutation_prob)
+        if random.random() <= p_pm:
+            point.c_prob = random.uniform(self.hrange.min_c_prob, self.hrange.max_c_prob)
 
-        net.weights = np.multiply(net.weights, get_mask(net.input_size, net.output_size, net.neuron_count))
-        net.links = np.multiply(net.links, get_mask(net.input_size, net.output_size, net.neuron_count))
+        net = ChaosNet(input_size=point.input_size, output_size=point.output_size, links=point.links, weights=point.weights,
+                       biases=point.biases, actFuns=point.actFuns, aggrFun=point.aggrFun, maxit=point.maxit, mutation_radius=point.mutation_radius,
+                       wb_mutation_prob=point.wb_mutation_prob, s_mutation_prob=point.s_mutation_prob, p_mutation_prob=point.p_mutation_prob,
+                       c_prob=point.c_prob)
+
+        net.weights = np.multiply(net.weights, get_weight_mask(net.input_size, net.output_size, net.neuron_count))
+        net.links = np.multiply(net.links, get_weight_mask(net.input_size, net.output_size, net.neuron_count))
 
         return net.copy()
-
 
 
 class TestMutationOperatorGauss(MutationOperator):

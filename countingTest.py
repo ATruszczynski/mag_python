@@ -20,37 +20,49 @@ if __name__ == '__main__':
 
     count_tr = 200
     count_test = 500
-    size = 3
+    size = 5
     x,y = generate_counting_problem(count_tr, size)
     X,Y = generate_counting_problem(ceil(count_test), size)
+
+    x, y = generate_square_problem(1000, -2, 2)
+    X, Y = generate_square_problem(100, -1, 1)
+
     #TODO add sized calculator
     #TODO ec better constructor
     ec = EvolvingClassifier()
-    ec.hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 10), (0, 0), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                    mut_radius=(-5, 5), wb_mut_prob=(0, 1), s_mut_prob=(0, 1), p_mutation_prob=(0.01, 1))
-    # ec.co = SimpleCrossoverOperator(ec.hrange)
-    # ec.mo = SimpleAndStructuralCNMutation(ec.hrange, 2)
+    ec.hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 10), (0, 0), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+                                    mut_radius=(0, 1), wb_mut_prob=(0.001, 1), s_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
+                                    r_prob=(0, 1))
     ec.co = SimpleCrossoverOperator(ec.hrange)
-    ec.mo = TestMutationOperator(ec.hrange)
-    ec.so = TournamentSelection(2)
+    ec.mo = SimpleAndStructuralCNMutation(ec.hrange, 2)
+    ec.co = FinalCrossoverOperator(ec.hrange)
+    # ec.co = SimpleCrossoverOperatorHorizontal(ec.hrange)
+    # ec.mo = FinalMutationOperator(ec.hrange)
+    ec.so = TournamentSelection(0.05)
     ec.ff = CNFF()
     # ec.ff = CNFF4(CrossEntropy())
     # ec.ff = CNFF2(QuadDiff())
     # ec.ff = CNFF2(ChebyshevLoss())
-    # ec.ff = CNFF4(QuadDiff())
+    ec.ff = CNFF4(QuadDiff())
     ec.fc = CNFitnessCalculator()
     ec.hrange.min_hidden = 0
-    ec.hrange.max_hidden = 10
-    ec.prepare(popSize=100, startPopSize=100, nn_data=(x, y), hidden_size=10, seed=1524)
-    network = ec.run(iterations=1000, pm=0.05, pc=0.0, power=12) # TODO po niewielkiej liczbie iteracji wagi wyglądają podejrzanie? Zła generacja?
+    ec.hrange.max_hidden = 20
+    ii = 100
+    ec.prepare(popSize=ii, startPopSize=ii, nn_data=(x, y), hidden_size=10, seed=1524)
+    network = ec.run(iterations=ii, pm=0.05, pc=0.8, power=12) # TODO po niewielkiej liczbie iteracji wagi wyglądają podejrzanie? Zła generacja?
     tests = network.test(X, Y, ChebyshevLoss())
-    print(network.links)
-    print(network.weights[:6, 5:])
-    print(network.biases[0, 6:])
-    print(network.aggrFun)
-    print(tests[:3])
-    print(tests[3])
-    print(mean(tests[:3]))
+    print(tests[4])
+    for i in range(11):
+        x = np.array([[(i - 5.0) / 5.0]])
+        y = x ** 2
+        print(f"{x} = {y} - {network.run(x)}")
+    # print(network.links)
+    # print(network.weights[:6, 5:])
+    # print(network.biases[0, 6:])
+    # print(network.aggrFun)
+    # print(tests[:3])
+    # print(tests[3])
+    # print(mean(tests[:3]))
 
     ori = 1
 

@@ -13,7 +13,8 @@ from ann_point.Functions import *
 
 def points():
     result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), SincAct()], mut_radius=(0, 1),
-                                                     wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6)), 2, 2, 3)
+                                                     wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.001, 0.002),
+                                                     r_prob=(0.1, 0.2)), 2, 2, 3)
     return result
 
 
@@ -233,4 +234,4 @@ print(f"f1: {average_f1_score(cm2)}")
 # test_fitness_calculator_with_size_eff()
 # test_fitness_calculator_with_pure_eff()
 
-test_fitness_calculator_with_pure_eff()
+# test_fitness_calculator_with_pure_eff()

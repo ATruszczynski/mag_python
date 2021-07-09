@@ -664,29 +664,6 @@ def test_possible_cuts_4():
     assert compare_lists(possible_cuts[10], [0, 6, 5, 3, 0, 2, 0])
     assert compare_lists(possible_cuts[11], [0, 7, 6, 3, 0, 2, 0])
 
-def gaussian_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, radius: float) -> np.ndarray:
-    result = matrix.copy()
-
-    probs = np.random.random(matrix.shape)
-    to_change = np.where(probs <= prob)
-    change = np.zeros(matrix.shape)
-    change[to_change] = 1
-    shift = np.random.normal(0, radius, matrix.shape)
-    shift = np.multiply(change, shift)
-    result += shift
-    result = np.multiply(result, mask)
-
-    return result
-
-def reroll(matrix: np.ndarray, mask: float, prob: float, min: float, max: float):
-    result = matrix.copy()
-
-    probs = np.random.random(matrix.shape)
-    to_change = np.where(probs <= prob)
-    result[to_change] = np.random.uniform(min, max, matrix.shape)[to_change]
-    result = np.multiply(result, mask)
-
-    return result
 
 # test_possible_cuts_1()
 # test_possible_cuts_1_2()
