@@ -8,7 +8,8 @@ def test_cn_generation():
     np.random.seed(1001)
 
     hrnage = HyperparameterRange((-1, 1), (-10, 10), (1, 5), (0, 3), [ReLu(), GaussAct(), Sigmoid()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.2, 0.5),
+                                 r_prob=(0.8, 1))
     nets = generate_population(hrange=hrnage, count=2, input_size=2, output_size=1)
 
 
@@ -34,35 +35,35 @@ def test_cn_generation():
                           desired_mut_rad=0.555594,
                           desired_wb_prob=0.068865,
                           desired_s_prob=0.616022,
-                          desired_p_prob=0.544396)
+                          desired_p_prob=0.544396,
+                          desired_c_prob=0.369265,
+                          desired_r_prob=0.954734)
 
     compare_chaos_network(net=nets[1],
                           desired_input_size=2,
                           desited_output_size=1,
-                          desired_neuron_count=6,
+                          desired_neuron_count=4,
                           desired_hidden_start_index=2,
-                          desired_hidden_end_index=5,
-                          desired_hidden_count=3,
-                          desired_links=np.array([[0, 0, 1, 1, 0, 1],
-                                                  [0, 0, 0, 1, 1, 0],
-                                                  [0, 0, 0, 1, 1, 1],
-                                                  [0, 0, 1, 0, 1, 1],
-                                                  [0, 0, 1, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0.02348412, -0.47971685, 0, 0.0128531 ],
-                                                    [0, 0, 0, -0.78054184, 0.46013031, 0],
-                                                    [0, 0, 0, -0.91486681 , -0.11334042, 0.78668504],
-                                                    [0, 0, 0.32327473, 0, 0.39699364, 0.2487557],
-                                                    [0, 0, 0.5869129, 0.96277274, 0, -0.68333513],
-                                                    [0, 0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0, 0, -5.97746074, 5.44356359, 0.04376756, 5.26342884]]),
-                          desired_actFun=[None, None, ReLu(), Sigmoid(), ReLu(), None],
+                          desired_hidden_end_index=3,
+                          desired_hidden_count=1,
+                          desired_links=np.array([[0, 0, 1, 1],
+                                                  [0, 0, 0, 1],
+                                                  [0, 0, 0, 0],
+                                                  [0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0.75720675, -0.77634106],
+                                                    [0, 0, 0, -0.26970662],
+                                                    [0, 0, 0, 0],
+                                                    [0, 0, 0, 0]]),
+                          desired_biases=np.array([[0, 0, 5.2041659, 4.66856333]]),
+                          desired_actFun=[None, None, ReLu(), None],
                           desired_aggr=ReLu(),
                           desired_maxit=4,
                           desired_mut_rad=0.714939,
                           desired_wb_prob=0.082788,
                           desired_s_prob=0.673710,
-                          desired_p_prob=0.437508)
+                          desired_p_prob=0.437508,
+                          desired_c_prob=0.350593,
+                          desired_r_prob=0.979005)
 
 random.seed(1001)
 np.random.seed(1001)
@@ -80,6 +81,8 @@ print(f"mut_rad_1: {random.uniform(0, 1)}")
 print(f"wb_prob_1: {random.uniform(0.05, 0.1)}")
 print(f"s_prob_1: {random.uniform(0.6, 0.7)}")
 print(f"p_prob_1: {random.uniform(0.4, 0.6)}")
+print(f"c_prob_1: {random.uniform(0.2, 0.5)}")
+print(f"r_prob_1: {random.uniform(0.8, 1)}")
 
 print()
 
@@ -91,14 +94,14 @@ print(f"lin_prob2: \n{np.random.random((n2, n2))}")
 print(f"wei_2: \n{np.random.uniform(-1, 1, (n2, n2))}")
 print(f"bia_2: \n{np.random.uniform(-10, 10, (1, n2))}")
 print(f"af2_2: {random.randint(0, 2)}")
-print(f"af2_3: {random.randint(0, 2)}")
-print(f"af2_4: {random.randint(0, 2)}")
 print(f"aggrf_2: {random.randint(0, 2)}")
 print(f"maxit_2: {random.randint(1, 5)}")
 print(f"mut_rad_2: {random.uniform(0, 1)}")
 print(f"wb_prob_2: {random.uniform(0.05, 0.1)}")
 print(f"s_prob_2: {random.uniform(0.6, 0.7)}")
 print(f"p_prob_2: {random.uniform(0.4, 0.6)}")
+print(f"c_prob_2: {random.uniform(0.2, 0.5)}")
+print(f"r_prob_2: {random.uniform(0.8, 1)}")
 
 
 # test_cn_generation()

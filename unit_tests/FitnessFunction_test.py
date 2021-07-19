@@ -47,12 +47,14 @@ def get_io():
 #TODO pytest finds 2 tests here
 
 def test_pure_fitness_function():
+    random.seed(1001)
+
     point = get_point()
     i, o = get_io()
     ff = CNFF()
     res = ff.compute(point, i, o, 1001)
 
-    assert res[0] == pytest.approx(0.22222, abs=1e-3)
+    assert res[0] == pytest.approx(0.19999, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                            [4., 0., 0.]]))
@@ -94,6 +96,8 @@ i, o = get_io()
 test = net.test(i, o)
 print(efficiency(test[3]))
 print(test[3])
+
+# test_pure_fitness_function()
 
 
 #

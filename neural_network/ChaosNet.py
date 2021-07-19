@@ -419,8 +419,8 @@ class ChaosNet:
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(np.sum(self.links))}|{self.maxit}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
-                  f"{round(self.mutation_radius, 5)}|{round(self.wb_mutation_prob, 5)}|{round(self.s_mutation_prob, 5)}" \
-                  f"|{round(self.p_mutation_prob, 5)}|{round(self.c_prob, 5)}"
+                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.wb_mutation_prob, 5)}|s:{round(self.s_mutation_prob, 5)}" \
+                  f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.r_prob, 5)}"
 
         return result
 

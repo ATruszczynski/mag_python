@@ -160,7 +160,8 @@ def test_ohe():
 #TODO fix test
 def test_generate_population_limits():
     hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
 
     random.seed(1001)
     n = 200
@@ -184,6 +185,13 @@ def test_generate_population_limits():
     all_biases = []
     all_act_funs = []
     all_aggr_funs = []
+
+    all_mut_rad = []
+    all_wb_mut = []
+    all_s_mut = []
+    all_p_mut = []
+    all_c_prob = []
+    all_r_prob = []
 
     for i in range(len(pop)):
         net = pop[i]
@@ -221,6 +229,13 @@ def test_generate_population_limits():
 
             all_weights.append(net.weights[r, c])
 
+        all_mut_rad.append(net.mutation_radius)
+        all_wb_mut.append(net.wb_mutation_prob)
+        all_s_mut.append(net.s_mutation_prob)
+        all_p_mut.append(net.p_mutation_prob)
+        all_c_prob.append(net.c_prob)
+        all_r_prob.append(net.r_prob)
+
     assert max(all_weights) <= 2
     assert max(all_weights) > 1.95
     assert min(all_weights) >= 0
@@ -251,6 +266,39 @@ def test_generate_population_limits():
                 break
         assert isthere
 
+    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
+
+    assert min(all_mut_rad) >= 0
+    assert min(all_mut_rad) <= 0.05
+    assert max(all_mut_rad) <= 1
+    assert max(all_mut_rad) >= 0.95
+
+    assert min(all_wb_mut) >= 0.05
+    assert min(all_wb_mut) <= 0.055
+    assert max(all_wb_mut) <= 0.1
+    assert max(all_wb_mut) >= 0.095
+
+    assert min(all_s_mut) >= 0.6
+    assert min(all_s_mut) <= 0.605
+    assert max(all_s_mut) <= 0.7
+    assert max(all_s_mut) >= 0.695
+
+    assert min(all_p_mut) >= 0.4
+    assert min(all_p_mut) <= 0.405
+    assert max(all_p_mut) <= 0.6
+    assert max(all_p_mut) >= 0.595
+
+    assert min(all_c_prob) >= 0.22
+    assert min(all_c_prob) <= 0.221
+    assert max(all_c_prob) <= 0.33
+    assert max(all_c_prob) >= 0.325
+
+    assert min(all_r_prob) >= 0.44
+    assert min(all_r_prob) <= 0.445
+    assert max(all_r_prob) <= 0.55
+    assert max(all_r_prob) >= 0.545
 
 
 
@@ -449,4 +497,5 @@ def test_list_comparison():
 
 # test_generate_population_limits()
 
-test_list_comparison()
+# test_list_comparison()
+# test_generate_population_limits()

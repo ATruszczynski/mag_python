@@ -1,3 +1,5 @@
+import pytest
+
 from evolving_classifier.operators.CrossoverOperator import find_possible_cuts
 from utility.Mut_Utility import *
 from utility.TestingUtility import compare_chaos_network
@@ -6,7 +8,8 @@ from utility.Utility import *
 
 def test_neuron_increase():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
 
     link1 = np.array([[0, 1, 1, 0, 1],
                       [0, 0, 1, 1, 1],
@@ -23,7 +26,7 @@ def test_neuron_increase():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -58,7 +61,9 @@ def test_neuron_increase():
                           desired_mut_rad=1,
                           desired_wb_prob=2,
                           desired_s_prob=3,
-                          desired_p_prob=4)
+                          desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6)
 
 
     ############################################################################
@@ -135,12 +140,15 @@ def test_neuron_increase():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
 
 def test_neuron_decrease():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
 
     link1 = np.array([[0, 1, 1, 0, 0, 1],
                       [0, 0, 1, 1, 1, 1],
@@ -159,7 +167,7 @@ def test_neuron_decrease():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -195,6 +203,8 @@ def test_neuron_decrease():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0.]]))
 
@@ -223,6 +233,8 @@ def test_neuron_decrease():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0.]]))
 
@@ -230,7 +242,8 @@ def test_neuron_decrease():
 
 def test_network_inflate():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
 
     link1 = np.array([[0, 1, 0, 0, 1],
                       [0, 0, 1, 1, 1],
@@ -247,7 +260,7 @@ def test_network_inflate():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -281,6 +294,8 @@ def test_network_inflate():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0.]]))
 
@@ -316,12 +331,15 @@ def test_network_inflate():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
 
 def test_network_deflate():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
 
     link1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 1, 0, 1, 0, 0, 0, 1],
@@ -346,7 +364,7 @@ def test_network_deflate():
 
     cn1 = ChaosNet(input_size=2, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
 
 
@@ -392,6 +410,8 @@ def test_network_deflate():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0., 0., 0.]]))
 
@@ -426,13 +446,16 @@ def test_network_deflate():
                           desired_wb_prob=2,
                           desired_s_prob=3,
                           desired_p_prob=4,
+                          desired_c_prob=5,
+                          desired_r_prob=6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
 
 def test_possible_cuts_1():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
     link1 = np.array([[0, 1, 0, 0, 0, 1],
                       [0, 0, 0, 0, 0, 1],
                       [0, 0, 0, 0, 0, 0],
@@ -460,9 +483,9 @@ def test_possible_cuts_1():
     actFuns2 = [None, None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -476,7 +499,8 @@ def test_possible_cuts_1():
 def test_possible_cuts_1_2():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
 
     link1 = np.array([[0, 0, 0, 0],
                       [0, 0, 1, 0],
@@ -506,9 +530,9 @@ def test_possible_cuts_1_2():
     actFuns2 = [None, ReLu(), ReLu(), None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -522,7 +546,8 @@ def test_possible_cuts_1_2():
 
 def test_possible_cuts_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
     link1 = np.array([[0, 1, 0, 1],
                       [0, 0, 0, 1],
                       [0, 0, 0, 0],
@@ -548,9 +573,9 @@ def test_possible_cuts_2():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -567,7 +592,8 @@ def test_possible_cuts_2():
 def test_possible_cuts_3():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()],mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
     link1 = np.array([[0, 1, 0, 1],
                       [0, 0, 0, 1],
                       [0, 0, 0, 0],
@@ -591,9 +617,9 @@ def test_possible_cuts_3():
     actFuns2 = [None, None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -605,7 +631,8 @@ def test_possible_cuts_3():
 def test_possible_cuts_4():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()],mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 r_prob=(0.44, 0.55))
     link1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 1, 0, 0, 1, 0, 0],
                       [0, 0, 1, 0, 0, 1, 0, 0],
@@ -643,9 +670,9 @@ def test_possible_cuts_4():
     actFuns2 = [None, None, TanH(), TanH(), None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=3, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), maxit=2,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
     cn2 = ChaosNet(input_size=2, output_size=3, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), maxit=5,
-                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4)
+                   mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -663,6 +690,303 @@ def test_possible_cuts_4():
     assert compare_lists(possible_cuts[9],  [0, 5, 4, 3, 0, 2, 0])
     assert compare_lists(possible_cuts[10], [0, 6, 5, 3, 0, 2, 0])
     assert compare_lists(possible_cuts[11], [0, 7, 6, 3, 0, 2, 0])
+
+def test_gaussian_shift():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+    weights = np.array([[0, 1, 2],
+                        [0, 0, 4],
+                        [0, 0, 0.]])
+
+    links = np.array([[0, 1, 1],
+                      [0, 0, 1],
+                      [0, 0, 0]])
+
+    weights = gaussian_shift(weights, links, 0.75, 2)
+
+    assert np.all(np.isclose(weights, np.array([[0, 1.50308048, 1.96986593],
+                                                [0, 0, -0.90477989],
+                                                [0, 0, 0]]), atol=1e-4))
+
+
+    seed = 1004
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+    weights = np.array([[0, 1, 2],
+                        [0, 0, 4],
+                        [0, 0, 0.]])
+
+    links = np.array([[0, 1, 1],
+                      [0, 0, 1],
+                      [0, 0, 0]])
+
+    weights = gaussian_shift(weights, links, 0.75, 2)
+
+    assert np.all(np.isclose(weights, np.array([[0, 1, 5.72960772],
+                                                [0, 0, 6.10237258],
+                                                [0, 0, 0]]), atol=1e-4))
+
+def test_reroll_matrix():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+    weights = np.array([[0, 1, 2],
+                        [0, 0, 4],
+                        [0, 0, 0.]])
+
+    links = np.array([[0, 1, 1],
+                      [0, 0, 1],
+                      [0, 0, 0]])
+
+    weights = reroll_matrix(weights, links, 0.6, -1, 2)
+
+    assert np.all(np.isclose(weights, np.array([[0, 1.56070304, -0.87660839],
+                                                [0, 0, -0.67269435],
+                                                [0, 0, 0]]), atol=1e-4))
+
+
+
+    seed = 1004
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+    weights = np.array([[0, 1, 2],
+                        [0, 0, 4],
+                        [0, 0, 0.]])
+
+    links = np.array([[0, 1, 1],
+                      [0, 0, 1],
+                      [0, 0, 0]])
+
+    weights = reroll_matrix(weights, links, 0.6, -1, 2)
+
+    assert np.all(np.isclose(weights, np.array([[0, 1., 2],
+                                                [0, 0, 0.31546711],
+                                                [0, 0, 0]]), atol=1e-4))
+
+def test_conditional_try_differnt():
+    set = [ReLu(), Poly2(), SincAct(), Poly3()]
+
+    random.seed(1001)
+
+    f1 = conditional_try_choose_different(0.5, ReLu(), set)
+    assert f1.to_string() == "RL"
+
+    f1 = conditional_try_choose_different(0.5, ReLu(), set)
+    assert f1.to_string() == "P2"
+
+    f1 = conditional_try_choose_different(0.5, SincAct(), set)
+    assert f1.to_string() == "SC"
+
+    f1 = conditional_try_choose_different(0.5, Poly3(), set)
+    assert f1.to_string() == "P2"
+
+def test_reroll_value():
+    random.seed(1002)
+
+    d = 1
+    d = reroll_value(0.5, d, -1, 2)
+    assert d == 1
+    d = 2
+    d = reroll_value(0.5, d, -1, 2)
+    assert d == pytest.approx(-0.33716, abs=1e-4)
+    d = 3
+    d = reroll_value(0.5, d, -1, 2)
+    assert d == pytest.approx(0.4518733, abs=1e-4)
+
+def test_conditional_value_swap():
+    random.seed(1006)
+
+    a = 10
+    b = 20
+    c, d = conditional_value_swap(0.5, a, b)
+    assert c == 20
+    assert d == 10
+
+    a = 20
+    b = 30
+    c, d = conditional_value_swap(0.5, a, b)
+    assert c == 30
+    assert d == 20
+
+    a = 30
+    b = 40
+    c, d = conditional_value_swap(0.5, a, b)
+    assert c == 40
+    assert d == 30
+
+    a = 40
+    b = 50
+    c, d = conditional_value_swap(0.5, a, b)
+    assert c == 40
+    assert d == 50
+
+def test_uniform_shift():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+    weights = np.array([[0, 1, 2],
+                        [0, 0, 4],
+                        [0, 0, 0.]])
+
+    links = np.array([[0, 1, 1],
+                      [0, 0, 1],
+                      [0, 0, 0]])
+
+    weights = uniform_shift(weights, links, 0.6, -2, 1)
+
+    assert np.all(np.isclose(weights, np.array([[0, 1.56070304, 0.12339161],
+                                                [0, 0, 2.32730565],
+                                                [0, 0, 0]]), atol=1e-4))
+
+
+    seed = 1004
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+    weights = np.array([[0, 1, 2],
+                        [0, 0, 4],
+                        [0, 0, 0.]])
+
+    links = np.array([[0, 1, 1],
+                      [0, 0, 1],
+                      [0, 0, 0]])
+
+    weights = uniform_shift(weights, links, 0.6, -2, 1)
+
+    assert np.all(np.isclose(weights, np.array([[0, 1, 2],
+                                                [0, 0, 3.31546711],
+                                                [0, 0, 0]]), atol=1e-4))
+
+
+# seed = 1004
+# random.seed(seed)
+# np.random.seed(seed)
+#
+# weights = np.array([[0, 1, 2],
+#                     [0, 0, 4],
+#                     [0, 0, 0.]])
+#
+# links = np.array([[0, 1, 1],
+#                   [0, 0, 1],
+#                   [0, 0, 0]])
+#
+# probs = np.random.random((3, 3))
+# cmask = np.zeros((3, 3))
+# cmask[np.where(probs <= 0.6)] = 1
+# shift = np.random.uniform(-2, 1, (3, 3))
+# shift = np.multiply(shift, cmask)
+# w2 = weights.copy()
+# w2 += shift
+# w2 = np.multiply(w2, links)
+# print(w2)
+# test_uniform_shift()
+
+# random.seed(1006)
+# d = 0.5
+# prob = random.random()
+# if prob <= d:
+#     print("0 ")
+# prob = random.random()
+# if prob <= d:
+#     print("1 ")
+# prob = random.random()
+# if prob <= d:
+#     print("2 ")
+# prob = random.random()
+# if prob <= d:
+#     print("3 ")
+# test_conditional_value_swap()
+
+# random.seed(1002)
+# d = 0.5
+# prob = random.random()
+# if prob <= d:
+#     print("0 " + str(random.uniform(-1, 2)))
+# prob = random.random()
+# if prob <= d:
+#     print("1 " + str(random.uniform(-1, 2)))
+# prob = random.random()
+# if prob <= d:
+#     print("2 " + str(random.uniform(-1, 2)))
+# test_reroll_value()
+
+# random.seed(1001)
+# d = 0.5
+# set = [ReLu(), Poly2(), SincAct(), Poly3()]
+#
+# prob = random.random()
+# if prob <= d:
+#     print("0 " + try_choose_different(ReLu(), set).to_string())
+#
+# prob = random.random()
+# if prob <= d:
+#     print("1 " + try_choose_different(ReLu(), set).to_string())
+#
+# prob = random.random()
+# if prob <= d:
+#     print("2 " + try_choose_different(SincAct(), set).to_string())
+#
+# prob = random.random()
+# if prob <= d:
+#     print("3 " + try_choose_different(Poly3(), set).to_string())
+#
+# test_conditional_try_differnt()
+
+# seed = 1004
+# random.seed(seed)
+# np.random.seed(seed)
+#
+# weights = np.array([[0, 1, 2],
+#                     [0, 0, 4],
+#                     [0, 0, 0.]])
+#
+# links = np.array([[0, 1, 1],
+#                   [0, 0, 1],
+#                   [0, 0, 0]])
+#
+# probs = np.random.random((3, 3))
+# w2 = weights.copy()
+# w2[np.where(probs <= 0.6)] = np.random.uniform(-1, 2, (3, 3))[np.where(probs <= 0.6)]
+# w2 = np.multiply(w2, links)
+# print(w2)
+#
+# test_reroll_matrix()
+
+# seed = 1004
+# random.seed(seed)
+# np.random.seed(seed)
+#
+# weights = np.array([[0, 1, 2],
+#                     [0, 0, 4],
+#                     [0, 0, 0.]])
+#
+# links = np.array([[0, 1, 1],
+#                   [0, 0, 1],
+#                   [0, 0, 0]])
+#
+# probs = np.random.random((3, 3))
+# cmask = np.zeros((3, 3))
+# cmask[np.where(probs <= 0.75)] = 1
+# shift = np.random.normal(0, 2, (3, 3))
+# shift = np.multiply(shift, cmask)
+# w2 = weights.copy()
+# w2 += shift
+# w2 = np.multiply(w2, links)
+# print(w2)
+# test_gaussian_shift()
+
 
 
 # test_possible_cuts_1()

@@ -165,7 +165,7 @@ def uniform_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, minS: float
 
     return result
 
-def reroll_matrix(matrix: np.ndarray, mask: float, prob: float, minV: float, maxV: float):
+def reroll_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float, minV: float, maxV: float):
     result = matrix.copy()
 
     probs = np.random.random(matrix.shape)
@@ -178,7 +178,7 @@ def reroll_matrix(matrix: np.ndarray, mask: float, prob: float, minV: float, max
 def reroll_value(p: float, value: float, minV: float, maxV: float):
     result = value
 
-    if p <= random.random():
+    if random.random() <= p:
         result = random.uniform(minV, maxV)
 
     return result
@@ -186,7 +186,7 @@ def reroll_value(p: float, value: float, minV: float, maxV: float):
 def conditional_try_choose_different(p: float, current, options):
     result = current
 
-    if p <= random.random():
+    if random.random() <= p:
         result = try_choose_different(current, options)
 
     return result
@@ -195,12 +195,56 @@ def conditional_value_swap(prob: float, val1, val2):
     res1 = val1
     res2 = val2
 
-    if prob <= random.random():
+    if random.random() <= prob:
         tmp = res1
         res1 = res2
         res2 = tmp
 
     return res1, res2
+
+def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: float, frac: float):
+    if random.random() <= p:
+        spectrum = maxV - minV
+        radius = spectrum * frac
+        minR = max(minV, value - radius)
+        maxR = min(maxV, value + radius)
+        value = random.uniform(minR, maxR)
+
+    return value
+
+def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask):
+    probs = np.random.random(links.shape)
+    to_change = np.where(probs <= s_pm)
+    new_links = links.copy()
+    new_links[to_change] = 1 - new_links[to_change]
+    new_links = np.multiply(new_links, mask)
+
+    diffs = links - new_links
+    added_edges = np.where(diffs == -1)
+    minW = np.min(weights)
+    maxW = np.max(weights)
+    weights[added_edges] = np.random.uniform(minW, maxW, weights.shape)[added_edges]
+
+    links = new_links
+
+    weights = np.multiply(weights, links)
+
+    return weights, links
+
+def get_min_max_values_of_matrix_with_mask(matrix: np.ndarray, mask: np.ndarray):
+    only_present = matrix[np.where(mask == 1)]
+    minW = 0
+    maxW = 0
+    if only_present.shape[0] != 0:
+        minW = np.min(only_present)
+        maxW = np.max(only_present)
+
+    return minW, maxW
+
+
+
+
+
 
 
 

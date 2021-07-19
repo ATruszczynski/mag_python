@@ -7,6 +7,9 @@ from evolving_classifier.operators.SelectionOperator import *
 
 
 def test_determinism(): #TODO this is (was?) broken
+    random.seed(1001)
+    np.random.seed(1001)
+
     ec = EvolvingClassifier()
 
     ec.co = FinalCrossoverOperator(ec.hrange)

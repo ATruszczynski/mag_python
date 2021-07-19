@@ -2,7 +2,8 @@ from ann_point.HyperparameterRange import *
 
 def test_hparam():
     hrange = HyperparameterRange((1, 2), (3, 4), (1, 5), (10, 20), [ReLu(), Sigmoid(), TanH(), Softmax()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
+                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
+                                 r_prob=(0.45, 0.75))
 
     assert hrange.min_init_wei == 1
     assert hrange.max_init_wei == 2
@@ -27,3 +28,7 @@ def test_hparam():
     assert hrange.max_s_mut_prob == 0.7
     assert hrange.min_p_mut_prob == 0.4
     assert hrange.max_p_mut_prob == 0.6
+    assert hrange.min_c_prob == 0.61
+    assert hrange.max_c_prob == 0.71
+    assert hrange.min_r_prob == 0.45
+    assert hrange.max_r_prob == 0.75

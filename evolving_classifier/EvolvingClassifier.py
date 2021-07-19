@@ -61,7 +61,7 @@ class EvolvingClassifier:
 
 
     def prepare(self, popSize:int, startPopSize: int,
-                nn_data: ([np.ndarray], [np.ndarray]), hidden_size: int, seed: int):
+                nn_data: ([np.ndarray], [np.ndarray]), seed: int):
         random.seed(seed)
         np.random.seed(seed)
         self.pop_size = popSize
