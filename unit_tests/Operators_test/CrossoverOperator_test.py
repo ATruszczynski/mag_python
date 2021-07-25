@@ -51,7 +51,7 @@ def test_simple_crossover():
                    aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20,
                    s_mutation_prob=30, p_mutation_prob=40, c_prob=50, r_prob=60)
 
-    co = SimpleCrossoverOperator(hrange)
+    co = FinalCrossoverOperator(hrange)
 
     random.seed(1002)
     np.random.seed(1002)
@@ -218,7 +218,7 @@ def test_simple_crossover_2():
                    aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20, s_mutation_prob=30,
                    p_mutation_prob=40, c_prob=50, r_prob=60)
 
-    co = SimpleCrossoverOperator(hrange)
+    co = FinalCrossoverOperator(hrange)
 
     seed = 1006
     random.seed(seed)

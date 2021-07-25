@@ -4,9 +4,7 @@ import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from math import ceil, exp, sqrt
 
-# from ann_point.AnnPoint2 import *
 from ann_point.HyperparameterRange import *
-# from ann_point.AnnPoint import *
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
 from utility.Utility2 import get_weight_mask
@@ -55,20 +53,6 @@ def one_hot_endode(data: [int]) -> [np.ndarray]:
     ohe = onehot_encoder.fit_transform(array)
 
     return [en.reshape(-1, 1) for en in ohe]
-
-# def divideIntoBatches(inputs: [np.ndarray], outputs: [np.ndarray], batchSize: int) -> [[(np.ndarray, np.ndarray)]]:
-#     count = len(inputs)
-#     batchCount = ceil(count/batchSize)
-#
-#     batches = []
-#
-#     for i in range(0, batchCount):
-#         batch = []
-#         for j in range(i * batchSize, min((i + 1) * batchSize, count)):
-#             batch.append((inputs[j], outputs[j]))
-#         batches.append(batch)
-#
-#     return batches
 
 def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [ChaosNet]:
     result = []
@@ -123,61 +107,11 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 
     return links
 
-# def get_mask(input_size: int, output_size: int, neuron_count: int) -> np.ndarray:
-#     mask = np.zeros((neuron_count, neuron_count))
-#     mask[:-output_size, input_size:] = 1
-#     mask = np.triu(mask)
-#     np.fill_diagonal(mask, 0)
-#
-#     return mask
-
-    # result = []
-    # # TODO stabilise names
-    # for i in range(count):
-    #     hidden_layer_count = random.randint(hrange.layerCountMin, hrange.layerCountMax)
-    #
-    #     neuron_counts = [input_size]
-    #     for i in range(hidden_layer_count):
-    #         neuron_counts.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax))
-    #     neuron_counts.append(output_size)
-    #
-    #     hidden_neuron_counts = []
-    #
-    #     for i in range(1, len(neuron_counts) - 1):
-    #         hidden_neuron_counts.append(neuron_counts[i])
-    #
-    #     actFuns = []
-    #     biases = []
-    #     weights = []
-    #
-    #     for i in range(1, len(neuron_counts)):
-    #         actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
-    #         biases.append(np.random.uniform(-hrange.biaAbs, hrange.biaAbs, size=(neuron_counts[i], 1)))
-    #         weights.append(np.random.uniform(-hrange.weiAbs, hrange.weiAbs, size=(neuron_counts[i], neuron_counts[i - 1])))
-    #
-    #     result.append(AnnPoint2(input_size=input_size, output_size=output_size, hiddenNeuronCounts=hidden_neuron_counts, activationFuns=actFuns, weights=weights, biases=biases))
-
-
-# def generate_layer(hrange: HyperparameterRange) -> [int, int, ActFun]:
-#     layer = [-1]
-#     layer.append(random.randint(hrange.neuronCountMin, hrange.neuronCountMax))
-#     layer.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)].copy())
-#
-#     return layer
-
 def get_default_hrange():#TODO przemyśl to
     hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 1), (0, 0), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                  mut_radius=(0.0, 1), wb_mut_prob=(0.001, 0.1), s_mut_prob=(0, 1), p_mutation_prob=(0.05, 0.01), c_prob=(0.2, 1),
                                  r_prob=(0, 1))
     return hrange
-
-# def punishment_function(arg: float):
-#     result = 0.75 / (1 + exp(-50 * arg))
-#
-#     if arg > 0:
-#         result += 0.25
-#
-#     return result
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
     inputs = []
@@ -218,49 +152,6 @@ def generate_square_problem(howMany, minV, maxV) -> [np.ndarray]:
 
     return [inputs, outputs]
 
-
-# def average_distance_between_points(points: [AnnPoint], hrange: HyperparameterRange) -> [float]:
-#     total_distance = []
-#
-#     for i in range(len(points) - 1):
-#         for j in range(i + 1, len(points)):
-#             total_distance.append(distance_between_points(points[i], points[j], hrange))
-#
-#     return total_distance
-#
-# def distance_between_points(pointA: AnnPoint, pointB: AnnPoint, hrange: HyperparameterRange) -> float:
-#     distance = 0
-#
-#     hidLayScale = hrange.hiddenLayerCountMax - hrange.hiddenLayerCountMin
-#     if hidLayScale != 0:
-#         distance += (abs(pointA.hiddenLayerCount - pointB.hiddenLayerCount) / hidLayScale) ** 2
-#
-#     neuronCountScale = hrange.neuronCountMax - hrange.neuronCountMin
-#     if neuronCountScale != 0:
-#         distance += (abs(pointA.neuronCount - pointB.neuronCount) / neuronCountScale) ** 2
-#
-#     learningRateScale = hrange.learningRateMax - hrange.learningRateMin
-#     if learningRateScale != 0:
-#         distance += (abs(pointA.learningRate - pointB.learningRate) / learningRateScale) ** 2
-#
-#     momentumCoeffScale = hrange.momentumCoeffMax - hrange.momentumCoeffMin
-#     if momentumCoeffScale != 0:
-#         distance += (abs(pointA.momCoeff - pointB.momCoeff) / momentumCoeffScale) ** 2
-#
-#     batchSizeScale = hrange.batchSizeMax - hrange.batchSizeMin
-#     if batchSizeScale != 0:
-#         distance += (abs(pointA.batchSize - pointB.batchSize) / batchSizeScale) ** 2
-#
-#     if pointA.actFun.to_string() != pointB.actFun.to_string():
-#         distance += 1
-#
-#     if pointA.aggrFun.to_string() != pointB.aggrFun.to_string():
-#         distance += 1
-#
-#     if pointA.lossFun.to_string() != pointB.lossFun.to_string():
-#         distance += 1
-#
-#     return sqrt(distance)
 # TODO end algo faster if net is good
 
 def get_in_radius(current: float, min_val: float, max_val:float, radius: float) -> float:
@@ -270,16 +161,6 @@ def get_in_radius(current: float, min_val: float, max_val:float, radius: float) 
     upper_bound = min(max_val, current + move_radius)
 
     return random.uniform(lower_bound, upper_bound)
-
-# def get_Xu_matrix(shape: (int, int), var_mul: float = 1, div: float = None) -> np.ndarray:
-#     if div is None:
-#         l = shape[1]
-#     else:
-#         l = div
-#
-#     result = np.random.normal(0, var_mul / sqrt(l), shape)
-#
-#     return result
 
 def compare_lists(l1: [int], l2: [int]):
     equal = True

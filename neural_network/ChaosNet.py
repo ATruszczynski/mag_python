@@ -20,62 +20,44 @@ class ChaosNet:
         assert biases.shape[1] == weights.shape[1]
         assert len(actFuns) == biases.shape[1]
 
-        self.links = links.copy()###---
-        self.weights = weights.copy()###---
-        self.biases = biases.copy()###---
+        self.links = links.copy()
+        self.weights = weights.copy()
+        self.biases = biases.copy()
         self.inp = np.zeros(biases.shape)
         self.act = np.zeros(biases.shape)
-        self.actFuns = []###---
+        self.actFuns = []
         for i in range(len(actFuns)):
             if actFuns[i] is None:
                 self.actFuns.append(None)
             else:
                 self.actFuns.append(actFuns[i].copy())
-        self.aggrFun = aggrFun###---
+        self.aggrFun = aggrFun
 
         #TODO make those private
-        self.input_size = input_size###---
-        self.output_size = output_size###---
-        self.neuron_count = self.biases.shape[1]###---
-        self.hidden_start_index = self.input_size###---
-        self.hidden_end_index = self.neuron_count - self.output_size###---
-        self.hidden_count = self.hidden_end_index - self.hidden_start_index###---
+        self.input_size = input_size
+        self.output_size = output_size
+        self.neuron_count = self.biases.shape[1]
+        self.hidden_start_index = self.input_size
+        self.hidden_end_index = self.neuron_count - self.output_size
+        self.hidden_count = self.hidden_end_index - self.hidden_start_index
 
         assert self.neuron_count == weights.shape[1]
         assert weights.shape[1] - input_size - output_size == self.hidden_count
         assert self.neuron_count == self.links.shape[0]
         assert self.neuron_count == self.links.shape[1]
 
-        self.comp_count = np.zeros(biases.shape)#TODO useless?
-        self.hidden_comp_order = None###---
-        self.maxit = maxit###---
+        # self.comp_count = np.zeros(biases.shape)#TODO useless?
+        self.hidden_comp_order = None
+        self.maxit = maxit
 
         if mutation_radius == 0:
             raise Exception()
-        self.mutation_radius = mutation_radius###---
-        self.wb_mutation_prob = wb_mutation_prob###---
-        self.s_mutation_prob = s_mutation_prob###---
-        self.p_mutation_prob = p_mutation_prob###---
+        self.mutation_radius = mutation_radius
+        self.wb_mutation_prob = wb_mutation_prob
+        self.s_mutation_prob = s_mutation_prob
+        self.p_mutation_prob = p_mutation_prob
         self.c_prob = c_prob
         self.r_prob = r_prob
-
-    # def run(self, input: np.ndarray, try_faster: bool = False):
-    #     self.act[0, :self.input_size] = input.reshape(1, -1)
-    #
-    #     if self.hidden_comp_order is None:
-    #         self.get_comp_order()
-    #
-    #     for i in range(self.maxit):
-    #         for n in self.hidden_comp_order:
-    #             # wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
-    #             wei = self.weights[:, n].reshape(-1, 1)
-    #             self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-    #             self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
-    #
-    #     self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-    #     self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
-    #
-    #     return self.act[0, self.hidden_end_index:]
 
     def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
@@ -92,97 +74,13 @@ class ChaosNet:
                 self.inp[n, :] = np.dot(wei.T, self.act) + self.biases[0, n]
                 self.act[n, :] = self.actFuns[n].compute(self.inp[n, :])
 
-
         self.inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, self.act) + self.biases[0, self.hidden_end_index:].reshape(-1, 1)
         self.act[self.hidden_end_index:, :] = self.aggrFun.compute(self.inp[self.hidden_end_index:, :])
 
         return self.act[self.hidden_end_index:]
 
-        # for i in range(self.maxit):
-        #     for n in self.hidden_comp_order:
-        #         # wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
-        #         wei = self.weights[:, n].reshape(-1, 1)
-        #         self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-        #         self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
-        #
-        # self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-        # self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
-
-        # return self.act[self.hidden_end_index:]
-
-
-
-    # def run_normal(self, input:np.ndarray):
-    #     self.act[0, :self.input_size] = input.reshape(1, -1)
-    #
-    #     for n in range(self. hidden_start_index, self.hidden_end_index):
-    #         wei = np.multiply(self.weights[:, n].reshape(-1, 1), self.links[:, n].reshape(-1, 1)) #TODO co to robi?
-    #         self.inp[0, n] = np.sum(np.multiply(self.act, wei.T)) + self.bias[0, n]
-    #         self.act[0, n] = self.actFuns[n].compute(self.inp[0, n])
-    #
-    #     self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-    #     self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
-    #
-    #     return self.act[0, self.hidden_end_index:]
-    #
-    # def run_faster(self, input: np.ndarray):
-    #     if self.hidden_comp_order is None:
-    #         self.get_comp_order()
-    #
-    #     self.act[0, :self.input_size] = input.reshape(1, -1)
-    #     for batch in self.hidden_comp_order:
-    #         wei = np.multiply(self.weights[:, batch].reshape(-1, len(batch)), self.links[:, batch].reshape(-1, len(batch)))
-    #         self.inp[0, batch] = np.sum(np.multiply(self.act, wei.T), axis=1) + self.bias[0, batch]
-    #         for n in range(len(batch)):
-    #             self.act[0, batch[n]] = self.actFuns[batch[n]].compute(self.inp[0, batch[n]])
-    #
-    #     self.inp[0, self.hidden_end_index:] = np.sum(np.multiply(self.act.T, self.weights[:, self.hidden_end_index:]), axis=0) + self.bias[0, self.hidden_end_index:]
-    #     self.act[0, self.hidden_end_index:] = self.aggrFun.compute(self.inp[0, self.hidden_end_index:])
-    #
-    #
-    #     return self.act[0, self.hidden_end_index:]
-
     #TODO identify which vertices don't need to be processed
     def get_comp_order(self):
-        # self.hidden_comp_order = []
-        # computed = list(range(self.input_size))
-        # computed.extend(range(self.hidden_end_index, self.neuron_count))
-        # links = self.links.copy()
-        # links[computed, :] = 0
-        #
-        # while len(computed) < self.neuron_count:
-        #     in_degrees = np.sum(links, axis=0)
-        #     zero_degrees_ind = np.where(in_degrees == 0)[0]
-        #     batch = []
-        #     for zdi in zero_degrees_ind:
-        #         if zdi not in computed:
-        #             batch.append(zdi)
-        #             computed.append(zdi)
-        #             links[zdi, :] = 0
-        #
-        #     self.hidden_comp_order.append(batch)
-
-        # self.hidden_comp_order = []
-        # hidden_links = self.links[self.hidden_start_index:self.hidden_end_index, self.hidden_start_index:self.hidden_end_index].copy()
-        #
-        # hidden_neuron_count = self.hidden_end_index - self.hidden_start_index
-        # computed = []
-        #
-        # while len(computed) < hidden_neuron_count:
-        #     in_degrees = np.sum(hidden_links, axis=0)
-        #     zero_degrees_ind = np.where(in_degrees == 0)[0]
-        #     batch = []
-        #     for zdi in zero_degrees_ind:
-        #         if zdi not in computed:
-        #             batch.append(zdi)
-        #             computed.append(zdi)
-        #             hidden_links[zdi, :] = 0
-        #
-        #     self.hidden_comp_order.append(batch)
-        #
-        # for batch in self.hidden_comp_order:
-        #     for i in range(len(batch)):
-        #         batch[i] += self.input_size
         #TODO jak to reaguje na wierzchołek ukryyt bez wejścia?
         self.hidden_comp_order = []
 
@@ -208,13 +106,6 @@ class ChaosNet:
 
         self.hidden_comp_order = [i for layer in layers[1:] for i in layer]
 
-
-
-
-
-
-
-
     def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lf: LossFun = None) -> [float, float, float, np.ndarray]:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
@@ -236,25 +127,24 @@ class ChaosNet:
 
         return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, resultt]
 
-    def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
-        self.links = links.copy()
-        self.weights = weights.copy()
-        self.biases = biases.copy()
-        self.aggrFun = aggrFun.copy()
-
-        self.actFuns = []
-        for i in range(len(actFuns)):
-            if actFuns[i] is None:
-                self.actFuns.append(None)
-            else:
-                self.actFuns.append(actFuns[i].copy())
-
-        self.hidden_comp_order = None
-
+    # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
+    #     self.links = links.copy()
+    #     self.weights = weights.copy()
+    #     self.biases = biases.copy()
+    #     self.aggrFun = aggrFun.copy()
+    #
+    #     self.actFuns = []
+    #     for i in range(len(actFuns)):
+    #         if actFuns[i] is None:
+    #             self.actFuns.append(None)
+    #         else:
+    #             self.actFuns.append(actFuns[i].copy())
+    #
+    #     self.hidden_comp_order = None
 
     def size(self):
         return -666
-    
+    #TODO dużo z tych funkcji jest do wyrzucenia prawd.
     def get_indices_of_neurons_with_output(self):
         row_sum = np.sum(self.links, axis=1)
         ones = list(np.where(row_sum[:self.hidden_end_index] > 0)[0])
@@ -280,7 +170,6 @@ class ChaosNet:
                 connected_neurons.append(i)
 
         return connected_neurons
-
 
     def get_indices_of_used_neurons(self):
         no_output = self.get_indices_of_no_output_neurons()
@@ -330,24 +219,9 @@ class ChaosNet:
                         s_mutation_prob=self.s_mutation_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
                         r_prob=self.r_prob)
 
-    def calculate_distance_from_input(self):
-        touched = []
-        layers = []
-
-        hidden_links = self.links
-
-    # def get_mask(self) -> np.ndarray:
-    #     mask = np.ones((self.neuron_count, self.neuron_count))
-    #     mask[:, self.input_size] = 0
-    #     mask[-self.output_size:, :] = 0
-    #     np.fill_diagonal(mask, 0)
-    #
-    #     return mask
-
     def edge_count(self):
         how_many = np.sum(self.links)
         return how_many
-
 
     def density(self):
         how_many = np.sum(self.links)
@@ -355,55 +229,7 @@ class ChaosNet:
 
         return how_many/maxi
 
-
-
-    # def get_comp_order(self):
-    #     self.comp_order = [list(range(self.neuron_count))]
-    #     self.comp_count = np.zeros(self.bias.shape)
-    #
-    #     to_recalculate = np.zeros(self.bias.shape)
-    #
-    #     for i in range(1, self.max_it):
-    #         prev = self.comp_order[i - 1]
-    #         for p in prev:
-    #             to_update = self.get_neurons_to_update([p])
-    #             to_recalculate_local = []
-    #             for tu in to_update:
-    #                 if tu <= p:
-    #                     to_recalculate_local.append(tu)
-    #                 else:
-    #                     break
-    #
-    #             to_recalculate[to_recalculate_local] = 1
-    #             self.comp_order.append(np.where(to_recalculate == 1)[0])
-
-    # def get_computable_division(self, links: np.ndarray) -> [[int]]:
-    #     pass
-    #
-    # def get_neurons_to_update(self, links: np.ndarray, touched: [int]) -> [int]:
-    #     to_update = np.zeros(self.bias.shape)
-    #
-    #     analysed = self.neuron_count * [0]
-    #     for t in touched:
-    #         following = self.get_neurons_to_update_rec(links, t, analysed)
-    #         to_update[following] = 1
-    #
-    #     to_update_ind = np.where(to_update == 1)[0]
-    #     to_update_ind = sorted(to_update_ind)
-    #
-    #     return to_update_ind
-    #
-    # def get_neurons_to_update_rec(self, links: np.ndarray, current: int, analysed: [int]) -> [int]:
-    #     to_update = [current]
-    #     analysed.append(current)
-    #     outgoing = np.where(links[current, :] == 1)[0]
-    #     for o in outgoing:
-    #         if o not in analysed:
-    #             to_update.extend(self.get_neurons_to_update_rec(links, o, analysed))
-    #             analysed.append(o)
-    #
-    #     return to_update
-
+    #TODO coś by się przydało z tym zrobić
     def to_string(self):
         actFunsString = ""
         for i in range(len(self.actFuns)):
@@ -415,7 +241,6 @@ class ChaosNet:
             if i != len(self.actFuns) - 1:
                 actFunsString += "|"
 
-
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(np.sum(self.links))}|{self.maxit}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
@@ -425,88 +250,7 @@ class ChaosNet:
         return result
 
 #TODO SAVE NET AT THE END!!!!!!!!!!!
-def accuracy(confusion_matrix: np.ndarray):
-    tot_sum = np.sum(confusion_matrix)
-    diag_sum = np.sum(np.diag(confusion_matrix))
 
-    accuracy = diag_sum / tot_sum
-
-    return accuracy
-
-def average_precision(conf_matrix):
-    return np.average(get_precisions(conf_matrix))
-
-def get_precisions(conf_matrix) -> [float]:
-    col_sum = np.sum(conf_matrix, axis=0)
-    row_sum = np.sum(conf_matrix, axis=1)
-    diag = np.diag(conf_matrix)
-
-    class_prec = []
-
-    for i in range(len(col_sum)):
-        if row_sum[i] > 0:
-            if col_sum[i] > 0:
-                class_prec.append(diag[i] / col_sum[i])
-            else:
-                class_prec.append(0)
-
-    return class_prec
-
-
-def average_recall(conf_matrix):
-    return np.average(get_recalls(conf_matrix))
-
-def get_recalls(conf_matrix) -> [float]:
-    row_sums = np.sum(conf_matrix, axis=1)
-    diag = np.diag(conf_matrix)
-
-    class_recalls = []
-
-    for i in range(len(row_sums)):
-        if row_sums[i] > 0:
-            class_recalls.append(diag[i] / row_sums[i])
-
-    return class_recalls
-
-
-def efficiency(conf_matrix):
-    acc = accuracy(conf_matrix)
-    prec = average_precision(conf_matrix)
-    rec = average_recall(conf_matrix)
-    f1 = average_f1_score(conf_matrix)
-
-    # prec = min(get_precisions(conf_matrix))
-    # rec = min(get_recalls(conf_matrix))
-    # f1 = min(get_f1_scores(conf_matrix))
-
-    return mean([acc, prec, rec, f1])
-
-def get_f1_scores(conf_matrix):
-    precisions = get_precisions(conf_matrix)
-    recall = get_recalls(conf_matrix)
-
-    f1 = []
-    for i in range(len(precisions)):
-        prec = precisions[i]
-        rec = recall[i]
-        numerator = 2 * prec * rec
-        denominator = prec + rec
-
-        if denominator == 0:
-            f1.append(0)
-        else:
-            f1.append(numerator / denominator)
-
-        # prec_inv = 1 / precisions[i]
-        # rec_inv = 1 / recall[i]
-        # f1.append(2 / (rec_inv + prec_inv))
-
-    return f1
-
-def average_f1_score(conf_matrix):
-    f1 = get_f1_scores(conf_matrix)
-
-    return mean(f1)
 
 
 
