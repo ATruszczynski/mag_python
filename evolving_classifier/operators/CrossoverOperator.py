@@ -1,11 +1,11 @@
 import random
 
-from ann_point.AnnPoint import AnnPoint
-from ann_point.AnnPoint2 import AnnPoint2, point_from_layer_tuples
+# from ann_point.AnnPoint import AnnPoint
+# from ann_point.AnnPoint2 import AnnPoint2, point_from_layer_tuples
 from neural_network.ChaosNet import ChaosNet
 from utility.Mut_Utility import *
 from utility.Utility2 import *
-from utility.Utility import get_Xu_matrix
+# from utility.Utility import get_Xu_matrix
 import numpy as np
 
 

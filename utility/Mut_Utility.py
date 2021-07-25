@@ -1,10 +1,11 @@
 # from evolving_classifier.EvolvingClassifier import *
 import random
 
-from ann_point.AnnPoint2 import *
+# from ann_point.AnnPoint2 import *
 from neural_network.ChaosNet import ChaosNet
-from utility.Utility import choose_without_repetition, get_Xu_matrix, AnnPoint, point_from_layers, generate_layer, \
-    get_links, try_choose_different
+# from utility.Utility import choose_without_repetition, get_Xu_matrix, AnnPoint, point_from_layers, generate_layer, \
+#     get_links, try_choose_different
+from utility.Utility import *
 from utility.Utility2 import *
 from ann_point.HyperparameterRange import HyperparameterRange
 

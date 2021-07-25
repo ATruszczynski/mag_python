@@ -22,11 +22,11 @@ def test_cn_generation():
                           desired_hidden_start_index=2,
                           desired_hidden_end_index=2,
                           desired_hidden_count=0,
-                          desired_links=np.array([[0, 0, 1],
-                                                  [0, 0, 1],
+                          desired_links=np.array([[0, 0, 0],
+                                                  [0, 0, 0],
                                                   [0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, -0.91773893],
-                                                    [0, 0, -0.78179623],
+                          desired_weights=np.array([[0, 0, 0],
+                                                    [0, 0, 0],
                                                     [0, 0, 0]]),
                           desired_biases=np.array([[0, 0, 4.10972096]]),
                           desired_actFun=[None, None, None],
@@ -46,12 +46,12 @@ def test_cn_generation():
                           desired_hidden_start_index=2,
                           desired_hidden_end_index=3,
                           desired_hidden_count=1,
-                          desired_links=np.array([[0, 0, 1, 1],
-                                                  [0, 0, 0, 1],
+                          desired_links=np.array([[0, 0, 1, 0],
+                                                  [0, 0, 0, 0],
                                                   [0, 0, 0, 0],
                                                   [0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0.75720675, -0.77634106],
-                                                    [0, 0, 0, -0.26970662],
+                          desired_weights=np.array([[0, 0, 0.75720675, 0],
+                                                    [0, 0, 0, 0],
                                                     [0, 0, 0, 0],
                                                     [0, 0, 0, 0]]),
                           desired_biases=np.array([[0, 0, 5.2041659, 4.66856333]]),
@@ -104,4 +104,4 @@ print(f"c_prob_2: {random.uniform(0.2, 0.5)}")
 print(f"r_prob_2: {random.uniform(0.8, 1)}")
 
 
-# test_cn_generation()
+test_cn_generation()

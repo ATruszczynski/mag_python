@@ -51,7 +51,7 @@ def run_tests(repetitions: int, res_subdir_path: str, nn_data: ([np.ndarray], [n
             network = network_from_point(point=point, seed=nn_seed)
             network.train(nn_data[0], nn_data[1], epochs=nn_epochs)
             test_res = network.test(nn_data[2], nn_data[3])
-            ann_data_point = AnnDataPoint(point=point)
+            ann_data_point = CNDataPoint(net=point)
             ann_data_point.add_data(new_ff=0, new_conf_mat=test_res[3])
             net_data_points.append(ann_data_point)
             write_down_net_res(file=log, run_it=i, variant=n_id, n_it=j, data_point=ann_data_point, learningIts=learningIts)
@@ -73,12 +73,12 @@ def write_down_run_hist(file, run_it: int, rh: RunHistory, learningIts: int):
                  f"{summary[mean_ff_id]},{summary[mean_acc_id]},{summary[mean_prec_id]},{summary[mean_rec_id]}," \
                  f"{summary[mean_eff_id]}," \
                  f"{summary[mean_f1_id]},{summary[mean_lc_id]},{summary[mean_size_id]}," \
-                 f"{best.point.to_string()},{best.ff},{best.acc},{best.prec},{best.rec},{best.get_eff()},{best.f1}," \
-                 f"{len(best.point.neuronCounts)-2},{best.point.size()},{learningIts}\n"
+                 f"{best.net.to_string()},{best.ff},{best.acc},{best.prec},{best.rec},{best.get_eff()},{best.f1}," \
+                 f"{len(best.net.neuronCounts) - 2},{best.net.size()},{learningIts}\n"
         file.write(record)
 #TODO czy eff ma jakąś oficjalną nazwę
 
-def write_down_net_res(file, run_it: int, variant: str, n_it: int, data_point: AnnDataPoint, learningIts: int):
+def write_down_net_res(file, run_it: int, variant: str, n_it: int, data_point: CNDataPoint, learningIts: int):
     record = ""
     if variant == n_id:
         record = f"{run_it},{variant},{n_it},"
@@ -86,13 +86,13 @@ def write_down_net_res(file, run_it: int, variant: str, n_it: int, data_point: A
         record = f"{run_it},{variant},{filler},"
 
     record += f"{filler_space}," \
-              f"{data_point.point.to_string()},{filler}," \
+              f"{data_point.net.to_string()},{filler}," \
               f"{data_point.acc},{data_point.prec},{data_point.rec},{data_point.get_eff()},{data_point.f1}," \
-              f"{len(data_point.point.neuronCounts)-2},{data_point.point.size()},{learningIts}\n"
+              f"{len(data_point.net.neuronCounts) - 2},{data_point.net.size()},{learningIts}\n"
 
     file.write(record)
 
-def write_down_avg_net(file, run_it: int, data_points: [AnnDataPoint], learningIts: int):
+def write_down_avg_net(file, run_it: int, data_points: [CNDataPoint], learningIts: int):
     rh = RunHistory()
     rh.add_it_hist(data_points)
     summary = rh.summary_dict(0)
@@ -101,7 +101,7 @@ def write_down_avg_net(file, run_it: int, data_points: [AnnDataPoint], learningI
              f"{filler},{filler}," \
              f"{summary[mean_acc_id]},{summary[mean_prec_id]},{summary[mean_rec_id]},{summary[mean_eff_id]}," \
              f"{summary[mean_f1_id]},{summary[mean_lc_id]},{summary[mean_size_id]}," \
-             f"{data_points[0].point.to_string()}," \
+             f"{data_points[0].net.to_string()}," \
              f"{filler_space},{learningIts}\n"
 
     file.write(record)

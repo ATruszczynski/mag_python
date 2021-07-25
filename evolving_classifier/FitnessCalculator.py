@@ -7,7 +7,7 @@ from evolving_classifier import FitnessFunction
 import numpy as np
 
 from neural_network.ChaosNet import ChaosNet
-from utility.AnnDataPoint import AnnDataPoint
+from utility.CNDataPoint import CNDataPoint
 
 
 
@@ -16,7 +16,7 @@ class FitnessCalculator:
         pass
 
     def compute(self, pool: mp.Pool, to_compute: [ChaosNet], fitnessFunc: FitnessFunction,
-                trainInputs: [np.ndarray], trainOutputs: [np.ndarray]):
+                trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [CNDataPoint]:
         pass
 
 class CNFitnessCalculator(FitnessCalculator):
@@ -24,25 +24,23 @@ class CNFitnessCalculator(FitnessCalculator):
         super().__init__()
 
     def compute(self, pool: mp.Pool, to_compute: [ChaosNet], fitnessFunc: FitnessFunction,
-                trainInputs: [np.ndarray], trainOutputs: [np.ndarray]):
-        count = len(to_compute)
+                trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [CNDataPoint]:
+        results = [CNDataPoint(point) for point in to_compute]#TODO moża stąd wyrzucić point
 
-        estimates = [[point, AnnDataPoint(point)] for point in to_compute]#TODO moża stąd wyrzucić point
-
-        estimates = sorted(estimates, key=lambda x: x[1].ff, reverse=True)
-        seeds = [random.randint(0, 1000) for i in range(len(to_compute))]
+        # results = sorted(results, key=lambda x: x[1].ff, reverse=True) TODO co to po co to
+        seeds = [random.randint(0, 1000) for i in range(len(results))]
 
         if pool is None:
-            new_fitnesses = [fitnessFunc.compute(to_compute[i], trainInputs, trainOutputs, seeds[i])for i in range(len(to_compute))]
+            new_fitnesses = [fitnessFunc.compute(results[i].net, trainInputs, trainOutputs, seeds[i])for i in range(len(results))]
         else:
-            estimating_async_results = [pool.apply_async(func=fitnessFunc.compute, args=(to_compute[i], trainInputs, trainOutputs, seeds[i])) for i in range(len(to_compute))]
+            estimating_async_results = [pool.apply_async(func=fitnessFunc.compute, args=(results[i].net, trainInputs, trainOutputs, seeds[i])) for i in range(len(results))]
             [estimation_result.wait() for estimation_result in estimating_async_results]
             new_fitnesses = [result.get() for result in estimating_async_results]
 
         for i in range(len(to_compute)):
-            estimates[i][1].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
+            results[i].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
 
-        return estimates
+        return results
 
 
 #

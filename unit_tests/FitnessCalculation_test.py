@@ -24,29 +24,25 @@ def test_fitness_calculator_with_pure_eff():
     fc = CNFitnessCalculator()
     anns = points()
     i, o = get_io()
-    res = fc.compute(None,to_compute=anns, fitnessFunc=CNFF(), trainInputs=i, trainOutputs=o)
+    res = fc.compute(None, to_compute=anns, fitnessFunc=CNFF(), trainInputs=i, trainOutputs=o)
 
     assert len(res) == 2
 
-    assert len(res[0]) == 2
     # assert res[0][0].to_string() == anns[1].to_string() #TODO fix this
-    assert res[0][1].ff == pytest.approx(0.1875, abs=1e-3)
-    assert res[0][1].acc == pytest.approx(0.25, abs=1e-3)
-    assert res[0][1].prec == pytest.approx(0.16666, abs=1e-3)
-    assert res[0][1].rec == pytest.approx(0.16666, abs=1e-3)
-    assert res[0][1].f1 == pytest.approx(0.16666, abs=1e-3)
-    assert res[0][1].touch == pytest.approx(1, abs=1e-3)
-    assert res[0][1].get_eff() == pytest.approx(0.1875, abs=1e-3)
+    assert res[0].ff == pytest.approx(0.1875, abs=1e-3)
+    assert res[0].acc == pytest.approx(0.25, abs=1e-3)
+    assert res[0].prec == pytest.approx(0.16666, abs=1e-3)
+    assert res[0].rec == pytest.approx(0.16666, abs=1e-3)
+    assert res[0].f1 == pytest.approx(0.16666, abs=1e-3)
+    assert res[0].get_eff() == pytest.approx(0.1875, abs=1e-3)
 
-    assert len(res[1]) == 2
     # assert res[1][0].to_string() == anns[0].to_string()
-    assert res[1][1].ff == pytest.approx(0.430555, abs=1e-3)
-    assert res[1][1].acc == pytest.approx(0.5, abs=1e-3)
-    assert res[1][1].prec == pytest.approx(0.33333, abs=1e-3)
-    assert res[1][1].rec == pytest.approx(0.5, abs=1e-3)
-    assert res[1][1].f1 == pytest.approx(.388888, abs=1e-3)
-    assert res[1][1].touch == pytest.approx(1, abs=1e-3)
-    assert res[1][1].get_eff() == pytest.approx(0.430555, abs=1e-3)
+    assert res[1].ff == pytest.approx(0.30555, abs=1e-3)
+    assert res[1].acc == pytest.approx(0.5, abs=1e-3)
+    assert res[1].prec == pytest.approx(0.166666, abs=1e-3)
+    assert res[1].rec == pytest.approx(0.333333, abs=1e-3)
+    assert res[1].f1 == pytest.approx(0.22222, abs=1e-3)
+    assert res[1].get_eff() == pytest.approx(0.30555, abs=1e-3)
 
 
 random.seed(1002)

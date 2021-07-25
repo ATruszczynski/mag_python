@@ -424,7 +424,7 @@ class ChaosNet:
 
         return result
 
-
+#TODO SAVE NET AT THE END!!!!!!!!!!!
 def accuracy(confusion_matrix: np.ndarray):
     tot_sum = np.sum(confusion_matrix)
     diag_sum = np.sum(np.diag(confusion_matrix))

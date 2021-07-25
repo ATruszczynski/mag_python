@@ -1,6 +1,6 @@
-import numpy as np
+# import numpy as np
 from ann_point.Functions import *
-from ann_point.AnnPoint2 import *
+# from ann_point.AnnPoint2 import *
 from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
 from utility.TestingUtility import compare_chaos_network

@@ -4,8 +4,8 @@ import time
 from statistics import mean
 from ann_point.HyperparameterRange import *
 
-from ann_point.AnnPoint import *
-from utility.AnnDataPoint import AnnDataPoint
+# from ann_point.AnnPoint import *
+from utility.CNDataPoint import CNDataPoint, ChaosNet
 from utility.RunHistory import RunHistory
 
 record_id = "R"
@@ -55,7 +55,7 @@ class EC_supervisor():
         self.iterations = iterations
         self.total_work = self.sps + iterations * self.ps
 
-    def check_point(self, evals: [(AnnPoint, AnnDataPoint)], iteration: int):
+    def check_point(self, evals: [(ChaosNet, CNDataPoint)], iteration: int):
         # predict execution time
         curr_time = time.time()
         elapsed_time = (curr_time - self.start_point)
@@ -69,7 +69,7 @@ class EC_supervisor():
 
         # evaluate statistics
 
-        it_hist = [evals[i][1] for i in range(len(evals))]
+        it_hist = [evals[i] for i in range(len(evals))]
         self.rh.add_it_hist(it_hist)
 
         # write down iteration results
@@ -82,26 +82,26 @@ class EC_supervisor():
 
         log.write(f"{iteration_id} Iteration {iteration + 1} \n")
 
-        evals = sorted(evals, key=lambda x: x[1].ff, reverse=True)
+        evals = sorted(evals, key=lambda x: x.ff, reverse=True)
 
         round_prec = 3
 
         for i in range(len(evals)):
             # log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
-            log.write(f"R {iteration} {i + 1} {evals[i][0].to_string()} - {round(evals[i][1].ff, round_prec)}\n")
+            log.write(f"R {iteration} {i + 1} {evals[i].net.to_string()} - {round(evals[i].ff, round_prec)}\n")
 
         best_eval = self.rh.get_it_best(iteration)
 
         stat_string = self.rh.get_it_summary_string(iteration)
 
         log.write(f"{summary_id} {stat_string}\n")
-        log.write(f"{summary_id} Best ff: {best_eval.point.to_string()} - {round(best_eval.ff, round_prec)}\n")
+        log.write(f"{summary_id} Best ff: {best_eval.net.to_string()} - {round(best_eval.ff, round_prec)}\n")
 
         log.close()
 
         # iteration prints
 
         print(f"--- Iteration - {iteration + 1} - {stat_string}")
-        print(f"--- Best point: {best_eval.point.to_string()}")
+        print(f"--- Best point: {best_eval.net.to_string()}")
 
 

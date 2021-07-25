@@ -11,12 +11,12 @@ def test_neuron_increase():
                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  r_prob=(0.44, 0.55))
 
-    link1 = np.array([[0, 1, 1, 0, 1],
+    link1 = np.array([[0, 1, 1, 0, 0],
                       [0, 0, 1, 1, 1],
                       [0, 1, 0, 0, 1],
                       [0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0]])
-    wei1 = np.array([[0., 1, 2, 0, 4],
+    wei1 = np.array([[0., 1, 2, 0, 0],
                      [0, 0, 3, 8, 5],
                      [0, 7, 0, 0, 6],
                      [0, 0, 0, 0, 0],
@@ -44,12 +44,12 @@ def test_neuron_increase():
                           desired_hidden_start_index=1,
                           desired_hidden_end_index=3,
                           desired_hidden_count=2,
-                          desired_links=np.array([[0, 1, 1, 0, 1],
+                          desired_links=np.array([[0, 1, 1, 0, 0],
                                                   [0, 0, 1, 1, 1],
                                                   [0, 1, 0, 0, 1],
                                                   [0, 0, 0, 0, 0],
                                                   [0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0., 1, 2, 0, 4],
+                          desired_weights=np.array([[0., 1, 2, 0, 0],
                                                     [0, 0, 3, 8, 5],
                                                     [0, 7, 0, 0, 6],
                                                     [0, 0, 0, 0, 0],
@@ -118,14 +118,14 @@ def test_neuron_increase():
                           desired_hidden_start_index=1,
                           desired_hidden_end_index=5,
                           desired_hidden_count=4,
-                          desired_links=np.array([[0., 1., 1., 1., 1., 0., 1.],
+                          desired_links=np.array([[0., 1., 1., 1., 1., 0., 0.],
                                                   [0., 0., 1., 0., 1., 1., 1.],
                                                   [0., 1., 0., 1., 0., 0., 1.],
                                                   [0., 1., 1., 0., 0., 1., 1.],
                                                   [0., 0., 1., 1., 0., 1., 1.],
                                                   [0., 0., 0., 0., 0., 0., 0.],
                                                   [0., 0., 0., 0., 0., 0., 0.]]),
-                          desired_weights=np.array([[0., 1, 2, 1.99852202, 3.53627653, 0, 4],
+                          desired_weights=np.array([[0., 1, 2, 1.99852202, 3.53627653, 0, 0],
                                                     [0 , 0, 3, 0, 2.08113262, 8, 5],
                                                     [0 , 7, 0, 0.87783263, 0, 0, 6],
                                                     [0., 7.15815828, 0.34053276, 0., 0., 5.35134103, 6.56899812],
@@ -1024,4 +1024,37 @@ def test_uniform_shift():
 
 # test_network_inflate()
 # test_network_deflate()
+
+hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
+                             wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                             r_prob=(0.44, 0.55))
+
+link1 = np.array([[0, 1, 1, 0, 1],
+                  [0, 0, 1, 1, 1],
+                  [0, 1, 0, 0, 1],
+                  [0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0]])
+wei1 = np.array([[0., 1, 2, 0, 4],
+                 [0, 0, 3, 8, 5],
+                 [0, 7, 0, 0, 6],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]])
+bia1 = np.array([[0., -2, -3, -4, -5]])
+actFuns1 = [None, ReLu(), Sigmoid(), None, None]
+
+cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+               actFuns=actFuns1, aggrFun=TanH(), maxit=2,
+               mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
+
+np.random.seed(1001)
+random.seed(1001)
+
+cn2 = increase_neuron_count(cn1, hrange, 2)
+
+print(cn2.links)
+print(cn2.weights)
+
+
+test_neuron_increase()
+
 

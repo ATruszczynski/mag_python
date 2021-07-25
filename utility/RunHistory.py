@@ -1,6 +1,6 @@
 from statistics import mean
 
-from utility.AnnDataPoint import AnnDataPoint
+from utility.CNDataPoint import CNDataPoint
 
 mean_ff_id = "m.f."
 mean_acc_id = "m.a."
@@ -17,10 +17,10 @@ class RunHistory:
     def __init__(self):
         self.it_hist = []
 
-    def add_it_hist(self, data_points: [AnnDataPoint]): #TODO test
+    def add_it_hist(self, data_points: [CNDataPoint]): #TODO test
         self.it_hist.append(data_points)
 
-    def get_it_best(self, iteration: int) -> AnnDataPoint: #TODO test
+    def get_it_best(self, iteration: int) -> CNDataPoint: #TODO test
         it = self.it_hist[iteration]
 
         best_eval = None
@@ -39,8 +39,8 @@ class RunHistory:
         mean_prec = mean([eval.prec for eval in evals])
         mean_rec = mean([eval.rec for eval in evals])
         mean_eff = mean([eval.get_eff() for eval in evals])
-        mean_size = mean([eval.point.size() for eval in evals])
-        mean_used = mean([eval.point.get_number_of_used_neurons() for eval in evals])
+        mean_size = mean([eval.net.size() for eval in evals])
+        mean_used = mean([eval.net.get_number_of_used_neurons() for eval in evals])
 
         result = f"{iteration} |{mean_ff_id}:{round(mean_ff, round_prec_rh)}|" + \
                  f"{mean_acc_id}:{round(mean_acc, round_prec_rh)}|" + \
@@ -58,8 +58,8 @@ class RunHistory:
         mean_prec = mean([eval.prec for eval in evals])
         mean_rec = mean([eval.rec for eval in evals])
         mean_eff = mean([eval.get_eff() for eval in evals])
-        mean_size = mean([eval.point.size() for eval in evals])
-        mean_lc = mean([len(eval.point.neuronCounts)-1 for eval in evals])
+        mean_size = mean([eval.net.size() for eval in evals])
+        mean_lc = mean([len(eval.net.neuronCounts) - 1 for eval in evals])
 
         res_dict = {}
         res_dict[mean_ff_id] = mean_ff

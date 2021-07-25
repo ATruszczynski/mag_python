@@ -12,12 +12,6 @@ def test_determinism(): #TODO this is (was?) broken
 
     ec = EvolvingClassifier()
 
-    ec.co = FinalCrossoverOperator(ec.hrange)
-    ec.mo = FinalMutationOperator(ec.hrange)
-    ec.so = TournamentSelection(2)
-    ec.ff = CNFF()
-    ec.fc = CNFitnessCalculator()
-
     count = 10
     size = 5
     x,y = generate_counting_problem(count, size)
@@ -26,8 +20,8 @@ def test_determinism(): #TODO this is (was?) broken
     tests = []
 
     for i in range(5):
-        ec.prepare(4, 4, (x, y, X, Y), 5, 1001)
-        net = ec.run(3, 0.01, 0.25, 1)
+        ec.prepare(4, (x, y, X, Y), 1001)
+        net = ec.run(3, 1)
         tests.append(net.test(X, Y))
     #TODO move eff etc to different file
     for i in range(len(tests) - 1):

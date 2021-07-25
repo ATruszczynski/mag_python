@@ -1,9 +1,9 @@
 from math import sqrt
 from statistics import mean
 
-from ann_point.AnnPoint2 import CrossEntropy, AnnPoint2, QuadDiff, Softmax
+# from ann_point.AnnPoint2 import CrossEntropy, AnnPoint2, QuadDiff, Softmax
 from neural_network.ChaosNet import *
-from neural_network.FeedForwardNeuralNetwork import *
+# from neural_network.FeedForwardNeuralNetwork import *
 import numpy as np
 from ann_point.Functions import *
 

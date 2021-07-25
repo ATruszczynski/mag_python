@@ -1,9 +1,8 @@
 import random
-
 import numpy as np
-import pytest
+# import pytest
 
-from ann_point.AnnPoint2 import AnnPoint2
+# from ann_point.AnnPoint2 import AnnPoint2
 from ann_point.Functions import *
 from ann_point.HyperparameterRange import HyperparameterRange
 from evolving_classifier.operators.MutationOperators import *
@@ -242,13 +241,13 @@ def test_struct_mutation_2():
                           desired_r_prob=0.75)
 
 def test_struct_mutation_3():
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 2),
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
                                  r_prob=(0.44, 0.55))
     mo = FinalMutationOperator(hrange)
 
-    random.seed(1004)
-    np.random.seed(1004)
+    random.seed(1009)
+    np.random.seed(1009)
 
     link1 = np.array([[0, 0, 1, 1, 1],
                       [0, 0, 1, 0, 1],
@@ -268,28 +267,6 @@ def test_struct_mutation_3():
                    wb_mutation_prob=0.2, s_mutation_prob=0.8, p_mutation_prob=1., c_prob=0.3, r_prob=0.35)
 
     mutant = mo.mutate(cn1)
-
-
-    # assert np.array_equal(cn1.links, np.array([[0, 0, 1, 1, 1],
-    #                                            [0, 0, 1, 0, 1],
-    #                                            [0, 0, 0, 1, 1],
-    #                                            [0, 0, 1, 0, 1],
-    #                                            [0, 0, 0, 0, 0]]))
-    # assert np.all(np.isclose(cn1.weights, np.array([[0, 0, 1, 4, 6],
-    #                                                    [0, 0, 2, 0, 7],
-    #                                                    [0, 0, 0, 5, 8],
-    #                                                    [0, 0, 3, 0, 9],
-    #                                                    [0, 0, 0, 0, 0.]]), atol=1e-5))
-    # assert np.all(np.isclose(cn1.biases, np.array([[0., 0, -3, -4, -5]]), atol=1e-5))
-    # assert len(cn1.actFuns) == 5
-    # assert cn1.actFuns[0] is None
-    # assert cn1.actFuns[1] is None
-    # assert cn1.actFuns[2].to_string() == ReLu().to_string()
-    # assert cn1.actFuns[3].to_string() == ReLu().to_string()
-    # assert cn1.actFuns[4] is None
-    # assert cn1.aggrFun.to_string() == TanH().to_string()
-    #
-    # assert cn1.hidden_comp_order is None
 
     compare_chaos_network(net=cn1,
                           desired_input_size=2,
@@ -319,67 +296,57 @@ def test_struct_mutation_3():
                           desired_c_prob=0.3,
                           desired_r_prob=0.35)
 
-    #
-    # assert np.array_equal(mutant.links, np.array([[0, 0, 0],
-    #                                               [0, 0, 1],
-    #                                               [0, 0, 0]]))
-    # assert np.all(np.isclose(mutant.weights, np.array([[0, 0, 0],
-    #                                                    [0, 0, 6.2377573],
-    #                                                    [0, 0, 0]]), atol=1e-5))
-    # assert np.all(np.isclose(mutant.biases, np.array([[0., 0., -5.]]), atol=1e-5))
-    # assert len(mutant.actFuns) == 3
-    # assert mutant.actFuns[0] is None
-    # assert mutant.actFuns[1] is None
-    # assert mutant.actFuns[2] is None
-    # assert mutant.aggrFun.to_string() == TanH().to_string()
-    #
-    # assert mutant.hidden_comp_order is None
-
     compare_chaos_network(net=mutant,
                           desired_input_size=2,
                           desited_output_size=1,
-                          desired_neuron_count=4,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=2,
-                          desired_hidden_count=0,
-                          desired_links=np.array([[0, 0, 0],
-                                                  [0, 0, 1],
-                                                  [0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0],
-                                                    [0, 0, 6.2377573],
-                                                    [0, 0, 0]]),
-                          desired_biases=np.array([[0., 0, -5]]),
-                          desired_actFun=[None, None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=0.235941,
-                          desired_wb_prob=0.0857273,
-                          desired_s_prob=0.609284,
-                          desired_p_prob=0.8862662)
+                          desired_neuron_count=5,
+                          desired_hidden_start_index=2,
+                          desired_hidden_end_index=4,
+                          desired_hidden_count=2,
+                          desired_links=np.array([[0., 0., 1., 0., 0.],
+                                                  [0., 0., 0., 1., 0.],
+                                                  [0., 0., 0., 1., 0.],
+                                                  [0., 0., 0., 0., 0.],
+                                                  [0., 0., 0., 0., 0.]]),
+                          desired_weights=np.array([[0, 0, 7.29343795, 0, 0],
+                                                    [0, 0, 0, 5.98317628, 0],
+                                                    [0, 0, 0, 5, 0],
+                                                    [0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0.]]),
+                          desired_biases=np.array([[ 0.,         -0.,         -3.,         -3.78908424, -3.49521686]]),
+                          desired_actFun=[None, None, Sigmoid(), Sigmoid(), None],
+                          desired_aggr=Sigmoid(),
+                          desired_maxit=4,
+                          desired_mut_rad=0.8160267,
+                          desired_wb_prob=0.0607029,
+                          desired_s_prob=0.620329,
+                          desired_p_prob=0.934746,
+                          desired_c_prob=0.30211,
+                          desired_r_prob=0.491017)
 
-seed = 1007
+seed = 1009
 random.seed(seed)
 np.random.seed(seed)
 hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 2),
                              wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
                              r_prob=(0.44, 0.55))
-link1 = np.array([[0, 1, 1, 0, 1],
+link1 = np.array([[0, 0, 1, 1, 1],
                   [0, 0, 1, 0, 1],
-                  [0, 1, 0, 0, 1],
-                  [0, 0, 0, 0, 0],
+                  [0, 0, 0, 1, 1],
+                  [0, 0, 1, 0, 1],
                   [0, 0, 0, 0, 0]])
-wei1 = np.array([[0., 1, 2, 0, 4],
-                 [0, 0, 3, 0, 5],
-                 [0, 7, 0, 0, 6],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0]])
-bia1 = np.array([[0., -2, -3, -4, -5]])
-act1 = [None, TanH(), Sigmoid(), None, None]
+wei1 = np.array([[0, 0, 1, 4, 6],
+                 [0, 0, 2, 0, 7],
+                 [0, 0, 0, 5, 8],
+                 [0, 0, 3, 0, 9],
+                 [0, 0, 0, 0, 0.]])
+bia1 = np.array([[0., 0, -3, -4, -5]])
+act1 = [None, None, TanH(), Sigmoid(), None]
 aggr1 = TanH()
-maxit = 2
-input_size = 1
+maxit = 4
+input_size = 2
 hidden_size = 2
-output_size = 2
+output_size = 1
 neuron_count = 5
 radius = 1.2
 frac_radius = radius / hrange.max_mut_radius
@@ -397,13 +364,13 @@ print(bia1)
 wei2 = gaussian_shift(wei1, link1, wb_pm, radius).copy()
 print(f"wei_shifted: \n{wei2}")
 
-wei3 = reroll_matrix(wei2, link1, r_pm, 0.92655431, np.max(wei2)).copy()
+wei3 = reroll_matrix(wei2, link1, r_pm, 1, np.max(wei2)).copy()
 print(f"wei_rerolled: \n{wei3}")
 
 bia2 = gaussian_shift(bia1, get_bias_mask(input_size, neuron_count), wb_pm, radius).copy()
 print(f"bia_shifted: \n{bia2}")
 
-bia3 = reroll_matrix(bia2, get_bias_mask(input_size=input_size, neuron_count=neuron_count), r_pm, -5, -2.16211487).copy()
+bia3 = reroll_matrix(bia2, get_bias_mask(input_size=input_size, neuron_count=neuron_count), r_pm, -5, -3).copy()
 print(f"bia_rerolled: \n{bia3}")
 
 for i in range(input_size, input_size+hidden_size):
@@ -458,7 +425,8 @@ print(f"c:\n{reroll_value(p_pm, c_pm, 0.22, 0.33)}")
 print(f"r:\n{reroll_value(p_pm, r_pm, 0.44, 0.55)}")
 
 # test_struct_mutation()
-test_struct_mutation_2()
+# test_struct_mutation_2()
+test_struct_mutation_3()
 
 
 
