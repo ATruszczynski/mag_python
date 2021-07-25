@@ -1,7 +1,7 @@
 import pytest
 
 from neural_network.ChaosNet import *
-from neural_network.FeedForwardNeuralNetwork import *
+# from neural_network.FeedForwardNeuralNetwork import *
 
 def test_accuracy():
     conf = np.array([[1, 0, 1, 0], [0, 2, 0, 0], [1, 2, 2, 0], [0, 0, 0, 1]])

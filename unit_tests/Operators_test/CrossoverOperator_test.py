@@ -5,6 +5,12 @@ from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
 from utility.TestingUtility import compare_chaos_network
 
+# #TODO test generation of counting problem
+# #TODO create an unbalanced test problem
+# #TODO test numpy copy
+# #TODO test deepcopying in general
+# #TODO test multiple runs vs single run
+# #TODO ec test multiple runs vs single run?
 
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),

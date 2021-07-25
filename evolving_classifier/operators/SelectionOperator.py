@@ -1,6 +1,5 @@
 import random
 
-from ann_point.AnnPoint2 import AnnPoint2
 from neural_network.ChaosNet import ChaosNet
 from utility.CNDataPoint import CNDataPoint
 from utility.Utility import choose_without_repetition

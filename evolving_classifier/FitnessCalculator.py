@@ -2,7 +2,7 @@ import multiprocessing as mp
 import random
 from math import ceil
 
-from ann_point import AnnPoint
+# from ann_point import AnnPoint
 from evolving_classifier import FitnessFunction
 import numpy as np
 

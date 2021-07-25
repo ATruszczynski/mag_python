@@ -7,7 +7,7 @@ from evolving_classifier.operators.CrossoverOperator import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from utility.Utility import *
-from neural_network.FeedForwardNeuralNetwork import *
+# from neural_network.FeedForwardNeuralNetwork import *
 from statistics import mean
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 from ann_point.Functions import *
 
-from ann_point.AnnPoint2 import AnnPoint2
+# from ann_point.AnnPoint2 import AnnPoint2
 from evolving_classifier.operators.MutationOperators import *
 import numpy as np
 import time
@@ -31,7 +31,7 @@ import time
 #
 # compare_mutations()
 from neural_network.ChaosNet import ChaosNet
-from neural_network.FeedForwardNeuralNetwork import FeedForwardNeuralNetwork
+# from neural_network.FeedForwardNeuralNetwork import FeedForwardNeuralNetwork
 
 if __name__ == '__main__':
     #TODO podział na zbiór uczący EC, zbiór uczący NN i zbiór testowy?

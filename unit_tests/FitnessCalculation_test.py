@@ -3,12 +3,17 @@ import pytest
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
 from neural_network.ChaosNet import *
-from unit_tests.discarded.ANN_test_test import get_io
 from utility.Utility import generate_population, HyperparameterRange
 from ann_point.Functions import *
 
 
 #TODO this also counts two tests instead of one
+
+def get_io():
+    inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
+    output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
+
+    return inputs, output
 
 
 def points():
