@@ -59,3 +59,28 @@ def compare_chaos_network(net: ChaosNet,
     assert net.p_mutation_prob == pytest.approx(desired_p_prob, 1e-4)
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
     assert net.r_prob == pytest.approx(desired_r_prob, 1e-4)
+
+def compare_chaos_networks(net: ChaosNet, net2: ChaosNet):
+    compare_chaos_network(net,
+                          desired_input_size=net2.input_size,
+                          desited_output_size=net2.output_size,
+                          desired_neuron_count=net2.neuron_count,
+                          desired_hidden_start_index=net2.hidden_start_index,
+                          desired_hidden_end_index=net2.hidden_end_index,
+                          desired_hidden_count=net2.hidden_count,
+                          desired_links=net2.links,
+                          desired_weights=net2.weights,
+                          desired_biases=net2.biases,
+                          desired_actFun=net2.actFuns,
+                          desired_aggr=net2.aggrFun,
+                          desired_maxit=net2.maxit,
+                          desired_mut_rad=net2.mutation_radius,
+                          desired_wb_prob=net2.wb_mutation_prob,
+                          desired_s_prob=net2.s_mutation_prob,
+                          desired_p_prob=net2.p_mutation_prob,
+                          desired_c_prob=net2.c_prob,
+                          desired_r_prob=net2.r_prob,
+                          desired_hidden_comp_order=net2.hidden_comp_order,
+                          desired_inp=net2.inp,
+                          desired_act=net2.act)
+

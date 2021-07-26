@@ -19,6 +19,7 @@ class EvolvingClassifier:
             self.supervisor = EC_supervisor(logs_path)
 
         #TODO remove needless things from here
+        self.hrange = None
         self.population = []
         self.pop_size = -1
         self.trainInputs = []
@@ -30,18 +31,48 @@ class EvolvingClassifier:
         self.ff = None
         self.fc = None
 
-    def prepare(self, popSize:int, nn_data: ([np.ndarray], [np.ndarray]),
-                seed: int, hrange: HyperparameterRange = None):
+    def prepare(self, popSize: int, nn_data: ([np.ndarray], [np.ndarray]),
+                seed: int, hrange: HyperparameterRange = None, ct: type = None, mt: type = None, st: type = None, fft: type = None,
+                fct: type = None, starg: int = -1, fftarg: type = None):
         if hrange is None:
             self.hrange = get_default_hrange()
         else:
             self.hrange = hrange
 
-        self.co = FinalCrossoverOperator(self.hrange)
-        self.mo = FinalMutationOperator(self.hrange)
-        self.so = TournamentSelection(0.01)
-        self.ff = CNFF()
-        self.fc = CNFitnessCalculator()
+        if ct == None:
+            self.co = FinalCrossoverOperator(self.hrange)
+        else:
+            self.co = ct(self.hrange)
+
+        if mt == None:
+            self.mo = FinalMutationOperator(self.hrange)
+        else:
+            self.mo = mt(self.hrange)
+
+        if st == None:
+            self.so = TournamentSelection(0.01)
+        elif starg is not None:
+            self.so = st(starg)
+        else:
+            self.so = st()
+
+        if fft == None:
+            self.ff = CNFF()
+        elif fftarg is not None:
+            self.ff = fft(fftarg())
+        else:
+            self.ff = fft()
+
+        if fct == None:
+            self.fc = CNFitnessCalculator()
+        else:
+            self.fc = fct()
+
+
+
+        # self.so = TournamentSelection(0.01)
+        # self.ff = CNFF()
+        # self.fc = CNFitnessCalculator()
 
         random.seed(seed)
         np.random.seed(seed)
@@ -74,6 +105,10 @@ class EvolvingClassifier:
         best = [self.population[0], -math.inf]
 
         for i in range(iterations):
+            if i % 20 == 0:
+                print(f"{i + 1} - {best[1]},", end="")
+            if i > 0 and i % 400 == 0:
+                print()
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
@@ -84,7 +119,7 @@ class EvolvingClassifier:
             if sorted_eval[0].ff >= best[1]:
                 best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
 
-            self.supervisor.check_point(eval_pop, i)
+            # self.supervisor.check_point(eval_pop, i)
             crossed = []
 
             while len(crossed) < self.pop_size:
@@ -105,11 +140,10 @@ class EvolvingClassifier:
                 new_pop.append(self.mo.mutate(to_mutate))
 
             self.population = new_pop
-            print(f"best ff: {best[1]}")
 
         eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                    trainOutputs=self.trainOutputs)
-        self.supervisor.check_point(eval_pop, iterations)
+        # self.supervisor.check_point(eval_pop, iterations)
         if power > 1:
             pool.close()
 
@@ -117,5 +151,6 @@ class EvolvingClassifier:
         if sorted_eval[0].ff >= best[1]:
             best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
 
+        # print(f"\nbest ff: {best[1]}")
         return best[0]
 

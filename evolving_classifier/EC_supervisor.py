@@ -101,7 +101,7 @@ class EC_supervisor():
 
         # iteration prints
 
-        print(f"--- Iteration - {iteration + 1} - {stat_string}")
-        print(f"--- Best point: {best_eval.net.to_string()}")
+        # print(f"--- Iteration - {iteration + 1} - {stat_string}")
+        # print(f"--- Best point: {best_eval.net.to_string()}")
 
 

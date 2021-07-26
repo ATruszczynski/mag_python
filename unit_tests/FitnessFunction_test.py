@@ -87,15 +87,15 @@ def test_pure_fitness_function():
 #     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
 
 
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point()
-i, o = get_io()
-
-test = net.test(i, o)
-print(efficiency(test[3]))
-print(test[3])
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o)
+# print(efficiency(test[3]))
+# print(test[3])
 
 # test_pure_fitness_function()
 

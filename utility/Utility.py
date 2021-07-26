@@ -108,7 +108,7 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
     return links
 
 def get_default_hrange():#TODO przemyśl to
-    hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 1), (0, 0), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+    hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 10), (0, 100), [ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                  mut_radius=(0.0, 1), wb_mut_prob=(0.001, 0.1), s_mut_prob=(0, 1), p_mutation_prob=(0.05, 0.01), c_prob=(0.2, 1),
                                  r_prob=(0, 1))
     return hrange

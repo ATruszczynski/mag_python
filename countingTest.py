@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     count_tr = 500
     count_test = 500
-    size = 7
+    size = 3
     x,y = generate_counting_problem(count_tr, size)
     X,Y = generate_counting_problem(ceil(count_test), size)
 
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     ec.co = FinalCrossoverOperator(ec.hrange)
     # ec.co = SimpleCrossoverOperatorHorizontal(ec.hrange)
     ec.mo = FinalMutationOperator(ec.hrange)
-    ec.so = TournamentSelection(0.05)
+    ec.so = TournamentSelection(0.01)
     ec.ff = CNFF()
     # ec.ff = CNFF4(CrossEntropy())
     # ec.ff = CNFF2(QuadDiff())
@@ -56,8 +56,8 @@ if __name__ == '__main__':
     tests = network.test(X, Y, ChebyshevLoss())
 
 
-    print(network.links)
-    print(network.weights)
+    # print(network.links)
+    # print(network.weights)
     # print(tests[4])
     # for i in range(11):
     #     x = np.array([[(i - 5.0) / 5.0]])

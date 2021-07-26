@@ -1,10 +1,10 @@
 import random
 
-# from ann_point.AnnPoint2 import AnnPoint2
 from ann_point.HyperparameterRange import HyperparameterRange
 from unit_tests.utility_tests.OperatorUtility_test import gaussian_shift
 from utility.Mut_Utility import *
 from utility.Utility import *
+from utility.Utility2 import *
 
 
 class MutationOperator:

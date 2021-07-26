@@ -1,172 +1,75 @@
-from sklearn import datasets
+import random
+from statistics import mean
+import numpy as np
+
+np.seterr(all='ignore')
+
 from evolving_classifier.EvolvingClassifier import *
-import os
-
-from utility.RunHistory import *
-
-random.seed(1001)
-ec_pop_size = 10
-ec_starting_pop_size = 10
-ec_iterations = 5
-nn_epochs = 10
-nn_reps = 5
-power = 12
-pm = 0.05
-pc = 0.8
-r_id = "R"
-n_id = "N"
-b_id = "B"
-s_id = "S"
-filler = "-"
-filler_space = f"{filler},{filler},{filler},{filler},{filler},{filler},{filler},{filler}"
-res_folder = "ec_test"
-
-def run_tests(repetitions: int, res_subdir_path: str, nn_data: ([np.ndarray], [np.ndarray], [np.ndarray], [np.ndarray]),
-              cus_hrange: HyperparameterRange = None, cus_cross_op: CrossoverOperator = None, cus_mut_op: MutationOperator = None,
-              cus_sel_op: SelectionOperator = None, cus_ff: FitnessFunction = None, cus_fc: FitnessCalculator = None):
-    if not os.path.exists(res_folder):
-        os.mkdir(res_folder)
-
-    test_subdir = f"{res_folder}{os.path.sep}{res_subdir_path}"
-    if not os.path.exists(test_subdir):
-        os.mkdir(test_subdir)
-
-    log = open(f"{test_subdir}{os.path.sep}result.csv", "a+")
-    log.write("run,type,it,ff,acc,prec,rec,eff,f1,lc,size,bnet,bff,bacc,bprec,brec,beff,bf1,blc,bsize,epo\n")
-
-    for i in range(repetitions):
-        print(f"{i + 1}")
-        ec = get_ec(test_subdir=test_subdir, cus_hrange=cus_hrange, cus_cross_op=cus_cross_op,
-                    cus_mut_op=cus_mut_op, cus_sel_op=cus_sel_op, cus_ff=cus_ff, cus_fc=cus_fc)
-        ec_seed = random.randint(0, 10000)
-        ec.prepare(popSize=ec_pop_size, startPopSize=ec_starting_pop_size, nn_data=nn_data, seed=ec_seed)
-        point = ec.run(iterations=ec_iterations, pm=pm, pc=pc, power=power)
-
-        learningIts = ec.ff.learningIts
-        write_down_run_hist(file=log, run_it=i, rh=ec.supervisor.rh, learningIts=learningIts)
-
-        net_data_points = []
-        for j in range(nn_reps):
-            nn_seed = random.randint(0, 10000)
-            network = network_from_point(point=point, seed=nn_seed)
-            network.train(nn_data[0], nn_data[1], epochs=nn_epochs)
-            test_res = network.test(nn_data[2], nn_data[3])
-            ann_data_point = CNDataPoint(net=point)
-            ann_data_point.add_data(new_ff=0, new_conf_mat=test_res[3])
-            net_data_points.append(ann_data_point)
-            write_down_net_res(file=log, run_it=i, variant=n_id, n_it=j, data_point=ann_data_point, learningIts=learningIts)
-
-        write_down_avg_net(file=log, run_it=i, data_points=net_data_points, learningIts=learningIts)
-        ordered_pounts = sorted(net_data_points, key=lambda x: x.get_eff(), reverse=True)
-        write_down_net_res(file=log, run_it=i, variant=b_id, n_it=-1, data_point=ordered_pounts[0], learningIts=learningIts)
-
-        log.flush()
-    log.close()
-
-#TODO rounding too few digits
-#TODO sprawdzić czy na pewno kolejności danych są dobre
-def write_down_run_hist(file, run_it: int, rh: RunHistory, learningIts: int):
-    for i in range(len(rh.it_hist)):
-        summary = rh.summary_dict(i)
-        best = rh.get_it_best(i)
-        record = f"{run_it},{r_id},{i}," \
-                 f"{summary[mean_ff_id]},{summary[mean_acc_id]},{summary[mean_prec_id]},{summary[mean_rec_id]}," \
-                 f"{summary[mean_eff_id]}," \
-                 f"{summary[mean_f1_id]},{summary[mean_lc_id]},{summary[mean_size_id]}," \
-                 f"{best.net.to_string()},{best.ff},{best.acc},{best.prec},{best.rec},{best.get_eff()},{best.f1}," \
-                 f"{len(best.net.neuronCounts) - 2},{best.net.size()},{learningIts}\n"
-        file.write(record)
-#TODO czy eff ma jakąś oficjalną nazwę
-
-def write_down_net_res(file, run_it: int, variant: str, n_it: int, data_point: CNDataPoint, learningIts: int):
-    record = ""
-    if variant == n_id:
-        record = f"{run_it},{variant},{n_it},"
-    else:
-        record = f"{run_it},{variant},{filler},"
-
-    record += f"{filler_space}," \
-              f"{data_point.net.to_string()},{filler}," \
-              f"{data_point.acc},{data_point.prec},{data_point.rec},{data_point.get_eff()},{data_point.f1}," \
-              f"{len(data_point.net.neuronCounts) - 2},{data_point.net.size()},{learningIts}\n"
-
-    file.write(record)
-
-def write_down_avg_net(file, run_it: int, data_points: [CNDataPoint], learningIts: int):
-    rh = RunHistory()
-    rh.add_it_hist(data_points)
-    summary = rh.summary_dict(0)
-
-    record = f"{run_it},{s_id}," \
-             f"{filler},{filler}," \
-             f"{summary[mean_acc_id]},{summary[mean_prec_id]},{summary[mean_rec_id]},{summary[mean_eff_id]}," \
-             f"{summary[mean_f1_id]},{summary[mean_lc_id]},{summary[mean_size_id]}," \
-             f"{data_points[0].net.to_string()}," \
-             f"{filler_space},{learningIts}\n"
-
-    file.write(record)
-
-def get_ec(test_subdir,
-           cus_hrange: HyperparameterRange = None, cus_cross_op: CrossoverOperator = None,
-           cus_mut_op: MutationOperator = None, cus_sel_op: SelectionOperator = None,
-           cus_ff: FitnessFunction = None, cus_fc: FitnessCalculator = None):
-    ec = EvolvingClassifier(logs_path=f"{test_subdir}")
-    if cus_hrange is not None:
-        ec.hrange = cus_hrange
-    if cus_cross_op is not None:
-        ec.co = cus_cross_op
-    if cus_mut_op is not None:
-        cus_mut_op.hrange = ec.hrange
-        ec.mo = cus_mut_op
-    if cus_sel_op is not None:
-        ec.so = cus_sel_op
-    if cus_ff is not None:
-        ec.ff = cus_ff
-    if cus_fc is not None:
-        ec.fc = cus_fc
-    return ec
+from TupleForTest import TupleForTest
+import numpy as np
 
 
+def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
+    resultss = []
 
+    for tt in tts:
+        results = []
+        random.seed(tt.seed)
+        np.random.seed(tt.seed)
 
+        seeds = []
+        for i in range(tt.rep):
+            seeds.append(random.randint(0, 10**6))
 
+        for i in range(tt.rep):
+            ec = EvolvingClassifier()
+            ec.prepare(popSize=tt.popSize, nn_data=tt.data, seed=seeds[i], hrange=tt.hrange, ct=tt.ct, mt=tt.mt,
+                       st=tt.st, fft=tt.fft, fct=tt.fct, starg=tt.starg, fftarg=tt.fftarg)
+            net = ec.run(iterations=tt.iterations, power=power)
+            results.append(net.copy())
+            print()
+            if tt.reg == False:
+                tr = net.test(tt.data[2], tt.data[3])
+                print(mean(tr[:3]))
+            else:
+                tr = net.test(tt.data[2], tt.data[3], lf=tt.fftarg())
+                print(tr[4])
 
+            # print(tr[3])
 
+        resultss.append(results)
 
-def ec_test_irises(repetitions: int, path: str):
-    iris = datasets.load_iris()
-    x = iris.data
-    y = iris.target
-
-    x = [x.reshape((4, 1)) for x in x]
-    y = one_hot_endode(y)
-
-    perm = list(range(0, len(y)))
-    random.shuffle(perm)
-
-    x = [x[i] for i in perm]
-    y = [y[i] for i in perm]
-
-    train_X = [x[i] for i in range(120)]
-    train_y = [y[i] for i in range(120)]
-    test_X = [x[i] for i in range(120, 150)]
-    test_y = [y[i] for i in range(120, 150)]
-
-    run_tests(repetitions=repetitions, res_subdir_path=path, nn_data=(train_X, train_y, test_X, test_y), cus_fc=PlusSizeFitnessCalculator(def_frac, 0.5))
-
-def ec_test_count(repetitions: int, path: str):
-    count_tr = 300
-    count_test = 300
-    size = 5
-    train_X, train_y = generate_counting_problem(count_tr, size)
-    test_X, test_y = generate_counting_problem(ceil(count_test), size)
-
-    run_tests(repetitions=repetitions, res_subdir_path=path, nn_data=(train_X, train_y, test_X, test_y))
-
-
-
+    return resultss
 
 if __name__ == '__main__':
-    ec_test_irises(repetitions=7, path="iris_test")
-    # ec_test_count(repetitions=5, path="count_test")
+    seed = 22223333
+    random.seed(seed)
+    np.random.seed(seed)
+
+    count_tr = 500
+    count_test = 500
+    size = 7
+    x,y = generate_counting_problem(count_tr, size)
+    X,Y = generate_counting_problem(ceil(count_test), size)
+
+    x,y = generate_square_problem(100, -1, 1)
+    X,Y = generate_square_problem(100, -1, 1)
+
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+                                 mut_radius=(0.001, 1), wb_mut_prob=(0.001, 1), s_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
+                                 r_prob=(0, 1))
+
+    test = TupleForTest(rep=1, seed=1001, popSize=300, data=[x, y, X, Y], iterations=300, hrange=hrange,
+                        ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
+                        fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
+
+    net = run_tests([test], 12)[0][0]
+
+    args = [-1, -0.5, 0, 0.5, 1]
+
+    for i in range(len(args)):
+        print(net.run(np.array([[args[i]]])))
+
+
+
 

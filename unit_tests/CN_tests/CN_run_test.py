@@ -394,8 +394,8 @@ def test_faster_run():
                           desired_inp=np.array([[0, 0], [0, 0], [0, 0], [2, 1], [2, 0], [-0.5, -1.5]]),
                           desired_act=np.array([[0, 1], [1, 0], [0, 1], [2, 1], [2, 0], [0.377540669, 0.182425524]]))
 
-test_cn_run()
-test_run_with_cycle_1_run()
-test_run_with_cycle_2_run()
-test_faster_run()
-test_faster_run()
+# test_cn_run()
+# test_run_with_cycle_1_run()
+# test_run_with_cycle_2_run()
+# test_faster_run()
+# test_faster_run()

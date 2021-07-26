@@ -1,5 +1,7 @@
 import numpy as np
 
+eps = 1e-10
+
 class ActFun:
     def compute(self, arg: np.ndarray) -> np.ndarray:
         pass
@@ -87,14 +89,14 @@ class SincAct(ActFun):
         arg = arg.copy()
         res = np.zeros(arg.shape)
         res[arg == 0] = 1
-        res[arg != 0] = np.sin(arg[arg != 0]) / arg[arg != 0]
+        res[arg != 0] = np.sin(arg[arg != 0]) / (arg[arg != 0] + eps)
         return res
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
         result = np.zeros((arg.shape[0], arg.shape[0]))
         diag = np.zeros(arg.shape)
         diag[arg == 0] = 0
-        diag[arg != 0] = (np.cos(arg[arg != 0]) / (arg[arg != 0] + 1e-15)) - (np.sin(arg[arg != 0]) / (arg[arg != 0] ** 2 + 1e-15))
+        diag[arg != 0] = (np.cos(arg[arg != 0]) / (arg[arg != 0] + eps)) - (np.sin(arg[arg != 0]) / (arg[arg != 0] ** 2 + eps))
         np.fill_diagonal(result, diag)
         return result
 
@@ -119,7 +121,7 @@ class TanH(ActFun):
         low[np.where(np.isneginf(up))] = 1
         up[np.where(np.isneginf(up))] = -1
 
-        result = up / low
+        result = up / (low + eps)
 
         return result
 
@@ -156,7 +158,7 @@ class Softmax(ActFun):
     def compute(self, arg: np.ndarray) -> np.ndarray:
         arg_c = arg - np.max(arg)
         exp_a = np.exp(arg_c)
-        return exp_a / exp_a.sum(axis=0, keepdims=True)
+        return exp_a / (exp_a.sum(axis=0, keepdims=True) + eps)
 
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
         diag = self.compute(arg)

@@ -104,4 +104,4 @@ print(f"c_prob_2: {random.uniform(0.2, 0.5)}")
 print(f"r_prob_2: {random.uniform(0.8, 1)}")
 
 
-test_cn_generation()
+# test_cn_generation()

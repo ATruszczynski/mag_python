@@ -90,8 +90,8 @@ def test_select_too_few():
 
     assert adp2.net.to_string() == so.select(list).to_string()
 
-random.seed(1010)
-print(choose_without_repetition([0, 1, 2, 3], 2))
+# random.seed(1010)
+# print(choose_without_repetition([0, 1, 2, 3], 2))
 
 test_select()
 # test_select_too_few()

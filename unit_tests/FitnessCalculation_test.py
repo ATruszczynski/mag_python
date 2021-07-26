@@ -49,34 +49,34 @@ def test_fitness_calculator_with_pure_eff():
     assert res[1].f1 == pytest.approx(0.22222, abs=1e-3)
     assert res[1].get_eff() == pytest.approx(0.30555, abs=1e-3)
 
-
-random.seed(1002)
-np.random.seed(1002)
-
-nets = points()
-i, o = get_io()
-
-cff = CNFF()
-
-res1 = cff.compute(nets[0], i, o, 1111)
-cm1 = res1[1]
-print(f"f: {res1[0]}")
-print(f"acc: {accuracy(cm1)}")
-print(f"prec: {average_precision(cm1)}")
-print(f"rec: {average_recall(cm1)}")
-print(f"eff: {efficiency(cm1)}")
-print(f"f1: {average_f1_score(cm1)}")
-
-print("\n\n")
-
-res2 = cff.compute(nets[1], i, o, 1111)
-cm2 = res2[1]
-print(f"f: {res2[0]}")
-print(f"acc: {accuracy(cm2)}")
-print(f"prec: {average_precision(cm2)}")
-print(f"rec: {average_recall(cm2)}")
-print(f"eff: {efficiency(cm2)}")
-print(f"f1: {average_f1_score(cm2)}")
+#
+# random.seed(1002)
+# np.random.seed(1002)
+#
+# nets = points()
+# i, o = get_io()
+#
+# cff = CNFF()
+#
+# res1 = cff.compute(nets[0], i, o, 1111)
+# cm1 = res1[1]
+# print(f"f: {res1[0]}")
+# print(f"acc: {accuracy(cm1)}")
+# print(f"prec: {average_precision(cm1)}")
+# print(f"rec: {average_recall(cm1)}")
+# print(f"eff: {efficiency(cm1)}")
+# print(f"f1: {average_f1_score(cm1)}")
+#
+# print("\n\n")
+#
+# res2 = cff.compute(nets[1], i, o, 1111)
+# cm2 = res2[1]
+# print(f"f: {res2[0]}")
+# print(f"acc: {accuracy(cm2)}")
+# print(f"prec: {average_precision(cm2)}")
+# print(f"rec: {average_recall(cm2)}")
+# print(f"eff: {efficiency(cm2)}")
+# print(f"f1: {average_f1_score(cm2)}")
 
 
 # test_fitness_calculator_with_pure_eff()

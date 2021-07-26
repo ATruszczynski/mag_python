@@ -324,109 +324,109 @@ def test_struct_mutation_3():
                           desired_c_prob=0.30211,
                           desired_r_prob=0.491017)
 
-seed = 1009
-random.seed(seed)
-np.random.seed(seed)
-hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 2),
-                             wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
-                             r_prob=(0.44, 0.55))
-link1 = np.array([[0, 0, 1, 1, 1],
-                  [0, 0, 1, 0, 1],
-                  [0, 0, 0, 1, 1],
-                  [0, 0, 1, 0, 1],
-                  [0, 0, 0, 0, 0]])
-wei1 = np.array([[0, 0, 1, 4, 6],
-                 [0, 0, 2, 0, 7],
-                 [0, 0, 0, 5, 8],
-                 [0, 0, 3, 0, 9],
-                 [0, 0, 0, 0, 0.]])
-bia1 = np.array([[0., 0, -3, -4, -5]])
-act1 = [None, None, TanH(), Sigmoid(), None]
-aggr1 = TanH()
-maxit = 4
-input_size = 2
-hidden_size = 2
-output_size = 1
-neuron_count = 5
-radius = 1.2
-frac_radius = radius / hrange.max_mut_radius
-
-wb_pm = 0.2
-s_pm = 0.8
-p_pm = 1
-c_pm = 0.3
-r_pm = 0.35
-
-
-print(wei1)
-print(bia1)
-
-wei2 = gaussian_shift(wei1, link1, wb_pm, radius).copy()
-print(f"wei_shifted: \n{wei2}")
-
-wei3 = reroll_matrix(wei2, link1, r_pm, 1, np.max(wei2)).copy()
-print(f"wei_rerolled: \n{wei3}")
-
-bia2 = gaussian_shift(bia1, get_bias_mask(input_size, neuron_count), wb_pm, radius).copy()
-print(f"bia_shifted: \n{bia2}")
-
-bia3 = reroll_matrix(bia2, get_bias_mask(input_size=input_size, neuron_count=neuron_count), r_pm, -5, -3).copy()
-print(f"bia_rerolled: \n{bia3}")
-
-for i in range(input_size, input_size+hidden_size):
-    if random.random() <= s_pm:
-        tmp_act = try_choose_different(act1[i], hrange.actFunSet)
-        print(f"act {i}: \n{tmp_act.to_string()}")
-        act1[i] = tmp_act
-
-
-print(f"aggr: \n{conditional_try_choose_different(s_pm, aggr1, hrange.actFunSet).to_string()}")
-
-point = ChaosNet(input_size=input_size, output_size=output_size, links=link1, weights=wei3,
-                  biases=bia3, actFuns=act1, aggrFun=TanH(), maxit=maxit, mutation_radius=radius,
-                  wb_mutation_prob=wb_pm, s_mutation_prob=s_pm, p_mutation_prob=p_pm, c_prob=c_pm, r_prob=r_pm)
-
-nc = conditional_try_choose_different(s_pm, 2, [0, 1, 2, 3, 4])
-point = change_neuron_count(net=point, hrange=hrange, demanded_hidden=nc).copy()
-
-wei4 = point.weights.copy()
-bia4 = point.biases.copy()
-link2 = point.links.copy()
-act2 = point.actFuns.copy()
-
-print(f"wei_changed_count:\n{wei4}")
-print(f"bia_changed_count:\n{bia4}")
-for i in range(point.input_size, point.hidden_end_index):
-    print(f"act_2_{i}:\n{act2[i].to_string()}")
-
-wei5, link3 = add_remove_weights(s_pm, wei4, link2, get_weight_mask(point.input_size, point.output_size, point.neuron_count))
-
-wei5 = wei5.copy()
-link3 = link3.copy()
-
-print(f"weights_ar:\n{wei5}")
-print(f"links_ar:\n{link3}")
-print(f"is:\n{point.input_size}")
-print(f"os:\n{point.output_size}")
-print(f"nc:\n{point.neuron_count}")
-
-hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                             wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
-                             r_prob=(0.44, 0.55))
-
-print(f"max_it:\n {conditional_try_choose_different(s_pm, maxit, [1, 2, 3, 4, 5])}")
-
-
-print(f"rad:\n{reroll_value(p_pm, radius, 0, 1)}")
-print(f"wb:\n{reroll_value(p_pm, wb_pm, 0.05, 0.1)}")
-print(f"s:\n{reroll_value(p_pm, s_pm, 0.6, 0.7)}")
-print(f"p:\n{reroll_value(p_pm, p_pm, 0.8, 1)}")
-print(f"c:\n{reroll_value(p_pm, c_pm, 0.22, 0.33)}")
-print(f"r:\n{reroll_value(p_pm, r_pm, 0.44, 0.55)}")
-
-# test_struct_mutation()
-# test_struct_mutation_2()
-test_struct_mutation_3()
+# seed = 1009
+# random.seed(seed)
+# np.random.seed(seed)
+# hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 2),
+#                              wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
+#                              r_prob=(0.44, 0.55))
+# link1 = np.array([[0, 0, 1, 1, 1],
+#                   [0, 0, 1, 0, 1],
+#                   [0, 0, 0, 1, 1],
+#                   [0, 0, 1, 0, 1],
+#                   [0, 0, 0, 0, 0]])
+# wei1 = np.array([[0, 0, 1, 4, 6],
+#                  [0, 0, 2, 0, 7],
+#                  [0, 0, 0, 5, 8],
+#                  [0, 0, 3, 0, 9],
+#                  [0, 0, 0, 0, 0.]])
+# bia1 = np.array([[0., 0, -3, -4, -5]])
+# act1 = [None, None, TanH(), Sigmoid(), None]
+# aggr1 = TanH()
+# maxit = 4
+# input_size = 2
+# hidden_size = 2
+# output_size = 1
+# neuron_count = 5
+# radius = 1.2
+# frac_radius = radius / hrange.max_mut_radius
+#
+# wb_pm = 0.2
+# s_pm = 0.8
+# p_pm = 1
+# c_pm = 0.3
+# r_pm = 0.35
+#
+#
+# print(wei1)
+# print(bia1)
+#
+# wei2 = gaussian_shift(wei1, link1, wb_pm, radius).copy()
+# print(f"wei_shifted: \n{wei2}")
+#
+# wei3 = reroll_matrix(wei2, link1, r_pm, 1, np.max(wei2)).copy()
+# print(f"wei_rerolled: \n{wei3}")
+#
+# bia2 = gaussian_shift(bia1, get_bias_mask(input_size, neuron_count), wb_pm, radius).copy()
+# print(f"bia_shifted: \n{bia2}")
+#
+# bia3 = reroll_matrix(bia2, get_bias_mask(input_size=input_size, neuron_count=neuron_count), r_pm, -5, -3).copy()
+# print(f"bia_rerolled: \n{bia3}")
+#
+# for i in range(input_size, input_size+hidden_size):
+#     if random.random() <= s_pm:
+#         tmp_act = try_choose_different(act1[i], hrange.actFunSet)
+#         print(f"act {i}: \n{tmp_act.to_string()}")
+#         act1[i] = tmp_act
+#
+#
+# print(f"aggr: \n{conditional_try_choose_different(s_pm, aggr1, hrange.actFunSet).to_string()}")
+#
+# point = ChaosNet(input_size=input_size, output_size=output_size, links=link1, weights=wei3,
+#                   biases=bia3, actFuns=act1, aggrFun=TanH(), maxit=maxit, mutation_radius=radius,
+#                   wb_mutation_prob=wb_pm, s_mutation_prob=s_pm, p_mutation_prob=p_pm, c_prob=c_pm, r_prob=r_pm)
+#
+# nc = conditional_try_choose_different(s_pm, 2, [0, 1, 2, 3, 4])
+# point = change_neuron_count(net=point, hrange=hrange, demanded_hidden=nc).copy()
+#
+# wei4 = point.weights.copy()
+# bia4 = point.biases.copy()
+# link2 = point.links.copy()
+# act2 = point.actFuns.copy()
+#
+# print(f"wei_changed_count:\n{wei4}")
+# print(f"bia_changed_count:\n{bia4}")
+# for i in range(point.input_size, point.hidden_end_index):
+#     print(f"act_2_{i}:\n{act2[i].to_string()}")
+#
+# wei5, link3 = add_remove_weights(s_pm, wei4, link2, get_weight_mask(point.input_size, point.output_size, point.neuron_count))
+#
+# wei5 = wei5.copy()
+# link3 = link3.copy()
+#
+# print(f"weights_ar:\n{wei5}")
+# print(f"links_ar:\n{link3}")
+# print(f"is:\n{point.input_size}")
+# print(f"os:\n{point.output_size}")
+# print(f"nc:\n{point.neuron_count}")
+#
+# hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+#                              wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
+#                              r_prob=(0.44, 0.55))
+#
+# print(f"max_it:\n {conditional_try_choose_different(s_pm, maxit, [1, 2, 3, 4, 5])}")
+#
+#
+# print(f"rad:\n{reroll_value(p_pm, radius, 0, 1)}")
+# print(f"wb:\n{reroll_value(p_pm, wb_pm, 0.05, 0.1)}")
+# print(f"s:\n{reroll_value(p_pm, s_pm, 0.6, 0.7)}")
+# print(f"p:\n{reroll_value(p_pm, p_pm, 0.8, 1)}")
+# print(f"c:\n{reroll_value(p_pm, c_pm, 0.22, 0.33)}")
+# print(f"r:\n{reroll_value(p_pm, r_pm, 0.44, 0.55)}")
+#
+# # test_struct_mutation()
+# # test_struct_mutation_2()
+# test_struct_mutation_3()
 
 
 
