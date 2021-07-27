@@ -6,9 +6,6 @@ from neural_network.ChaosNet import *
 from utility.Utility import generate_population, HyperparameterRange
 from ann_point.Functions import *
 
-
-#TODO this also counts two tests instead of one
-
 def get_io():
     inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
     output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
@@ -33,21 +30,22 @@ def test_fitness_calculator_with_pure_eff():
 
     assert len(res) == 2
 
-    # assert res[0][0].to_string() == anns[1].to_string() #TODO fix this
-    assert res[0].ff == pytest.approx(0.1875, abs=1e-3)
-    assert res[0].acc == pytest.approx(0.25, abs=1e-3)
-    assert res[0].prec == pytest.approx(0.16666, abs=1e-3)
-    assert res[0].rec == pytest.approx(0.16666, abs=1e-3)
-    assert res[0].f1 == pytest.approx(0.16666, abs=1e-3)
-    assert res[0].get_eff() == pytest.approx(0.1875, abs=1e-3)
+    assert res[0].net.to_string() == anns[1].to_string()
+    assert res[0].ff == pytest.approx(0.30555, abs=1e-3)
+    assert res[0].acc == pytest.approx(0.5, abs=1e-3)
+    assert res[0].prec == pytest.approx(0.166666, abs=1e-3)
+    assert res[0].rec == pytest.approx(0.333333, abs=1e-3)
+    assert res[0].f1 == pytest.approx(0.22222, abs=1e-3)
+    assert res[0].get_eff() == pytest.approx(0.30555, abs=1e-3)
 
-    # assert res[1][0].to_string() == anns[0].to_string()
-    assert res[1].ff == pytest.approx(0.30555, abs=1e-3)
-    assert res[1].acc == pytest.approx(0.5, abs=1e-3)
-    assert res[1].prec == pytest.approx(0.166666, abs=1e-3)
-    assert res[1].rec == pytest.approx(0.333333, abs=1e-3)
-    assert res[1].f1 == pytest.approx(0.22222, abs=1e-3)
-    assert res[1].get_eff() == pytest.approx(0.30555, abs=1e-3)
+    assert res[1].net.to_string() == anns[0].to_string() #TODO fix this
+    assert res[1].ff == pytest.approx(0.1875, abs=1e-3)
+    assert res[1].acc == pytest.approx(0.25, abs=1e-3)
+    assert res[1].prec == pytest.approx(0.16666, abs=1e-3)
+    assert res[1].rec == pytest.approx(0.16666, abs=1e-3)
+    assert res[1].f1 == pytest.approx(0.16666, abs=1e-3)
+    assert res[1].get_eff() == pytest.approx(0.1875, abs=1e-3)
+
 
 #
 # random.seed(1002)
@@ -79,7 +77,7 @@ def test_fitness_calculator_with_pure_eff():
 # print(f"f1: {average_f1_score(cm2)}")
 
 
-# test_fitness_calculator_with_pure_eff()
+test_fitness_calculator_with_pure_eff()
 
 
 

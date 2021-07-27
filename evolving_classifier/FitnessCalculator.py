@@ -26,7 +26,6 @@ class CNFitnessCalculator(FitnessCalculator):
                 trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [CNDataPoint]:
         results = [CNDataPoint(point) for point in to_compute]
 
-        # results = sorted(results, key=lambda x: x[1].ff, reverse=True) TODO co to po co to
         seeds = [random.randint(0, 1000) for i in range(len(results))]
 
         if pool is None:
@@ -38,5 +37,8 @@ class CNFitnessCalculator(FitnessCalculator):
 
         for i in range(len(to_compute)):
             results[i].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
+
+
+        results = sorted(results, key=lambda x: x.ff, reverse=True)
 
         return results

@@ -438,6 +438,22 @@ def test_wieght_mask():
                                           [0, 1, 1, 1, 0, 1, 1],
                                           [0, 0, 0, 0, 0, 0, 0],
                                           [0, 0, 0, 0, 0, 0, 0]]))
+def test_wieght_mask_2():
+    mask = get_weight_mask(2, 1, 6)
+
+    assert np.array_equal(mask, np.array([[0, 0, 1, 1, 1, 0],
+                                          [0, 0, 1, 1, 1, 0],
+                                          [0, 0, 0, 1, 1, 1],
+                                          [0, 0, 1, 0, 1, 1],
+                                          [0, 0, 1, 1, 0, 1],
+                                          [0, 0, 0, 0, 0, 0]]))
+def test_wieght_mask_3():
+    mask = get_weight_mask(2, 2, 4)
+
+    assert np.array_equal(mask, np.array([[0, 0, 0, 0],
+                                          [0, 0, 0, 0],
+                                          [0, 0, 0, 0],
+                                          [0, 0, 0, 0]]))
 
 # test_wieght_mask()
 

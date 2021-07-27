@@ -28,8 +28,7 @@ if __name__ == '__main__':
     # x, y = generate_square_problem(1000, -2, 2)
     # X, Y = generate_square_problem(100, -1, 1)
 
-    #TODO add sized calculator
-    #TODO ec better constructor
+    #TODO - B - add sized calculator
 
     ii = 200
 

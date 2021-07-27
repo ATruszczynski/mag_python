@@ -35,7 +35,6 @@ class ReLu(ActFun):
     def to_string(self):
         return "RL"
 
-#TODO upewnij się że wszystko co można jest w hrange
 
 class LReLu(ActFun):
     def __init__(self, a: float=0.01):

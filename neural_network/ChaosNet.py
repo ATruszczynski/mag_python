@@ -8,7 +8,6 @@ from utility.Utility2 import *
 
 
 class ChaosNet:
-    #TODO remove maxit as default
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
                  actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
                  s_mutation_prob: float, p_mutation_prob: float, c_prob: float, r_prob: float):
@@ -106,6 +105,7 @@ class ChaosNet:
 
         self.hidden_comp_order = [i for layer in layers[1:] for i in layer]
 
+    #TODO write some tests of test
     def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lf: LossFun = None) -> [float, float, float, np.ndarray]:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
@@ -125,7 +125,7 @@ class ChaosNet:
                 lfcc = lf.compute(net_result, to)
                 resultt += lfcc
 
-        return [accuracy(confusion_matrix), average_precision(confusion_matrix), average_recall(confusion_matrix), confusion_matrix, resultt]
+        return [confusion_matrix, resultt]
 
     # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
     #     self.links = links.copy()

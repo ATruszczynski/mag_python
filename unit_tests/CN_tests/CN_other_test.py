@@ -142,7 +142,7 @@ def test_cn_test_5():
                    p_mutation_prob=4, c_prob=5, r_prob=6)
     test_res = net.test(fives_i, fives_o, QuadDiff())
 
-    assert efficiency(test_res[3]) == 1.0
+    assert efficiency(test_res[0]) == 1.0
 
 
 

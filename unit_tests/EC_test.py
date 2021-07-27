@@ -1,7 +1,6 @@
 from evolving_classifier.EvolvingClassifier import *
 from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.CrossoverOperator import *
-# from evolving_classifier.operators.HillClimbOperator import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 
@@ -29,9 +28,6 @@ def test_determinism(): #TODO this is (was?) broken
             t1 = tests[i]
             t2 = tests[j]
 
-            assert t1[0] == t2[0]
-            assert t1[1] == t2[1]
-            assert t1[2] == t2[2]
-            assert np.array_equal(t1[3], t2[3])
+            assert np.array_equal(t1[0], t2[0])
 
 # test_determinism()

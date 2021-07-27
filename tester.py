@@ -30,10 +30,10 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
             print()
             if tt.reg == False:
                 tr = net.test(tt.data[2], tt.data[3])
-                print(mean(tr[:3]))
+                print(efficiency(tr[0]))
             else:
                 tr = net.test(tt.data[2], tt.data[3], lf=tt.fftarg())
-                print(tr[4])
+                print(tr[1])
 
             # print(tr[3])
 
@@ -52,20 +52,25 @@ if __name__ == '__main__':
     x,y = generate_counting_problem(count_tr, size)
     X,Y = generate_counting_problem(ceil(count_test), size)
 
-    x,y = generate_square_problem(100, -1, 1)
-    X,Y = generate_square_problem(100, -1, 1)
+    x,y = generate_square_problem(200, -1.5, 1.5)
+    X,Y = generate_square_problem(200, -1.5, 1.5)
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                  mut_radius=(0.001, 1), wb_mut_prob=(0.001, 1), s_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
                                  r_prob=(0, 1))
 
-    test = TupleForTest(rep=1, seed=1001, popSize=300, data=[x, y, X, Y], iterations=300, hrange=hrange,
+    # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+    #                              mut_radius=(0.1, 0.1), wb_mut_prob=(0.01, 0.01), s_mut_prob=(0.01, 0.01), p_mutation_prob=(0.00, 0.00), c_prob=(0.7, 0.7),
+    #                              r_prob=(0.01, 0.01))
+
+    test = TupleForTest(rep=3, seed=1001, popSize=100, data=[x, y, X, Y], iterations=200, hrange=hrange,
                         ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
-                        fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
+                        fft=CNFF4, fct=CNFitnessCalculator, starg=0.1, fftarg=QuadDiff, reg=True)
 
     net = run_tests([test], 12)[0][0]
+    print(net.to_string())
 
-    args = [-1, -0.5, 0, 0.5, 1]
+    args = [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2]
 
     for i in range(len(args)):
         print(net.run(np.array([[args[i]]])))

@@ -106,7 +106,7 @@ class EvolvingClassifier:
 
         for i in range(iterations):
             if i % 20 == 0:
-                print(f"{i + 1} - {best[1]},", end="")
+                print(f"{i + 1} - {best[1]} - {best[0].to_string()},")
             if i > 0 and i % 400 == 0:
                 print()
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
