@@ -218,6 +218,7 @@ def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask
 
     diffs = links - new_links
     added_edges = np.where(diffs == -1)
+    #TODO not correct extraction of min/max weights
     minW = np.min(weights)
     maxW = np.max(weights)
     weights[added_edges] = np.random.uniform(minW, maxW, weights.shape)[added_edges]
@@ -237,6 +238,30 @@ def get_min_max_values_of_matrix_with_mask(matrix: np.ndarray, mask: np.ndarray)
         maxW = np.max(only_present)
 
     return minW, maxW
+
+def cut_into_puzzles(matrix: np.ndarray, i: int, o: int, start: int, num: int, lim: int, left: bool) -> [np.ndarray]:
+    n = matrix.shape[0]
+
+    end = start + num
+
+    P1 = matrix[start:end, start:end]
+    P2 = matrix[:i, start:end]
+    P3 = matrix[start:end, -o:]
+
+    if left:
+        p4ei = min(n - o, end + lim)
+        P4 = matrix[start:end, start+num:p4ei]
+        P5 = matrix[start+num:p4ei, start:end]
+    else:
+        p4si = max(start - lim, i)
+        P4 = matrix[start:end, p4si:start]
+        P5 = matrix[p4si:start, start:end]
+
+    return P1, P2, P3, P4, P5
+
+
+
+
 
 
 

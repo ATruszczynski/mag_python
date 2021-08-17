@@ -6,6 +6,7 @@ import numpy as np
 from ann_point.Functions import *
 from utility.Utility2 import *
 
+#TODO - A - links nie są potrzebne lol
 
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
@@ -144,6 +145,10 @@ class ChaosNet:
 
     def size(self):
         return -666
+
+    def edge_count(self):
+        return sum(self.links)
+
     #TODO dużo z tych funkcji jest do wyrzucenia prawd.
     def get_indices_of_neurons_with_output(self):
         row_sum = np.sum(self.links, axis=1)
@@ -229,8 +234,7 @@ class ChaosNet:
 
         return how_many/maxi
 
-    #TODO coś by się przydało z tym zrobić
-    def to_string(self):
+    def get_act_fun_string(self):
         actFunsString = ""
         for i in range(len(self.actFuns)):
             fun = self.actFuns[i]
@@ -241,6 +245,13 @@ class ChaosNet:
             if i != len(self.actFuns) - 1:
                 actFunsString += "|"
 
+        return actFunsString
+
+
+    #TODO coś by się przydało z tym zrobić
+    def to_string(self):
+        actFunsString = self.get_act_fun_string()
+
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(np.sum(self.links))}|{self.maxit}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
@@ -249,9 +260,21 @@ class ChaosNet:
 
         return result
 
-#TODO SAVE NET AT THE END!!!!!!!!!!!
+    def net_to_file(self, fpath: str):
+        file = open(fpath, "w")
+        file.write(f"input_size: {self.input_size}\n")
+        file.write(f"output_size: {self.output_size}\n")
+        file.write(f"neuron_count: {self.neuron_count}\n")
+        file.write(f"links: \n{self.links}\n")
+        file.write(f"weights: \n{self.weights}\n")
+        file.write(f"biases: \n{self.biases}\n")
+        file.write(f"actFuns: \n{self.get_act_fun_string()}\n")
+        file.write(f"aggrFun: \n{self.aggrFun.to_string()}\n")
 
+        file.close()
 
+#TODO - S - SAVE NET AT THE END!!!!!!!!!!!
+#TODO - A - flush files
 
 
 

@@ -22,3 +22,13 @@ class CNDataPoint(): #TODO test
     def get_eff(self):
         return mean([self.acc, self.prec, self.rec, self.f1])
 
+    def copy(self):
+        ncn = CNDataPoint(self.net.copy())
+        ncn.ff = self.ff
+        ncn.acc = self.acc
+        ncn.prec = self.prec
+        ncn.rec = self.rec
+        ncn.f1 = self.f1
+
+        return ncn
+

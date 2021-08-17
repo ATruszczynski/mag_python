@@ -269,7 +269,7 @@ class MeanDiff(LossFun):
 
 class CrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
-        result = np.sum(np.multiply(corr, np.log(res + 1e-15)), axis=0)[0]
+        result = np.sum(np.multiply(corr, np.log10(res + 1e-15)), axis=0)[0]
         return -result
 
     def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:

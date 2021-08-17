@@ -1,4 +1,5 @@
 from statistics import mean
+import numpy as np
 
 from utility.CNDataPoint import CNDataPoint
 
@@ -18,7 +19,10 @@ class RunHistory:
         self.it_hist = []
 
     def add_it_hist(self, data_points: [CNDataPoint]): #TODO test
-        self.it_hist.append(data_points)
+        it_rec = []
+        for i in range(len(data_points)):
+            it_rec.append(data_points[i].copy())
+        self.it_hist.append(it_rec)
 
     def get_it_best(self, iteration: int) -> CNDataPoint: #TODO test
         it = self.it_hist[iteration]
@@ -72,4 +76,30 @@ class RunHistory:
         res_dict[mean_lc_id] = mean_lc
 
         return res_dict
+
+    def to_csv_file(self, fpath: str, reg: bool):
+        file = open(fpath, "w")
+        file.write("it,rk,is,os,nc,lc,af,ag,mi,mr,wbp,smp,pmp,cp,rp,ff")
+        if not reg:
+            file.write(",eff")
+        file.write("\n")
+
+        for it in range(len(self.it_hist)):
+            it_nets = self.it_hist[it]
+            for rk in range(len(it_nets)):
+                cndatapoint = it_nets[rk]
+                net = cndatapoint.net
+                file.write(f"{it + 1},{rk + 1},{net.input_size},{net.output_size},{net.neuron_count},"
+                           f"{np.sum(net.links)},"
+                           f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.maxit},"
+                           f"{net.mutation_radius},{net.wb_mutation_prob},{net.s_mutation_prob},"
+                           f"{net.p_mutation_prob},{net.c_prob},{net.r_prob},{cndatapoint.ff}")
+                if not reg:
+                    file.write(f",{cndatapoint.get_eff()}")
+                file.write("\n")
+        file.close()
+
+
+
+
 

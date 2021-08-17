@@ -5,6 +5,7 @@ from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.CrossoverOperator import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
+from utility.RunHistory import RunHistory
 from utility.Utility import *
 
 logs = "logs"
@@ -31,6 +32,9 @@ class EvolvingClassifier:
         self.ff = None
         self.fc = None
 
+        self.history = None
+
+    #TODO - C - ziarno nieobowiązkowe?
     def prepare(self, popSize: int, nn_data: ([np.ndarray], [np.ndarray]),
                 seed: int, hrange: HyperparameterRange = None, ct: type = None, mt: type = None, st: type = None, fft: type = None,
                 fct: type = None, starg: int = -1, fftarg: type = None):
@@ -84,7 +88,10 @@ class EvolvingClassifier:
         output_size = self.trainOutputs[0].shape[0]
         self.population = generate_population(self.hrange, popSize, input_size=input_size, output_size=output_size)
 
+        self.history = RunHistory()
+
     def run(self, iterations: int, power: int = 1) -> ChaosNet:
+        #TODO upewnić się, że wszędzie gdzie potrzebne sieci są posortowane
         if power > 1:
             pool = mp.Pool(power)
         else:
@@ -105,16 +112,17 @@ class EvolvingClassifier:
         best = [self.population[0], -math.inf]
 
         for i in range(iterations):
-            if i % 20 == 0:
-                print(f"{i + 1} - {best[1]} - {best[0].to_string()},")
-            if i > 0 and i % 400 == 0:
-                print()
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
-            eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i].ff)]
+            eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i].ff)]#TODO moze się zdarzyć że to usunie wszystkie sieci
+            if i % 10 == 0:
+                print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
+            if i > 0 and i % 400 == 0:
+                print()
 
             sorted_eval = sorted(eval_pop, key=lambda x: x.ff, reverse=True)
+            self.history.add_it_hist(sorted_eval)
 
             if sorted_eval[0].ff >= best[1]:
                 best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
@@ -126,7 +134,7 @@ class EvolvingClassifier:
                 c1 = self.so.select(val_pop=eval_pop)
                 cr = random.random()
 
-                if len(crossed) <= self.pop_size - 2 and cr <= c1.c_prob:
+                if len(crossed) <= self.pop_size - 2 and cr <= 10 ** c1.c_prob:
                     c2 = self.so.select(val_pop=eval_pop)
                     cr_result = self.co.crossover(c1, c2)
                     crossed.extend(cr_result)

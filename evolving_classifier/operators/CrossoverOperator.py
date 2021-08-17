@@ -12,6 +12,8 @@ class CrossoverOperator:
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         pass
 
+#TODO - B - AL zamiast A1 etc?
+#TODO - S - wyrzuć procentowość z selekcji
 
 class FinalCrossoverOperator(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
@@ -138,7 +140,9 @@ class FinalCrossoverOperator(CrossoverOperator):
 
 
 
-
+#TODO - C - pierwszy element wyjścia chyba nie ma już sensu
+#TODO - S - zamiana na outputach też ma sens
+#TODO - S - zawsze branie tylko górnych krawędzi to może nie być taki dobry pomysł :/
 def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     for i in range(pointA.hidden_start_index, pointA.hidden_end_index + 1):
@@ -155,6 +159,29 @@ def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamete
                 sum_A = A_1 + B_2
                 sum_B = A_2 + B_1
                 if B_1 >= 0 and B_2 >= 0 and sum_A >= hrange.min_hidden and sum_B >= hrange.min_hidden and sum_A <= hrange.max_hidden and sum_B <= hrange.max_hidden:
+                    possible_cuts.append((0, i, j, A_1, A_2, B_1, B_2))
+
+    for i in range(pointA.output_size):
+        possible_cuts.append((0, pointA.hidden_end_index + i, pointB.hidden_end_index + i, pointA.hidden_count, 0, pointB.hidden_count, 0))
+
+    return possible_cuts
+
+def find_possible_cuts3(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
+    possible_cuts = []
+    for i in range(pointA.hidden_start_index, pointA.hidden_end_index + 1):
+        A_1 = i - pointA.hidden_start_index
+        A_2 = pointA.hidden_count - A_1
+
+        if A_1 >= 0 and A_2 >= 0: #TODO - C - czy któreś może być ujemne?
+            for j in range(pointB.hidden_start_index, pointB.hidden_end_index + 1):
+                if i == pointA.hidden_end_index and j == pointB.hidden_end_index:
+                    continue
+                B_1 = j - pointB.hidden_start_index
+                B_2 = pointB.hidden_count - B_1
+
+                sum_A = A_1 + B_2
+                sum_B = A_2 + B_1
+                if B_1 >= 0 and B_2 >= 0:
                     possible_cuts.append((0, i, j, A_1, A_2, B_1, B_2))
 
     for i in range(pointA.output_size):

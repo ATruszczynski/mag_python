@@ -38,6 +38,14 @@ class CNFitnessCalculator(FitnessCalculator):
         for i in range(len(to_compute)):
             results[i].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
 
+        # effsorted = sorted(results, key=lambda x: x.ff, reverse=True)
+
+        # results = sorted(results, key=lambda x: x.net.neuron_count)
+        # ll = len(results)
+        # pun = np.linspace(1, 1.00001, ll)
+        #
+        # for i in range(ll):
+        #     results[i].ff = results[i].ff * pun[i]
 
         results = sorted(results, key=lambda x: x.ff, reverse=True)
 

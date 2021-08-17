@@ -8,8 +8,9 @@ import numpy as np
 class TupleForTest:
     # def __init__(self, rep: int, seed: int, popSize: int, data: [np.ndarray], iterations: int, hrange: HyperparameterRange,
     #              ff, fc, ct, mt, st, *starg):
-    def __init__(self, rep: int, seed: int, popSize: int, data: [np.ndarray], iterations: int, hrange: HyperparameterRange,
+    def __init__(self, name: str, rep: int, seed: int, popSize: int, data: [np.ndarray], iterations: int, hrange: HyperparameterRange,
                  ct: type, mt: type, st: type, fft: type, fct: type, starg: float, fftarg: type, reg: bool):
+        self.name = name
         self.rep = rep
         self.seed = seed
         self.popSize = popSize
