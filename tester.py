@@ -135,11 +135,11 @@ if __name__ == '__main__':
     X = [xx[i] for i in range(125, 150)]
     Y = [yy[i] for i in range(125, 150)]
 
-    # count_tr = 500
-    # count_test = 500
-    # size = 5
-    # x,y = generate_counting_problem(count_tr, size)
-    # X,Y = generate_counting_problem(ceil(count_test), size)
+    count_tr = 500
+    count_test = 500
+    size = 5
+    x,y = generate_counting_problem(count_tr, size)
+    X,Y = generate_counting_problem(ceil(count_test), size)
     #
     # x,y = generate_square_problem(200, -5, 5)
     # X,Y = generate_square_problem(200, -5, 5)
@@ -149,7 +149,7 @@ if __name__ == '__main__':
                                  r_prob=(0, 1))
 
     minrr = -2
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (1, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (1, 40), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                  mut_radius=(minrr, 0), wb_mut_prob=(minrr, 0), s_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(-0.125, 0),
                                  r_prob=(minrr, 0))
 
@@ -170,9 +170,9 @@ if __name__ == '__main__':
     # test = TupleForTest(name="desu3", rep=3, seed=1001, popSize=20, data=[x, y, X, Y], iterations=20, hrange=hrange,
     #                      ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
-    test = TupleForTest(name="iris3", rep=3, seed=1001, popSize=300, data=[x, y, X, Y], iterations=150, hrange=hrange,
-                        ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
-                        fft=CNFF4, fct=CNFitnessCalculator, starg=0.01, fftarg=QuadDiff, reg=False)
+    test = TupleForTest(name="iris3", rep=3, seed=1001, popSize=200, data=[x, y, X, Y], iterations=200, hrange=hrange,
+                        ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=TournamentSelection,
+                        fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False)
 
 
     net = run_tests([test], power=12)[0][0]
