@@ -38,7 +38,7 @@ def test_fitness_calculator_with_pure_eff():
     assert res[0].f1 == pytest.approx(0.22222, abs=1e-3)
     assert res[0].get_eff() == pytest.approx(0.30555, abs=1e-3)
 
-    assert res[1].net.to_string() == anns[0].to_string() #TODO fix this
+    assert res[1].net.to_string() == anns[0].to_string() #TODO - B - fix this?
     assert res[1].ff == pytest.approx(0.1875, abs=1e-3)
     assert res[1].acc == pytest.approx(0.25, abs=1e-3)
     assert res[1].prec == pytest.approx(0.16666, abs=1e-3)

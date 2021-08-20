@@ -18,13 +18,13 @@ class RunHistory:
     def __init__(self):
         self.it_hist = []
 
-    def add_it_hist(self, data_points: [CNDataPoint]): #TODO test
+    def add_it_hist(self, data_points: [CNDataPoint]): #TODO - S - test
         it_rec = []
         for i in range(len(data_points)):
             it_rec.append(data_points[i].copy())
         self.it_hist.append(it_rec)
 
-    def get_it_best(self, iteration: int) -> CNDataPoint: #TODO test
+    def get_it_best(self, iteration: int) -> CNDataPoint: #TODO - S - test
         it = self.it_hist[iteration]
 
         best_eval = None
@@ -35,7 +35,7 @@ class RunHistory:
 
         return best_eval
 
-    def get_it_summary_string(self, iteration: int): #TODO test
+    def get_it_summary_string(self, iteration: int): #TODO - S - test
         evals = self.it_hist[iteration]
 
         mean_ff = mean([eval.ff for eval in evals])
@@ -54,7 +54,7 @@ class RunHistory:
 
         return result
 
-    def summary_dict(self, iteration: int): #TODO test
+    def summary_dict(self, iteration: int): #TODO - S - test
         evals = self.it_hist[iteration]
 
         mean_ff = mean([eval.ff for eval in evals])

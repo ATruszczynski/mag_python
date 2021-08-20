@@ -1,9 +1,9 @@
 import pytest
 from ann_point.Functions import *
 
-#TODO sprawdzaj w testach licznosci krotek
-#TODO Dopisz wypisywanie eff
-#TODO Dopisz F1 score gdzieś
+#TODO - S - sprawdzaj w testach licznosci krotek
+#TODO - A - Dopisz wypisywanie eff?
+#TODO - A - Dopisz F1 score gdzieś?
 
 allActFun = [ReLu(), Sigmoid(), TanH(), Softmax(), LReLu(), GaussAct(), SincAct()]
 
@@ -100,7 +100,7 @@ def test_sinc():
     assert sinc.to_string() == "SC"
     assert isinstance(sinc.copy(), SincAct)
 
-#TODO test counting generation?
+#TODO - A - test counting generation?
 def test_sigma():
     arg = np.array([[3, 2, 1],
                     [0.5, 0, -1],

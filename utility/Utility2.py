@@ -7,6 +7,7 @@ def get_weight_mask(input_size: int, output_size: int, neuron_count: int) -> np.
     mask[:-output_size, input_size:] = 1
     mask[:input_size, -output_size:] = 0
     # mask = np.triu(mask)
+    # TODO - S - co z tym?
     np.fill_diagonal(mask, 0)
 
     return mask

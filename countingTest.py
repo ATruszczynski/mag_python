@@ -51,7 +51,7 @@ if __name__ == '__main__':
     ec.fc = CNFitnessCalculator()
     ec.hrange.min_hidden = 0
     ec.hrange.max_hidden = 20
-    network = ec.run(iterations=ii, power=12) # TODO po niewielkiej liczbie iteracji wagi wyglądają podejrzanie? Zła generacja?
+    network = ec.run(iterations=ii, power=12) # TODO - B - po niewielkiej liczbie iteracji wagi wyglądają podejrzanie? Zła generacja?
     tests = network.test(X, Y, ChebyshevLoss())
 
 

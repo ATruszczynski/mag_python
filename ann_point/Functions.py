@@ -127,7 +127,7 @@ class TanH(ActFun):
     def computeDer(self, arg: np.ndarray) -> np.ndarray:
         diag = 2 / (np.exp(arg) + np.exp(-arg))
         # diqg = 1 - self.compute(arg) ** 2
-        diag = diag ** 2 #TODO is this der correct?
+        diag = diag ** 2
         return np.diagflat(diag)
 
     def copy(self):
@@ -300,7 +300,7 @@ class ChebyshevLoss(LossFun):
     def to_string(self):
         return "CL"
 
-#TODO test
+#TODO - A - test
 class QuasiCrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
         result = np.sum(np.multiply(corr, np.abs(res - corr)))

@@ -9,7 +9,7 @@
 # from utility.Utility import *
 #
 # if __name__ == '__main__':
-#     #TODO podział na zbiór uczący EC, zbiór uczący NN i zbiór testowy?
+#     #TODO - B - podział na zbiór uczący EC, zbiór uczący NN i zbiór testowy?
 #     from keras.datasets import mnist
 #     (train_X, train_y), (test_X, test_y) = mnist.load_data()
 #

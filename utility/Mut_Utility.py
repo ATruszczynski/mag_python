@@ -46,7 +46,7 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
     new_biases[0, -output_size:] = net.biases[0, -output_size:]
 
     new_af = net.actFuns[:net.hidden_end_index]
-    for i in range(to_add): #TODO generate sequence of afs could be a function
+    for i in range(to_add): #TODO - C - generate sequence of afs could be a function
         new_af.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)].copy())
 
     new_af.extend(net.actFuns[net.hidden_end_index:])
@@ -78,7 +78,7 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
                     wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
                     c_prob=net.c_prob, r_prob=net.r_prob)
 
-def inflate_network(net: ChaosNet, to_add: int): #TODO tests missed wrong maxit
+def inflate_network(net: ChaosNet, to_add: int): #TODO - D - tests missed wrong maxit
     new_neuron_count = net.neuron_count + to_add
 
     new_links = np.zeros((new_neuron_count, new_neuron_count))
@@ -192,7 +192,8 @@ def conditional_value_swap(prob: float, val1, val2):
     res1 = val1
     res2 = val2
 
-    if random.random() <= prob:
+    r = random.random()
+    if r <= prob:
         tmp = res1
         res1 = res2
         res2 = tmp
@@ -218,7 +219,7 @@ def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask
 
     diffs = links - new_links
     added_edges = np.where(diffs == -1)
-    #TODO not correct extraction of min/max weights
+    #TODO - B - not correct extraction of min/max weights
     minW = np.min(weights)
     maxW = np.max(weights)
     weights[added_edges] = np.random.uniform(minW, maxW, weights.shape)[added_edges]
@@ -238,53 +239,6 @@ def get_min_max_values_of_matrix_with_mask(matrix: np.ndarray, mask: np.ndarray)
         maxW = np.max(only_present)
 
     return minW, maxW
-
-def cut_into_puzzles(matrix: np.ndarray, i: int, o: int, start: int, num: int, lim: int, left: bool) -> [np.ndarray]:
-    n = matrix.shape[0]
-
-    end = start + num
-
-    P1 = matrix[start:end, start:end]
-    P2 = matrix[:i, start:end]
-    P3 = matrix[start:end, -o:]
-
-    if left:
-        p4ei = min(n - o, end + lim)
-        P4 = matrix[start:end, start+num:p4ei]
-        P5 = matrix[start+num:p4ei, start:end]
-    else:
-        p4si = max(start - lim, i)
-        P4 = matrix[start:end, p4si:start]
-        P5 = matrix[p4si:start, start:end]
-
-    return P1, P2, P3, P4, P5
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

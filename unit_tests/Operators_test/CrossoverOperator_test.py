@@ -5,19 +5,19 @@ from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
 from utility.TestingUtility import compare_chaos_network
 
-# #TODO test generation of counting problem
-# #TODO create an unbalanced test problem
-# #TODO test numpy copy
-# #TODO test deepcopying in general
-# #TODO test multiple runs vs single run
-# #TODO ec test multiple runs vs single run?
+#TODO - A - test generation of counting problem
+#TODO - A - create an unbalanced test problem
+#TODO - S - test numpy copy (done?)
+#TODO - A - test deepcopying in general (done?)
+#TODO - B - test multiple runs vs single run (done?)
+#TODO - B - ec test multiple runs vs single run? (done?)
 
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
                                  r_prob=(0, 0)) # values irrelevant aside from neuron count
 
-    #TODO fix with it changes
+    #TODO - A - fix with it changes (done?)
     link1 = np.array([[0, 1, 1, 0, 1],
                       [0, 0, 1, 0, 1],
                       [0, 1, 0, 0, 1],
@@ -88,7 +88,7 @@ def test_simple_crossover():
                           desired_p_prob=4,
                           desired_c_prob=5,
                           desired_r_prob=6)
-    #TODO biasy tu są źle
+    #TODO - A - biasy tu są źle
     ##################################################################
 
     compare_chaos_network(net=cn2,
@@ -181,7 +181,7 @@ def test_simple_crossover():
 
 
 def test_simple_crossover_2():
-    #TODO fix with it changes
+    #TODO - A - fix with it changes
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
@@ -284,7 +284,7 @@ def test_simple_crossover_2():
                           desired_c_prob=50,
                           desired_r_prob=60)
 
-    #TODO biasy tu są źle
+    #TODO - A - biasy tu są źle
 
     ##################################################################
 
@@ -348,7 +348,6 @@ def test_simple_crossover_2():
 #     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
 #                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
 #
-#     #TODO fix with it changes
 #     link1 = np.array([[0, 1, 1, 0, 1],
 #                       [0, 0, 1, 0, 1],
 #                       [0, 1, 0, 0, 1],

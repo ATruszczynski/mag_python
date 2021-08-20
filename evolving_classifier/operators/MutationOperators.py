@@ -13,7 +13,7 @@ class MutationOperator:
 
     def mutate(self, point: ChaosNet) -> ChaosNet:
         pass
-
+# TODO - S - czy poprawnie są zmienione prawd zmian kwadr i liniowych?
 # TODO - S - does reroll make sense at all? It is included in large radius wb shifts mutations anyway?
 # TODO - S - crossover of two identical networks is a waste of time?
 # TODO - A - można by używać średnich hiperaparamtrów EC zamiast po prostu tego co jest w chormosomach?
@@ -37,7 +37,8 @@ class FinalMutationOperator2:
 
         point.weights = gaussian_shift(point.weights, point.links, wb_pm, radius)
 
-        #TODO tu można być coś zrobić żeby ignorowało zera
+        #TODO - B - tu można być coś zrobić żeby ignorowało zera (done?)
+
         # only_present = point.weights[np.where(point.links == 1)]
         # minW = 0
         # maxW = 0
@@ -45,29 +46,29 @@ class FinalMutationOperator2:
         #     minW = np.min(only_present)
         #     maxW = np.max(only_present)
         minW, maxW = get_min_max_values_of_matrix_with_mask(point.weights, point.links)
-        point.weights = reroll_matrix(point.weights, point.links, r_pm, minW, maxW) # TODO zmień
+        point.weights = reroll_matrix(point.weights, point.links, r_pm, minW, maxW) # TODO - A - zmień
 
         point.biases = gaussian_shift(point.biases, get_bias_mask(point.input_size, point.neuron_count), wb_pm, radius)
 
-        #TODO tu można być coś zrobić żeby ignorowało zera
+        #TODO - B - tu można być coś zrobić żeby ignorowało zera (done?)
         only_present = point.biases[np.where(get_bias_mask(point.input_size, point.neuron_count) == 1)]
-        point.biases = reroll_matrix(point.biases, get_bias_mask(point.input_size, point.neuron_count), r_pm, np.min(only_present), np.max(only_present)) # TODO zmień
+        point.biases = reroll_matrix(point.biases, get_bias_mask(point.input_size, point.neuron_count), r_pm, np.min(only_present), np.max(only_present)) # TODO - A - zmień
 
         for i in range(point.hidden_start_index, point.hidden_end_index):
             point.actFuns[i] = conditional_try_choose_different(s_pm, point.actFuns[i], self.hrange.actFunSet)
 
         point.aggrFun = conditional_try_choose_different(s_pm, point.aggrFun, self.hrange.actFunSet)
 
-        # TODO czy mutacja powinna umieć zmieniać liczbę neuronów?
+        # TODO - A - czy mutacja powinna umieć zmieniać liczbę neuronów?
 
         spectrum = self.hrange.max_hidden - self.hrange.min_hidden
         h_rad = max(1, round(spectrum * rad_frac))
-        minh = max(self.hrange.min_hidden, point.hidden_count - h_rad) #TODO zrób coś z tym
+        minh = max(self.hrange.min_hidden, point.hidden_count - h_rad) #TODO - A - zrób coś z tym
         maxh = min(self.hrange.max_hidden, point.hidden_count + h_rad)
         options = list(range(minh, maxh + 1))
         # point = change_neuron_count(point, self.hrange, conditional_try_choose_different(s_pm, point.hidden_count, options))
 
-        # TODO zmienić to jakoś
+        # TODO - B - zmienić to jakoś  (done?)
         # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         # probs = np.random.random(point.links.shape)
         # to_change = np.where(probs <= s_pm)
@@ -136,7 +137,8 @@ class FinalMutationOperator:
 
         point.weights = gaussian_shift(point.weights, point.links, wb_pm, radius)
 
-        #TODO tu można być coś zrobić żeby ignorowało zera
+        #TODO - A - tu można być coś zrobić żeby ignorowało zera
+
         # only_present = point.weights[np.where(point.links == 1)]
         # minW = 0
         # maxW = 0
@@ -144,31 +146,32 @@ class FinalMutationOperator:
         #     minW = np.min(only_present)
         #     maxW = np.max(only_present)
         # minW, maxW = get_min_max_values_of_matrix_with_mask(point.weights, point.links)
-        # point.weights = reroll_matrix(point.weights, point.links, r_pm, minW, maxW) # TODO zmień
+        # point.weights = reroll_matrix(point.weights, point.links, r_pm, minW, maxW) # TODO - A - zmień
 
         point.biases = gaussian_shift(point.biases, get_bias_mask(point.input_size, point.neuron_count), s_pm, radius)
 
-        #TODO tu można być coś zrobić żeby ignorowało zera
+        #TODO - A - tu można być coś zrobić żeby ignorowało zera
+
         # only_present = point.biases[np.where(get_bias_mask(point.input_size, point.neuron_count) == 1)]
-        # point.biases = reroll_matrix(point.biases, get_bias_mask(point.input_size, point.neuron_count), r_pm, np.min(only_present), np.max(only_present)) # TODO zmień
+        # point.biases = reroll_matrix(point.biases, get_bias_mask(point.input_size, point.neuron_count), r_pm, np.min(only_present), np.max(only_present)) # TODO - B - zmień
 
         for i in range(point.hidden_start_index, point.hidden_end_index):
             point.actFuns[i] = conditional_try_choose_different(s_pm, point.actFuns[i], self.hrange.actFunSet)
 
         point.aggrFun = conditional_try_choose_different(s_pm, point.aggrFun, self.hrange.actFunSet)
 
-        # TODO czy mutacja powinna umieć zmieniać liczbę neuronów?
+        # TODO - A - czy mutacja powinna umieć zmieniać liczbę neuronów?
 
         rad_frac = 0.1
         spectrum = self.hrange.max_hidden - self.hrange.min_hidden
         h_rad = max(1, round(spectrum * rad_frac))
-        minh = max(self.hrange.min_hidden, point.hidden_count - h_rad) #TODO zrób coś z tym
+        minh = max(self.hrange.min_hidden, point.hidden_count - h_rad) #TODO - A - zrób coś z tym
         maxh = min(self.hrange.max_hidden, point.hidden_count + h_rad)
         # maxh = point.hidden_count
         options = list(range(minh, maxh + 1))
         # point = change_neuron_count(point, self.hrange, conditional_try_choose_different(s_pm, point.hidden_count, options))
 
-        # TODO zmienić to jakoś
+        # TODO - A - zmienić to jakoś
         # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         # probs = np.random.random(point.links.shape)
         # to_change = np.where(probs <= s_pm)

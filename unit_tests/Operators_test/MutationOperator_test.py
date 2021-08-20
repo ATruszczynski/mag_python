@@ -125,7 +125,7 @@ def test_struct_mutation_2():
                      [0, 0, 0, 0, 0]])
     bia1 = np.array([[0., -2, -3, -4, -5]])
     actFuns1 = [None, ReLu(), ReLu(), None, None]
-    #TODO nie ma sensu żeby przekazywać prawd do operatora bo są w punkcie i tak
+    #TODO - B - nie ma sensu żeby przekazywać prawd do operatora bo są w punkcie i tak
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1,
                    aggrFun=TanH(), maxit=2, mutation_radius=0.5, wb_mutation_prob=0.4, s_mutation_prob=0.5, p_mutation_prob=0.4,
                    c_prob=0.9, r_prob=0.75)

@@ -19,7 +19,7 @@ class EvolvingClassifier:
         else:
             self.supervisor = EC_supervisor(logs_path)
 
-        #TODO remove needless things from here
+        #TODO - A - remove needless things from here (done?)
         self.hrange = None
         self.population = []
         self.pop_size = -1
@@ -89,9 +89,9 @@ class EvolvingClassifier:
         self.population = generate_population(self.hrange, popSize, input_size=input_size, output_size=output_size)
 
         self.history = RunHistory()
-
+#TODO - S - ma zwracać najlepszą znalezioną, czy najlepszą z ostatniej generacji?
     def run(self, iterations: int, power: int = 1) -> ChaosNet:
-        #TODO upewnić się, że wszędzie gdzie potrzebne sieci są posortowane
+        #TODO - S - upewnić się, że wszędzie gdzie potrzebne sieci są posortowane
         if power > 1:
             pool = mp.Pool(power)
         else:
@@ -115,7 +115,7 @@ class EvolvingClassifier:
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
-            eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i].ff)]#TODO moze się zdarzyć że to usunie wszystkie sieci
+            eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i].ff)]#TODO - S - moze się zdarzyć że to usunie wszystkie sieci
             if i % 10 == 0:
                 print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
             if i > 0 and i % 400 == 0:

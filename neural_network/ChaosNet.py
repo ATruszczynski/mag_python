@@ -12,7 +12,7 @@ class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
                  actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
                  s_mutation_prob: float, p_mutation_prob: float, c_prob: float, r_prob: float):
-        #TODO validation
+        #TODO - A - validation
 
         assert links.shape[0] == weights.shape[0]
         assert links.shape[1] == weights.shape[1]
@@ -33,7 +33,7 @@ class ChaosNet:
                 self.actFuns.append(actFuns[i].copy())
         self.aggrFun = aggrFun
 
-        #TODO make those private
+        #TODO - C - make those private
         self.input_size = input_size
         self.output_size = output_size
         self.neuron_count = self.biases.shape[1]
@@ -46,7 +46,7 @@ class ChaosNet:
         assert self.neuron_count == self.links.shape[0]
         assert self.neuron_count == self.links.shape[1]
 
-        # self.comp_count = np.zeros(biases.shape)#TODO useless?
+        # self.comp_count = np.zeros(biases.shape)#TODO - B - useless?
         self.hidden_comp_order = None
         self.maxit = maxit
 
@@ -69,7 +69,7 @@ class ChaosNet:
         self.act[:self.input_size, :] = inputs
 
         for i in range(self.maxit):
-            for n in self.hidden_comp_order: #TODO czy w komp order jest output neurons? chyba nie
+            for n in self.hidden_comp_order: #TODO - S - czy w komp order jest output neurons? chyba nie
                 wei = self.weights[:, n].reshape(-1, 1)
                 self.inp[n, :] = np.dot(wei.T, self.act) + self.biases[0, n]
                 self.act[n, :] = self.actFuns[n].compute(self.inp[n, :])
@@ -79,9 +79,9 @@ class ChaosNet:
 
         return self.act[self.hidden_end_index:]
 
-    #TODO identify which vertices don't need to be processed
+    #TODO - S - identify which vertices don't need to be processed
     def get_comp_order(self):
-        #TODO jak to reaguje na wierzchołek ukryyt bez wejścia?
+        #TODO - S - jak to reaguje na wierzchołek ukryyt bez wejścia?
         self.hidden_comp_order = []
 
         touched = list(range(self.hidden_start_index))
@@ -89,7 +89,7 @@ class ChaosNet:
 
         hidden_links = self.links[:self.hidden_end_index, :self.hidden_end_index].copy()
 
-        #TODO wyznaczanie które wierzch mają stopień wejśćia jest chyba bez sensu
+        #TODO - S - wyznaczanie które wierzch mają stopień wejśćia jest chyba bez sensu
         while len(touched) < self.hidden_end_index:
             out_of_layer_edges = hidden_links[layers[-1], :]
             oole_col_sums = np.sum(out_of_layer_edges, axis=0)
@@ -106,7 +106,7 @@ class ChaosNet:
 
         self.hidden_comp_order = [i for layer in layers[1:] for i in layer]
 
-    #TODO write some tests of test
+    #TODO - S - write some tests of test
     def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lf: LossFun = None) -> [float, float, float, np.ndarray]:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
@@ -149,7 +149,7 @@ class ChaosNet:
     def edge_count(self):
         return sum(self.links)
 
-    #TODO dużo z tych funkcji jest do wyrzucenia prawd.
+    #TODO - B - dużo z tych funkcji jest do wyrzucenia prawd.
     def get_indices_of_neurons_with_output(self):
         row_sum = np.sum(self.links, axis=1)
         ones = list(np.where(row_sum[:self.hidden_end_index] > 0)[0])
@@ -162,7 +162,7 @@ class ChaosNet:
         ones.extend(list(range(self.hidden_start_index)))
         return ones
 
-    def get_indices_of_connected_neurons(self):#TODO can this be faster?
+    def get_indices_of_connected_neurons(self):#TODO - A - can this be faster?
         connected_neurons = []
         with_input = self.get_indices_of_neurons_with_input()
 

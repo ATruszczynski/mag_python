@@ -56,7 +56,7 @@ def one_hot_endode(data: [int]) -> [np.ndarray]:
 
 def generate_population(hrange: HyperparameterRange, count: int, input_size: int, output_size: int) -> [ChaosNet]:
     result = []
-    # TODO stabilise names
+    # TODO - C - stabilise names
     for i in range(count):
         hidden_size = random.randint(hrange.min_hidden, hrange.max_hidden)
 
@@ -70,7 +70,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         biases[0, :input_size] = 0
 
         actFuns = []
-        for j in range(input_size):#TODO shorten
+        for j in range(input_size):#TODO - C - shorten?
             actFuns.append(None)
         for j in range(input_size, input_size + hidden_size):
             actFuns.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)])
@@ -107,8 +107,8 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 
     return links
 
-#TODO zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj
-def get_default_hrange():#TODO przemyśl to
+#TODO - A - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
+def get_default_hrange():#TODO - S - przemyśl to
     hrange = HyperparameterRange(init_wei=(-10, 10), init_bia=(-10, 10), it=(1, 10), hidden_count=(0, 100),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(0.0, 1), wb_mut_prob=(0.001, 0.1), s_mut_prob=(0, 1),
@@ -155,7 +155,7 @@ def generate_square_problem(howMany, minV, maxV) -> [np.ndarray]:
 
     return [inputs, outputs]
 
-# TODO end algo faster if net is good
+# TODO - B - end algo faster if net is good
 
 def get_in_radius(current: float, min_val: float, max_val:float, radius: float) -> float:
     scale = max_val - min_val

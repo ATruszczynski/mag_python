@@ -2,7 +2,7 @@ from neural_network.ChaosNet import ChaosNet, ActFun
 import numpy as np
 import pytest
 
-#TODO this may require even more asserts
+#TODO - A - this may require even more asserts (done?)
 def compare_chaos_network(net: ChaosNet,
                           desired_input_size: int,
                           desited_output_size: int,

@@ -63,8 +63,8 @@ def run_tests(repetitions: int, res_subdir_path: str, nn_data: ([np.ndarray], [n
         log.flush()
     log.close()
 
-#TODO rounding too few digits
-#TODO sprawdzić czy na pewno kolejności danych są dobre
+#TODO - A - rounding too few digits
+#TODO - A - sprawdzić czy na pewno kolejności danych są dobre
 def write_down_run_hist(file, run_it: int, rh: RunHistory, learningIts: int):
     for i in range(len(rh.it_hist)):
         summary = rh.summary_dict(i)
@@ -76,7 +76,7 @@ def write_down_run_hist(file, run_it: int, rh: RunHistory, learningIts: int):
                  f"{best.net.to_string()},{best.ff},{best.acc},{best.prec},{best.rec},{best.get_eff()},{best.f1}," \
                  f"{len(best.net.neuronCounts) - 2},{best.net.size()},{learningIts}\n"
         file.write(record)
-#TODO czy eff ma jakąś oficjalną nazwę
+#TODO - C - czy eff ma jakąś oficjalną nazwę
 
 def write_down_net_res(file, run_it: int, variant: str, n_it: int, data_point: CNDataPoint, learningIts: int):
     record = ""

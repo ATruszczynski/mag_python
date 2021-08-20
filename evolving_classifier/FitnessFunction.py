@@ -9,7 +9,7 @@ from ann_point.Functions import *
 
 from sklearn.linear_model import LinearRegression
 
-#TODO all here tested?
+#TODO - S - all here tested?
 class FitnessFunction:
     def __init__(self, learningIts):
         self.learningIts = learningIts

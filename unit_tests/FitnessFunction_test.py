@@ -29,7 +29,7 @@ def get_point():
 
     return cn
 
-# TODO is test tested?
+# TODO - S - is test tested?
 def get_io():
     inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
     output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
@@ -41,9 +41,7 @@ def get_io():
 
     return inputs, output
 
-#TODO more tests of fitness funcs
-
-#TODO pytest finds 2 tests here
+#TODO - A - more tests of fitness funcs
 
 def test_pure_fitness_function():
     random.seed(1001)

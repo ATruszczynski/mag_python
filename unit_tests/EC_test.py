@@ -5,7 +5,7 @@ from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 
 
-def test_determinism(): #TODO this is (was?) broken
+def test_determinism(): #TODO - S - this is (was?) broken
     random.seed(1001)
     np.random.seed(1001)
 
@@ -22,7 +22,7 @@ def test_determinism(): #TODO this is (was?) broken
         ec.prepare(4, (x, y, X, Y), 1001)
         net = ec.run(3, 1)
         tests.append(net.test(X, Y))
-    #TODO move eff etc to different file
+    #TODO move - A - eff etc to different file (done?)
     for i in range(len(tests) - 1):
         for j in range(i + 1, len(tests)):
             t1 = tests[i]

@@ -5,7 +5,7 @@ from neural_network.ChaosNet import ChaosNet
 from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *
 
-#TODO CN constructor
+#TODO - C - CN constructor
 
 def test_cn_run():
     weights = np.array([[0, 0, 0.5, 0, 0, 0, 0],
@@ -27,7 +27,7 @@ def test_cn_run():
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
                    maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
 
-    #TODO różne pola w inpucie
+    #TODO - A - różne pola w inpucie
     result = net.run(np.array([[0], [0]]))
 
     assert np.all(np.isclose(result, np.array([[0.416043846], [0.583956154]]), atol=1e-5))
@@ -139,7 +139,7 @@ def test_multiple_runs():
     for i in range(999):
         assert np.array_equal(results[i], results[i + 1])
 
-#TODO test consecutive runs?
+#TODO - A - test consecutive runs?
 
 def test_run_with_cycle_1_run():
     links = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0],

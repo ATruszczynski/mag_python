@@ -12,7 +12,7 @@ class SelectionOperator:
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
         pass
 
-
+# TODO - A - usunąć procentowość
 class TournamentSelection(SelectionOperator):
     def __init__(self, frac: float):
         super().__init__()

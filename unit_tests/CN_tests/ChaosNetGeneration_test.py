@@ -1,7 +1,7 @@
 from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *
 
-#TODO is CN constructor tested?
+#TODO - S - is CN constructor tested?
 
 def test_cn_generation():
     random.seed(1001)
