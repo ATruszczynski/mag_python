@@ -4,10 +4,8 @@ from evolving_classifier.operators.MutationOperators import MutationOperator
 from evolving_classifier.operators.SelectionOperator import SelectionOperator, TournamentSelection
 import numpy as np
 
-
+# TODO - A - can modify declaration to have more graceful passing of optional arguments?
 class TupleForTest:
-    # def __init__(self, rep: int, seed: int, popSize: int, data: [np.ndarray], iterations: int, hrange: HyperparameterRange,
-    #              ff, fc, ct, mt, st, *starg):
     def __init__(self, name: str, rep: int, seed: int, popSize: int, data: [np.ndarray], iterations: int, hrange: HyperparameterRange,
                  ct: type, mt: type, st: type, fft: type, fct: type, starg: float, fftarg: type, reg: bool):
         self.name = name

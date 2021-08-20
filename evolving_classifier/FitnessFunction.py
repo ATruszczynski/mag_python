@@ -10,6 +10,7 @@ from ann_point.Functions import *
 from sklearn.linear_model import LinearRegression
 
 #TODO - S - all here tested?
+# TODO - A - check if mixed works? test?
 class FitnessFunction:
     def __init__(self, learningIts):
         self.learningIts = learningIts

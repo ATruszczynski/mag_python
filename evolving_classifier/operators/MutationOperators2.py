@@ -7,6 +7,7 @@ from utility.Mut_Utility import *
 from utility.Utility import *
 from utility.Utility2 import *
 
+# TODO - A - wywalić cały ten plik zasadniczo
 
 # TODO - S - czy poprawnie są zmienione prawd zmian kwadr i liniowych?
 # TODO - S - does reroll make sense at all? It is included in large radius wb shifts mutations anyway?
@@ -15,6 +16,7 @@ from utility.Utility2 import *
 # TODO - A - czy lepiej żeby efektywność używała minimów?
 # TODO - A - czy będzie testowane mieszania funkcja fitness? Jak tak to dopisać do tekstu
 # TODO - A - czy selekcje truniejowa procentowa ma sens?
+# TODO - B - remove needless code from here
 
 class FinalMutationOperator2(MutationOperator):
     def __init__(self, hrange: HyperparameterRange):

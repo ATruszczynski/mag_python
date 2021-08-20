@@ -9,7 +9,7 @@ from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
 from utility.Utility2 import get_weight_mask
 
-
+# TODO - B - remove needless functions
 def try_choose_different(current: Any, possibilities: [Any]) -> Any:
     options = []
     for i in range(len(possibilities)):

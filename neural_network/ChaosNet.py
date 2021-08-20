@@ -7,6 +7,7 @@ from ann_point.Functions import *
 from utility.Utility2 import *
 
 #TODO - A - links nie są potrzebne lol
+# TODO - B - clean up file
 
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
@@ -248,7 +249,7 @@ class ChaosNet:
         return actFunsString
 
 
-    #TODO coś by się przydało z tym zrobić
+    #TODO - A - coś by się przydało z tym zrobić
     def to_string(self):
         actFunsString = self.get_act_fun_string()
 
@@ -274,7 +275,7 @@ class ChaosNet:
         file.close()
 
 #TODO - S - SAVE NET AT THE END!!!!!!!!!!!
-#TODO - A - flush files
+#TODO - S - flush files
 
 
 

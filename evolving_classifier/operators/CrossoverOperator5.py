@@ -18,6 +18,8 @@ class CrossoverOperator:
 
 #TODO - B - AL zamiast A1 etc?
 #TODO - S - wyrzuć procentowość z selekcji
+# TODO - B - remove needless code from here
+# TODO - S - test
 
 class FinalCrossoverOperator5(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):

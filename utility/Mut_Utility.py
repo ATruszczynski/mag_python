@@ -5,6 +5,8 @@ from utility.Utility import *
 # from utility.Utility2 import *
 # from ann_point.HyperparameterRange import HyperparameterRange
 
+# TODO - B - remove needless functions
+
 def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hidden: int):
     current_hidden = net.hidden_count
     change_hidden = demanded_hidden - current_hidden

@@ -20,6 +20,7 @@ import os.path
 directory_for_tests="algo_tests"
 
 #TODO - S - add some summary report file per test
+# TODO - S - check if everythoing works correctly
 
 def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
     resultss = []

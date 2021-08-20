@@ -61,7 +61,7 @@ def get_recalls(conf_matrix) -> [float]:
 
     return class_recalls
 
-
+# TODO - S - mins?
 def efficiency(conf_matrix):
     acc = accuracy(conf_matrix)
     prec = average_precision(conf_matrix)

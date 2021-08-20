@@ -12,7 +12,8 @@ class SelectionOperator:
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
         pass
 
-# TODO - A - usunąć procentowość
+# TODO - S - usunąć procentowość
+# TODO - S - dodać rozstrzganie remisów na podstawie rozmiaru sieci?
 class TournamentSelection(SelectionOperator):
     def __init__(self, frac: float):
         super().__init__()

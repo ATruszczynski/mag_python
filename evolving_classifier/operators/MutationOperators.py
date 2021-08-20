@@ -20,6 +20,7 @@ class MutationOperator:
 # TODO - A - czy lepiej żeby efektywność używała minimów?
 # TODO - A - czy będzie testowane mieszania funkcja fitness? Jak tak to dopisać do tekstu
 # TODO - A - czy selekcje truniejowa procentowa ma sens?
+# TODO - B - remove needless code from here
 
 # class FinalMutationOperator2:
 #     def __init__(self, hrange: HyperparameterRange):

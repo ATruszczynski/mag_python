@@ -9,7 +9,7 @@ from neural_network.ChaosNet import ChaosNet
 from utility.CNDataPoint import CNDataPoint
 
 
-
+# TODO - S - sprawdź czy usunięte wszystkie pozostałości po eksperymentach
 class FitnessCalculator:
     def __init__(self):
         pass

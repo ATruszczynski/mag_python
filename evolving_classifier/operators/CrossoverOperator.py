@@ -12,8 +12,10 @@ class CrossoverOperator:
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         pass
 
-#TODO - B - AL zamiast A1 etc?
-#TODO - S - wyrzuć procentowość z selekcji
+# TODO - B - AL zamiast A1 etc?
+# TODO - S - wyrzuć procentowość z selekcji
+# TODO - B - remove needless code from here
+# TODO - C - rename to C, D networks to be more in line with text
 
 class FinalCrossoverOperator(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
@@ -44,7 +46,7 @@ class FinalCrossoverOperator(CrossoverOperator):
         rows_to_copy_A_B = min(pointA.hidden_end_index, new_B_count - output_size)
         rows_to_copy_B_A = min(pointB.hidden_end_index, new_A_count - output_size)
         rows_to_copy_B_B = min(pointB.hidden_end_index, new_B_count - output_size)
-        # TODO - S - to chyba nie sprawdza, czy warunki połączeń są spełnione
+        # TODO - S - to chyba nie sprawdza, czy warunki połączeń są spełnione (done?)
         # link swap
         new_A_links = np.zeros((new_A_count, new_A_count))
         new_B_links = np.zeros((new_B_count, new_B_count))
@@ -145,8 +147,8 @@ class FinalCrossoverOperator(CrossoverOperator):
 
 
 #TODO - C - pierwszy element wyjścia chyba nie ma już sensu
-#TODO - S - zamiana na outputach też ma sens
-#TODO - S - zawsze branie tylko górnych krawędzi to może nie być taki dobry pomysł :/
+#TODO - S - zamiana na outputach też ma sens (done?)
+#TODO - S - zawsze branie tylko górnych krawędzi to może nie być taki dobry pomysł :/ (done?)
 def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     for i in range(pointA.hidden_start_index, pointA.hidden_end_index + 1):
@@ -481,7 +483,9 @@ def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamete
 #     return result
 #
 #
-#TODO - S - jak reaguje na puste sieci
+# TODO - S - jak reaguje na puste sieci
+# TODO - C - to chyba powinno być w innym pliku
+# TODO - A - wpływ dodawania zer na efektywność?
 def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden

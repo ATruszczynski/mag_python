@@ -9,6 +9,8 @@ from utility.Mut_Utility import conditional_value_swap
 from utility.Utility import choose_without_repetition
 
 
+# TODO - B - remove needless code from here
+# TODO - B - test
 class PuzzleCO(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()

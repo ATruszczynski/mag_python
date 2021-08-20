@@ -17,6 +17,8 @@ class CrossoverOperator:
         pass
 
 
+# TODO - B - remove needless code from here
+# TODO - B - test
 class FinalCrossoverOperator4(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()

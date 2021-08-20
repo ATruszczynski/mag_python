@@ -11,6 +11,7 @@ from utility.Utility import *
 logs = "logs"
 np.seterr(over='ignore')
 
+# TODO - B - usunąć supervisora? Chyba nie jest używany
 class EvolvingClassifier:
     def __init__(self, logs_path: str = ""):
 

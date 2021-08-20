@@ -14,6 +14,7 @@ mean_lc_id = "m.lc."
 round_prec_rh = 7
 mean_used_id="m.u."
 
+# TODO - S - wypisz trochę więcej danych?
 class RunHistory:
     def __init__(self):
         self.it_hist = []
