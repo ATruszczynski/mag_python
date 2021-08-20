@@ -1,7 +1,7 @@
 # import numpy as np
 from ann_point.Functions import *
 # from ann_point.AnnPoint2 import *
-from evolving_classifier.operators.CO_Puzzle import CO_Puzzle
+from evolving_classifier.operators.PuzzleCO import PuzzleCO
 from evolving_classifier.operators.CrossoverOperator import *
 # from utility.Mut_Utility import resize_layer
 from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOperator2
@@ -45,7 +45,7 @@ def test_simple_crossover():
                    aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20,
                    s_mutation_prob=30, p_mutation_prob=40, c_prob=50, r_prob=60)
 
-    co = CO_Puzzle(hrange)
+    co = PuzzleCO(hrange)
 
     random.seed(1001)
     np.random.seed(1001)

@@ -6,6 +6,7 @@ from evolving_classifier.operators.CrossoverOperator import *
 from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOperator2
 from evolving_classifier.operators.CrossoverOperator3 import FinalCrossoverOperator3
 from evolving_classifier.operators.CrossoverOperator4 import FinalCrossoverOperator4
+from evolving_classifier.operators.CrossoverOperator5 import FinalCrossoverOperator5
 from utility.TestingUtility import compare_chaos_network
 
 
@@ -46,10 +47,10 @@ def test_simple_crossover():
                    aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20,
                    s_mutation_prob=30, p_mutation_prob=40, c_prob=50, r_prob=60)
 
-    co = FinalCrossoverOperator4(hrange)
+    co = FinalCrossoverOperator5(hrange)
 
-    random.seed(1001)
-    np.random.seed(1001)
+    random.seed(12345678)
+    np.random.seed(12345678)
     cn3, cn4 = co.crossover(cn1, cn2)
 
 

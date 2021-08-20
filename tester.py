@@ -3,11 +3,12 @@ from statistics import mean
 import numpy as np
 from sklearn import datasets
 
-from evolving_classifier.operators.CO_Puzzle import CO_Puzzle
-from evolving_classifier.operators.CO_Puzzle_2 import PuzzleCO2
+from evolving_classifier.operators.PuzzleCO import PuzzleCO
+from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
 from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOperator2
 from evolving_classifier.operators.CrossoverOperator3 import FinalCrossoverOperator3
 from evolving_classifier.operators.CrossoverOperator4 import FinalCrossoverOperator4
+from evolving_classifier.operators.CrossoverOperator5 import FinalCrossoverOperator5
 
 np.seterr(all='ignore')
 
@@ -18,7 +19,7 @@ import os.path
 
 directory_for_tests="algo_tests"
 
-
+#TODO - S - add some summary report file per test
 
 def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
     resultss = []
@@ -142,11 +143,11 @@ if __name__ == '__main__':
     X = [xx[i] for i in range(125, 150)]
     Y = [yy[i] for i in range(125, 150)]
 
-    count_tr = 500
-    count_test = 500
-    size = 5
-    x,y = generate_counting_problem(count_tr, size)
-    X,Y = generate_counting_problem(ceil(count_test), size)
+    # count_tr = 500
+    # count_test = 500
+    # size = 5
+    # x,y = generate_counting_problem(count_tr, size)
+    # X,Y = generate_counting_problem(ceil(count_test), size)
     #
     # x,y = generate_square_problem(200, -5, 5)
     # X,Y = generate_square_problem(200, -5, 5)
@@ -155,9 +156,9 @@ if __name__ == '__main__':
                                  mut_radius=(0.001, 1), wb_mut_prob=(0.001, 1), s_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
                                  r_prob=(0, 1))
 
-    minrr = -5
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (5, 10), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(minrr, 0), wb_mut_prob=(minrr, 0), s_mut_prob=(minrr, 0), p_mutation_prob=(-2, 0), c_prob=(minrr, 0),
+    minrr = -2
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (5, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+                                 mut_radius=(minrr, 0), wb_mut_prob=(minrr, 0), s_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(-1, 0),
                                  r_prob=(minrr, 0))
 
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 10), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
@@ -178,33 +179,38 @@ if __name__ == '__main__':
     #                      ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
     tests = []
-    pops = 200
-    its = 200
-    rep = 2
-    seed = 12345678
-    power = 12
-    tests.append(TupleForTest(name="test_1", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    pops = 25
+    its = 25
+    rep = 1
+    seed = 12121212
+    power = 1
+    starg = 0.02
+    tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
                               ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False))
-    tests.append(TupleForTest(name="test_2", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+                              fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+    tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
                               ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False))
-    tests.append(TupleForTest(name="test_3", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=FinalCrossoverOperator3, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False))
-    tests.append(TupleForTest(name="test_4", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=FinalCrossoverOperator4, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False))
-    tests.append(TupleForTest(name="test_5", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=CO_Puzzle, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False))
-    tests.append(TupleForTest(name="test_6", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=PuzzleCO2, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=0.02, fftarg=QuadDiff, reg=False))
+                              fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+    # tests.append(TupleForTest(name="test_2", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    #                           ct=FinalCrossoverOperator3, mt=FinalMutationOperator, st=TournamentSelection,
+    #                           fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+    # tests.append(TupleForTest(name="test_3", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    #                           ct=FinalCrossoverOperator4, mt=FinalMutationOperator, st=TournamentSelection,
+    #                           fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+    # tests.append(TupleForTest(name="test_4", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    #                           ct=FinalCrossoverOperator5, mt=FinalMutationOperator, st=TournamentSelection,
+    #                           fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+    # tests.append(TupleForTest(name="test_5", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    #                           ct=CO_Puzzle, mt=FinalMutationOperator, st=TournamentSelection,
+    #                           fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+    # tests.append(TupleForTest(name="test_6", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    #                           ct=PuzzleCO2, mt=FinalMutationOperator, st=TournamentSelection,
+    #                           fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
 
 
     # net = run_tests([test, test2, test3], power=12)[0][0]
-    net = run_tests(tests, power=power)[0][0]
+    resultsss = run_tests(tests, power=power)
+    net = resultsss[0][0]
     print(net.to_string())
 
     args = [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2]

@@ -118,8 +118,6 @@ class EvolvingClassifier:
             eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i].ff)]#TODO - S - moze się zdarzyć że to usunie wszystkie sieci
             if i % 10 == 0:
                 print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
-            if i > 0 and i % 400 == 0:
-                print()
 
             sorted_eval = sorted(eval_pop, key=lambda x: x.ff, reverse=True)
             self.history.add_it_hist(sorted_eval)
