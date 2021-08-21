@@ -15,14 +15,12 @@ class SelectionOperator:
 # TODO - S - usunąć procentowość
 # TODO - S - dodać rozstrzganie remisów na podstawie rozmiaru sieci?
 class TournamentSelection(SelectionOperator):
-    def __init__(self, frac: float):
+    def __init__(self, count: int):
         super().__init__()
-        self.frac = frac
+        self.count = count
 
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
-        count = max(round(len(val_pop) * self.frac), 2)
-
-        chosen = choose_without_repetition(options=val_pop, count=count)
+        chosen = choose_without_repetition(options=val_pop, count=self.count)
         chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
         return chosen_sorted[0].net.copy()
 

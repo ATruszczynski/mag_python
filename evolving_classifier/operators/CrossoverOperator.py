@@ -485,7 +485,7 @@ def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamete
 #
 # TODO - S - jak reaguje na puste sieci
 # TODO - C - to chyba powinno być w innym pliku
-# TODO - A - wpływ dodawania zer na efektywność?
+# TODO - C - wpływ dodawania zer na efektywność??
 def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden
@@ -497,7 +497,7 @@ def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
                     hL = eA - sA
                     hR = eB - sB
 
-                    if hL == 0 or hR == 0: #TODO - A - to chyba powinno być zmienione
+                    if hL == 0 or hR == 0: #TODO - S - to chyba powinno być zmienione
                         continue
 
                     if hL + hR >= minh and hL + hR <= maxh:

@@ -147,49 +147,6 @@ class FinalCrossoverOperator2(CrossoverOperator):
 
         return pointA, pointB
 
-
-
-
-
-
-#
-# #TODO - S - jak reaguje na puste sieci
-# def find_possible_cuts5(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
-#     possible_cuts = []
-#     maxh = hrange.max_hidden
-#     minh = hrange.min_hidden
-#     for sA in range(pointA.hidden_start_index, pointA.hidden_end_index):
-#         for eA in range(sA, pointA.hidden_end_index + 1):
-#             for sB in range(pointB.hidden_start_index, pointB.hidden_end_index):
-#                 for eB in range(sB, pointB.hidden_end_index + 1):
-#                     hL = eA - sA
-#                     hR = eB - sB
-#
-#                     if hL == 0 or hR == 0: #TODO - A - usunąć inne wycinanki?
-#                         continue
-#
-#                     if hL + hR >= minh and hL + hR <= maxh:
-#                         possible_cuts.append([sA, hL, sB, hR])
-#
-#     #TODO - S - tu mogą być ignorowane ograniczenia
-#
-#     for sA in range(pointA.hidden_start_index, pointA.hidden_end_index):
-#         for eA in range(sA, pointA.hidden_end_index + 1):
-#             hL = eA - sA
-#             if hL > 0 and hL >= minh and hL <= maxh:
-#                 possible_cuts.append([sA, hL, 1, 0])
-#
-#
-#     for sB in range(pointB.hidden_start_index, pointB.hidden_end_index):
-#         for eB in range(sB, pointB.hidden_end_index + 1):
-#             hR = eB - sB
-#             if hR > 0 and hR >= minh and hR <= maxh:
-#                 possible_cuts.append([1, 0, sB, hR])
-#
-#     # TODO - S - tu mogą być igrnorowane ograniczenia (a w głównym kodzie trzeba zmienić co się dizeje kiedy jest za mało cieć do wyboru
-#     possible_cuts.append([1, 0, 1, 0])
-#     return possible_cuts
-
 def cut_into_puzzles3(matrix: np.ndarray, o: int, start: int, num: int) -> [np.ndarray]:
     P1 = matrix[:, start:start + num]
     P2 = matrix[start:start + num, -o:]

@@ -130,7 +130,7 @@ def test_simple_crossover():
 
 
 def test_simple_crossover_2():
-    #TODO - A - fix with it changes
+    #TODO - S - fix with it changes
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),

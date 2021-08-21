@@ -1,7 +1,7 @@
 import random
 
 from neural_network.ChaosNet import *
-from utility.Mut_Utility import inflate_network
+# from utility.Mut_Utility import inflate_network
 from utility.TestingUtility import compare_chaos_network
 import numpy as np
 

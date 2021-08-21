@@ -48,7 +48,7 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
         for i in range(tt.rep):
             ec = EvolvingClassifier()
             ec.prepare(popSize=tt.popSize, nn_data=tt.data, seed=seeds[i], hrange=tt.hrange, ct=tt.ct, mt=tt.mt,
-                       st=tt.st, fft=tt.fft, fct=tt.fct, starg=tt.starg, fftarg=tt.fftarg)
+                       st=tt.st, fft=tt.fft, fct=tt.fct)
             net = ec.run(iterations=tt.iterations, power=power)
             net.net_to_file(fpath=fpath+f"best_{i + 1}.txt")
             ec.history.to_csv_file(fpath=fpath+f"rep_{i + 1}.csv", reg=tt.reg)
@@ -77,12 +77,13 @@ def create_test_data_file(fpath: str, tt: TupleForTest):
     data_file.write(f"iterations: {tt.iterations} \n")
     data_file.write(f"ct: {tt.ct.__name__} \n")
     data_file.write(f"mt: {tt.mt.__name__} \n")
-    data_file.write(f"st: {tt.st.__name__} \n")
-    data_file.write(f"starg: {tt.starg} \n")
-    data_file.write(f"fft: {tt.fft.__name__} \n")
+    data_file.write(f"st: {tt.st[0].__name__} \n")
+    if len(tt.st) == 2:
+        data_file.write(f"starg: {tt.st[1]} \n")
+    data_file.write(f"fft: {tt.fft[0].__name__} \n")
+    if len(tt.fft) == 2:
+        data_file.write(f"fftarg: {tt.fft[1].__name__} \n")
     data_file.write(f"fct: {tt.fct.__name__} \n")
-    if tt.fftarg is not None:
-        data_file.write(f"fftarg: {tt.fftarg.__name__} \n")
     data_file.write(f"reg: {tt.reg} \n")
     data_file.write(f"data_len: {len(tt.data[0])} \n")
 
@@ -185,13 +186,13 @@ if __name__ == '__main__':
     rep = 1
     seed = 12121212
     power = 1
-    starg = 0.02
+    starg = 6
     tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+                              ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=[TournamentSelection, starg],
+                              fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
     tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=TournamentSelection,
-                              fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))
+                              ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
+                              fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
     # tests.append(TupleForTest(name="test_2", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=FinalCrossoverOperator3, mt=FinalMutationOperator, st=TournamentSelection,
     #                           fft=CNFF4, fct=CNFitnessCalculator, starg=starg, fftarg=QuadDiff, reg=False))

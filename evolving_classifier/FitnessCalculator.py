@@ -29,9 +29,9 @@ class CNFitnessCalculator(FitnessCalculator):
         seeds = [random.randint(0, 1000) for i in range(len(results))]
 
         if pool is None:
-            new_fitnesses = [fitnessFunc.compute(results[i].net, trainInputs, trainOutputs, seeds[i])for i in range(len(results))]
+            new_fitnesses = [fitnessFunc.compute(results[i].net, trainInputs, trainOutputs)for i in range(len(results))]
         else:
-            estimating_async_results = [pool.apply_async(func=fitnessFunc.compute, args=(results[i].net, trainInputs, trainOutputs, seeds[i])) for i in range(len(results))]
+            estimating_async_results = [pool.apply_async(func=fitnessFunc.compute, args=(results[i].net, trainInputs, trainOutputs)) for i in range(len(results))]
             [estimation_result.wait() for estimation_result in estimating_async_results]
             new_fitnesses = [result.get() for result in estimating_async_results]
 

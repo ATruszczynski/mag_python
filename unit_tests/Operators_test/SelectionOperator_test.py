@@ -8,6 +8,7 @@ from evolving_classifier.operators.SelectionOperator import *
 from utility.CNDataPoint import CNDataPoint
 from utility.MockCN import MockCN
 
+# TODO - S - fix all tests
 
 def test_roullette_select():
     random.seed(2020)

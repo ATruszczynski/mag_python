@@ -2,7 +2,6 @@ from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *
 
 #TODO - S - is CN constructor tested?
-# TODO - A - remove comparing nets by strings
 
 def test_cn_generation():
     random.seed(1001)
@@ -66,43 +65,43 @@ def test_cn_generation():
                           desired_c_prob=0.350593,
                           desired_r_prob=0.979005)
 
-random.seed(1001)
-np.random.seed(1001)
-
-hd1 = random.randint(0, 3)
-print(f"hd1: {hd1}")
-n1 = 2 + 1 + hd1
-print(f"den1: {random.random()}")
-print(f"lin_prob1: \n{np.random.random((n1, n1))}")
-print(f"wei_1: \n{np.random.uniform(-1, 1, (n1, n1))}")
-print(f"bia_1: \n{np.random.uniform(-10, 10, (1, n1))}")
-print(f"aggrf_1: {random.randint(0, 2)}")
-print(f"maxit_1: {random.randint(1, 5)}")
-print(f"mut_rad_1: {random.uniform(0, 1)}")
-print(f"wb_prob_1: {random.uniform(0.05, 0.1)}")
-print(f"s_prob_1: {random.uniform(0.6, 0.7)}")
-print(f"p_prob_1: {random.uniform(0.4, 0.6)}")
-print(f"c_prob_1: {random.uniform(0.2, 0.5)}")
-print(f"r_prob_1: {random.uniform(0.8, 1)}")
-
-print()
-
-hd2 = random.randint(0, 3)
-print(f"hd2: {hd2}")
-n2 = 2 + 1 + hd2
-print(f"den2: {random.random()}")
-print(f"lin_prob2: \n{np.random.random((n2, n2))}")
-print(f"wei_2: \n{np.random.uniform(-1, 1, (n2, n2))}")
-print(f"bia_2: \n{np.random.uniform(-10, 10, (1, n2))}")
-print(f"af2_2: {random.randint(0, 2)}")
-print(f"aggrf_2: {random.randint(0, 2)}")
-print(f"maxit_2: {random.randint(1, 5)}")
-print(f"mut_rad_2: {random.uniform(0, 1)}")
-print(f"wb_prob_2: {random.uniform(0.05, 0.1)}")
-print(f"s_prob_2: {random.uniform(0.6, 0.7)}")
-print(f"p_prob_2: {random.uniform(0.4, 0.6)}")
-print(f"c_prob_2: {random.uniform(0.2, 0.5)}")
-print(f"r_prob_2: {random.uniform(0.8, 1)}")
+# random.seed(1001)
+# np.random.seed(1001)
+#
+# hd1 = random.randint(0, 3)
+# print(f"hd1: {hd1}")
+# n1 = 2 + 1 + hd1
+# print(f"den1: {random.random()}")
+# print(f"lin_prob1: \n{np.random.random((n1, n1))}")
+# print(f"wei_1: \n{np.random.uniform(-1, 1, (n1, n1))}")
+# print(f"bia_1: \n{np.random.uniform(-10, 10, (1, n1))}")
+# print(f"aggrf_1: {random.randint(0, 2)}")
+# print(f"maxit_1: {random.randint(1, 5)}")
+# print(f"mut_rad_1: {random.uniform(0, 1)}")
+# print(f"wb_prob_1: {random.uniform(0.05, 0.1)}")
+# print(f"s_prob_1: {random.uniform(0.6, 0.7)}")
+# print(f"p_prob_1: {random.uniform(0.4, 0.6)}")
+# print(f"c_prob_1: {random.uniform(0.2, 0.5)}")
+# print(f"r_prob_1: {random.uniform(0.8, 1)}")
+#
+# print()
+#
+# hd2 = random.randint(0, 3)
+# print(f"hd2: {hd2}")
+# n2 = 2 + 1 + hd2
+# print(f"den2: {random.random()}")
+# print(f"lin_prob2: \n{np.random.random((n2, n2))}")
+# print(f"wei_2: \n{np.random.uniform(-1, 1, (n2, n2))}")
+# print(f"bia_2: \n{np.random.uniform(-10, 10, (1, n2))}")
+# print(f"af2_2: {random.randint(0, 2)}")
+# print(f"aggrf_2: {random.randint(0, 2)}")
+# print(f"maxit_2: {random.randint(1, 5)}")
+# print(f"mut_rad_2: {random.uniform(0, 1)}")
+# print(f"wb_prob_2: {random.uniform(0.05, 0.1)}")
+# print(f"s_prob_2: {random.uniform(0.6, 0.7)}")
+# print(f"p_prob_2: {random.uniform(0.4, 0.6)}")
+# print(f"c_prob_2: {random.uniform(0.2, 0.5)}")
+# print(f"r_prob_2: {random.uniform(0.8, 1)}")
 
 
 # test_cn_generation()

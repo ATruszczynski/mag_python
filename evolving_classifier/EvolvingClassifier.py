@@ -31,8 +31,8 @@ class EvolvingClassifier:
 
     #TODO - C - ziarno nieobowiązkowe?
     def prepare(self, popSize: int, nn_data: ([np.ndarray], [np.ndarray]),
-                seed: int, hrange: HyperparameterRange = None, ct: type = None, mt: type = None, st: type = None, fft: type = None,
-                fct: type = None, starg: int = -1, fftarg: type = None):
+                seed: int, hrange: HyperparameterRange = None, ct: type = None, mt: type = None, st: [Any] = None, fft: [Any] = None,
+                fct: type = None):
         if hrange is None:
             self.hrange = get_default_hrange()
         else:
@@ -49,18 +49,18 @@ class EvolvingClassifier:
             self.mo = mt(self.hrange)
 
         if st == None:
-            self.so = TournamentSelection(0.01)
-        elif starg is not None:
-            self.so = st(starg)
-        else:
+            self.so = TournamentSelection(round(0.02 * popSize))
+        elif len(st) == 1:
             self.so = st()
+        else:
+            self.so = st[0](st[1])
 
         if fft == None:
             self.ff = CNFF()
-        elif fftarg is not None:
-            self.ff = fft(fftarg())
-        else:
+        elif len(fft) == 1:
             self.ff = fft()
+        else:
+            self.ff = fft[0](fft[1]())
 
         if fct == None:
             self.fc = CNFitnessCalculator()

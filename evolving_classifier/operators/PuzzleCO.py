@@ -305,13 +305,14 @@ def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
                     hL = eA - sA
                     hR = eB - sB
 
-                    if hL == 0 or hR == 0: #TODO - A - usunąć inne wycinanki?
+                    if hL == 0 or hR == 0:
                         continue
 
                     if hL + hR >= minh and hL + hR <= maxh:
                         possible_cuts.append([sA, hL, sB, hR])
 
     #TODO - S - tu mogą być ignorowane ograniczenia
+    #TODO - S - jeśli jest używany, to tu trzeba naprawić
 
     # for sA in range(pointA.hidden_start_index, pointA.hidden_end_index):
     #     for eA in range(sA, pointA.hidden_end_index + 1):
@@ -325,8 +326,6 @@ def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
     #         hR = eB - sB
     #         if hR > 0 and hR >= minh and hR <= maxh:
     #             possible_cuts.append([0, 0, sB, hR])
-
-    # TODO - S - tu mogą być igrnorowane ograniczenia (a w głównym kodzie trzeba zmienić co się dizeje kiedy jest za mało cieć do wyboru
 
     while len(possible_cuts) < 2:
         possible_cuts.append([pointA.input_size, pointA.hidden_count, pointB.input_size, pointB.hidden_count])
