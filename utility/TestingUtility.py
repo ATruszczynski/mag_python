@@ -60,6 +60,7 @@ def compare_chaos_network(net: ChaosNet,
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
     assert net.r_prob == pytest.approx(desired_r_prob, 1e-4)
 
+# TODO - A - test :/
 def compare_chaos_networks(net: ChaosNet, net2: ChaosNet):
     compare_chaos_network(net,
                           desired_input_size=net2.input_size,

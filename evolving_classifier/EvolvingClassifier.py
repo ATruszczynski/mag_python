@@ -13,14 +13,8 @@ np.seterr(over='ignore')
 
 # TODO - B - usunąć supervisora? Chyba nie jest używany
 class EvolvingClassifier:
-    def __init__(self, logs_path: str = ""):
+    def __init__(self):
 
-        if logs_path == "":
-            self.supervisor = EC_supervisor(logs)
-        else:
-            self.supervisor = EC_supervisor(logs_path)
-
-        #TODO - A - remove needless things from here (done?)
         self.hrange = None
         self.population = []
         self.pop_size = -1
@@ -73,12 +67,6 @@ class EvolvingClassifier:
         else:
             self.fc = fct()
 
-
-
-        # self.so = TournamentSelection(0.01)
-        # self.ff = CNFF()
-        # self.fc = CNFitnessCalculator()
-
         random.seed(seed)
         np.random.seed(seed)
 
@@ -90,25 +78,13 @@ class EvolvingClassifier:
         self.population = generate_population(self.hrange, popSize, input_size=input_size, output_size=output_size)
 
         self.history = RunHistory()
-#TODO - S - ma zwracać najlepszą znalezioną, czy najlepszą z ostatniej generacji?
+    #TODO - S - ma zwracać najlepszą znalezioną, czy najlepszą z ostatniej generacji?
     def run(self, iterations: int, power: int = 1) -> ChaosNet:
         #TODO - S - upewnić się, że wszędzie gdzie potrzebne sieci są posortowane
         if power > 1:
             pool = mp.Pool(power)
         else:
             pool = None
-
-        self.supervisor.start(iterations)
-
-        input_size = self.trainInputs[0].shape[0]
-        output_size = self.trainOutputs[0].shape[0]
-
-        self.supervisor.get_algo_data(input_size=input_size, output_size=output_size, pmS=-666, pmE=-666,
-                                      pcS=-666, pcE=-666,
-                                      ts=-666, sps=len(self.population),
-                                      ps=self.pop_size, fracs=[0], hrange=self.hrange, learningIts=self.ff.learningIts)
-
-        self.supervisor.start(iterations=iterations)
 
         best = [self.population[0], -math.inf]
 
@@ -126,7 +102,6 @@ class EvolvingClassifier:
             if sorted_eval[0].ff >= best[1]:
                 best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
 
-            # self.supervisor.check_point(eval_pop, i)
             crossed = []
 
             while len(crossed) < self.pop_size:
@@ -150,7 +125,7 @@ class EvolvingClassifier:
 
         eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                    trainOutputs=self.trainOutputs)
-        # self.supervisor.check_point(eval_pop, iterations)
+
         if power > 1:
             pool.close()
 
@@ -158,6 +133,5 @@ class EvolvingClassifier:
         if sorted_eval[0].ff >= best[1]:
             best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
 
-        # print(f"\nbest ff: {best[1]}")
         return best[0]
 

@@ -36,53 +36,31 @@ class RunHistory:
 
         return best_eval
 
-    def get_it_summary_string(self, iteration: int): #TODO - S - test
-        evals = self.it_hist[iteration]
+    # def get_it_summary_string(self, iteration: int): #TODO - S - test
+    #     evals = self.it_hist[iteration]
+    #
+    #     mean_ff = mean([eval.ff for eval in evals])
+    #     mean_acc = mean([eval.acc for eval in evals])
+    #     mean_prec = mean([eval.prec for eval in evals])
+    #     mean_rec = mean([eval.rec for eval in evals])
+    #     mean_eff = mean([eval.get_eff() for eval in evals])
+    #     mean_size = mean([eval.net.size() for eval in evals])
+    #     mean_used = mean([eval.net.get_number_of_used_neurons() for eval in evals])
+    #
+    #     result = f"{iteration} |{mean_ff_id}:{round(mean_ff, round_prec_rh)}|" + \
+    #              f"{mean_acc_id}:{round(mean_acc, round_prec_rh)}|" + \
+    #              f"{mean_prec_id}:{round(mean_prec, round_prec_rh)}|{mean_rec_id}:{round(mean_rec, round_prec_rh)}|" + \
+    #              f"{mean_size_id}:{round(mean_size,round_prec_rh)}|{mean_eff_id}:{round(mean_eff, round_prec_rh)}|" \
+    #              f"{mean_used_id}:{round(mean_used, round_prec_rh)}"
+    #
+    #     return result
 
-        mean_ff = mean([eval.ff for eval in evals])
-        mean_acc = mean([eval.acc for eval in evals])
-        mean_prec = mean([eval.prec for eval in evals])
-        mean_rec = mean([eval.rec for eval in evals])
-        mean_eff = mean([eval.get_eff() for eval in evals])
-        mean_size = mean([eval.net.size() for eval in evals])
-        mean_used = mean([eval.net.get_number_of_used_neurons() for eval in evals])
-
-        result = f"{iteration} |{mean_ff_id}:{round(mean_ff, round_prec_rh)}|" + \
-                 f"{mean_acc_id}:{round(mean_acc, round_prec_rh)}|" + \
-                 f"{mean_prec_id}:{round(mean_prec, round_prec_rh)}|{mean_rec_id}:{round(mean_rec, round_prec_rh)}|" + \
-                 f"{mean_size_id}:{round(mean_size,round_prec_rh)}|{mean_eff_id}:{round(mean_eff, round_prec_rh)}|" \
-                 f"{mean_used_id}:{round(mean_used, round_prec_rh)}"
-
-        return result
-
-    def summary_dict(self, iteration: int): #TODO - S - test
-        evals = self.it_hist[iteration]
-
-        mean_ff = mean([eval.ff for eval in evals])
-        mean_acc = mean([eval.acc for eval in evals])
-        mean_prec = mean([eval.prec for eval in evals])
-        mean_rec = mean([eval.rec for eval in evals])
-        mean_eff = mean([eval.get_eff() for eval in evals])
-        mean_size = mean([eval.net.size() for eval in evals])
-        mean_lc = mean([len(eval.net.neuronCounts) - 1 for eval in evals])
-
-        res_dict = {}
-        res_dict[mean_ff_id] = mean_ff
-        res_dict[mean_acc_id] = mean_acc
-        res_dict[mean_prec_id] = mean_prec
-        res_dict[mean_rec_id] = mean_rec
-        res_dict[mean_eff_id] = mean_eff
-        res_dict[mean_f1_id] = -666
-        res_dict[mean_size_id] = mean_size
-        res_dict[mean_lc_id] = mean_lc
-
-        return res_dict
 
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")
-        file.write("it,rk,is,os,nc,lc,af,ag,mi,mr,wbp,smp,pmp,cp,rp,ff")
+        file.write("it,rk,is,os,nc,ec,af,ag,mi,mr,wbp,smp,pmp,cp,rp,ff")
         if not reg:
-            file.write(",eff")
+            file.write(",eff,acc,prc,rec,f1s")
         file.write("\n")
 
         for it in range(len(self.it_hist)):
@@ -97,6 +75,10 @@ class RunHistory:
                            f"{net.p_mutation_prob},{net.c_prob},{net.r_prob},{cndatapoint.ff}")
                 if not reg:
                     file.write(f",{cndatapoint.get_eff()}")
+                    file.write(f",{cndatapoint.acc}")
+                    file.write(f",{cndatapoint.prec}")
+                    file.write(f",{cndatapoint.rec}")
+                    file.write(f",{cndatapoint.f1}")
                 file.write("\n")
         file.close()
 

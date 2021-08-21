@@ -92,3 +92,12 @@ def average_f1_score(conf_matrix):
     f1 = get_f1_scores(conf_matrix)
 
     return mean(f1)
+
+def check_cond_in_cn_const(cond: bool):
+    if not cond:
+        raise CNConstructorException()
+
+
+class CNConstructorException(Exception):
+    def __init__(self):
+        pass

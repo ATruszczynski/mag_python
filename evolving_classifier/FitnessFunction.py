@@ -10,7 +10,7 @@ from ann_point.Functions import *
 from sklearn.linear_model import LinearRegression
 
 #TODO - S - all here tested?
-# TODO - A - check if mixed works? test?
+# TODO - A - usunąć seed stąd
 class FitnessFunction:
     def __init__(self, learningIts):
         self.learningIts = learningIts
@@ -29,16 +29,6 @@ class CNFF(FitnessFunction):
 
         return [eff, test_results[0]]
 
-class CNFF3(FitnessFunction):
-    def __init__(self):
-        super().__init__(0)
-
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray], seed: int) -> [float, np.ndarray]:
-        test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
-        eff = efficiency(test_results[0])
-
-        return [eff**6 * sqrt(sqrt(net.s_mutation_prob)) * sqrt(sqrt(net.wb_mutation_prob)), test_results[0]]
-
 class CNFF2(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__(0)
@@ -48,11 +38,9 @@ class CNFF2(FitnessFunction):
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
         eff = efficiency(test_results[0])
 
-        return [(1 - eff)**2 * -test_results[1], test_results[0]]
-        # return [-test_results[4], test_results[3]]
-        # return [eff, test_results[3]]
+        return [(1 - eff) * -test_results[1], test_results[0]]
 
-class CNFF4(FitnessFunction):
+class CNFF3(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__(0)
         self.lossFun = lossFun
@@ -61,9 +49,18 @@ class CNFF4(FitnessFunction):
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
         eff = efficiency(test_results[0])
 
+        return [(1 - eff)**2 * -test_results[1], test_results[0]]
+
+# TODO - C - could take type as argument
+class CNFF4(FitnessFunction):
+    def __init__(self, lossFun: LossFun):
+        super().__init__(0)
+        self.lossFun = lossFun
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray], seed: int) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
+
         return [-test_results[1], test_results[0]]
-        # return [-test_results[4], test_results[3]]
-        # return [eff, test_results[3]]
 
 class CNFF5(FitnessFunction):
     def __init__(self):

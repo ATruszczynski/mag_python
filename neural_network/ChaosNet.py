@@ -6,20 +6,29 @@ import numpy as np
 from ann_point.Functions import *
 from utility.Utility2 import *
 
-#TODO - A - links nie są potrzebne lol
 # TODO - B - clean up file
 
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
                  actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
                  s_mutation_prob: float, p_mutation_prob: float, c_prob: float, r_prob: float):
-        #TODO - A - validation
 
-        assert links.shape[0] == weights.shape[0]
-        assert links.shape[1] == weights.shape[1]
-        assert biases.shape[0] == 1
-        assert biases.shape[1] == weights.shape[1]
-        assert len(actFuns) == biases.shape[1]
+        check_cond_in_cn_const(links.shape[0] == links.shape[1])
+        check_cond_in_cn_const(links.shape[0] >= input_size + output_size)
+        check_cond_in_cn_const(input_size >= 1)
+        check_cond_in_cn_const(output_size >= 1)
+        check_cond_in_cn_const(links.shape[0] == weights.shape[0])
+        check_cond_in_cn_const(links.shape[1] == weights.shape[1])
+        check_cond_in_cn_const(biases.shape[0] == 1)
+        check_cond_in_cn_const(biases.shape[1] == weights.shape[1])
+        check_cond_in_cn_const(len(actFuns) == biases.shape[1])
+        check_cond_in_cn_const(maxit >= 1)
+        check_cond_in_cn_const(mutation_radius <= 0)
+        check_cond_in_cn_const(wb_mutation_prob <= 0)
+        check_cond_in_cn_const(s_mutation_prob <= 0)
+        check_cond_in_cn_const(p_mutation_prob <= 0)
+        check_cond_in_cn_const(c_prob <= 0)
+        check_cond_in_cn_const(r_prob <= 0)
 
         self.links = links.copy()
         self.weights = weights.copy()
@@ -42,17 +51,14 @@ class ChaosNet:
         self.hidden_end_index = self.neuron_count - self.output_size
         self.hidden_count = self.hidden_end_index - self.hidden_start_index
 
-        assert self.neuron_count == weights.shape[1]
-        assert weights.shape[1] - input_size - output_size == self.hidden_count
-        assert self.neuron_count == self.links.shape[0]
-        assert self.neuron_count == self.links.shape[1]
+        check_cond_in_cn_const(self.neuron_count == weights.shape[1])
+        check_cond_in_cn_const(weights.shape[1] - input_size - output_size == self.hidden_count)
+        check_cond_in_cn_const(self.neuron_count == self.links.shape[0])
+        check_cond_in_cn_const(self.neuron_count == self.links.shape[1])
 
-        # self.comp_count = np.zeros(biases.shape)#TODO - B - useless?
         self.hidden_comp_order = None
         self.maxit = maxit
 
-        if mutation_radius == 0:
-            raise Exception()
         self.mutation_radius = mutation_radius
         self.wb_mutation_prob = wb_mutation_prob
         self.s_mutation_prob = s_mutation_prob
@@ -144,38 +150,39 @@ class ChaosNet:
     #
     #     self.hidden_comp_order = None
 
-    def size(self):
-        return -666
+    # def size(self):
+    #     return -666
 
     def edge_count(self):
         return sum(self.links)
 
     #TODO - B - dużo z tych funkcji jest do wyrzucenia prawd.
-    def get_indices_of_neurons_with_output(self):
-        row_sum = np.sum(self.links, axis=1)
-        ones = list(np.where(row_sum[:self.hidden_end_index] > 0)[0])
-        ones.extend(list(range(self.hidden_end_index, self.neuron_count)))
-        return ones
 
-    def get_indices_of_neurons_with_input(self):
-        col_sum = np.sum(self.links, axis=0)
-        ones = list(np.where(col_sum > 0)[0])
-        ones.extend(list(range(self.hidden_start_index)))
-        return ones
+    # def get_indices_of_neurons_with_output(self):
+    #     row_sum = np.sum(self.links, axis=1)
+    #     ones = list(np.where(row_sum[:self.hidden_end_index] > 0)[0])
+    #     ones.extend(list(range(self.hidden_end_index, self.neuron_count)))
+    #     return ones
+    #
+    # def get_indices_of_neurons_with_input(self):
+    #     col_sum = np.sum(self.links, axis=0)
+    #     ones = list(np.where(col_sum > 0)[0])
+    #     ones.extend(list(range(self.hidden_start_index)))
+    #     return ones
 
-    def get_indices_of_connected_neurons(self):#TODO - A - can this be faster?
-        connected_neurons = []
-        with_input = self.get_indices_of_neurons_with_input()
-
-        for i in with_input:
-            connected_neurons.append(i)
-
-        with_output = self.get_indices_of_neurons_with_output()
-        for i in with_output:
-            if i not in connected_neurons:
-                connected_neurons.append(i)
-
-        return connected_neurons
+    # def get_indices_of_connected_neurons(self):#TODO - C - can this be faster?
+    #     connected_neurons = []
+    #     with_input = self.get_indices_of_neurons_with_input()
+    #
+    #     for i in with_input:
+    #         connected_neurons.append(i)
+    #
+    #     with_output = self.get_indices_of_neurons_with_output()
+    #     for i in with_output:
+    #         if i not in connected_neurons:
+    #             connected_neurons.append(i)
+    #
+    #     return connected_neurons
 
     def get_indices_of_used_neurons(self):
         no_output = self.get_indices_of_no_output_neurons()
@@ -249,12 +256,12 @@ class ChaosNet:
         return actFunsString
 
 
-    #TODO - A - coś by się przydało z tym zrobić
+    #TODO - S - coś by się przydało z tym zrobić
     def to_string(self):
         actFunsString = self.get_act_fun_string()
 
         result = ""
-        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(np.sum(self.links))}|{self.maxit}|" \
+        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.edge_count())}|{self.maxit}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
                   f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.wb_mutation_prob, 5)}|s:{round(self.s_mutation_prob, 5)}" \
                   f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.r_prob, 5)}"

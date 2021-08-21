@@ -2,6 +2,7 @@ from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *
 
 #TODO - S - is CN constructor tested?
+# TODO - A - remove comparing nets by strings
 
 def test_cn_generation():
     random.seed(1001)

@@ -7,6 +7,7 @@ from evolving_classifier.FitnessFunction import *
 from ann_point.Functions import *
 
 from neural_network.ChaosNet import efficiency
+from utility.Mut_Utility import gaussian_shift
 
 
 def get_point():
@@ -25,7 +26,33 @@ def get_point():
     bias = np.array([[0, 0, 0.5, 0.5, 0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), None, None, None]
     cn = ChaosNet(input_size=2, output_size=3, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                  maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
+                  maxit=2, mutation_radius=0, wb_mutation_prob=0, s_mutation_prob=0, p_mutation_prob=0, c_prob=0, r_prob=0)
+
+    return cn
+
+def get_point2():
+    links = np.array([[0, 0, 1, 1, 1, 0, 0, 0, 0],
+                      [0, 0, 1, 1, 1, 0, 0, 0, 0],
+                      [0, 0, 1, 1, 1, 1, 1, 1, 1],
+                      [0, 0, 1, 1, 1, 1, 1, 1, 1],
+                      [0, 0, 1, 1, 1, 1, 1, 1, 1],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    weights = np.array([[0, 0, 1, 2, 1, 0, 0, 0, 0],
+                        [0, 0, -1, 1, -1, 0, 0, 0, 0],
+                        [0, 0, 1, 1, -2, 1, 1, 1, -1],
+                        [0, 0, 1, 2, 1, 1, 1, 1, -0.5],
+                        [0, 0, 1, 1, -1, -2, 0.5, 1, 1],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    bias = np.array([[0, 0, 0.5, 1, -1, 0.5, 0.5, -0.5, 0.75]])
+    actFuns = [None, None, Sigmoid(), ReLu(), Identity(), Sigmoid(), None, None, None]
+    cn = ChaosNet(input_size=2, output_size=4, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                  maxit=4, mutation_radius=0, wb_mutation_prob=0, s_mutation_prob=0, p_mutation_prob=0, c_prob=0, r_prob=0)
 
     return cn
 
@@ -41,10 +68,21 @@ def get_io():
 
     return inputs, output
 
-#TODO - A - more tests of fitness funcs
+def get_io2():
+    inputs = [np.array([[0.], [0]]), np.array([[0.], [1]]), np.array([[1.], [0]]), np.array([[1.], [1]])]
+    output = [np.array([[1.], [0], [0], [0]]), np.array([[0.], [1], [0], [0]]), np.array([[0.], [0], [1], [0]]), np.array([[0.], [0], [0], [1]])]
+
+    inputs.extend([gaussian_shift(c.copy(), np.ones(c.shape), 1, 1) for c in inputs])
+    inputs.extend([gaussian_shift(c.copy(), np.ones(c.shape), 1, 1) for c in inputs])
+    output.extend([c.copy() for c in output])
+    output.extend([c.copy() for c in output])
+
+    return inputs, output
 
 def test_pure_fitness_function():
-    random.seed(1001)
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
 
     point = get_point()
     i, o = get_io()
@@ -56,45 +94,217 @@ def test_pure_fitness_function():
                                             [8., 0., 0.],
                                            [4., 0., 0.]]))
 
-# def test_progress_ff():
-#     point = get_point()
-#     i, o = get_io()
-#     ff = ProgressFF(3)
-#     res = ff.compute(point, i, o, 1001)
-#
-#     assert res[0] == pytest.approx(0.2222 * 0.375, abs=1e-3)
-#     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
-#
-# def test_progress2_ff():
-#     point = get_point()
-#     i, o = get_io()
-#     ff = ProgressFF2(3)
-#     res = ff.compute(point, i, o, 1001)
-#
-#     assert res[0] == pytest.approx(0.2222 * 0.68899, abs=1e-3)
-#     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
-#
-# def test_pure_progress_ff():
-#     point = get_point()
-#     i, o = get_io()
-#     ff = PureProgressFF(3)
-#     res = ff.compute(point, i, o, 1001)
-#
-#     assert res[0] == pytest.approx(0.375, abs=1e-3)
-#     assert np.array_equal(res[1], np.array([[4., 0., 0.],[8., 0., 0.],[4., 0., 0.]]))
+
+def test_pure_fitness_function2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
 
 
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point()
-i, o = get_io()
+    point = get_point2()
+    i, o = get_io2()
+    ff = CNFF()
+    res = ff.compute(point, i, o, 1001)
 
-test = net.test(i, o)
-print(efficiency(test[0]))
-print(test[0])
+    assert res[0] == pytest.approx(0.18106060, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[0., 2., 2., 0.],
+                                            [0., 0., 2., 2.],
+                                            [0., 0., 4., 0.],
+                                            [0., 1., 3., 0.]]))
 
-test_pure_fitness_function()
+def test_mixed_loss_1_fun():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point()
+    i, o = get_io()
+    ff = CNFF2(QuadDiff())
+    res = ff.compute(point, i, o, 1001)
+
+    assert res[0] == pytest.approx(-3.03872776, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
+                                            [4., 0., 0.]]))
+
+def test_mixed_loss_1_fun2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point2()
+    i, o = get_io2()
+    ff = CNFF2(QuadDiff())
+    res = ff.compute(point, i, o, 1001)
+
+    assert res[0] == pytest.approx(-3.07102272, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[0., 2., 2., 0.],
+                                            [0., 0., 2., 2.],
+                                            [0., 0., 4., 0.],
+                                            [0., 1., 3., 0.]]))
+
+def test_mixed_loss_2_fun():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point()
+    i, o = get_io()
+    ff = CNFF3(QuadDiff())
+    res = ff.compute(point, i, o, 1001)
+
+    assert res[0] == pytest.approx(-2.4309822, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
+                                            [4., 0., 0.]]))
+
+def test_mixed_loss_2_fun2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point2()
+    i, o = get_io2()
+    ff = CNFF3(QuadDiff())
+    res = ff.compute(point, i, o, 1001)
+
+    assert res[0] == pytest.approx(-2.5149814, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[0., 2., 2., 0.],
+                                            [0., 0., 2., 2.],
+                                            [0., 0., 4., 0.],
+                                            [0., 1., 3., 0.]]))
+
+def test_pure_loss_fun():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point()
+    i, o = get_io()
+    ff = CNFF4(QuadDiff())
+    res = ff.compute(point, i, o, 1001)
+
+    assert res[0] == pytest.approx(-3.7984097, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
+                                            [4., 0., 0.]]))
+
+def test_pure_loss_fun2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point2()
+    i, o = get_io2()
+    ff = CNFF4(QuadDiff())
+    res = ff.compute(point, i, o, 1001)
+
+    assert res[0] == pytest.approx(-3.75, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[0., 2., 2., 0.],
+                                            [0., 0., 2., 2.],
+                                            [0., 0., 4., 0.],
+                                            [0., 1., 3., 0.]]))
+
+
+
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o)
+# print(efficiency(test[0]))
+# print(test[0])
+#
+# test_pure_fitness_function()
+
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o)
+# print(efficiency(test[0]))
+# print(test[0])
+#
+# test_pure_fitness_function2()
+
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-test[1])
+# print(test[0])
+#
+# test_pure_loss_fun()
+
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-test[1])
+# print(test[0])
+#
+# test_pure_loss_fun2()
+#
+#
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# print((1 - efficiency(test[0])) * -test[1])
+# print(test[0])
+#
+# test_mixed_loss_1_fun()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# print((1 - efficiency(test[0])) * -test[1])
+# print(test[0])
+#
+# test_mixed_loss_1_fun2()
+
+
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# print((1 - efficiency(test[0]))**2 * -test[1])
+# print(test[0])
+#
+# test_mixed_loss_2_fun()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# print((1 - efficiency(test[0]))**2 * -test[1])
+# print(test[0])
+#
+# test_mixed_loss_2_fun2()
 
 
 #

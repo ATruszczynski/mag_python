@@ -80,59 +80,59 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
                     wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
                     c_prob=net.c_prob, r_prob=net.r_prob)
 
-def inflate_network(net: ChaosNet, to_add: int): #TODO - D - tests missed wrong maxit
-    new_neuron_count = net.neuron_count + to_add
+# def inflate_network(net: ChaosNet, to_add: int): #TODO - D - tests missed wrong maxit
+#     new_neuron_count = net.neuron_count + to_add
+#
+#     new_links = np.zeros((new_neuron_count, new_neuron_count))
+#     new_weights = np.zeros((new_neuron_count, new_neuron_count))
+#     new_biases = np.zeros((1, new_neuron_count))
+#
+#
+#     new_links[:net.hidden_end_index, :net.hidden_end_index] = net.links[:net.hidden_end_index, :net.hidden_end_index]
+#     new_links[:net.hidden_end_index, -net.output_size:] = net.links[:net.hidden_end_index, -net.output_size:]
+#
+#     new_weights[:net.hidden_end_index, :net.hidden_end_index] = net.weights[:net.hidden_end_index, :net.hidden_end_index]
+#     new_weights[:net.hidden_end_index, -net.output_size:] = net.weights[:net.hidden_end_index, -net.output_size:]
+#
+#     new_biases[0, :net.hidden_end_index] = net.biases[0, :net.hidden_end_index]
+#     new_biases[0, -net.output_size:] = net.biases[0, -net.output_size:]
+#
+#     new_actFun = []
+#     for i in range(net.hidden_end_index):
+#         af = net.actFuns[i]
+#         if af is None:
+#             new_actFun.append(None)
+#         else:
+#             new_actFun.append(af.copy())
+#
+#     for i in range(to_add):
+#         af = new_actFun[net.input_size + i]
+#         new_actFun.append(af.copy())
+#
+#     for i in range(net.hidden_end_index, net.neuron_count):
+#         new_actFun.append(None)
+#
+#     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
+#                     biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=net.maxit, mutation_radius=net.mutation_radius,
+#                     wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
+#                     c_prob=net.c_prob, r_prob=net.r_prob)
 
-    new_links = np.zeros((new_neuron_count, new_neuron_count))
-    new_weights = np.zeros((new_neuron_count, new_neuron_count))
-    new_biases = np.zeros((1, new_neuron_count))
-
-
-    new_links[:net.hidden_end_index, :net.hidden_end_index] = net.links[:net.hidden_end_index, :net.hidden_end_index]
-    new_links[:net.hidden_end_index, -net.output_size:] = net.links[:net.hidden_end_index, -net.output_size:]
-
-    new_weights[:net.hidden_end_index, :net.hidden_end_index] = net.weights[:net.hidden_end_index, :net.hidden_end_index]
-    new_weights[:net.hidden_end_index, -net.output_size:] = net.weights[:net.hidden_end_index, -net.output_size:]
-
-    new_biases[0, :net.hidden_end_index] = net.biases[0, :net.hidden_end_index]
-    new_biases[0, -net.output_size:] = net.biases[0, -net.output_size:]
-
-    new_actFun = []
-    for i in range(net.hidden_end_index):
-        af = net.actFuns[i]
-        if af is None:
-            new_actFun.append(None)
-        else:
-            new_actFun.append(af.copy())
-
-    for i in range(to_add):
-        af = new_actFun[net.input_size + i]
-        new_actFun.append(af.copy())
-
-    for i in range(net.hidden_end_index, net.neuron_count):
-        new_actFun.append(None)
-
-    return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
-                    c_prob=net.c_prob, r_prob=net.r_prob)
-
-def deflate_network(net: ChaosNet):
-    ind_to_preserve = net.get_indices_of_connected_neurons()
-    ind_to_preserve = sorted(ind_to_preserve)
-    ind_to_preserve = np.array(ind_to_preserve).reshape(1, -1)
-
-    new_links = net.links[ind_to_preserve[0, :, None], ind_to_preserve]
-    new_weights = net.weights[ind_to_preserve[0, :, None], ind_to_preserve]
-    new_biases = net.biases[0, ind_to_preserve]
-    new_af = []
-    for i in range(ind_to_preserve.shape[1]):
-        new_af.append(net.actFuns[ind_to_preserve[0, i]])
-
-    return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
-                    c_prob=net.c_prob, r_prob=net.r_prob)
+# def deflate_network(net: ChaosNet):
+#     ind_to_preserve = net.get_indices_of_connected_neurons()
+#     ind_to_preserve = sorted(ind_to_preserve)
+#     ind_to_preserve = np.array(ind_to_preserve).reshape(1, -1)
+#
+#     new_links = net.links[ind_to_preserve[0, :, None], ind_to_preserve]
+#     new_weights = net.weights[ind_to_preserve[0, :, None], ind_to_preserve]
+#     new_biases = net.biases[0, ind_to_preserve]
+#     new_af = []
+#     for i in range(ind_to_preserve.shape[1]):
+#         new_af.append(net.actFuns[ind_to_preserve[0, i]])
+#
+#     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
+#                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
+#                     wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
+#                     c_prob=net.c_prob, r_prob=net.r_prob)
 
 
 def gaussian_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, radius: float) -> np.ndarray:

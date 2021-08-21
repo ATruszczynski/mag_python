@@ -2,6 +2,8 @@ import numpy as np
 
 eps = 1e-10
 
+# TODO - C - clean up all files from commented code
+
 class ActFun:
     def compute(self, arg: np.ndarray) -> np.ndarray:
         pass
@@ -300,10 +302,9 @@ class ChebyshevLoss(LossFun):
     def to_string(self):
         return "CL"
 
-#TODO - A - test
 class QuasiCrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
-        result = np.sum(np.multiply(corr, np.abs(res - corr)))
+        result = np.sum(np.multiply(corr, np.abs(res - corr)))[0]
         return result
 
     def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:

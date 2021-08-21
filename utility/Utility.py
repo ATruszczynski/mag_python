@@ -107,7 +107,7 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 
     return links
 
-#TODO - A - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
+#TODO - B - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
 def get_default_hrange():#TODO - S - przemyśl to
     hrange = HyperparameterRange(init_wei=(-10, 10), init_bia=(-10, 10), it=(1, 10), hidden_count=(0, 100),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
@@ -134,6 +134,13 @@ def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
         outputs.append(output)
 
     return [inputs, outputs]
+
+# TODO - B - generate unblaanced counting problem
+# def generate_counting_problem(countTo: int):
+#     inputs = []
+#     outputs = []
+
+
 
 def generate_square_problem(howMany, minV, maxV) -> [np.ndarray]:
     inputs = []
