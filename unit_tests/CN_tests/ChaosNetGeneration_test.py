@@ -8,8 +8,8 @@ def test_cn_generation():
     np.random.seed(1001)
 
     hrnage = HyperparameterRange((-1, 1), (-10, 10), (1, 5), (0, 3), [ReLu(), GaussAct(), Sigmoid()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.2, 0.5),
-                                 r_prob=(0.8, 1))
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.2, 0.5),
+                                 dstr_mut_prob=(0.8, 1))
     nets = generate_population(hrange=hrnage, count=2, input_size=2, output_size=1)
 
 

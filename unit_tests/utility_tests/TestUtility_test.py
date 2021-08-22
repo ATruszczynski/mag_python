@@ -24,9 +24,9 @@ def test_chaos_compare_1():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -86,9 +86,9 @@ def test_chaos_compare_2():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -153,9 +153,9 @@ def test_chaos_compare_3():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -220,9 +220,9 @@ def test_chaos_compare_4():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -287,9 +287,9 @@ def test_chaos_compare_5():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -354,9 +354,9 @@ def test_chaos_compare_6():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -421,9 +421,9 @@ def test_chaos_compare_7():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -488,9 +488,9 @@ def test_chaos_compare_8():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -555,9 +555,9 @@ def test_chaos_compare_9():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -620,9 +620,9 @@ def test_chaos_compare_10():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -687,9 +687,9 @@ def test_chaos_compare_11():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -750,9 +750,9 @@ def test_chaos_compare_12():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -817,9 +817,9 @@ def test_chaos_compare_13():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -884,9 +884,9 @@ def test_chaos_compare_14():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -951,9 +951,9 @@ def test_chaos_compare_15():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1018,9 +1018,9 @@ def test_chaos_compare_16():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1085,9 +1085,9 @@ def test_chaos_compare_17():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1152,9 +1152,9 @@ def test_chaos_compare_18():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1219,9 +1219,9 @@ def test_chaos_compare_19():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1286,9 +1286,9 @@ def test_chaos_compare_20():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1353,9 +1353,9 @@ def test_chaos_compare_21():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1420,9 +1420,9 @@ def test_chaos_compare_22():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1487,9 +1487,9 @@ def test_chaos_compare_23():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1554,9 +1554,9 @@ def test_chaos_compare_24():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1621,9 +1621,9 @@ def test_chaos_compare_25():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1690,9 +1690,9 @@ def test_chaos_compare_26():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -1759,9 +1759,9 @@ def test_chaos_compare_27():
     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), maxit=10,
-                   mutation_radius=-1, wb_mutation_prob=2.5, s_mutation_prob=1, p_mutation_prob=0.44,
-                   c_prob=-11, r_prob=22)
+                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+                   mutation_radius=-1, sqr_mut_prob=2.5, lin_mut_prob=1, p_mutation_prob=0.44,
+                   c_prob=-11, dstr_mut_prob=22)
 
     np.random.seed(1001)
     random.seed(1001)

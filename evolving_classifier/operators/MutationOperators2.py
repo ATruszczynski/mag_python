@@ -25,7 +25,7 @@ class FinalMutationOperator(MutationOperator):
         sqr_pm =    10 ** point.sqr_mut_prob
         lin_pm =    10 ** point.lin_mut_prob
         p_pm =      10 ** point.p_mutation_prob
-        sqr_pm_2 =  10 ** point.dstr_mut_prob
+        dstr_pm =   10 ** point.dstr_mut_prob
         radius =    10 ** point.mutation_radius
 
         point.weights = gaussian_shift(point.weights, point.links, sqr_pm, radius)
@@ -36,7 +36,16 @@ class FinalMutationOperator(MutationOperator):
 
         point.aggrFun = conditional_try_choose_different(lin_pm, point.aggrFun, self.hrange.actFunSet)
 
-        point.weights, point.links = add_remove_weights(sqr_pm_2, point.weights, point.links, get_weight_mask(point.input_size, point.output_size, point.neuron_count))
+        # TODO - C - this could prob just be a separate function
+        rad_frac = 0.1
+        spectrum = self.hrange.max_hidden - self.hrange.min_hidden
+        h_rad = max(1, round(spectrum * rad_frac))
+        minh = max(self.hrange.min_hidden, point.hidden_count - h_rad)
+        maxh = min(self.hrange.max_hidden, point.hidden_count + h_rad)
+        options = list(range(minh, maxh + 1))
+        point = change_neuron_count(point, self.hrange, conditional_try_choose_different(dstr_pm, point.hidden_count, options))
+
+        point.weights, point.links = add_remove_weights(dstr_pm, point.weights, point.links, get_weight_mask(point.input_size, point.output_size, point.neuron_count))
 
         point.net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 

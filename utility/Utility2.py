@@ -6,7 +6,6 @@ def get_weight_mask(input_size: int, output_size: int, neuron_count: int) -> np.
     mask = np.zeros((neuron_count, neuron_count))
     mask[:-output_size, input_size:] = 1
     mask[:input_size, -output_size:] = 0
-    # mask = np.triu(mask)
     # TODO - S - co z tym?
     np.fill_diagonal(mask, 0)
 
@@ -69,6 +68,14 @@ def efficiency(conf_matrix):
     f1 = average_f1_score(conf_matrix)
 
     return mean([acc, prec, rec, f1])
+
+def m_efficiency(conf_matrix):
+    acc = accuracy(conf_matrix)
+    prec = np.min(get_precisions(conf_matrix))
+    rec = np.min(get_recalls(conf_matrix))
+    f1 = np.min(get_f1_scores(conf_matrix))
+
+    return min([acc, prec, rec, f1])
 
 def get_f1_scores(conf_matrix):
     precisions = get_precisions(conf_matrix)

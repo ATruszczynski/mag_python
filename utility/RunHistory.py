@@ -70,9 +70,9 @@ class RunHistory:
                 net = cndatapoint.net
                 file.write(f"{it + 1},{rk + 1},{net.input_size},{net.output_size},{net.neuron_count},"
                            f"{np.sum(net.links)},"
-                           f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.maxit},"
-                           f"{net.mutation_radius},{net.wb_mutation_prob},{net.s_mutation_prob},"
-                           f"{net.p_mutation_prob},{net.c_prob},{net.r_prob},{cndatapoint.ff}")
+                           f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
+                           f"{net.mutation_radius},{net.sqr_mut_prob},{net.lin_mut_prob},"
+                           f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{cndatapoint.ff}")
                 if not reg:
                     file.write(f",{cndatapoint.get_eff()}")
                     file.write(f",{cndatapoint.acc}")

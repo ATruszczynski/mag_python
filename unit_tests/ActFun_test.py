@@ -1,7 +1,7 @@
 import pytest
 from ann_point.Functions import *
 
-#TODO - S - sprawdzaj w testach licznosci krotek
+#TODO - A - sprawdzaj w testach licznosci krotek
 
 allActFun = [ReLu(), Sigmoid(), TanH(), Softmax(), LReLu(), GaussAct(), SincAct(), Poly2(), Poly3(), Identity()]
 

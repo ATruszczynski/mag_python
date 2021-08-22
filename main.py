@@ -54,8 +54,8 @@ from evolving_classifier.operators.CrossoverOperator4 import find_possible_cuts6
 from neural_network.ChaosNet import ChaosNet
 
 hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 4), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                             wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
-                             r_prob=(0, 0))
+                             sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                             dstr_mut_prob=(0, 0))
 
 link1 = np.array([[0, 1, 1, 1, 1, 1, 0, 0],
                   [0, 1, 1, 1, 1, 1, 1, 1],
@@ -90,11 +90,11 @@ bia2 = np.array([[0, -20, -30, -40, -50]])
 actFuns2 = [None, TanH(), TanH(), None, None]
 
 cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-               aggrFun=SincAct(), maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3,
-               p_mutation_prob=4, c_prob=5, r_prob=6)
+               aggrFun=SincAct(), net_it=2, mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3,
+               p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
 cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-               aggrFun=GaussAct(), maxit=5, mutation_radius=10, wb_mutation_prob=20, s_mutation_prob=30,
-               p_mutation_prob=40, c_prob=50, r_prob=60)
+               aggrFun=GaussAct(), net_it=5, mutation_radius=10, sqr_mut_prob=20, lin_mut_prob=30,
+               p_mutation_prob=40, c_prob=50, dstr_mut_prob=60)
 
 cuts = find_possible_cuts6(cn1, cn2, hrange)
 print(cuts)

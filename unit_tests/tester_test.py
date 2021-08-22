@@ -32,8 +32,8 @@ def test_tester_same_as_ec_ind():
     how_many = 10
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(0.001, 1), wb_mut_prob=(0.001, 1), s_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
-                                 r_prob=(0, 1))
+                                 mut_radius=(0.001, 1), sqr_mut_prob=(0.001, 1), lin_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
+                                 dstr_mut_prob=(0, 1))
 
     test = TupleForTest(rep=how_many, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                         ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,

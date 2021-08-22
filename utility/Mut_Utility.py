@@ -6,6 +6,7 @@ from utility.Utility import *
 # from ann_point.HyperparameterRange import HyperparameterRange
 
 # TODO - B - remove needless functions
+# TODO - A - are things here tested?
 
 def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hidden: int):
     current_hidden = net.hidden_count
@@ -54,9 +55,9 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
     new_af.extend(net.actFuns[net.hidden_end_index:])
 
     return ChaosNet(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
-                    c_prob=net.c_prob, r_prob=net.r_prob)
+                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
+                    sqr_mut_prob=net.sqr_mut_prob, lin_mut_prob=net.lin_mut_prob, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, dstr_mut_prob=net.dstr_mut_prob)
 
 
 def decrease_neuron_count(net: ChaosNet, to_remove: int):
@@ -76,9 +77,9 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
         new_af.append(net.actFuns[ind_to_preserve[0, i]])
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-                    wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
-                    c_prob=net.c_prob, r_prob=net.r_prob)
+                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
+                    sqr_mut_prob=net.sqr_mut_prob, lin_mut_prob=net.lin_mut_prob, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, dstr_mut_prob=net.dstr_mut_prob)
 
 # def inflate_network(net: ChaosNet, to_add: int): #TODO - D - tests missed wrong maxit
 #     new_neuron_count = net.neuron_count + to_add

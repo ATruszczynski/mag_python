@@ -12,8 +12,6 @@ class SelectionOperator:
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
         pass
 
-# TODO - S - usunąć procentowość
-# TODO - S - dodać rozstrzganie remisów na podstawie rozmiaru sieci?
 class TournamentSelection(SelectionOperator):
     def __init__(self, count: int):
         super().__init__()
@@ -22,6 +20,18 @@ class TournamentSelection(SelectionOperator):
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
         chosen = choose_without_repetition(options=val_pop, count=self.count)
         chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
+        return chosen_sorted[0].net.copy()
+
+# TODO - A - test
+class TournamentSelectionSized(SelectionOperator):
+    def __init__(self, count: int):
+        super().__init__()
+        self.count = count
+
+    def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
+        chosen = choose_without_repetition(options=val_pop, count=self.count)
+        size_sorted = sorted(chosen, key=lambda x: x.net.neuron_count)
+        chosen_sorted = sorted(size_sorted, key=lambda x: x.ff, reverse=True)
         return chosen_sorted[0].net.copy()
 
 class RoulletteSelection(SelectionOperator):

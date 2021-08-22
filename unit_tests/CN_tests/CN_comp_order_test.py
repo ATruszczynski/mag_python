@@ -14,7 +14,7 @@ def test_cn_comp_order():
                       [0, 0, 0, 0, 0, 0]])
     biases = np.array([[0, 0, 0, 0, 0, 0]])
     cn = ChaosNet(input_size=2, output_size=1, links=links, weights=links, biases=biases, actFuns=6 *[None], aggrFun=ReLu(),
-                  maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
+                  net_it=2, mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
     cn.get_comp_order()
 
     compare_chaos_network(net=cn,
@@ -84,7 +84,7 @@ def test_cn_comp_order_rec():
 
     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
     cn = ChaosNet(input_size=2, output_size=2, links=links, weights=links, biases=biases, actFuns=9 *[None], aggrFun=ReLu(),
-                  maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4, c_prob=5, r_prob=6)
+                  net_it=2, mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
     cn.get_comp_order()
 
 

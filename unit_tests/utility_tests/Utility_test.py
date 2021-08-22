@@ -160,8 +160,8 @@ def test_ohe():
 #TODO - S -  fix test?
 def test_generate_population_limits():
     hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
-                                 r_prob=(0.44, 0.55))
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
 
     random.seed(1001)
     n = 200
@@ -170,7 +170,7 @@ def test_generate_population_limits():
     input_sizes = [pop[i].input_size for i in range(len(pop))]
     output_sizes = [pop[i].output_size for i in range(len(pop))]
     hidden_sizes = [pop[i].hidden_end_index - pop[i].hidden_start_index for i in range(len(pop))]
-    its = [pop[i].maxit for i in range(len(pop))]
+    its = [pop[i].net_it for i in range(len(pop))]
 
     assert max(input_sizes) == min(input_sizes)
     assert max(input_sizes) == 10
@@ -230,11 +230,11 @@ def test_generate_population_limits():
             all_weights.append(net.weights[r, c])
 
         all_mut_rad.append(net.mutation_radius)
-        all_wb_mut.append(net.wb_mutation_prob)
-        all_s_mut.append(net.s_mutation_prob)
+        all_wb_mut.append(net.sqr_mut_prob)
+        all_s_mut.append(net.lin_mut_prob)
         all_p_mut.append(net.p_mutation_prob)
         all_c_prob.append(net.c_prob)
-        all_r_prob.append(net.r_prob)
+        all_r_prob.append(net.dstr_mut_prob)
 
     assert max(all_weights) <= 2
     assert max(all_weights) > 1.95
@@ -267,8 +267,8 @@ def test_generate_population_limits():
         assert isthere
 
     hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
-                                 r_prob=(0.44, 0.55))
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
 
     assert min(all_mut_rad) >= 0
     assert min(all_mut_rad) <= 0.05

@@ -51,13 +51,13 @@ def compare_chaos_network(net: ChaosNet,
         for i in range(len(net.hidden_comp_order)):
             assert net.hidden_comp_order[i] == desired_hidden_comp_order[i]
 
-    assert net.maxit == desired_maxit
+    assert net.net_it == desired_maxit
     assert net.mutation_radius == pytest.approx(desired_mut_rad, 1e-4)
-    assert net.wb_mutation_prob == pytest.approx(desired_wb_prob, 1e-4)
-    assert net.s_mutation_prob == pytest.approx(desired_s_prob, 1e-4)
+    assert net.sqr_mut_prob == pytest.approx(desired_wb_prob, 1e-4)
+    assert net.lin_mut_prob == pytest.approx(desired_s_prob, 1e-4)
     assert net.p_mutation_prob == pytest.approx(desired_p_prob, 1e-4)
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
-    assert net.r_prob == pytest.approx(desired_r_prob, 1e-4)
+    assert net.dstr_mut_prob == pytest.approx(desired_r_prob, 1e-4)
 
 def compare_chaos_networks(net: ChaosNet, net2: ChaosNet):
     compare_chaos_network(net,
@@ -72,13 +72,13 @@ def compare_chaos_networks(net: ChaosNet, net2: ChaosNet):
                           desired_biases=net2.biases,
                           desired_actFun=net2.actFuns,
                           desired_aggr=net2.aggrFun,
-                          desired_maxit=net2.maxit,
+                          desired_maxit=net2.net_it,
                           desired_mut_rad=net2.mutation_radius,
-                          desired_wb_prob=net2.wb_mutation_prob,
-                          desired_s_prob=net2.s_mutation_prob,
+                          desired_wb_prob=net2.sqr_mut_prob,
+                          desired_s_prob=net2.lin_mut_prob,
                           desired_p_prob=net2.p_mutation_prob,
                           desired_c_prob=net2.c_prob,
-                          desired_r_prob=net2.r_prob,
+                          desired_r_prob=net2.dstr_mut_prob,
                           desired_hidden_comp_order=net2.hidden_comp_order,
                           desired_inp=net2.inp,
                           desired_act=net2.act)

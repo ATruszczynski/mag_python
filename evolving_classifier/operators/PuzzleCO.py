@@ -11,6 +11,7 @@ from utility.Utility import choose_without_repetition
 
 # TODO - B - remove needless code from here
 # TODO - B - test
+# TODO - B - coś mi tu nie pasuje - nie powinine działać dużo gorzej niż 5
 class PuzzleCO(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
@@ -40,7 +41,7 @@ class PuzzleCO(CrossoverOperator):
 
         # maxIt swap
 
-        C_maxit, D_maxit = conditional_value_swap(0.5, pointA.maxit, pointB.maxit)
+        C_maxit, D_maxit = conditional_value_swap(0.5, pointA.net_it, pointB.net_it)
 
         # mutation radius swap
 
@@ -48,11 +49,11 @@ class PuzzleCO(CrossoverOperator):
 
         # wb prob swap
 
-        C_wb_prob, D_wb_prob = conditional_value_swap(0.5, pointA.wb_mutation_prob, pointB.wb_mutation_prob)
+        C_wb_prob, D_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
 
         # s prob swap
 
-        C_s_prob, D_s_prob = conditional_value_swap(0.5, pointA.s_mutation_prob, pointB.s_mutation_prob)
+        C_s_prob, D_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
 
         # p prob swap
 
@@ -64,18 +65,18 @@ class PuzzleCO(CrossoverOperator):
 
         # r prob swap
 
-        C_r_prob, D_r_prob = conditional_value_swap(0.5, pointA.r_prob, pointB.r_prob)
+        C_r_prob, D_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
 
         pointC = ChaosNet(input_size=input_size, output_size=output_size, links=C_links, weights=C_weights,
-                          biases=C_biases, actFuns=C_acts, aggrFun=C_aggr, maxit=C_maxit, mutation_radius=C_mut_rad,
-                          wb_mutation_prob=C_wb_prob, s_mutation_prob=C_s_prob, p_mutation_prob=C_p_prob,
-                          c_prob=C_c_prob, r_prob=C_r_prob)
+                          biases=C_biases, actFuns=C_acts, aggrFun=C_aggr, net_it=C_maxit, mutation_radius=C_mut_rad,
+                          sqr_mut_prob=C_wb_prob, lin_mut_prob=C_s_prob, p_mutation_prob=C_p_prob,
+                          c_prob=C_c_prob, dstr_mut_prob=C_r_prob)
 
         pointD = ChaosNet(input_size=input_size, output_size=output_size, links=D_links, weights=D_weights,
-                          biases=D_biases, actFuns=D_acts, aggrFun=D_aggr, maxit=D_maxit, mutation_radius=D_mut_rad,
-                          wb_mutation_prob=D_wb_prob, s_mutation_prob=D_s_prob, p_mutation_prob=D_p_prob,
-                          c_prob=D_c_prob, r_prob=D_r_prob)
+                          biases=D_biases, actFuns=D_acts, aggrFun=D_aggr, net_it=D_maxit, mutation_radius=D_mut_rad,
+                          sqr_mut_prob=D_wb_prob, lin_mut_prob=D_s_prob, p_mutation_prob=D_p_prob,
+                          c_prob=D_c_prob, dstr_mut_prob=D_r_prob)
 
         return pointC, pointD
 
@@ -293,7 +294,7 @@ def piece_together_from_puzzles(i: int, o: int, left_puzzles: [np.ndarray], righ
     return result
 
 
-#TODO - S - jak reaguje na puste sieci
+#TODO - B - jak reaguje na puste sieci
 def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden
@@ -311,8 +312,8 @@ def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
                     if hL + hR >= minh and hL + hR <= maxh:
                         possible_cuts.append([sA, hL, sB, hR])
 
-    #TODO - S - tu mogą być ignorowane ograniczenia
-    #TODO - S - jeśli jest używany, to tu trzeba naprawić
+    #TODO - B - tu mogą być ignorowane ograniczenia
+    #TODO - B - jeśli jest używany, to tu trzeba naprawić
 
     # for sA in range(pointA.hidden_start_index, pointA.hidden_end_index):
     #     for eA in range(sA, pointA.hidden_end_index + 1):

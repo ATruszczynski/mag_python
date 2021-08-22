@@ -13,7 +13,6 @@ class CrossoverOperator:
         pass
 
 # TODO - B - AL zamiast A1 etc?
-# TODO - S - wyrzuć procentowość z selekcji
 # TODO - B - remove needless code from here
 # TODO - C - rename to C, D networks to be more in line with text
 
@@ -46,7 +45,7 @@ class FinalCrossoverOperator(CrossoverOperator):
         rows_to_copy_A_B = min(pointA.hidden_end_index, new_B_count - output_size)
         rows_to_copy_B_A = min(pointB.hidden_end_index, new_A_count - output_size)
         rows_to_copy_B_B = min(pointB.hidden_end_index, new_B_count - output_size)
-        # TODO - S - to chyba nie sprawdza, czy warunki połączeń są spełnione (done?)
+
         # link swap
         new_A_links = np.zeros((new_A_count, new_A_count))
         new_B_links = np.zeros((new_B_count, new_B_count))
@@ -103,7 +102,7 @@ class FinalCrossoverOperator(CrossoverOperator):
 
         # maxIt swap
 
-        new_A_maxit, new_B_maxit = conditional_value_swap(0.5, pointA.maxit, pointB.maxit)
+        new_A_maxit, new_B_maxit = conditional_value_swap(0.5, pointA.net_it, pointB.net_it)
 
         # mutation radius swap
 
@@ -111,11 +110,11 @@ class FinalCrossoverOperator(CrossoverOperator):
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.wb_mutation_prob, pointB.wb_mutation_prob)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.s_mutation_prob, pointB.s_mutation_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
 
         # p prob swap
 
@@ -127,17 +126,17 @@ class FinalCrossoverOperator(CrossoverOperator):
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.r_prob, pointB.r_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
-                          biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit, mutation_radius=new_A_mut_rad,
-                          wb_mutation_prob=new_A_wb_prob, s_mutation_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
-                          c_prob=new_A_c_prob, r_prob=new_A_r_prob)
+                          biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
+                          sqr_mut_prob=new_A_wb_prob, lin_mut_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
+                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob)
 
         pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
-                          biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, maxit=new_B_maxit, mutation_radius=new_B_mut_rad,
-                          wb_mutation_prob=new_B_wb_prob, s_mutation_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
-                          c_prob=new_B_c_prob, r_prob=new_B_r_prob)
+                          biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_maxit, mutation_radius=new_B_mut_rad,
+                          sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
+                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob)
 
         return pointA, pointB
 
@@ -147,8 +146,6 @@ class FinalCrossoverOperator(CrossoverOperator):
 
 
 #TODO - C - pierwszy element wyjścia chyba nie ma już sensu
-#TODO - S - zamiana na outputach też ma sens (done?)
-#TODO - S - zawsze branie tylko górnych krawędzi to może nie być taki dobry pomysł :/ (done?)
 def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     for i in range(pointA.hidden_start_index, pointA.hidden_end_index + 1):
@@ -483,7 +480,7 @@ def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamete
 #     return result
 #
 #
-# TODO - S - jak reaguje na puste sieci
+# TODO - B - jak reaguje na puste sieci
 # TODO - C - to chyba powinno być w innym pliku
 # TODO - C - wpływ dodawania zer na efektywność??
 def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
@@ -497,13 +494,13 @@ def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
                     hL = eA - sA
                     hR = eB - sB
 
-                    if hL == 0 or hR == 0: #TODO - S - to chyba powinno być zmienione
+                    if hL == 0 or hR == 0: #TODO - B - to chyba powinno być zmienione
                         continue
 
                     if hL + hR >= minh and hL + hR <= maxh:
                         possible_cuts.append([sA, hL, sB, hR])
 
-    #TODO - S - tu mogą być ignorowane ograniczenia
+    #TODO - B - tu mogą być ignorowane ograniczenia
 
     # for sA in range(pointA.hidden_start_index, pointA.hidden_end_index):
     #     for eA in range(sA, pointA.hidden_end_index + 1):
@@ -518,7 +515,7 @@ def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
     #         if hR > 0 and hR >= minh and hR <= maxh:
     #             possible_cuts.append([0, 0, sB, hR])
 
-    # TODO - S - tu mogą być igrnorowane ograniczenia (a w głównym kodzie trzeba zmienić co się dizeje kiedy jest za mało cieć do wyboru
+    # TODO - B - tu mogą być igrnorowane ograniczenia (a w głównym kodzie trzeba zmienić co się dizeje kiedy jest za mało cieć do wyboru
 
     while len(possible_cuts) < 2:
         possible_cuts.append([pointA.input_size, pointA.hidden_count, pointB.input_size, pointB.hidden_count])

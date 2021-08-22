@@ -26,8 +26,8 @@ def test_CN_copy():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), TanH(), ReLu(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   maxit=2, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3, p_mutation_prob=4,
-                   c_prob=5, r_prob=6)
+                   net_it=2, mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4,
+                   c_prob=5, dstr_mut_prob=6)
 
 
     net.run(np.array([[0], [1]]))
@@ -138,8 +138,8 @@ def test_cn_test_5():
     # print(biases)
 
     net = ChaosNet(input_size=5, output_size=6, links=links, weights=weights, biases=biases, actFuns=11 * [None],
-                   aggrFun=Softmax(), maxit=1, mutation_radius=1, wb_mutation_prob=2, s_mutation_prob=3,
-                   p_mutation_prob=4, c_prob=5, r_prob=6)
+                   aggrFun=Softmax(), net_it=1, mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3,
+                   p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
     test_res = net.test(fives_i, fives_o, QuadDiff())
 
     assert efficiency(test_res[0]) == 1.0

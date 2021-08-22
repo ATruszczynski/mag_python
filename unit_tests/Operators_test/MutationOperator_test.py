@@ -11,8 +11,8 @@ from utility.TestingUtility import compare_chaos_network
 
 def test_struct_mutation():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
-                                 r_prob=(0.44, 0.55))
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
     mo = FinalMutationOperator(hrange)
 
     random.seed(20021234)
@@ -32,8 +32,8 @@ def test_struct_mutation():
     actFuns1 = [None, ReLu(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=TanH(), maxit=2, mutation_radius=0.5, wb_mutation_prob=0.5,
-                   s_mutation_prob=0.8, p_mutation_prob=0.7, c_prob=0.3, r_prob=0.6)
+                   actFuns=actFuns1, aggrFun=TanH(), net_it=2, mutation_radius=0.5, sqr_mut_prob=0.5,
+                   lin_mut_prob=0.8, p_mutation_prob=0.7, c_prob=0.3, dstr_mut_prob=0.6)
 
     mutant = mo.mutate(cn1)
 
@@ -106,8 +106,8 @@ def test_struct_mutation():
 
 def test_struct_mutation_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
-                                 r_prob=(0.44, 0.55))
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
     mo = FinalMutationOperator(hrange)
 
     random.seed(1006)
@@ -127,8 +127,8 @@ def test_struct_mutation_2():
     actFuns1 = [None, ReLu(), ReLu(), None, None]
     #TODO - B - nie ma sensu żeby przekazywać prawd do operatora bo są w punkcie i tak
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=TanH(), maxit=2, mutation_radius=0.5, wb_mutation_prob=0.4, s_mutation_prob=0.5, p_mutation_prob=0.4,
-                   c_prob=0.9, r_prob=0.75)
+                   aggrFun=TanH(), net_it=2, mutation_radius=0.5, sqr_mut_prob=0.4, lin_mut_prob=0.5, p_mutation_prob=0.4,
+                   c_prob=0.9, dstr_mut_prob=0.75)
 
     mutant = mo.mutate(cn1)
 
@@ -188,8 +188,8 @@ def test_struct_mutation_2():
 
 def test_struct_mutation_3():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
-                                 r_prob=(0.44, 0.55))
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.8, 1), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
     mo = FinalMutationOperator(hrange)
 
     random.seed(1009)
@@ -209,8 +209,8 @@ def test_struct_mutation_3():
     actFuns1 = [None, None, TanH(), Sigmoid(), None]
 
     cn1 = ChaosNet(input_size=2, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=TanH(), maxit=4, mutation_radius=1.2,
-                   wb_mutation_prob=0.2, s_mutation_prob=0.8, p_mutation_prob=1., c_prob=0.3, r_prob=0.35)
+                   actFuns=actFuns1, aggrFun=TanH(), net_it=4, mutation_radius=1.2,
+                   sqr_mut_prob=0.2, lin_mut_prob=0.8, p_mutation_prob=1., c_prob=0.3, dstr_mut_prob=0.35)
 
     mutant = mo.mutate(cn1)
 

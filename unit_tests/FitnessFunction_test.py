@@ -26,7 +26,7 @@ def get_point():
     bias = np.array([[0, 0, 0.5, 0.5, 0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), None, None, None]
     cn = ChaosNet(input_size=2, output_size=3, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                  maxit=2, mutation_radius=0, wb_mutation_prob=0, s_mutation_prob=0, p_mutation_prob=0, c_prob=0, r_prob=0)
+                  net_it=2, mutation_radius=0, sqr_mut_prob=0, lin_mut_prob=0, p_mutation_prob=0, c_prob=0, dstr_mut_prob=0)
 
     return cn
 
@@ -52,7 +52,7 @@ def get_point2():
     bias = np.array([[0, 0, 0.5, 1, -1, 0.5, 0.5, -0.5, 0.75]])
     actFuns = [None, None, Sigmoid(), ReLu(), Identity(), Sigmoid(), None, None, None]
     cn = ChaosNet(input_size=2, output_size=4, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                  maxit=4, mutation_radius=0, wb_mutation_prob=0, s_mutation_prob=0, p_mutation_prob=0, c_prob=0, r_prob=0)
+                  net_it=4, mutation_radius=0, sqr_mut_prob=0, lin_mut_prob=0, p_mutation_prob=0, c_prob=0, dstr_mut_prob=0)
 
     return cn
 

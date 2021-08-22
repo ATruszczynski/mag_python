@@ -51,14 +51,14 @@ class EvolvingClassifier:
         if st == None:
             self.so = TournamentSelection(round(0.02 * popSize))
         elif len(st) == 1:
-            self.so = st()
+            self.so = st[0]()
         else:
             self.so = st[0](st[1])
 
         if fft == None:
             self.ff = CNFF()
         elif len(fft) == 1:
-            self.ff = fft()
+            self.ff = fft[0]()
         else:
             self.ff = fft[0](fft[1]())
 

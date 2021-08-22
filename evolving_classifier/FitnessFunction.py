@@ -9,7 +9,7 @@ from ann_point.Functions import *
 
 from sklearn.linear_model import LinearRegression
 
-#TODO - S - all here tested?
+#TODO - A - all here tested?
 class FitnessFunction:
     def __init__(self, learningIts):
         self.learningIts = learningIts
@@ -61,13 +61,13 @@ class CNFF4(FitnessFunction):
 
         return [-test_results[1], test_results[0]]
 
+# TODO - A - test
 class CNFF5(FitnessFunction):
     def __init__(self):
         super().__init__(0)
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
-        eff = efficiency(test_results[3])
 
-        return [eff * net.density(), test_results[0]]
+        return [m_efficiency(test_results[0]), test_results[0]]
 

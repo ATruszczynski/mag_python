@@ -81,17 +81,17 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         maxit = random.randint(hrange.min_it, hrange.max_it)
 
         mut_radius = random.uniform(hrange.min_mut_radius, hrange.max_mut_radius)
-        wb_mut_prob = random.uniform(hrange.min_wb_mut_prob, hrange.max_wb_mut_prob)
-        s_mut_prob = random.uniform(hrange.min_s_mut_prob, hrange.max_s_mut_prob)
+        wb_mut_prob = random.uniform(hrange.min_sqr_mut_prob, hrange.max_sqr_mut_prob)
+        s_mut_prob = random.uniform(hrange.min_lin_mut_prob, hrange.max_lin_mut_prob)
         p_mut_prob = random.uniform(hrange.min_p_mut_prob, hrange.max_p_mut_prob)
         c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
-        r_prob = random.uniform(hrange.min_r_prob, hrange.max_r_prob)
+        r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
 
 
         result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
-                               biases=biases, actFuns=actFuns, aggrFun=aggrFun, maxit=maxit, mutation_radius=mut_radius,
-                               wb_mutation_prob=wb_mut_prob, s_mutation_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
-                               c_prob=c_prob, r_prob=r_prob))
+                               biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
+                               sqr_mut_prob=wb_mut_prob, lin_mut_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
+                               c_prob=c_prob, dstr_mut_prob=r_prob))
 
     return result
 
@@ -111,9 +111,9 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 def get_default_hrange():#TODO - S - przemyśl to
     hrange = HyperparameterRange(init_wei=(-10, 10), init_bia=(-10, 10), it=(1, 10), hidden_count=(0, 100),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(0.0, 1), wb_mut_prob=(0.001, 0.1), s_mut_prob=(0, 1),
+                                 mut_radius=(0.0, 1), sqr_mut_prob=(0.001, 0.1), lin_mut_prob=(0, 1),
                                  p_mutation_prob=(0.05, 0.01), c_prob=(0.2, 1),
-                                 r_prob=(0, 1))
+                                 dstr_mut_prob=(0, 1))
     return hrange
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:

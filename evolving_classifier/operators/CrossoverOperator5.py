@@ -1,7 +1,6 @@
 import random
 
 from ann_point import HyperparameterRange
-from evolving_classifier.operators.CrossoverOperator import find_possible_cuts4
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
@@ -17,9 +16,8 @@ class CrossoverOperator:
         pass
 
 #TODO - B - AL zamiast A1 etc?
-#TODO - S - wyrzuć procentowość z selekcji
 # TODO - B - remove needless code from here
-# TODO - S - test
+# TODO - A - test
 
 class FinalCrossoverOperator5(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
@@ -109,7 +107,7 @@ class FinalCrossoverOperator5(CrossoverOperator):
 
         # maxIt swap
 
-        new_A_maxit, new_B_maxit = conditional_value_swap(0.5, pointA.maxit, pointB.maxit)
+        new_A_maxit, new_B_maxit = conditional_value_swap(0.5, pointA.net_it, pointB.net_it)
 
         # mutation radius swap
 
@@ -117,11 +115,11 @@ class FinalCrossoverOperator5(CrossoverOperator):
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.wb_mutation_prob, pointB.wb_mutation_prob)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.s_mutation_prob, pointB.s_mutation_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
 
         # p prob swap
 
@@ -133,27 +131,22 @@ class FinalCrossoverOperator5(CrossoverOperator):
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.r_prob, pointB.r_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
-                          biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, maxit=new_A_maxit, mutation_radius=new_A_mut_rad,
-                          wb_mutation_prob=new_A_wb_prob, s_mutation_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
-                          c_prob=new_A_c_prob, r_prob=new_A_r_prob)
+                          biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
+                          sqr_mut_prob=new_A_wb_prob, lin_mut_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
+                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob)
 
         pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
-                          biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, maxit=new_B_maxit, mutation_radius=new_B_mut_rad,
-                          wb_mutation_prob=new_B_wb_prob, s_mutation_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
-                          c_prob=new_B_c_prob, r_prob=new_B_r_prob)
+                          biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_maxit, mutation_radius=new_B_mut_rad,
+                          sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
+                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob)
 
         return pointA, pointB
 
 
-
-
-
-
-
-#TODO - S - jak reaguje na puste sieci
+#TODO - A - jak reaguje na puste sieci
 def find_possible_cuts7(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden
@@ -169,6 +162,7 @@ def find_possible_cuts7(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
 
     return possible_cuts
 
+
 def cut_into_puzzles7(matrix: np.ndarray, i:int, o: int, num: int, left: bool) -> [np.ndarray]:
     if left:
         P1 = matrix[i:-o, i:i+num]
@@ -180,6 +174,7 @@ def cut_into_puzzles7(matrix: np.ndarray, i:int, o: int, num: int, left: bool) -
         P3 = matrix[-(o + num):-o, -o:]
 
     return P1, P2, P3
+
 
 def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], right_puzzles: [np.ndarray]):
     left_nc = left_puzzles[0].shape[1]
@@ -209,6 +204,7 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
 
 
     return result
+
 
 def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
     input_size = pointA.input_size

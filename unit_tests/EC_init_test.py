@@ -22,16 +22,16 @@ def test_ec_init():
 
     assert ec.hrange.min_mut_radius == dhrange.min_mut_radius
     assert ec.hrange.max_mut_radius == dhrange.max_mut_radius
-    assert ec.hrange.min_wb_mut_prob == dhrange.min_wb_mut_prob
-    assert ec.hrange.max_wb_mut_prob == dhrange.max_wb_mut_prob
-    assert ec.hrange.min_s_mut_prob == dhrange.min_s_mut_prob
-    assert ec.hrange.max_s_mut_prob == dhrange.max_s_mut_prob
+    assert ec.hrange.min_sqr_mut_prob == dhrange.min_sqr_mut_prob
+    assert ec.hrange.max_sqr_mut_prob == dhrange.max_sqr_mut_prob
+    assert ec.hrange.min_lin_mut_prob == dhrange.min_lin_mut_prob
+    assert ec.hrange.max_lin_mut_prob == dhrange.max_lin_mut_prob
     assert ec.hrange.min_p_mut_prob == dhrange.min_p_mut_prob
     assert ec.hrange.max_p_mut_prob == dhrange.max_p_mut_prob
     assert ec.hrange.min_c_prob == dhrange.min_c_prob
     assert ec.hrange.max_c_prob == dhrange.max_c_prob
-    assert ec.hrange.min_r_prob == dhrange.min_r_prob
-    assert ec.hrange.max_r_prob == dhrange.max_r_prob
+    assert ec.hrange.min_dstr_mut_prob == dhrange.min_dstr_mut_prob
+    assert ec.hrange.max_dstr_mut_prob == dhrange.max_dstr_mut_prob
 
     assert len(ec.population) == 2
     assert ec.pop_size == 2

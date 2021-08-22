@@ -35,8 +35,8 @@ if __name__ == '__main__':
     ec = EvolvingClassifier()
     ec.prepare(popSize=ii, nn_data=(x, y), seed=1524, hrange=get_default_hrange())
     ec.hrange = HyperparameterRange((-10, 10), (-10, 10), (1, 10), (0, 0), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                    mut_radius=(0.001, 1), wb_mut_prob=(0.001, 1), s_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
-                                    r_prob=(0, 1))
+                                    mut_radius=(0.001, 1), sqr_mut_prob=(0.001, 1), lin_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
+                                    dstr_mut_prob=(0, 1))
     # ec.co = SimpleCrossoverOperator(ec.hrange)
     # ec.mo = SimpleAndStructuralCNMutation(ec.hrange, 2)
     ec.co = FinalCrossoverOperator(ec.hrange)

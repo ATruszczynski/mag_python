@@ -10,8 +10,8 @@ from utility.Utility2 import *
 
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
-                 actFuns: [ActFun], aggrFun: ActFun, maxit: int, mutation_radius: float, wb_mutation_prob: float,
-                 s_mutation_prob: float, p_mutation_prob: float, c_prob: float, r_prob: float):
+                 actFuns: [ActFun], aggrFun: ActFun, net_it: int, mutation_radius: float, sqr_mut_prob: float,
+                 lin_mut_prob: float, p_mutation_prob: float, c_prob: float, dstr_mut_prob: float):
 
         check_cond_in_cn_const(links.shape[0] == links.shape[1])
         check_cond_in_cn_const(links.shape[0] >= input_size + output_size)
@@ -22,13 +22,13 @@ class ChaosNet:
         check_cond_in_cn_const(biases.shape[0] == 1)
         check_cond_in_cn_const(biases.shape[1] == weights.shape[1])
         check_cond_in_cn_const(len(actFuns) == biases.shape[1])
-        check_cond_in_cn_const(maxit >= 1)
+        check_cond_in_cn_const(net_it >= 1)
         check_cond_in_cn_const(mutation_radius <= 0)
-        check_cond_in_cn_const(wb_mutation_prob <= 0)
-        check_cond_in_cn_const(s_mutation_prob <= 0)
+        check_cond_in_cn_const(sqr_mut_prob <= 0)
+        check_cond_in_cn_const(lin_mut_prob <= 0)
         check_cond_in_cn_const(p_mutation_prob <= 0)
         check_cond_in_cn_const(c_prob <= 0)
-        check_cond_in_cn_const(r_prob <= 0)
+        check_cond_in_cn_const(dstr_mut_prob <= 0)
 
         self.links = links.copy()
         self.weights = weights.copy()
@@ -57,14 +57,14 @@ class ChaosNet:
         check_cond_in_cn_const(self.neuron_count == self.links.shape[1])
 
         self.hidden_comp_order = None
-        self.maxit = maxit
+        self.net_it = net_it
 
         self.mutation_radius = mutation_radius
-        self.wb_mutation_prob = wb_mutation_prob
-        self.s_mutation_prob = s_mutation_prob
+        self.sqr_mut_prob = sqr_mut_prob
+        self.lin_mut_prob = lin_mut_prob
         self.p_mutation_prob = p_mutation_prob
         self.c_prob = c_prob
-        self.r_prob = r_prob
+        self.dstr_mut_prob = dstr_mut_prob
 
     def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
@@ -75,7 +75,7 @@ class ChaosNet:
 
         self.act[:self.input_size, :] = inputs
 
-        for i in range(self.maxit):
+        for i in range(self.net_it):
             for n in self.hidden_comp_order: #TODO - S - czy w komp order jest output neurons? chyba nie
                 wei = self.weights[:, n].reshape(-1, 1)
                 self.inp[n, :] = np.dot(wei.T, self.act) + self.biases[0, n]
@@ -228,9 +228,9 @@ class ChaosNet:
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
-                        , maxit=self.maxit, mutation_radius=self.mutation_radius, wb_mutation_prob=self.wb_mutation_prob,
-                        s_mutation_prob=self.s_mutation_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
-                        r_prob=self.r_prob)
+                        , net_it=self.net_it, mutation_radius=self.mutation_radius, sqr_mut_prob=self.sqr_mut_prob,
+                        lin_mut_prob=self.lin_mut_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
+                        dstr_mut_prob=self.dstr_mut_prob)
 
     def edge_count(self):
         how_many = np.sum(self.links)
@@ -261,10 +261,10 @@ class ChaosNet:
         actFunsString = self.get_act_fun_string()
 
         result = ""
-        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.edge_count())}|{self.maxit}|" \
+        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.edge_count())}|{self.net_it}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
-                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.wb_mutation_prob, 5)}|s:{round(self.s_mutation_prob, 5)}" \
-                  f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.r_prob, 5)}"
+                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.sqr_mut_prob, 5)}|s:{round(self.lin_mut_prob, 5)}" \
+                  f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.dstr_mut_prob, 5)}"
 
         return result
 
