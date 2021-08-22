@@ -1,6 +1,7 @@
 import pytest
 
 from evolving_classifier.operators.FinalCO1 import find_possible_cuts
+from evolving_classifier.operators.FinalCO2 import find_possible_cuts7
 from utility.Mut_Utility import *
 from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *
@@ -869,6 +870,58 @@ def test_uniform_shift():
                                                 [0, 0, 3.31546711],
                                                 [0, 0, 0]]), atol=1e-4))
 
+def test_fco2_cuts():
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                                 dstr_mut_prob=(0, 0)) # values irrelevant aside from neuron count
+
+    link1 = np.array([[0, 1, 1, 0, 0],
+                      [0, 0, 1, 0, 1],
+                      [0, 1, 0, 0, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+    wei1 = np.array([[0., 1, 2, 0, 0],
+                     [0 , 0, 3, 0, 5],
+                     [0 , 7, 0, 0, 6],
+                     [0 , 0, 0, 0, 0],
+                     [0 , 0, 0, 0, 0]])
+    bia1 = np.array([[0., -2, -3, -4, -5]])
+    actFuns1 = [None, ReLu(), ReLu(), None, None]
+
+    link2 = np.array([[0, 0, 0, 0, 0],
+                      [0, 0, 1, 1, 0],
+                      [0, 0, 0, 1, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+    wei2 = np.array([[0, 0, 0,  0,  0],
+                     [0, 0, 10, 20, 0],
+                     [0, 0, 0,  30, 40],
+                     [0, 0, 0,  0,  0],
+                     [0, 0, 0,  0,  0]])
+    bia2 = np.array([[0., -20, -30, -40, -50]])
+    actFuns2 = [None, TanH(), TanH(), None, None]
+
+    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
+                   aggrFun=SincAct(), net_it=2, mutation_radius=-1, sqr_mut_prob=-2,
+                   lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
+                   aggrFun=GaussAct(), net_it=5, mutation_radius=-10, sqr_mut_prob=-20,
+                   lin_mut_prob=-30, p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
+
+    cuts = find_possible_cuts7(cn1, cn2, hrange)
+
+    assert len(cuts) == 9
+    assert compare_lists(cuts[0], [1, 0, 1, 2])
+    assert compare_lists(cuts[1], [1, 0, 2, 1])
+    assert compare_lists(cuts[2], [1, 0, 3, 0])
+    assert compare_lists(cuts[3], [2, 1, 1, 2])
+    assert compare_lists(cuts[4], [2, 1, 2, 1])
+    assert compare_lists(cuts[5], [2, 1, 3, 0])
+    assert compare_lists(cuts[6], [3, 2, 1, 2])
+    assert compare_lists(cuts[7], [3, 2, 2, 1])
+    assert compare_lists(cuts[8], [3, 2, 3, 0])
+
+# test_fco2_cuts()
 
 # seed = 1004
 # random.seed(seed)

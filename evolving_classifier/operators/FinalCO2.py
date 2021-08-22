@@ -192,7 +192,10 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
     result[i:i+lc, i:i+left_nc] = left_puzzles[0][:lc, :]
 
     rc = min(h, right_puzzles[0].shape[0])
-    result[-(o + rc):-o, aEnd:-o] = right_puzzles[0][-rc:, :]
+    if rc != 0:
+        result[-(o + rc):-o, aEnd:-o] = right_puzzles[0][-rc:, :]
+    else:
+        result[-(o + rc):-o, aEnd:-o] = np.zeros((0, right_nc))
 
     # Put in pieces #2
     result[:i, i:aEnd] = left_puzzles[1]
@@ -265,7 +268,7 @@ def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]
     # TODO - C - logika losowania jest odwrócona
     for i in range(output_size):
         swap = random.random()
-        if swap <= 0.5:
+        if swap >= 0.5:
             biases[0, -output_size + i] = pointA.biases[0, -output_size + i]
         else:
             biases[0, -output_size + i] = pointB.biases[0, -output_size + i]

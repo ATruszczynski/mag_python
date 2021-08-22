@@ -183,7 +183,7 @@ if __name__ == '__main__':
     its = 200
     rep = 1
     seed = 12121212
-    power = 12
+    power = 1
     starg = 6
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
