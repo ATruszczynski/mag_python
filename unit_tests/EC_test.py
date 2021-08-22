@@ -5,7 +5,7 @@ from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 
 
-def test_determinism(): #TODO - S - this is (was?) broken
+def test_determinism():
     random.seed(1001)
     np.random.seed(1001)
 

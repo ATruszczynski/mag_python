@@ -30,6 +30,14 @@ class ChaosNet:
         check_cond_in_cn_const(c_prob <= 0)
         check_cond_in_cn_const(dstr_mut_prob <= 0)
 
+        nonzl = np.where(links != 0)
+        nonzw = np.where(weights != 0)
+        check_cond_in_cn_const(len(nonzl[0]) == len(nonzw[0]))
+        for i in range(len(nonzl[0])):
+            check_cond_in_cn_const(nonzl[0][i] == nonzw[0][i])
+            check_cond_in_cn_const(nonzl[1][i] == nonzw[1][i])
+
+
         self.links = links.copy()
         self.weights = weights.copy()
         self.biases = biases.copy()
@@ -51,6 +59,8 @@ class ChaosNet:
         self.hidden_end_index = self.neuron_count - self.output_size
         self.hidden_count = self.hidden_end_index - self.hidden_start_index
 
+
+        check_cond_in_cn_const(np.min(get_weight_mask(input_size, output_size, self.neuron_count) - self.links) >= 0)
         check_cond_in_cn_const(self.neuron_count == weights.shape[1])
         check_cond_in_cn_const(weights.shape[1] - input_size - output_size == self.hidden_count)
         check_cond_in_cn_const(self.neuron_count == self.links.shape[0])

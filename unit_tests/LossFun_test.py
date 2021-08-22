@@ -3,7 +3,6 @@ from ann_point.Functions import *
 
 allLossFun = [QuadDiff(), MeanDiff(), CrossEntropy(), ChebyshevLoss(), QuasiCrossEntropy()]
 
-# TODO - A - TEST!!!
 def test_quad_diff():
     res = np.array([[1], [0], [1]])
     corr = np.array([[1], [2], [0]])
@@ -70,9 +69,7 @@ def test_non_rep_strings():
             lf2 = allLossFun[j]
             assert lf1.to_string() != lf2.to_string()
 
-# test_quasi_cross_entropy()
-# test_cross_entropy()
-# test_quasi_cross_entropy()
+
 
 
 

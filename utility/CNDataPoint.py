@@ -3,32 +3,38 @@ import numpy as np
 from neural_network.ChaosNet import *
 from ann_point.Functions import *
 
-class CNDataPoint(): #TODO - S - test
+class CNDataPoint(): #TODO - A - test
     def __init__(self, net: ChaosNet):
         self.net = net #TODO - B - copy?
         self.ff = 0.
-        self.acc = 0.
-        self.prec = 0.
-        self.rec = 0.
-        self.f1 = 0.
+        self.conf_mat = None
 
     def add_data(self, new_ff: float, new_conf_mat: np.ndarray):
         self.ff = new_ff
-        self.acc = accuracy(new_conf_mat)
-        self.prec = average_precision(new_conf_mat)
-        self.rec = average_recall(new_conf_mat)
-        self.f1 = average_f1_score(new_conf_mat)
+        self.conf_mat = new_conf_mat
 
     def get_eff(self):
-        return mean([self.acc, self.prec, self.rec, self.f1])
+        return efficiency(self.conf_mat)
+
+    def get_acc(self):
+        return accuracy(self.conf_mat)
+
+    def get_avg_prec(self):
+        return average_precision(self.conf_mat)
+
+    def get_avg_rec(self):
+        return average_recall(self.conf_mat)
+
+    def get_avg_f1(self):
+        return average_f1_score(self.conf_mat)
+
+    def get_meff(self):
+        return m_efficiency(self.conf_mat)
 
     def copy(self):
         ncn = CNDataPoint(self.net.copy())
         ncn.ff = self.ff
-        ncn.acc = self.acc
-        ncn.prec = self.prec
-        ncn.rec = self.rec
-        ncn.f1 = self.f1
+        ncn.conf_mat = self.conf_mat.copy()
 
         return ncn
 

@@ -675,7 +675,7 @@ def test_possible_cuts_4():
                    mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
-    print(possible_cuts)
+    # print(possible_cuts)
 
     assert len(possible_cuts) == 12
     assert compare_lists(possible_cuts[0],  [0, 2, 2, 0, 3, 0, 2])
@@ -1056,6 +1056,6 @@ def test_uniform_shift():
 #
 #
 # test_neuron_increase()
-test_possible_cuts_4()
+# test_possible_cuts_4()
 
 

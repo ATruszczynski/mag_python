@@ -12,6 +12,7 @@ logs = "logs"
 np.seterr(over='ignore')
 
 # TODO - B - usunąć supervisora? Chyba nie jest używany
+# TODO - B - czy sortowanie jest w ogóle koniecznie poza wypisywaniem?
 class EvolvingClassifier:
     def __init__(self):
 

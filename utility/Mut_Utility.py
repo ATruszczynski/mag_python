@@ -214,8 +214,19 @@ def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: f
 
     return value
 
+# TODO - B - test if used
+def conditional_gaussian_value_shift(p: float, value: float, minV: float, maxV: float, frac: float):
+    if random.random() <= p:
+        spectrum = maxV - minV
+        radius = spectrum * frac
+        value = random.gauss(value, radius)
+        value = max(minV, value)
+        value = min(value, maxV)
+
+    return value
+
 # TODO - A - test
-def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask):
+def add_remove_weights(s_pm: float, links: np.ndarray, weights: np.ndarray, mask, hrange: HyperparameterRange):
     probs = np.random.random(links.shape)
     to_change = np.where(probs <= s_pm)
     new_links = links.copy()
@@ -224,16 +235,21 @@ def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask
 
     diffs = links - new_links
     added_edges = np.where(diffs == -1)
-    #TODO - B - not correct extraction of min/max weights
+    #TODO - A - not correct extraction of min/max weights
     minW = np.min(weights)
     maxW = np.max(weights)
+
+    if minW == 0 and maxW == 0:
+        minW = hrange.min_init_wei
+        maxW = hrange.max_init_wei
+
     weights[added_edges] = np.random.uniform(minW, maxW, weights.shape)[added_edges]
 
     links = new_links
 
     weights = np.multiply(weights, links)
 
-    return weights, links
+    return links, weights
 
 # TODO - C - to delete
 def get_min_max_values_of_matrix_with_mask(matrix: np.ndarray, mask: np.ndarray):

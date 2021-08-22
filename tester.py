@@ -1,6 +1,5 @@
 import random
 from statistics import mean
-import numpy as np
 from sklearn import datasets
 
 from evolving_classifier.operators.PuzzleCO import PuzzleCO
@@ -9,13 +8,12 @@ from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOpera
 from evolving_classifier.operators.CrossoverOperator3 import FinalCrossoverOperator3
 from evolving_classifier.operators.CrossoverOperator4 import FinalCrossoverOperator4
 from evolving_classifier.operators.CrossoverOperator5 import FinalCrossoverOperator5
-
-np.seterr(all='ignore')
-
 from evolving_classifier.EvolvingClassifier import *
 from TupleForTest import TupleForTest
 import numpy as np
 import os.path
+
+np.seterr(all='ignore')
 
 directory_for_tests="algo_tests"
 
@@ -181,17 +179,17 @@ if __name__ == '__main__':
     #                      ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
     tests = []
-    pops = 100
-    its = 200
+    pops = 20
+    its = 20
     rep = 1
     seed = 12121212
-    power = 12
+    power = 1
     starg = 6
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF], fct=CNFitnessCalculator, reg=False))
     tests.append(TupleForTest(name="test_00", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=PuzzleCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
+                              ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
                               fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
     # tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=[TournamentSelection, starg],

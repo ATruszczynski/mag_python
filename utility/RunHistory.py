@@ -60,7 +60,7 @@ class RunHistory:
         file = open(fpath, "w")
         file.write("it,rk,is,os,nc,ec,af,ag,mi,mr,wbp,smp,pmp,cp,rp,ff")
         if not reg:
-            file.write(",eff,acc,prc,rec,f1s")
+            file.write(",eff,meff,acc,prc,rec,f1s")
         file.write("\n")
 
         for it in range(len(self.it_hist)):
@@ -75,10 +75,11 @@ class RunHistory:
                            f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{cndatapoint.ff}")
                 if not reg:
                     file.write(f",{cndatapoint.get_eff()}")
-                    file.write(f",{cndatapoint.acc}")
-                    file.write(f",{cndatapoint.prec}")
-                    file.write(f",{cndatapoint.rec}")
-                    file.write(f",{cndatapoint.f1}")
+                    file.write(f",{cndatapoint.get_meff()}")
+                    file.write(f",{cndatapoint.get_acc()}")
+                    file.write(f",{cndatapoint.get_avg_prec()}")
+                    file.write(f",{cndatapoint.get_avg_rec()}")
+                    file.write(f",{cndatapoint.get_avg_f1()}")
                 file.write("\n")
         file.close()
 

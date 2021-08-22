@@ -9,7 +9,6 @@ from neural_network.ChaosNet import ChaosNet
 from utility.CNDataPoint import CNDataPoint
 
 
-# TODO - S - sprawdź czy usunięte wszystkie pozostałości po eksperymentach
 class FitnessCalculator:
     def __init__(self):
         pass
@@ -26,8 +25,6 @@ class CNFitnessCalculator(FitnessCalculator):
                 trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [CNDataPoint]:
         results = [CNDataPoint(point) for point in to_compute]
 
-        seeds = [random.randint(0, 1000) for i in range(len(results))]
-
         if pool is None:
             new_fitnesses = [fitnessFunc.compute(results[i].net, trainInputs, trainOutputs)for i in range(len(results))]
         else:
@@ -38,15 +35,7 @@ class CNFitnessCalculator(FitnessCalculator):
         for i in range(len(to_compute)):
             results[i].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
 
-        # effsorted = sorted(results, key=lambda x: x.ff, reverse=True)
-
-        # results = sorted(results, key=lambda x: x.net.neuron_count)
-        # ll = len(results)
-        # pun = np.linspace(1, 1.00001, ll)
-        #
-        # for i in range(ll):
-        #     results[i].ff = results[i].ff * pun[i]
-
+        #TODO - B - potrzebne?
         results = sorted(results, key=lambda x: x.ff, reverse=True)
 
         return results

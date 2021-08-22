@@ -1,7 +1,5 @@
 from ann_point.Functions import *
 
-#TODO - S - operator krzyżowania dwóch dużych sieci nigdy nie zrobi mniejszej sieci :/
-#TODO - S - zmiana linków powinna być raczej podyktowana prawd wb, nie prwad strukt; zmiana biasów powinna być podyktowana przez ps nie przez pwb
 
 class HyperparameterRange:
     def __init__(self, init_wei: (float, float), init_bia: (float, float), it: (int, int), hidden_count: (int, int),
