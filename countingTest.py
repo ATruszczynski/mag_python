@@ -3,7 +3,7 @@ from sklearn.preprocessing import OneHotEncoder
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.FinalCO1 import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from utility.Utility import *
@@ -39,7 +39,7 @@ if __name__ == '__main__':
                                     dstr_mut_prob=(0, 1))
     # ec.co = SimpleCrossoverOperator(ec.hrange)
     # ec.mo = SimpleAndStructuralCNMutation(ec.hrange, 2)
-    ec.co = FinalCrossoverOperator(ec.hrange)
+    ec.co = FinalCO1(ec.hrange)
     # ec.co = SimpleCrossoverOperatorHorizontal(ec.hrange)
     ec.mo = FinalMutationOperator(ec.hrange)
     ec.so = TournamentSelection(0.01)

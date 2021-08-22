@@ -1,7 +1,7 @@
 import random
 
 from ann_point import HyperparameterRange
-from evolving_classifier.operators.CrossoverOperator import find_possible_cuts4
+from evolving_classifier.operators.FinalCO1 import find_possible_cuts4
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
@@ -19,7 +19,7 @@ class CrossoverOperator:
 # TODO - B - remove needless code from here
 # TODO - B - test
 
-class FinalCrossoverOperator3(CrossoverOperator):
+class RejectCO2(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
         self.hrange = hrange

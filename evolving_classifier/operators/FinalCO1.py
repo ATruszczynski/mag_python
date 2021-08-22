@@ -16,7 +16,7 @@ class CrossoverOperator:
 # TODO - B - remove needless code from here
 # TODO - C - rename to C, D networks to be more in line with text
 
-class FinalCrossoverOperator(CrossoverOperator):
+class FinalCO1(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
         self.hrange = hrange

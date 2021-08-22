@@ -1,6 +1,6 @@
 import pytest
 
-from evolving_classifier.operators.CrossoverOperator import find_possible_cuts
+from evolving_classifier.operators.FinalCO1 import find_possible_cuts
 from utility.Mut_Utility import *
 from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *

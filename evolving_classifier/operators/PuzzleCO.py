@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 from ann_point import HyperparameterRange
-from evolving_classifier.operators.CrossoverOperator import CrossoverOperator
+from evolving_classifier.operators.FinalCO1 import CrossoverOperator
 from neural_network.ChaosNet import ChaosNet
 from utility.Mut_Utility import conditional_value_swap
 from utility.Utility import choose_without_repetition

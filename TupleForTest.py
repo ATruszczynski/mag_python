@@ -1,7 +1,7 @@
 from typing import Any
 
 from ann_point.HyperparameterRange import HyperparameterRange
-from evolving_classifier.operators.CrossoverOperator import CrossoverOperator, LossFun
+from evolving_classifier.operators.FinalCO1 import CrossoverOperator, LossFun
 from evolving_classifier.operators.MutationOperators import MutationOperator
 from evolving_classifier.operators.SelectionOperator import SelectionOperator, TournamentSelection
 import numpy as np

@@ -1,7 +1,7 @@
 # import numpy as np
 from ann_point.Functions import *
 # from ann_point.AnnPoint2 import *
-from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.FinalCO1 import *
 # from utility.Mut_Utility import resize_layer
 from utility.TestingUtility import compare_chaos_network
 
@@ -48,7 +48,7 @@ def test_simple_crossover():
                    aggrFun=GaussAct(), net_it=5, mutation_radius=-10, sqr_mut_prob=-20,
                    lin_mut_prob=-30, p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
 
-    co = FinalCrossoverOperator(hrange)
+    co = FinalCO1(hrange)
 
     random.seed(1002)
     np.random.seed(1002)
@@ -213,7 +213,7 @@ def test_simple_crossover_2():
                    aggrFun=GaussAct(), net_it=5, mutation_radius=-10, sqr_mut_prob=-20, lin_mut_prob=-30,
                    p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
 
-    co = FinalCrossoverOperator(hrange)
+    co = FinalCO1(hrange)
 
     seed = 1006
     random.seed(seed)

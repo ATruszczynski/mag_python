@@ -49,7 +49,7 @@ from ann_point.HyperparameterRange import HyperparameterRange
 # print(P6)
 # print(P7)
 from evolving_classifier.operators.PuzzleCO import find_possible_cuts4
-from evolving_classifier.operators.CrossoverOperator4 import find_possible_cuts6
+from evolving_classifier.operators.RejectCO3 import find_possible_cuts6
 
 from neural_network.ChaosNet import ChaosNet
 

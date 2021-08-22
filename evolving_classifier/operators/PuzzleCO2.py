@@ -1,7 +1,7 @@
 import random
 
 from ann_point import HyperparameterRange
-from evolving_classifier.operators.CrossoverOperator import find_possible_cuts4
+from evolving_classifier.operators.FinalCO1 import find_possible_cuts4
 from neural_network.ChaosNet import ChaosNet
 from utility.Mut_Utility import conditional_value_swap
 from utility.Utility import choose_without_repetition

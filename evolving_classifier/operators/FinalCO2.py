@@ -19,7 +19,7 @@ class CrossoverOperator:
 # TODO - B - remove needless code from here
 # TODO - A - test
 
-class FinalCrossoverOperator5(CrossoverOperator):
+class FinalCO2(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
         self.hrange = hrange

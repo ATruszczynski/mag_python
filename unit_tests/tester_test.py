@@ -1,7 +1,7 @@
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.FinalCO1 import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from tester import run_tests
@@ -36,7 +36,7 @@ def test_tester_same_as_ec_ind():
                                  dstr_mut_prob=(-2, 0))
 
     test = TupleForTest(name="test_desu", rep=how_many, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                        ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=[TournamentSelection, 2],
+                        ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
                         fft=[CNFF], fct=CNFitnessCalculator, reg=False)
 
     results = run_tests([test], power=power)[0]

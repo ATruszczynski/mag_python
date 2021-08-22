@@ -4,10 +4,10 @@ from sklearn import datasets
 
 from evolving_classifier.operators.PuzzleCO import PuzzleCO
 from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
-from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOperator2
-from evolving_classifier.operators.CrossoverOperator3 import FinalCrossoverOperator3
-from evolving_classifier.operators.CrossoverOperator4 import FinalCrossoverOperator4
-from evolving_classifier.operators.CrossoverOperator5 import FinalCrossoverOperator5
+from evolving_classifier.operators.RejectCO1 import RejectCO1
+from evolving_classifier.operators.RejectCO2 import RejectCO2
+from evolving_classifier.operators.RejectCO3 import RejectCO3
+from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.EvolvingClassifier import *
 from TupleForTest import TupleForTest
 import numpy as np
@@ -179,18 +179,18 @@ if __name__ == '__main__':
     #                      ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
     tests = []
-    pops = 20
-    its = 20
+    pops = 200
+    its = 200
     rep = 1
     seed = 12121212
-    power = 1
+    power = 12
     starg = 6
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF], fct=CNFitnessCalculator, reg=False))
     tests.append(TupleForTest(name="test_00", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
-                              ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
-                              fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                              ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
+                              fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
     # tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))

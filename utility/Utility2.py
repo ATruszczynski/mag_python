@@ -6,7 +6,6 @@ def get_weight_mask(input_size: int, output_size: int, neuron_count: int) -> np.
     mask = np.zeros((neuron_count, neuron_count))
     mask[:-output_size, input_size:] = 1
     mask[:input_size, -output_size:] = 0
-    # TODO - S - co z tym?
     np.fill_diagonal(mask, 0)
 
     return mask
@@ -60,7 +59,6 @@ def get_recalls(conf_matrix) -> [float]:
 
     return class_recalls
 
-# TODO - S - mins?
 def efficiency(conf_matrix):
     acc = accuracy(conf_matrix)
     prec = average_precision(conf_matrix)

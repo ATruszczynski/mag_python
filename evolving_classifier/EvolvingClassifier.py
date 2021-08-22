@@ -2,7 +2,7 @@ import math
 from evolving_classifier.EC_supervisor import EC_supervisor
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.FinalCO1 import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from utility.RunHistory import RunHistory
@@ -40,7 +40,7 @@ class EvolvingClassifier:
             self.hrange = hrange
 
         if ct == None:
-            self.co = FinalCrossoverOperator(self.hrange)
+            self.co = FinalCO1(self.hrange)
         else:
             self.co = ct(self.hrange)
 

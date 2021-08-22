@@ -1,6 +1,6 @@
 from evolving_classifier.EvolvingClassifier import *
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.CrossoverOperator import *
+from evolving_classifier.operators.FinalCO1 import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 
