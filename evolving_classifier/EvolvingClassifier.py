@@ -49,7 +49,7 @@ class EvolvingClassifier:
             self.mo = mt(self.hrange)
 
         if st == None:
-            self.so = TournamentSelection(round(0.02 * popSize))
+            self.so = TournamentSelection(max(round(0.02 * popSize), 2))
         elif len(st) == 1:
             self.so = st[0]()
         else:
@@ -105,11 +105,11 @@ class EvolvingClassifier:
             crossed = []
 
             while len(crossed) < self.pop_size:
-                c1 = self.so.select(val_pop=eval_pop)
+                c1 = self.so.select(val_pop=sorted_eval)
                 cr = random.random()
 
                 if len(crossed) <= self.pop_size - 2 and cr <= 10 ** c1.c_prob:
-                    c2 = self.so.select(val_pop=eval_pop)
+                    c2 = self.so.select(val_pop=sorted_eval)
                     cr_result = self.co.crossover(c1, c2)
                     crossed.extend(cr_result)
                 else:

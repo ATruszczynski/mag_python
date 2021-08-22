@@ -32,12 +32,12 @@ def test_tester_same_as_ec_ind():
     how_many = 10
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(0.001, 1), sqr_mut_prob=(0.001, 1), lin_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
-                                 dstr_mut_prob=(0, 1))
+                                 mut_radius=(-2, 0), sqr_mut_prob=(-2, 0), lin_mut_prob=(-2, 0), p_mutation_prob=(-2, 0), c_prob=(-2, 0),
+                                 dstr_mut_prob=(-2, 0))
 
-    test = TupleForTest(rep=how_many, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                        ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
-                        fft=CNFF, fct=CNFitnessCalculator, starg=0.01, fftarg=None, reg=False)
+    test = TupleForTest(name="test_desu", rep=how_many, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                        ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=[TournamentSelection, 2],
+                        fft=[CNFF], fct=CNFitnessCalculator, reg=False)
 
     results = run_tests([test], power=power)[0]
 
@@ -55,7 +55,7 @@ def test_tester_same_as_ec_ind():
     for i in range(how_many):
         compare_chaos_networks(results[i], results2[i])
 
-test_tester_same_as_ec_ind()
+# test_tester_same_as_ec_ind()
 
 
 

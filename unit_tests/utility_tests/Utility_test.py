@@ -159,9 +159,9 @@ def test_ohe():
 #TODO - S - check if weights are properly filtered by lijnks everywhere
 #TODO - S -  fix test?
 def test_generate_population_limits():
-    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
-                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
-                                 dstr_mut_prob=(0.44, 0.55))
+    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(-1, 0),
+                                 sqr_mut_prob=(-2, -1), lin_mut_prob=(-3, -2), p_mutation_prob=(-4, -3), c_prob=(-5, -4),
+                                 dstr_mut_prob=(-6, -5))
 
     random.seed(1001)
     n = 200
@@ -266,39 +266,39 @@ def test_generate_population_limits():
                 break
         assert isthere
 
-    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
-                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
-                                 dstr_mut_prob=(0.44, 0.55))
+    # hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
+    #                              sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+    #                              dstr_mut_prob=(0.44, 0.55))
 
-    assert min(all_mut_rad) >= 0
-    assert min(all_mut_rad) <= 0.05
-    assert max(all_mut_rad) <= 1
-    assert max(all_mut_rad) >= 0.95
+    assert min(all_mut_rad) >= -1
+    assert min(all_mut_rad) <= -0.95
+    assert max(all_mut_rad) <= 0
+    assert max(all_mut_rad) >= -0.05
 
-    assert min(all_wb_mut) >= 0.05
-    assert min(all_wb_mut) <= 0.055
-    assert max(all_wb_mut) <= 0.1
-    assert max(all_wb_mut) >= 0.095
+    assert min(all_wb_mut) >= -2
+    assert min(all_wb_mut) <= -1.95
+    assert max(all_wb_mut) <= -1
+    assert max(all_wb_mut) >= -1.05
 
-    assert min(all_s_mut) >= 0.6
-    assert min(all_s_mut) <= 0.605
-    assert max(all_s_mut) <= 0.7
-    assert max(all_s_mut) >= 0.695
+    assert min(all_s_mut) >= -3
+    assert min(all_s_mut) <= -2.95
+    assert max(all_s_mut) <= -2
+    assert max(all_s_mut) >= -2.05
 
-    assert min(all_p_mut) >= 0.4
-    assert min(all_p_mut) <= 0.405
-    assert max(all_p_mut) <= 0.6
-    assert max(all_p_mut) >= 0.595
+    assert min(all_p_mut) >= -4
+    assert min(all_p_mut) <= -3.95
+    assert max(all_p_mut) <= -3
+    assert max(all_p_mut) >= -3.05
 
-    assert min(all_c_prob) >= 0.22
-    assert min(all_c_prob) <= 0.221
-    assert max(all_c_prob) <= 0.33
-    assert max(all_c_prob) >= 0.325
+    assert min(all_c_prob) >= -5
+    assert min(all_c_prob) <= -4.95
+    assert max(all_c_prob) <= -4
+    assert max(all_c_prob) >= -4.05
 
-    assert min(all_r_prob) >= 0.44
-    assert min(all_r_prob) <= 0.445
-    assert max(all_r_prob) <= 0.55
-    assert max(all_r_prob) >= 0.545
+    assert min(all_r_prob) >= -6
+    assert min(all_r_prob) <= -5.95
+    assert max(all_r_prob) <= -5
+    assert max(all_r_prob) >= -5.05
 
 
 
@@ -526,3 +526,4 @@ def test_wieght_mask_3():
 
 # test_list_comparison()
 # test_generate_population_limits()
+test_generate_population_limits()

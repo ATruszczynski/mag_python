@@ -203,6 +203,7 @@ def conditional_value_swap(prob: float, val1, val2):
 
     return res1, res2
 
+# TODO - A - test
 def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: float, frac: float):
     if random.random() <= p:
         spectrum = maxV - minV
@@ -213,6 +214,7 @@ def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: f
 
     return value
 
+# TODO - A - test
 def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask):
     probs = np.random.random(links.shape)
     to_change = np.where(probs <= s_pm)
@@ -233,6 +235,7 @@ def add_remove_weights(s_pm: float, weights: np.ndarray, links: np.ndarray, mask
 
     return weights, links
 
+# TODO - C - to delete
 def get_min_max_values_of_matrix_with_mask(matrix: np.ndarray, mask: np.ndarray):
     only_present = matrix[np.where(mask == 1)]
     minW = 0

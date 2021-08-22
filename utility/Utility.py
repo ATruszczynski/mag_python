@@ -111,9 +111,9 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 def get_default_hrange():#TODO - S - przemyśl to
     hrange = HyperparameterRange(init_wei=(-10, 10), init_bia=(-10, 10), it=(1, 10), hidden_count=(0, 100),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(0.0, 1), sqr_mut_prob=(0.001, 0.1), lin_mut_prob=(0, 1),
-                                 p_mutation_prob=(0.05, 0.01), c_prob=(0.2, 1),
-                                 dstr_mut_prob=(0, 1))
+                                 mut_radius=(-2, 0), sqr_mut_prob=(-2, 0), lin_mut_prob=(-2, 0),
+                                 p_mutation_prob=(-2, 0), c_prob=(-2, 0),
+                                 dstr_mut_prob=(-2, 0))
     return hrange
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:

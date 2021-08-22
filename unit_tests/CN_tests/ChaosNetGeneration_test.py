@@ -7,9 +7,9 @@ def test_cn_generation():
     random.seed(1001)
     np.random.seed(1001)
 
-    hrnage = HyperparameterRange((-1, 1), (-10, 10), (1, 5), (0, 3), [ReLu(), GaussAct(), Sigmoid()], mut_radius=(0, 1),
-                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.2, 0.5),
-                                 dstr_mut_prob=(0.8, 1))
+    hrnage = HyperparameterRange((-1, 1), (-10, 10), (1, 5), (0, 3), [ReLu(), GaussAct(), Sigmoid()], mut_radius=(-1, 0),
+                                 sqr_mut_prob=(-2, -1), lin_mut_prob=(-3, -2), p_mutation_prob=(-4, -3), c_prob=(-5, -4),
+                                 dstr_mut_prob=(-6, -5))
     nets = generate_population(hrange=hrnage, count=2, input_size=2, output_size=1)
 
 
@@ -32,12 +32,12 @@ def test_cn_generation():
                           desired_actFun=[None, None, None],
                           desired_aggr=ReLu(),
                           desired_maxit=1,
-                          desired_mut_rad=0.555594,
-                          desired_wb_prob=0.068865,
-                          desired_s_prob=0.616022,
-                          desired_p_prob=0.544396,
-                          desired_c_prob=0.369265,
-                          desired_r_prob=0.954734)
+                          desired_mut_rad=-0.4444052,
+                          desired_wb_prob=-1.62269240,
+                          desired_s_prob=-2.8397767,
+                          desired_p_prob=-3.27801995,
+                          desired_c_prob=-4.43578206,
+                          desired_r_prob=-5.226325)
 
     compare_chaos_network(net=nets[1],
                           desired_input_size=2,
@@ -58,12 +58,12 @@ def test_cn_generation():
                           desired_actFun=[None, None, ReLu(), None],
                           desired_aggr=ReLu(),
                           desired_maxit=4,
-                          desired_mut_rad=0.714939,
-                          desired_wb_prob=0.082788,
-                          desired_s_prob=0.673710,
-                          desired_p_prob=0.437508,
-                          desired_c_prob=0.350593,
-                          desired_r_prob=0.979005)
+                          desired_mut_rad=-0.2850609,
+                          desired_wb_prob=-1.3442275,
+                          desired_s_prob=-2.2628928,
+                          desired_p_prob=-3.8124577,
+                          desired_c_prob=-4.498022,
+                          desired_r_prob=-5.1049701)
 
 # random.seed(1001)
 # np.random.seed(1001)
@@ -77,12 +77,12 @@ def test_cn_generation():
 # print(f"bia_1: \n{np.random.uniform(-10, 10, (1, n1))}")
 # print(f"aggrf_1: {random.randint(0, 2)}")
 # print(f"maxit_1: {random.randint(1, 5)}")
-# print(f"mut_rad_1: {random.uniform(0, 1)}")
-# print(f"wb_prob_1: {random.uniform(0.05, 0.1)}")
-# print(f"s_prob_1: {random.uniform(0.6, 0.7)}")
-# print(f"p_prob_1: {random.uniform(0.4, 0.6)}")
-# print(f"c_prob_1: {random.uniform(0.2, 0.5)}")
-# print(f"r_prob_1: {random.uniform(0.8, 1)}")
+# print(f"mut_rad_1: {random.uniform(-1, 0)}")
+# print(f"wb_prob_1: {random.uniform(-2, -1)}")
+# print(f"s_prob_1: {random.uniform(-3, -2)}")
+# print(f"p_prob_1: {random.uniform(-4, -3)}")
+# print(f"c_prob_1: {random.uniform(-5, -4)}")
+# print(f"r_prob_1: {random.uniform(-6, -5)}")
 #
 # print()
 #
@@ -96,12 +96,12 @@ def test_cn_generation():
 # print(f"af2_2: {random.randint(0, 2)}")
 # print(f"aggrf_2: {random.randint(0, 2)}")
 # print(f"maxit_2: {random.randint(1, 5)}")
-# print(f"mut_rad_2: {random.uniform(0, 1)}")
-# print(f"wb_prob_2: {random.uniform(0.05, 0.1)}")
-# print(f"s_prob_2: {random.uniform(0.6, 0.7)}")
-# print(f"p_prob_2: {random.uniform(0.4, 0.6)}")
-# print(f"c_prob_2: {random.uniform(0.2, 0.5)}")
-# print(f"r_prob_2: {random.uniform(0.8, 1)}")
+# print(f"mut_rad_2: {random.uniform(-1, 0)}")
+# print(f"wb_prob_2: {random.uniform(-2, -1)}")
+# print(f"s_prob_2: {random.uniform(-3, -2)}")
+# print(f"p_prob_2: {random.uniform(-4, -3)}")
+# print(f"c_prob_2: {random.uniform(-5, -4)}")
+# print(f"r_prob_2: {random.uniform(-6, -5)}")
 
 
 # test_cn_generation()

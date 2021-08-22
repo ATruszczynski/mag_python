@@ -271,7 +271,7 @@ class MeanDiff(LossFun):
 
 class CrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
-        result = np.sum(np.multiply(corr, np.log10(res + 1e-15)), axis=0)[0]
+        result = np.sum(np.multiply(corr, np.log2(res + 1e-15)), axis=0)[0]
         return -result
 
     def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:
@@ -304,7 +304,7 @@ class ChebyshevLoss(LossFun):
 
 class QuasiCrossEntropy(LossFun):
     def compute(self, res: np.ndarray, corr: np.ndarray) -> float:
-        result = np.sum(np.multiply(corr, np.abs(res - corr)))[0]
+        result = np.sum(np.multiply(corr, np.abs(res - corr)), axis=0)[0]
         return result
 
     def computeDer(self, res: np.ndarray, corr: np.ndarray) -> np.ndarray:

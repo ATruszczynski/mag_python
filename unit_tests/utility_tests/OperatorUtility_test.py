@@ -26,7 +26,7 @@ def test_neuron_increase():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -58,12 +58,12 @@ def test_neuron_increase():
                           desired_actFun=[None, ReLu(), Sigmoid(), None, None],
                           desired_aggr=TanH(),
                           desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6)
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-6)
 
 
     ############################################################################
@@ -136,12 +136,12 @@ def test_neuron_increase():
                           desired_actFun=[None, ReLu(), Sigmoid(), SincAct(), ReLu(), None, None],
                           desired_aggr=TanH(),
                           desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
 
@@ -150,13 +150,13 @@ def test_neuron_decrease():
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  dstr_mut_prob=(0.44, 0.55))
 
-    link1 = np.array([[0, 1, 1, 0, 0, 1],
+    link1 = np.array([[0, 1, 1, 0, 0, 0],
                       [0, 0, 1, 1, 1, 1],
                       [0, 1, 0, 1, 0, 1],
                       [0, 1, 1, 0, 0, 1],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0]])
-    wei1 =  np.array([[0, 1, 4, 0, 0, 10],
+    wei1 =  np.array([[0, 1, 4, 0, 0, 0],
                       [0, 0, 5, 7, 9, 11],
                       [0, 2, 0, 8, 0, 12],
                       [0, 3, 6, 0, 0, 13],
@@ -167,7 +167,7 @@ def test_neuron_decrease():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -183,13 +183,13 @@ def test_neuron_decrease():
                           desired_hidden_start_index=1,
                           desired_hidden_end_index=4,
                           desired_hidden_count=3,
-                          desired_links=np.array([[0, 1, 1, 0, 0, 1],
+                          desired_links=np.array([[0, 1, 1, 0, 0, 0],
                                                   [0, 0, 1, 1, 1, 1],
                                                   [0, 1, 0, 1, 0, 1],
                                                   [0, 1, 1, 0, 0, 1],
                                                   [0, 0, 0, 0, 0, 0],
                                                   [0, 0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 1, 4, 0, 0, 10],
+                          desired_weights=np.array([[0, 1, 4, 0, 0, 0],
                                                     [0, 0, 5, 7, 9, 11],
                                                     [0, 2, 0, 8, 0, 12],
                                                     [0, 3, 6, 0, 0, 13],
@@ -199,12 +199,12 @@ def test_neuron_decrease():
                           desired_actFun=[None, ReLu(), Sigmoid(), SincAct(), None, None],
                           desired_aggr=TanH(),
                           desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-6,
                           desired_inp=np.array([[0., 0., 0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0., 0., 0.]]))
 
@@ -217,11 +217,11 @@ def test_neuron_decrease():
                           desired_hidden_start_index=1,
                           desired_hidden_end_index=2,
                           desired_hidden_count=1,
-                          desired_links=np.array([[0, 0, 0, 1],
+                          desired_links=np.array([[0, 0, 0, 0],
                                                   [0, 0, 0, 1],
                                                   [0, 0, 0, 0],
                                                   [0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0, 10],
+                          desired_weights=np.array([[0, 0, 0, 0],
                                                     [0, 0, 0, 13],
                                                     [0, 0, 0, 0],
                                                     [0, 0, 0, 0.]]),
@@ -229,241 +229,241 @@ def test_neuron_decrease():
                           desired_actFun=[None, SincAct(), None, None],
                           desired_aggr=TanH(),
                           desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-6,
                           desired_inp=np.array([[0., 0., 0., 0.]]),
                           desired_act=np.array([[0., 0., 0., 0.]]))
 
     ##########################################################################
 
-def test_network_inflate():
-    hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
-                                 dstr_mut_prob=(0.44, 0.55))
-
-    link1 = np.array([[0, 1, 0, 0, 1],
-                      [0, 0, 1, 1, 1],
-                      [0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0]])
-    wei1 =  np.array([[0, 1, 0, 0, 6],
-                      [0, 0, 3, 5, 7],
-                      [0, 2, 4, 0, 8],
-                      [0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0]])
-    bia1 = np.array([[0., -2, -4, -5, -6]])
-    actFuns1 = [None, ReLu(), SincAct(), None, None]
-
-    cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=TanH(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
-
-    np.random.seed(1001)
-    random.seed(1001)
-
-    cn2 = inflate_network(cn1, 2)
-
-    ##########################################################################
-
-    compare_chaos_network(net=cn1,
-                          desired_input_size=1,
-                          desited_output_size=2,
-                          desired_neuron_count=5,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=3,
-                          desired_hidden_count=2,
-                          desired_links=np.array([[0, 1, 0, 0, 1],
-                                                  [0, 0, 1, 1, 1],
-                                                  [0, 1, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 1, 0, 0, 6],
-                                                    [0, 0, 3, 5, 7],
-                                                    [0, 2, 4, 0, 8],
-                                                    [0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0., -2, -4, -5, -6]]),
-                          desired_actFun=[None, ReLu(), SincAct(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
-                          desired_inp=np.array([[0., 0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0., 0.]]))
-
-
-    ##########################################################################
-
-    compare_chaos_network(net=cn2,
-                          desired_input_size=1,
-                          desited_output_size=2,
-                          desired_neuron_count=7,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=5,
-                          desired_hidden_count=4,
-                          desired_links=np.array([[0, 1, 0, 0, 0, 0, 1],
-                                                  [0, 0, 1, 0, 0, 1, 1],
-                                                  [0, 1, 1, 0, 0, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 1, 0, 0, 0, 0, 6],
-                                                    [0, 0, 3, 0, 0, 5, 7],
-                                                    [0, 2, 4, 0, 0, 0, 8],
-                                                    [0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0., -2, -4, 0, 0, -5, -6]]),
-                          desired_actFun=[None, ReLu(), SincAct(), ReLu(), SincAct(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
-                          desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
-
-def test_network_deflate():
-    hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
-                                 dstr_mut_prob=(0.44, 0.55))
-
-    link1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 1, 0, 1, 0, 0, 0, 1],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 1, 0, 1, 0, 0, 0, 1],
-                      [0, 0, 1, 0, 0, 0, 0, 0, 1],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0]])
-    wei1 =  np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 3, 0, 6, 0, 0, 0, 8],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 4, 0, 7, 0, 0, 0, 9],
-                      [0, 0, 5, 0, 0, 0, 0, 0, 10],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0]])
-    bia1 = np.array([[0., 0, -4, -5, -6, -7, -8, -9, -10]])
-    actFuns1 = [None, None, SincAct(), TanH(), LReLu(), GaussAct(), Sigmoid(), None, None]
-
-    cn1 = ChaosNet(input_size=2, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=TanH(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
-
-
-
-
-    np.random.seed(1001)
-    random.seed(1001)
-
-    cn2 = deflate_network(cn1)
-
-
-    ##########################################################################
-
-    compare_chaos_network(net=cn1,
-                          desired_input_size=2,
-                          desited_output_size=2,
-                          desired_neuron_count=9,
-                          desired_hidden_start_index=2,
-                          desired_hidden_end_index=7,
-                          desired_hidden_count=5,
-                          desired_links=np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 1, 0, 1, 0, 0, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 1, 0, 1, 0, 0, 0, 1],
-                                                  [0, 0, 1, 0, 0, 0, 0, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 3, 0, 6, 0, 0, 0, 8],
-                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 4, 0, 7, 0, 0, 0, 9],
-                                                    [0, 0, 5, 0, 0, 0, 0, 0, 10],
-                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0., 0, -4, -5, -6, -7, -8, -9, -10]]),
-                          desired_actFun=[None, None, SincAct(), TanH(), LReLu(), GaussAct(), Sigmoid(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
-                          desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0., 0., 0., 0., 0., 0.]]))
-
-    ##########################################################################
-
-    compare_chaos_network(net=cn2,
-                          desired_input_size=2,
-                          desited_output_size=2,
-                          desired_neuron_count=7,
-                          desired_hidden_start_index=2,
-                          desired_hidden_end_index=5,
-                          desired_hidden_count=3,
-                          desired_links=np.array([[0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 1, 0, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 1, 0, 1, 0, 1],
-                                                  [0, 0, 1, 0, 0, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0, 0],
-                                                  [0, 0, 0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 3, 0, 6, 0, 8],
-                                                    [0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 4, 0, 7, 0, 9],
-                                                    [0, 0, 5, 0, 0, 0, 10],
-                                                    [0, 0, 0, 0, 0, 0, 0],
-                                                    [0, 0, 0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0., 0, -4, -5, -6, -9, -10]]),
-                          desired_actFun=[None, None, SincAct(), TanH(), LReLu(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=1,
-                          desired_wb_prob=2,
-                          desired_s_prob=3,
-                          desired_p_prob=4,
-                          desired_c_prob=5,
-                          desired_r_prob=6,
-                          desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
+# def test_network_inflate():
+#     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
+#                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+#                                  dstr_mut_prob=(0.44, 0.55))
+# 
+#     link1 = np.array([[0, 1, 0, 0, 1],
+#                       [0, 0, 1, 1, 1],
+#                       [0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0]])
+#     wei1 =  np.array([[0, 1, 0, 0, 6],
+#                       [0, 0, 3, 5, 7],
+#                       [0, 2, 4, 0, 8],
+#                       [0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0]])
+#     bia1 = np.array([[0., -2, -4, -5, -6]])
+#     actFuns1 = [None, ReLu(), SincAct(), None, None]
+# 
+#     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=TanH(), net_it=2,
+#                    mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+# 
+#     np.random.seed(1001)
+#     random.seed(1001)
+# 
+#     cn2 = inflate_network(cn1, 2)
+# 
+#     ##########################################################################
+# 
+#     compare_chaos_network(net=cn1,
+#                           desired_input_size=1,
+#                           desited_output_size=2,
+#                           desired_neuron_count=5,
+#                           desired_hidden_start_index=1,
+#                           desired_hidden_end_index=3,
+#                           desired_hidden_count=2,
+#                           desired_links=np.array([[0, 1, 0, 0, 1],
+#                                                   [0, 0, 1, 1, 1],
+#                                                   [0, 1, 1, 0, 1],
+#                                                   [0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0]]),
+#                           desired_weights=np.array([[0, 1, 0, 0, 6],
+#                                                     [0, 0, 3, 5, 7],
+#                                                     [0, 2, 4, 0, 8],
+#                                                     [0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0]]),
+#                           desired_biases=np.array([[0., -2, -4, -5, -6]]),
+#                           desired_actFun=[None, ReLu(), SincAct(), None, None],
+#                           desired_aggr=TanH(),
+#                           desired_maxit=2,
+#                           desired_mut_rad=1,
+#                           desired_wb_prob=2,
+#                           desired_s_prob=3,
+#                           desired_p_prob=4,
+#                           desired_c_prob=5,
+#                           desired_r_prob=6,
+#                           desired_inp=np.array([[0., 0., 0., 0., 0.]]),
+#                           desired_act=np.array([[0., 0., 0., 0., 0.]]))
+# 
+# 
+#     ##########################################################################
+# 
+#     compare_chaos_network(net=cn2,
+#                           desired_input_size=1,
+#                           desited_output_size=2,
+#                           desired_neuron_count=7,
+#                           desired_hidden_start_index=1,
+#                           desired_hidden_end_index=5,
+#                           desired_hidden_count=4,
+#                           desired_links=np.array([[0, 1, 0, 0, 0, 0, 1],
+#                                                   [0, 0, 1, 0, 0, 1, 1],
+#                                                   [0, 1, 1, 0, 0, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0]]),
+#                           desired_weights=np.array([[0, 1, 0, 0, 0, 0, 6],
+#                                                     [0, 0, 3, 0, 0, 5, 7],
+#                                                     [0, 2, 4, 0, 0, 0, 8],
+#                                                     [0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0]]),
+#                           desired_biases=np.array([[0., -2, -4, 0, 0, -5, -6]]),
+#                           desired_actFun=[None, ReLu(), SincAct(), ReLu(), SincAct(), None, None],
+#                           desired_aggr=TanH(),
+#                           desired_maxit=2,
+#                           desired_mut_rad=1,
+#                           desired_wb_prob=2,
+#                           desired_s_prob=3,
+#                           desired_p_prob=4,
+#                           desired_c_prob=5,
+#                           desired_r_prob=6,
+#                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
+#                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
+# 
+# def test_network_deflate():
+#     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
+#                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+#                                  dstr_mut_prob=(0.44, 0.55))
+# 
+#     link1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 1, 0, 1, 0, 0, 0, 1],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 1, 0, 1, 0, 0, 0, 1],
+#                       [0, 0, 1, 0, 0, 0, 0, 0, 1],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+#     wei1 =  np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 3, 0, 6, 0, 0, 0, 8],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 4, 0, 7, 0, 0, 0, 9],
+#                       [0, 0, 5, 0, 0, 0, 0, 0, 10],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                       [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+#     bia1 = np.array([[0., 0, -4, -5, -6, -7, -8, -9, -10]])
+#     actFuns1 = [None, None, SincAct(), TanH(), LReLu(), GaussAct(), Sigmoid(), None, None]
+# 
+#     cn1 = ChaosNet(input_size=2, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=TanH(), net_it=2,
+#                    mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+# 
+# 
+# 
+# 
+#     np.random.seed(1001)
+#     random.seed(1001)
+# 
+#     cn2 = deflate_network(cn1)
+# 
+# 
+#     ##########################################################################
+# 
+#     compare_chaos_network(net=cn1,
+#                           desired_input_size=2,
+#                           desited_output_size=2,
+#                           desired_neuron_count=9,
+#                           desired_hidden_start_index=2,
+#                           desired_hidden_end_index=7,
+#                           desired_hidden_count=5,
+#                           desired_links=np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 1, 0, 1, 0, 0, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 1, 0, 1, 0, 0, 0, 1],
+#                                                   [0, 0, 1, 0, 0, 0, 0, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+#                           desired_weights=np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 3, 0, 6, 0, 0, 0, 8],
+#                                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 4, 0, 7, 0, 0, 0, 9],
+#                                                     [0, 0, 5, 0, 0, 0, 0, 0, 10],
+#                                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0, 0, 0]]),
+#                           desired_biases=np.array([[0., 0, -4, -5, -6, -7, -8, -9, -10]]),
+#                           desired_actFun=[None, None, SincAct(), TanH(), LReLu(), GaussAct(), Sigmoid(), None, None],
+#                           desired_aggr=TanH(),
+#                           desired_maxit=2,
+#                           desired_mut_rad=1,
+#                           desired_wb_prob=2,
+#                           desired_s_prob=3,
+#                           desired_p_prob=4,
+#                           desired_c_prob=5,
+#                           desired_r_prob=6,
+#                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0., 0., 0.]]),
+#                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0., 0., 0.]]))
+# 
+#     ##########################################################################
+# 
+#     compare_chaos_network(net=cn2,
+#                           desired_input_size=2,
+#                           desited_output_size=2,
+#                           desired_neuron_count=7,
+#                           desired_hidden_start_index=2,
+#                           desired_hidden_end_index=5,
+#                           desired_hidden_count=3,
+#                           desired_links=np.array([[0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 1, 0, 1, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 1, 0, 1, 0, 1],
+#                                                   [0, 0, 1, 0, 0, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0, 0],
+#                                                   [0, 0, 0, 0, 0, 0, 0]]),
+#                           desired_weights=np.array([[0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 3, 0, 6, 0, 8],
+#                                                     [0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 4, 0, 7, 0, 9],
+#                                                     [0, 0, 5, 0, 0, 0, 10],
+#                                                     [0, 0, 0, 0, 0, 0, 0],
+#                                                     [0, 0, 0, 0, 0, 0, 0]]),
+#                           desired_biases=np.array([[0., 0, -4, -5, -6, -9, -10]]),
+#                           desired_actFun=[None, None, SincAct(), TanH(), LReLu(), None, None],
+#                           desired_aggr=TanH(),
+#                           desired_maxit=2,
+#                           desired_mut_rad=1,
+#                           desired_wb_prob=2,
+#                           desired_s_prob=3,
+#                           desired_p_prob=4,
+#                           desired_c_prob=5,
+#                           desired_r_prob=6,
+#                           desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
+#                           desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
 
 def test_possible_cuts_1():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  dstr_mut_prob=(0.44, 0.55))
-    link1 = np.array([[0, 1, 0, 0, 0, 1],
-                      [0, 0, 0, 0, 0, 1],
+    link1 = np.array([[0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0]])
-    wei1 = np.array([[0, 1, 0, 0, 0, 1],
-                     [0, 0, 0, 0, 0, 1],
+    wei1 = np.array([[0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0],
@@ -472,20 +472,20 @@ def test_possible_cuts_1():
     actFuns1 = [None, ReLu(), ReLu(), None, None, None]
 
     link2 = np.array([[0, 0, 0, 0],
-                      [0, 0, 1, 0],
-                      [0, 0, 1, 1],
+                      [0, 0, 0, 0],
+                      [0, 0, 0, 0],
                       [0, 0, 0, 0]])
     wei2 = np.array([[0, 0, 0, 0],
-                     [0, 0, 1, 0],
-                     [0, 0, 1, 1],
+                     [0, 0, 0, 0],
+                     [0, 0, 0, 0],
                      [0, 0, 0, 0]])
     bia2 = np.array([[-10, -20, -30, -40]])
     actFuns2 = [None, None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -503,25 +503,25 @@ def test_possible_cuts_1_2():
                                  dstr_mut_prob=(0.44, 0.55))
 
     link1 = np.array([[0, 0, 0, 0],
-                      [0, 0, 1, 0],
-                      [0, 0, 1, 1],
+                      [0, 0, 0, 0],
+                      [0, 0, 0, 0],
                       [0, 0, 0, 0]])
     wei1 = np.array([[0, 0, 0, 0],
-                     [0, 0, 1, 0],
-                     [0, 0, 1, 1],
+                     [0, 0, 0, 0],
+                     [0, 0, 0, 0],
                      [0, 0, 0, 0]])
     bia1 = np.array([[-10, -20, -30, -40]])
     actFuns1 = [None, None, None, None]
 
 
-    link2 = np.array([[0, 1, 0, 0, 0, 1],
-                      [0, 0, 0, 0, 0, 1],
+    link2 = np.array([[0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0]])
-    wei2 = np.array([[0, 1, 0, 0, 0, 1],
-                     [0, 0, 0, 0, 0, 1],
+    wei2 = np.array([[0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0],
@@ -530,9 +530,9 @@ def test_possible_cuts_1_2():
     actFuns2 = [None, ReLu(), ReLu(), None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -548,34 +548,34 @@ def test_possible_cuts_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  dstr_mut_prob=(0.44, 0.55))
-    link1 = np.array([[0, 1, 0, 1],
-                      [0, 0, 0, 1],
+    link1 = np.array([[0, 0, 0, 0],
+                      [0, 0, 0, 0],
                       [0, 0, 0, 0],
                       [0, 0, 0, 0]])
-    wei1 = np.array([[0., 1, 0, 4],
-                     [0 , 0, 0, 5],
-                     [0 , 0, 0, 0],
-                     [0 , 0, 0, 0]])
+    wei1 = np.array([[0, 0, 0, 0],
+                     [0, 0, 0, 0],
+                     [0, 0, 0, 0],
+                     [0, 0, 0, 0]])
     bia1 = np.array([[-1., -2, -4, -5]])
     actFuns1 = [None, ReLu(), None, None]
 
     link2 = np.array([[0, 0, 0, 0, 0],
-                      [0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0]])
-    wei2 = np.array([[0, 0, 0,  0,  0 ],
-                     [0, 0, 10, 20, 0 ],
-                     [0, 0, 0,  30, 40],
-                     [0, 0, 0,  0,  0 ],
-                     [0, 0, 0,  0,  0.]])
+    wei2 = np.array([[0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0]])
     bia2 = np.array([[-10, -20, -30, -40, -50]])
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -594,32 +594,32 @@ def test_possible_cuts_3():
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  dstr_mut_prob=(0.44, 0.55))
-    link1 = np.array([[0, 1, 0, 1],
-                      [0, 0, 0, 1],
+    link1 = np.array([[0, 0, 0, 0],
+                      [0, 0, 0, 0],
                       [0, 0, 0, 0],
                       [0, 0, 0, 0]])
-    wei1 = np.array([[0, 1, 0, 1],
-                     [0, 0, 0, 1],
+    wei1 = np.array([[0, 0, 0, 0],
+                     [0, 0, 0, 0],
                      [0, 0, 0, 0],
                      [0, 0, 0, 0]])
     bia1 = np.array([[-1., -2, -4, -5]])
     actFuns1 = [None, None, None, None]
 
     link2 = np.array([[0, 0, 0, 0],
-                      [0, 0, 1, 0],
-                      [0, 0, 1, 1],
+                      [0, 0, 0, 0],
+                      [0, 0, 0, 0],
                       [0, 0, 0, 0]])
     wei2 = np.array([[0, 0, 0, 0],
-                     [0, 0, 1, 0],
-                     [0, 0, 1, 1],
+                     [0, 0, 0, 0],
+                     [0, 0, 0, 0],
                      [0, 0, 0, 0]])
     bia2 = np.array([[-10, -20, -30, -40]])
     actFuns2 = [None, None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -634,45 +634,45 @@ def test_possible_cuts_4():
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  dstr_mut_prob=(0.44, 0.55))
     link1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 1, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 1, 0, 0],
                       [0, 0, 1, 0, 0, 1, 0, 0],
                       [0, 0, 1, 0, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 0, 1, 0, 0],
-                      [0, 0, 1, 1, 0, 1, 1, 1],
+                      [0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0]])
     wei1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 1, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 1, 0, 0],
                      [0, 0, 1, 0, 0, 1, 0, 0],
                      [0, 0, 1, 0, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 0, 1, 0, 0],
-                     [0, 0, 1, 1, 0, 1, 1, 1],
+                     [0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0, 0, 0]])
     bia1 = np.array([[-1., -2, -4, -5, -1., -2, -4, -5]])
     actFuns1 = [None, None, ReLu(), ReLu(), ReLu(), None, None, None]
 
     link2 = np.array([[0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 1, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 1, 0, 0],
                       [0, 0, 1, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 1, 0, 0],
-                      [0, 0, 1, 0, 1, 1, 1],
+                      [0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0]])
     wei2 = np.array([[0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 1, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 1, 0, 0],
                      [0, 0, 1, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 1, 0, 0],
-                     [0, 0, 1, 0, 1, 1, 1],
+                     [0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0],
                      [0, 0, 0, 0, 0, 0, 0]])
     bia2 = np.array([[-10, -20, -30, -40, -50, -40, -50]])
     actFuns2 = [None, None, TanH(), TanH(), None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=3, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
     cn2 = ChaosNet(input_size=2, output_size=3, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=1, sqr_mut_prob=2, lin_mut_prob=3, p_mutation_prob=4, c_prob=5, dstr_mut_prob=6)
+                   mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -1056,5 +1056,6 @@ def test_uniform_shift():
 #
 #
 # test_neuron_increase()
+test_possible_cuts_4()
 
 

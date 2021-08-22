@@ -30,4 +30,4 @@ def test_determinism(): #TODO - S - this is (was?) broken
 
             assert np.array_equal(t1[0], t2[0])
 
-# test_determinism()
+test_determinism()
