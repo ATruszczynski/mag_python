@@ -29,6 +29,9 @@ def test_fitness_calculator_with_pure_eff():
     i, o = get_io()
     res = fc.compute(None, to_compute=anns, fitnessFunc=CNFF(), trainInputs=i, trainOutputs=o)
 
+    anns[0].run(np.hstack(i))
+    anns[1].run(np.hstack(i))
+
     assert len(res) == 2
 
     compare_chaos_networks(res[0].net, anns[1])
@@ -82,7 +85,7 @@ def test_fitness_calculator_with_pure_eff():
 # print(f"meff: {m_efficiency(cm2)}")
 #
 #
-# test_fitness_calculator_with_pure_eff()
+test_fitness_calculator_with_pure_eff()
 
 
 

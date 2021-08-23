@@ -452,9 +452,11 @@ def test_faster_run():
                    net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5,
                    dstr_mut_prob=-6)
 
-    res = net.run(np.array([[0, 1], [1, 0], [0, 1]]))
+    inputs = np.array([[0, 1], [1, 0], [0, 1]])
+    expected = np.array([[0.377540669, 0.182425524]])
+    res = net.run(inputs)
 
-    assert np.all(np.isclose(res, np.array([[0.377540669, 0.182425524]])))
+    assert np.all(np.isclose(res, expected))
 
     compare_chaos_network(net=net,
                           desired_input_size=3,
@@ -489,10 +491,16 @@ def test_faster_run():
                           desired_inp=np.array([[0, 0], [0, 0], [0, 0], [2, 1], [2, 0], [-0.5, -1.5]]),
                           desired_act=np.array([[0, 1], [1, 0], [0, 1], [2, 1], [2, 0], [0.377540669, 0.182425524]]))
 
+    o1 = net.run(inputs[:, 0].reshape((-1, 1)))
+    o2 = net.run(inputs[:, 1].reshape((-1, 1)))
+
+    assert np.all(np.isclose(o1, expected[0, 0], atol=1e-5))
+    assert np.all(np.isclose(o2, expected[0, 1], atol=1e-5))
+
 # test_cn_run()
 # test_run_with_cycle_1_run()
 # test_run_with_cycle_2_run()
-# test_faster_run()
+test_faster_run()
 # test_faster_run()
 
-test_cn_run2()
+# test_cn_run2()
