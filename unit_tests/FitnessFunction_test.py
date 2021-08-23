@@ -203,6 +203,66 @@ def test_pure_loss_fun2():
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
                                             [2., 1., 1., 0.]]))
+def test_meff_loss_1():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point()
+    i, o = get_io()
+    ff = CNFF5()
+    res = ff.compute(point, i, o)
+
+    assert res[0] == pytest.approx(0.0999999, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
+                                            [4., 0., 0.]]))
+
+def test_meff_loss_2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point2()
+    i, o = get_io2()
+    ff = CNFF5()
+    res = ff.compute(point, i, o)
+
+    assert res[0] == pytest.approx(0.177303165, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
+                                            [3., 0., 1., 0.],
+                                            [0., 0., 4., 0.],
+                                            [2., 1., 1., 0.]]))
+def test_mixed_meff_loss_1():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point()
+    i, o = get_io()
+    ff = CNFF6(QuadDiff())
+    res = ff.compute(point, i, o)
+
+    assert res[0] == pytest.approx(-3.44421232, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
+                                            [4., 0., 0.]]))
+
+def test_mixed_meff_loss_2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point2()
+    i, o = get_io2()
+    ff = CNFF6(QuadDiff())
+    res = ff.compute(point, i, o)
+
+    assert res[0] == pytest.approx(-3.388678384, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
+                                            [3., 0., 1., 0.],
+                                            [0., 0., 4., 0.],
+                                            [2., 1., 1., 0.]]))
 
 
 #
@@ -304,6 +364,55 @@ def test_pure_loss_fun2():
 # print(test[0])
 #
 # test_mixed_loss_2_fun2()
+
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o)
+# print(mean([efficiency(test[0]), m_efficiency(test[0])]))
+# print(test[0])
+#
+# test_meff_loss_1()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o)
+# print(mean([efficiency(test[0]), m_efficiency(test[0])]))
+# print(test[0])
+#
+# test_meff_loss_2()
+
+seed = 1001
+random.seed(seed)
+np.random.seed(seed)
+net = get_point()
+i, o = get_io()
+
+test = net.test(i, o, QuadDiff())
+print(-(1.01 - m_efficiency(test[0]))*test[1])
+print(test[0])
+
+test_mixed_meff_loss_1()
+
+seed = 1001
+random.seed(seed)
+np.random.seed(seed)
+net = get_point2()
+i, o = get_io2()
+
+test = net.test(i, o, QuadDiff())
+print(-(1.01 - m_efficiency(test[0]))*test[1])
+print(test[0])
+
+test_mixed_meff_loss_2()
+
 
 
 

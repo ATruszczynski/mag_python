@@ -3,9 +3,10 @@ import numpy as np
 from neural_network.ChaosNet import *
 from ann_point.Functions import *
 
-class CNDataPoint(): #TODO - A - test
+#TODO - A - test
+class CNDataPoint():
     def __init__(self, net: ChaosNet):
-        self.net = net #TODO - B - copy?
+        self.net = net.copy()
         self.ff = 0.
         self.conf_mat = None
 

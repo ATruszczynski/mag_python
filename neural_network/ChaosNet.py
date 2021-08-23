@@ -77,7 +77,7 @@ class ChaosNet:
     # TODO - A - test run of couple inputs vs input matrix
     def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
-            self.get_comp_order()
+            self.compute_comp_order()
 
         self.act = np.zeros((self.neuron_count, inputs.shape[1]))
         self.inp = np.zeros((self.neuron_count, inputs.shape[1]))
@@ -85,7 +85,7 @@ class ChaosNet:
         self.act[:self.input_size, :] = inputs
 
         for i in range(self.net_it):
-            for n in self.hidden_comp_order: #TODO - S - czy w komp order jest output neurons? chyba nie
+            for n in self.hidden_comp_order:
                 wei = self.weights[:, n].reshape(-1, 1)
                 self.inp[n, :] = np.dot(wei.T, self.act) + self.biases[0, n]
                 self.act[n, :] = self.actFuns[n].compute(self.inp[n, :])
@@ -95,7 +95,7 @@ class ChaosNet:
 
         return self.act[self.hidden_end_index:]
 
-    def get_comp_order(self):
+    def compute_comp_order(self):
         self.hidden_comp_order = []
 
         touched = list(range(self.hidden_start_index))
@@ -261,8 +261,6 @@ class ChaosNet:
 
         return actFunsString
 
-
-    #TODO - S - coś by się przydało z tym zrobić
     def to_string(self):
         actFunsString = self.get_act_fun_string()
 

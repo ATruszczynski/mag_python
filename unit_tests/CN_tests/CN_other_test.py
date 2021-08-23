@@ -125,6 +125,9 @@ def test_CN_copy():
                           desired_inp=np.array([[0, 0, 0.5, -0.5, -0.924234315, 0.122459331, -0.962117157]]).reshape(-1, 1),
                           desired_act=np.array([[0, 1, 0.622459331, -0.462117157, 0, 0.747359064, 0.252640936]]).reshape(-1, 1))
 
+    net.net_it = 32
+    net.links[-1, -3] = 32313
+    net.actFuns[2] = Identity()
 
 
     compare_chaos_network(net=net2,
@@ -158,6 +161,7 @@ def test_CN_copy():
                           desired_p_prob=-4,
                           desired_c_prob=-5,
                           desired_r_prob=-6)
+test_CN_copy()
 
 # TODO - A - make some similar test
 # def test_cn_test_5():

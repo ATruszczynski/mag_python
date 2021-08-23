@@ -310,7 +310,6 @@ def test_run_with_cycle_1_run():
                                                 [0.731058579, 0.119202922], [0.675037527, 0.593279805], [0.324962473, 0.470234507],
                                                 [0.268941421, 0.256638438], [0.731058579, 0.743361562]]))
 
-#TODO - S - cn.run returns output in wrong dimensions?
 def test_run_with_cycle_2_run():
     links = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 1, 0, 0, 0, 0],

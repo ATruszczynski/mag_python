@@ -146,7 +146,6 @@ class FinalCO2(CrossoverOperator):
         return pointA, pointB
 
 
-#TODO - A - jak reaguje na puste sieci
 def find_possible_cuts7(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden

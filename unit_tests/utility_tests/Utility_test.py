@@ -156,8 +156,6 @@ def test_ohe():
 #     assert population[1].momCoeff == pytest.approx(-2.42444, abs=1e-4)
 #     assert population[1].batchSize == pytest.approx(-4.85385, abs=1e-4)
 
-#TODO - S - check if weights are properly filtered by lijnks everywhere
-#TODO - S -  fix test?
 def test_generate_population_limits():
     hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(-1, 0),
                                  sqr_mut_prob=(-2, -1), lin_mut_prob=(-3, -2), p_mutation_prob=(-4, -3), c_prob=(-5, -4),

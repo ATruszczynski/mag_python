@@ -9,10 +9,8 @@ from ann_point.Functions import *
 
 from sklearn.linear_model import LinearRegression
 
-#TODO - A - all here tested?
 class FitnessFunction:
-    def __init__(self, learningIts):
-        self.learningIts = learningIts
+    def __init__(self):
         pass
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
@@ -20,7 +18,7 @@ class FitnessFunction:
 
 class CNFF(FitnessFunction):
     def __init__(self):
-        super().__init__(0)
+        super().__init__()
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
@@ -30,7 +28,7 @@ class CNFF(FitnessFunction):
 
 class CNFF2(FitnessFunction):
     def __init__(self, lossFun: LossFun):
-        super().__init__(0)
+        super().__init__()
         self.lossFun = lossFun
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
@@ -41,7 +39,7 @@ class CNFF2(FitnessFunction):
 
 class CNFF3(FitnessFunction):
     def __init__(self, lossFun: LossFun):
-        super().__init__(0)
+        super().__init__()
         self.lossFun = lossFun
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
@@ -53,7 +51,7 @@ class CNFF3(FitnessFunction):
 # TODO - C - could take type as argument
 class CNFF4(FitnessFunction):
     def __init__(self, lossFun: LossFun):
-        super().__init__(0)
+        super().__init__()
         self.lossFun = lossFun
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
@@ -61,13 +59,35 @@ class CNFF4(FitnessFunction):
 
         return [-test_results[1], test_results[0]]
 
-# TODO - A - test
 class CNFF5(FitnessFunction):
     def __init__(self):
-        super().__init__(0)
+        super().__init__()
 
     def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
 
-        return [m_efficiency(test_results[0]), test_results[0]]
+        cm = test_results[0]
+        eff = efficiency(cm)
+        meff = m_efficiency(cm)
+
+        result = mean([eff, meff])
+
+        return [result, cm]
+
+class CNFF6(FitnessFunction):
+    def __init__(self, lossFun: LossFun):
+        super().__init__()
+        self.lossFun = lossFun
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
+
+        cm = test_results[0]
+        meff = m_efficiency(cm)
+
+        result = -(1.01 - meff) * test_results[1]
+
+        return [result, cm]
+
+
 

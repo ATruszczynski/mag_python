@@ -6,8 +6,6 @@ from evolving_classifier.operators.FinalCO1 import *
 from evolving_classifier.operators.FinalCO2 import FinalCO2, find_possible_cuts7
 from utility.TestingUtility import compare_chaos_network
 
-#TODO - A - test numpy copy (done?)
-#TODO - A - test deepcopying in general (done?)
 #TODO - B - test multiple runs vs single run (done?)
 #TODO - B - ec test multiple runs vs single run? (done?)
 

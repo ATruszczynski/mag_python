@@ -33,10 +33,10 @@ class FinalMutationOperator(MutationOperator):
 
         nact = point.input_size * [None]
         for i in range(point.hidden_start_index, point.hidden_end_index):
-            nact.append(conditional_try_choose_different(lin_pm, point.actFuns[i], self.hrange.actFunSet))
+            nact.append(conditional_try_choose_different(sqr_pm_2, point.actFuns[i], self.hrange.actFunSet))
         nact.extend(point.output_size * [None])
 
-        aggr = conditional_try_choose_different(lin_pm, point.aggrFun, self.hrange.actFunSet)
+        aggr = conditional_try_choose_different(sqr_pm_2, point.aggrFun, self.hrange.actFunSet)
 
         links_rev, weights_rev = add_remove_weights(sqr_pm_2, point.links, weights_shifted, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
 
