@@ -160,6 +160,9 @@ def find_possible_cuts7(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamet
             if lhc + rhc >= minh and lhc + rhc <= maxh:
                 possible_cuts.append([i, lhc, j, rhc])
 
+    while len(possible_cuts) <= 2:
+        possible_cuts.append([pointA.hidden_start_index, 0, pointB.hidden_end_index, 0])
+
     return possible_cuts
 
 

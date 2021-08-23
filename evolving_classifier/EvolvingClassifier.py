@@ -1,5 +1,4 @@
 import math
-from evolving_classifier.EC_supervisor import EC_supervisor
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.FinalCO1 import *
@@ -79,7 +78,7 @@ class EvolvingClassifier:
         self.population = generate_population(self.hrange, popSize, input_size=input_size, output_size=output_size)
 
         self.history = RunHistory()
-    #TODO - S - ma zwracać najlepszą znalezioną, czy najlepszą z ostatniej generacji?
+
     def run(self, iterations: int, power: int = 1) -> ChaosNet:
         #TODO - S - upewnić się, że wszędzie gdzie potrzebne sieci są posortowane
         if power > 1:
@@ -90,15 +89,18 @@ class EvolvingClassifier:
         best = [self.population[0], -math.inf]
 
         for i in range(iterations):
-            eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
+            eval_pop_unfiltered = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
-            eval_pop = [eval_pop[i] for i in range(len(eval_pop)) if not np.isnan(eval_pop[i].ff)]#TODO - S - moze się zdarzyć że to usunie wszystkie sieci
-            if i % 10 == 0:
-                print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
+            eval_pop = [eval_pop_unfiltered[i] for i in range(len(eval_pop_unfiltered)) if not np.isnan(eval_pop_unfiltered[i].ff)]
+            if len(eval_pop) == 0:
+                eval_pop = eval_pop_unfiltered
 
             sorted_eval = sorted(eval_pop, key=lambda x: x.ff, reverse=True)
             self.history.add_it_hist(sorted_eval)
+
+            if i % 10 == 0: # TODO - A - do usunięcia
+                print(f"{i + 1} - {sorted_eval[0].ff} - {sorted_eval[0].net.to_string()},")
 
             if sorted_eval[0].ff >= best[1]:
                 best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]

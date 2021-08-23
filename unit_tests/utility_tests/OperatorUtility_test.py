@@ -143,8 +143,8 @@ def test_neuron_increase():
                           desired_p_prob=-4,
                           desired_c_prob=-5,
                           desired_r_prob=-6,
-                          desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0., 0., 0., 0.]]))
+                          desired_inp=np.zeros((0,0)),
+                          desired_act=np.zeros((0,0)))
 
 def test_neuron_decrease():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
@@ -206,8 +206,8 @@ def test_neuron_decrease():
                           desired_p_prob=-4,
                           desired_c_prob=-5,
                           desired_r_prob=-6,
-                          desired_inp=np.array([[0., 0., 0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0., 0., 0.]]))
+                          desired_inp=np.zeros((0,0)),
+                          desired_act=np.zeros((0,0)))
 
     ##########################################################################
 
@@ -236,8 +236,8 @@ def test_neuron_decrease():
                           desired_p_prob=-4,
                           desired_c_prob=-5,
                           desired_r_prob=-6,
-                          desired_inp=np.array([[0., 0., 0., 0.]]),
-                          desired_act=np.array([[0., 0., 0., 0.]]))
+                          desired_inp=np.zeros((0,0)),
+                          desired_act=np.zeros((0,0)))
 
     ##########################################################################
 

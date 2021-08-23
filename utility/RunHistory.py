@@ -14,29 +14,30 @@ mean_lc_id = "m.lc."
 round_prec_rh = 7
 mean_used_id="m.u."
 
+# TODO - B - remove useless code
 # TODO - S - wypisz trochę więcej danych?
 class RunHistory:
     def __init__(self):
         self.it_hist = []
 
-    def add_it_hist(self, data_points: [CNDataPoint]): #TODO - S - test
+    def add_it_hist(self, data_points: [CNDataPoint]): #TODO - A - test
         it_rec = []
         for i in range(len(data_points)):
             it_rec.append(data_points[i].copy())
         self.it_hist.append(it_rec)
 
-    def get_it_best(self, iteration: int) -> CNDataPoint: #TODO - S - test
-        it = self.it_hist[iteration]
+    # def get_it_best(self, iteration: int) -> CNDataPoint:
+    #     it = self.it_hist[iteration]
+    #
+    #     best_eval = None
+    #     for i in range(len(it)):
+    #         eval = it[i]
+    #         if best_eval is None or eval.ff > best_eval.ff:
+    #             best_eval = eval
+    #
+    #     return best_eval
 
-        best_eval = None
-        for i in range(len(it)):
-            eval = it[i]
-            if best_eval is None or eval.ff > best_eval.ff:
-                best_eval = eval
-
-        return best_eval
-
-    # def get_it_summary_string(self, iteration: int): #TODO - S - test
+    # def get_it_summary_string(self, iteration: int):
     #     evals = self.it_hist[iteration]
     #
     #     mean_ff = mean([eval.ff for eval in evals])
@@ -58,7 +59,7 @@ class RunHistory:
 
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")
-        file.write("it,rk,is,os,nc,ec,af,ag,mi,mr,wbp,smp,pmp,cp,rp,ff")
+        file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,sqrp,linp,pmp,cp,dstp,ff")
         if not reg:
             file.write(",eff,meff,acc,prc,rec,f1s")
         file.write("\n")
@@ -69,7 +70,7 @@ class RunHistory:
                 cndatapoint = it_nets[rk]
                 net = cndatapoint.net
                 file.write(f"{it + 1},{rk + 1},{net.input_size},{net.output_size},{net.neuron_count},"
-                           f"{np.sum(net.links)},"
+                           f"{net.edge_count()},"
                            f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
                            f"{net.mutation_radius},{net.sqr_mut_prob},{net.lin_mut_prob},"
                            f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{cndatapoint.ff}")

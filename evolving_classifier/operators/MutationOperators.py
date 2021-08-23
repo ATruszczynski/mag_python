@@ -43,7 +43,6 @@ class FinalMutationOperator(MutationOperator):
         net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 
         rad_frac = 0.1
-        # TODO - S - what about using limited gaussian shift here?
         mutation_radius = conditional_uniform_value_shift(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
 
         sqr_mut_prob = conditional_uniform_value_shift(p_pm, point.sqr_mut_prob, self.hrange.min_sqr_mut_prob, self.hrange.max_sqr_mut_prob, rad_frac)

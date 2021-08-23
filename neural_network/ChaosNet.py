@@ -37,12 +37,11 @@ class ChaosNet:
             check_cond_in_cn_const(nonzl[0][i] == nonzw[0][i])
             check_cond_in_cn_const(nonzl[1][i] == nonzw[1][i])
 
-
         self.links = links.copy()
         self.weights = weights.copy()
         self.biases = biases.copy()
-        self.inp = np.zeros(biases.shape)
-        self.act = np.zeros(biases.shape)
+        self.inp = np.zeros((0, 0))
+        self.act = np.zeros((0, 0))
         self.actFuns = []
         for i in range(len(actFuns)):
             if actFuns[i] is None:
@@ -58,7 +57,6 @@ class ChaosNet:
         self.hidden_start_index = self.input_size
         self.hidden_end_index = self.neuron_count - self.output_size
         self.hidden_count = self.hidden_end_index - self.hidden_start_index
-
 
         check_cond_in_cn_const(np.min(get_weight_mask(input_size, output_size, self.neuron_count) - self.links) >= 0)
         check_cond_in_cn_const(self.neuron_count == weights.shape[1])
@@ -76,6 +74,7 @@ class ChaosNet:
         self.c_prob = c_prob
         self.dstr_mut_prob = dstr_mut_prob
 
+    # TODO - A - test run of couple inputs vs input matrix
     def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
             self.get_comp_order()
@@ -123,8 +122,7 @@ class ChaosNet:
 
         self.hidden_comp_order = [i for layer in layers[1:] for i in layer]
 
-    #TODO - S - write some tests of test
-    def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lf: LossFun = None) -> [float, float, float, np.ndarray]:
+    def test(self, test_input: [np.ndarray], test_output: [np.ndarray], lf: LossFun = None) -> [np.ndarray, float]:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
 
@@ -143,7 +141,10 @@ class ChaosNet:
                 lfcc = lf.compute(net_result, to)
                 resultt += lfcc
 
-        return [confusion_matrix, resultt]
+        test_res = [confusion_matrix]
+        if lf is not None:
+            test_res.append(resultt)
+        return test_res
 
     # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
     #     self.links = links.copy()

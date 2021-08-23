@@ -30,22 +30,22 @@ def compare_chaos_network(net: ChaosNet,
     assert net.hidden_end_index == desired_hidden_end_index
     assert net.hidden_count == desired_hidden_count
     if desired_inp is None:
-        desired_inp = np.zeros((1, desired_neuron_count))
+        desired_inp = np.zeros((0, 0))
     if desired_act is None:
-        desired_act = np.zeros((1, desired_neuron_count))
-    assert np.all(np.isclose(net.inp, desired_inp, atol=1e-5))
-    assert np.all(np.isclose(net.act, desired_act, atol=1e-5))
+        desired_act = np.zeros((0, 0))
+    assert net.inp.shape == desired_inp.shape and np.all(np.isclose(net.inp, desired_inp, atol=1e-5))
+    assert net.act.shape == desired_act.shape and np.all(np.isclose(net.act, desired_act, atol=1e-5))
 
-    assert np.array_equal(net.links, desired_links)
-    assert np.all(np.isclose(net.weights, desired_weights, atol=1e-5))
-    assert np.all(np.isclose(net.biases, desired_biases, atol=1e-5))
+    assert net.links.shape == desired_links.shape and np.array_equal(net.links, desired_links)
+    assert net.weights.shape == desired_weights.shape and np.all(np.isclose(net.weights, desired_weights, atol=1e-5))
+    assert net.biases.shape == desired_biases.shape and np.all(np.isclose(net.biases, desired_biases, atol=1e-5))
     assert len(net.actFuns) == len(desired_actFun)
     for i in range(len(net.actFuns)):
         assert net.actFuns[i] is None or net.actFuns[i].to_string() == desired_actFun[i].to_string()
     assert net.aggrFun.to_string() == desired_aggr.to_string()
 
-    if desired_hidden_comp_order is None:
-        assert net.hidden_comp_order is None
+    if desired_hidden_comp_order is None or net.hidden_comp_order is None:
+        assert desired_hidden_comp_order is None and net.hidden_comp_order is None
     else:
         assert len(net.hidden_comp_order) == len(desired_hidden_comp_order)
         for i in range(len(net.hidden_comp_order)):

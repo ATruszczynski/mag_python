@@ -1100,7 +1100,7 @@ def test_chaos_compare_21():
                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
                    c_prob=-11, dstr_mut_prob=-22)
 
-    cn2.inp[0, -1] = 1
+    cn2.inp = np.array([[-1, -2, -3]])
 
     try:
         compare_chaos_networks(net=cn1, net2=cn2)
@@ -1153,11 +1153,11 @@ def test_chaos_compare_22():
                    actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
                    c_prob=-11, dstr_mut_prob=-22)
-    cn2.inp = np.zeros((1, 3))
+    cn2.inp = np.array([[222, 0], [-1, -1.]])
 
     try:
         compare_chaos_networks(net=cn1, net2=cn2)
-    except ValueError:
+    except AssertionError:
         assert True
     else:
         assert False
@@ -1206,7 +1206,7 @@ def test_chaos_compare_23():
                    actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
                    c_prob=-11, dstr_mut_prob=-22)
-    cn2.act[0, -4] = 222
+    cn2.act = np.array([[222, 0], [-1, -1.]])
 
     try:
         compare_chaos_networks(net=cn1, net2=cn2)
@@ -1262,7 +1262,7 @@ def test_chaos_compare_24():
     cn2.act = np.zeros((3, 3))
     try:
         compare_chaos_networks(net=cn1, net2=cn2)
-    except ValueError:
+    except AssertionError:
         assert True
     else:
         assert False

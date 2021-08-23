@@ -8,6 +8,62 @@ import random
 from utility.Utility import generate_counting_problem
 from utility.Utility2 import get_weight_mask
 
+def test_CN_constr():
+    weights = np.array([[0, 0, 0.5, 0, 0, 0, 0],
+                        [0, 0, 0, -1, 0.5, 0, 0],
+                        [0, 0, 0, 0, 0, 1, 0],
+                        [0, 0, 0, 0, 2, 0, 1],
+                        [0, 0, 0, 0, 0, 0, 0.5],
+                        [0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0]])
+    links =   np.array([[0, 0, 1, 0, 0, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 0, 0, 1, 0],
+                        [0, 0, 0, 0, 1, 0, 1],
+                        [0, 0, 0, 0, 0, 0, 1],
+                        [0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0]])
+    bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
+    actFuns = [None, None, Sigmoid(), TanH(), ReLu(), None, None]
+    net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                   net_it=2, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4,
+                   c_prob=-5, dstr_mut_prob=-6)
+
+    compare_chaos_network(net=net,
+                          desired_input_size=2,
+                          desited_output_size=2,
+                          desired_neuron_count=7,
+                          desired_hidden_start_index=2,
+                          desired_hidden_end_index=5,
+                          desired_hidden_count=3,
+                          desired_links=np.array([[0, 0, 1, 0, 0, 0, 0],
+                                                  [0, 0, 0, 1, 1, 0, 0],
+                                                  [0, 0, 0, 0, 0, 1, 0],
+                                                  [0, 0, 0, 0, 1, 0, 1],
+                                                  [0, 0, 0, 0, 0, 0, 1],
+                                                  [0, 0, 0, 0, 0, 0, 0],
+                                                  [0, 0, 0, 0, 0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0.5, 0, 0, 0, 0],
+                                                    [0, 0, 0, -1, 0.5, 0, 0],
+                                                    [0, 0, 0, 0, 0, 1, 0],
+                                                    [0, 0, 0, 0, 2, 0, 1],
+                                                    [0, 0, 0, 0, 0, 0, 0.5],
+                                                    [0, 0, 0, 0, 0, 0, 0],
+                                                    [0, 0, 0, 0, 0, 0, 0]]),
+                          desired_biases=np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]]),
+                          desired_actFun=[None, None, Sigmoid(), TanH(), ReLu(), None, None],
+                          desired_aggr=Softmax(),
+                          desired_maxit=2,
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-6,
+                          desired_hidden_comp_order=None,
+                          desired_inp=np.zeros((0,0)),
+                          desired_act=np.zeros((0,0)))
+
 
 def test_CN_copy():
     weights = np.array([[0, 0, 0.5, 0, 0, 0, 0],

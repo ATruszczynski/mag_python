@@ -8,8 +8,6 @@ from evolving_classifier.operators.SelectionOperator import *
 from utility.CNDataPoint import CNDataPoint
 from utility.MockCN import MockCN
 
-# TODO - S - fix all tests
-
 def test_roullette_select():
     random.seed(2020)
 
@@ -94,5 +92,5 @@ def test_select_too_few():
 # random.seed(1010)
 # print(choose_without_repetition([0, 1, 2, 3], 2))
 
-test_select()
+# test_select()
 # test_select_too_few()

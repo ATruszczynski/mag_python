@@ -354,6 +354,150 @@ def test_simple_crossover_2():
                           desired_c_prob=-5,
                           desired_r_prob=-60)
 
+
+def test_simple_crossover_3():
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                                 dstr_mut_prob=(0, 0))
+
+    link1 = np.array([[0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0]])
+    wei1 = np.array([[0., 0, 0],
+                     [0 , 0, 0],
+                     [0 , 0, 0]])
+    bia1 = np.array([[0., -2, -3]])
+    actFuns1 = [None, None, None]
+
+    link2 = np.array([[0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0]])
+    wei2 = np.array([[0., 0, 0],
+                     [0 , 0, 0],
+                     [0 , 0, 0]])
+    bia2 = np.array([[0., -20, -30]])
+    actFuns2 = [None, None, None]
+
+    cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3,
+                   p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+    cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, sqr_mut_prob=-20, lin_mut_prob=-30,
+                   p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
+
+    co = FinalCO2(hrange)
+
+    seed = 1006
+    random.seed(seed)
+    np.random.seed(seed)
+    cn3, cn4 = co.crossover(cn1, cn2)
+
+
+    ##################################################################
+
+    compare_chaos_network(net=cn1,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=3,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=1,
+                          desired_hidden_count=0,
+                          desired_links=np.array([[0, 0, 0],
+                                                  [0, 0, 0],
+                                                  [0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0],
+                                                    [0, 0, 0],
+                                                    [0, 0, 0]]),
+                          desired_biases=np.array([[0., -2, -3]]),
+                          desired_actFun=[None, None, None],
+                          desired_aggr=SincAct(),
+                          desired_maxit=1,
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-6)
+
+    ##################################################################
+
+    compare_chaos_network(net=cn2,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=3,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=1,
+                          desired_hidden_count=0,
+                          desired_links=np.array([[0, 0, 0],
+                                                  [0, 0, 0],
+                                                  [0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0],
+                                                    [0, 0, 0],
+                                                    [0, 0, 0]]),
+                          desired_biases=np.array([[0, -20, -30]]),
+                          desired_actFun=[None, None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=10,
+                          desired_mut_rad=-10,
+                          desired_wb_prob=-20,
+                          desired_s_prob=-30,
+                          desired_p_prob=-40,
+                          desired_c_prob=-50,
+                          desired_r_prob=-60)
+
+
+    ##################################################################
+
+    compare_chaos_network(net=cn3,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=3,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=1,
+                          desired_hidden_count=0,
+                          desired_links=np.array([[0, 0, 0],
+                                                  [0, 0, 0],
+                                                  [0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0],
+                                                    [0, 0, 0],
+                                                    [0, 0, 0]]),
+                          desired_biases=np.array([[0., -20, -30]]),
+                          desired_actFun=[None, None, None],
+                          desired_aggr=GaussAct(),
+                          desired_maxit=10,
+                          desired_mut_rad=-1,
+                          desired_wb_prob=-2,
+                          desired_s_prob=-30,
+                          desired_p_prob=-40,
+                          desired_c_prob=-50,
+                          desired_r_prob=-6)
+
+    ###################################################################
+
+    compare_chaos_network(net=cn4,
+                          desired_input_size=1,
+                          desited_output_size=2,
+                          desired_neuron_count=3,
+                          desired_hidden_start_index=1,
+                          desired_hidden_end_index=1,
+                          desired_hidden_count=0,
+                          desired_links=np.array([[0, 0, 0],
+                                                  [0, 0, 0],
+                                                  [0, 0, 0]]),
+                          desired_weights=np.array([[0, 0, 0],
+                                                    [0, 0, 0],
+                                                    [0, 0, 0]]),
+                          desired_biases=np.array([[0., -2, -30]]),
+                          desired_actFun=[None, None, None],
+                          desired_aggr=SincAct(),
+                          desired_maxit=1,
+                          desired_mut_rad=-10,
+                          desired_wb_prob=-20,
+                          desired_s_prob=-3,
+                          desired_p_prob=-4,
+                          desired_c_prob=-5,
+                          desired_r_prob=-60)
+
 # def test_test_crossover():
 #     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
 #                                  wb_mut_prob=(0.05, 0.1), s_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6))
@@ -509,7 +653,7 @@ cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bi
 # print(f"swap_c_prob: \n {random.random()}")
 # print(f"swap_r_prob: \n {random.random()}")
 # test_simple_crossover()
-test_simple_crossover_2()
-
+# test_simple_crossover_2()
+# test_simple_crossover_3()
 # test_simple_crossover()
 

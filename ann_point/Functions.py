@@ -1,5 +1,7 @@
 import numpy as np
 
+# TODO - C - unmake import stucture
+
 eps = 1e-10
 
 # TODO - C - clean up all files from commented code
