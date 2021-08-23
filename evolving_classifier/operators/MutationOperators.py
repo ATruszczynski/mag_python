@@ -38,7 +38,7 @@ class FinalMutationOperator(MutationOperator):
 
         aggr = conditional_try_choose_different(sqr_pm_2, point.aggrFun, self.hrange.actFunSet)
 
-        links_rev, weights_rev = add_remove_weights(sqr_pm_2, point.links, weights_shifted, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
+        links_rev, weights_rev = add_or_remove_edges(sqr_pm_2, point.links, weights_shifted, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
 
         net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 

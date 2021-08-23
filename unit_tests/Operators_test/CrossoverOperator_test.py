@@ -5,8 +5,6 @@ from evolving_classifier.operators.FinalCO1 import *
 # from utility.Mut_Utility import resize_layer
 from utility.TestingUtility import compare_chaos_network
 
-#TODO - A - test numpy copy (done?)
-#TODO - A - test deepcopying in general (done?)
 #TODO - B - test multiple runs vs single run (done?)
 #TODO - B - ec test multiple runs vs single run? (done?)
 

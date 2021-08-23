@@ -124,16 +124,16 @@ def write_test_parameters(data_file, tt:TupleForTest):
 
     data_file.write(f"min_mut_radius: {hrange.min_mut_radius}\n")
     data_file.write(f"max_mut_radius: {hrange.max_mut_radius}\n")
-    data_file.write(f"min_wb_mut_prob: {hrange.min_sqr_mut_prob}\n")
-    data_file.write(f"max_wb_mut_prob: {hrange.max_sqr_mut_prob}\n")
-    data_file.write(f"min_s_mut_prob: {hrange.min_lin_mut_prob}\n")
-    data_file.write(f"max_s_mut_prob: {hrange.max_lin_mut_prob}\n")
+    data_file.write(f"min_sqr_mut_prob: {hrange.min_sqr_mut_prob}\n")
+    data_file.write(f"max_sqr_mut_prob: {hrange.max_sqr_mut_prob}\n")
+    data_file.write(f"min_lin_mut_prob: {hrange.min_lin_mut_prob}\n")
+    data_file.write(f"max_lin_mut_prob: {hrange.max_lin_mut_prob}\n")
     data_file.write(f"min_p_mut_prob: {hrange.min_p_mut_prob}\n")
     data_file.write(f"max_p_mut_prob: {hrange.max_p_mut_prob}\n")
     data_file.write(f"min_c_prob: {hrange.min_c_prob}\n")
     data_file.write(f"max_c_prob: {hrange.max_c_prob}\n")
-    data_file.write(f"min_r_prob: {hrange.min_dstr_mut_prob}\n")
-    data_file.write(f"max_r_prob: {hrange.max_dstr_mut_prob}\n")
+    data_file.write(f"min_dstr_mut_prob: {hrange.min_dstr_mut_prob}\n")
+    data_file.write(f"max_dstr_mut_prob: {hrange.max_dstr_mut_prob}\n")
 
     data_file.write("actfuns: ")
     for i in range(len(hrange.actFunSet)):
@@ -142,7 +142,6 @@ def write_test_parameters(data_file, tt:TupleForTest):
     data_file.write("\n")
 
 
-# TODO - A - change names here
 def create_test_data_file(fpath: str, tt: TupleForTest):
     data_file = open(fpath + "data_file.txt", "w")
     write_test_parameters(data_file, tt)

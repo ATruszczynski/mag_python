@@ -45,7 +45,7 @@ class FinalMutationOperator(MutationOperator):
         options = list(range(minh, maxh + 1))
         point = change_neuron_count(point, self.hrange, conditional_try_choose_different(dstr_pm, point.hidden_count, options))
 
-        point.weights, point.links = add_remove_weights(dstr_pm, point.weights, point.links, get_weight_mask(point.input_size, point.output_size, point.neuron_count))
+        point.weights, point.links = add_or_remove_edges(dstr_pm, point.weights, point.links, get_weight_mask(point.input_size, point.output_size, point.neuron_count))
 
         point.net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 

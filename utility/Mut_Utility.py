@@ -6,7 +6,6 @@ from utility.Utility import *
 # from ann_point.HyperparameterRange import HyperparameterRange
 
 # TODO - B - remove needless functions
-# TODO - A - are things here tested?
 
 def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hidden: int):
     current_hidden = net.hidden_count
@@ -165,23 +164,23 @@ def uniform_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, minS: float
 
     return result
 
-def reroll_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float, minV: float, maxV: float):
-    result = matrix.copy()
-
-    probs = np.random.random(matrix.shape)
-    to_change = np.where(probs <= prob)
-    result[to_change] = np.random.uniform(minV, maxV, matrix.shape)[to_change]
-    result = np.multiply(result, mask)
-
-    return result
-
-def reroll_value(p: float, value: float, minV: float, maxV: float):
-    result = value
-
-    if random.random() <= p:
-        result = random.uniform(minV, maxV)
-
-    return result
+# def reroll_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float, minV: float, maxV: float):
+#     result = matrix.copy()
+#
+#     probs = np.random.random(matrix.shape)
+#     to_change = np.where(probs <= prob)
+#     result[to_change] = np.random.uniform(minV, maxV, matrix.shape)[to_change]
+#     result = np.multiply(result, mask)
+#
+#     return result
+#
+# def reroll_value(p: float, value: float, minV: float, maxV: float):
+#     result = value
+#
+#     if random.random() <= p:
+#         result = random.uniform(minV, maxV)
+#
+#     return result
 
 def conditional_try_choose_different(p: float, current, options):
     result = current
@@ -203,7 +202,6 @@ def conditional_value_swap(prob: float, val1, val2):
 
     return res1, res2
 
-# TODO - A - test
 def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: float, frac: float):
     if random.random() <= p:
         spectrum = maxV - minV
@@ -226,8 +224,7 @@ def conditional_gaussian_value_shift(p: float, value: float, minV: float, maxV: 
 
     return value
 
-# TODO - A - test
-def add_remove_weights(s_pm: float, links: np.ndarray, weights: np.ndarray, mask, hrange: HyperparameterRange):
+def add_or_remove_edges(s_pm: float, links: np.ndarray, weights: np.ndarray, mask, hrange: HyperparameterRange):
     probs = np.random.random(links.shape)
     to_change = np.where(probs <= s_pm)
     new_links = links.copy()
@@ -236,9 +233,7 @@ def add_remove_weights(s_pm: float, links: np.ndarray, weights: np.ndarray, mask
 
     diffs = links - new_links
     added_edges = np.where(diffs == -1)
-    #TODO - A - not correct extraction of min/max weights
-    minW = np.min(weights)
-    maxW = np.max(weights)
+    minW, maxW = get_min_max_values_of_matrix_with_mask(weights, links)
 
     if minW == 0 and maxW == 0:
         minW = hrange.min_init_wei
@@ -252,7 +247,6 @@ def add_remove_weights(s_pm: float, links: np.ndarray, weights: np.ndarray, mask
 
     return links, weights
 
-# TODO - C - to delete
 def get_min_max_values_of_matrix_with_mask(matrix: np.ndarray, mask: np.ndarray):
     only_present = matrix[np.where(mask == 1)]
     minW = 0

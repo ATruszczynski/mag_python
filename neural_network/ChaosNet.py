@@ -30,6 +30,7 @@ class ChaosNet:
         check_cond_in_cn_const(c_prob <= 0)
         check_cond_in_cn_const(dstr_mut_prob <= 0)
 
+        # TODO - A - that is not a correct check; maybe a warning or sth?
         nonzl = np.where(links != 0)
         nonzw = np.where(weights != 0)
         check_cond_in_cn_const(len(nonzl[0]) == len(nonzw[0]))

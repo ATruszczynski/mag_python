@@ -3,7 +3,6 @@ import numpy as np
 from neural_network.ChaosNet import *
 from ann_point.Functions import *
 
-#TODO - A - test
 class CNDataPoint():
     def __init__(self, net: ChaosNet):
         self.net = net.copy()

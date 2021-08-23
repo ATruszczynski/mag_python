@@ -6,7 +6,7 @@ from utility.Mut_Utility import *
 from utility.TestingUtility import compare_chaos_network
 from utility.Utility import *
 
-
+# TODO - B - cleanup
 def test_neuron_increase():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
@@ -732,46 +732,48 @@ def test_gaussian_shift():
                                                 [0, 0, 6.10237258],
                                                 [0, 0, 0]]), atol=1e-4))
 
-def test_reroll_matrix():
-    seed = 1001
-    random.seed(seed)
-    np.random.seed(seed)
 
 
-    weights = np.array([[0, 1, 2],
-                        [0, 0, 4],
-                        [0, 0, 0.]])
-
-    links = np.array([[0, 1, 1],
-                      [0, 0, 1],
-                      [0, 0, 0]])
-
-    weights = reroll_matrix(weights, links, 0.6, -1, 2)
-
-    assert np.all(np.isclose(weights, np.array([[0, 1.56070304, -0.87660839],
-                                                [0, 0, -0.67269435],
-                                                [0, 0, 0]]), atol=1e-4))
-
-
-
-    seed = 1004
-    random.seed(seed)
-    np.random.seed(seed)
-
-
-    weights = np.array([[0, 1, 2],
-                        [0, 0, 4],
-                        [0, 0, 0.]])
-
-    links = np.array([[0, 1, 1],
-                      [0, 0, 1],
-                      [0, 0, 0]])
-
-    weights = reroll_matrix(weights, links, 0.6, -1, 2)
-
-    assert np.all(np.isclose(weights, np.array([[0, 1., 2],
-                                                [0, 0, 0.31546711],
-                                                [0, 0, 0]]), atol=1e-4))
+# def test_reroll_matrix():
+#     seed = 1001
+#     random.seed(seed)
+#     np.random.seed(seed)
+#
+#
+#     weights = np.array([[0, 1, 2],
+#                         [0, 0, 4],
+#                         [0, 0, 0.]])
+#
+#     links = np.array([[0, 1, 1],
+#                       [0, 0, 1],
+#                       [0, 0, 0]])
+#
+#     weights = reroll_matrix(weights, links, 0.6, -1, 2)
+#
+#     assert np.all(np.isclose(weights, np.array([[0, 1.56070304, -0.87660839],
+#                                                 [0, 0, -0.67269435],
+#                                                 [0, 0, 0]]), atol=1e-4))
+#
+#
+#
+#     seed = 1004
+#     random.seed(seed)
+#     np.random.seed(seed)
+#
+#
+#     weights = np.array([[0, 1, 2],
+#                         [0, 0, 4],
+#                         [0, 0, 0.]])
+#
+#     links = np.array([[0, 1, 1],
+#                       [0, 0, 1],
+#                       [0, 0, 0]])
+#
+#     weights = reroll_matrix(weights, links, 0.6, -1, 2)
+#
+#     assert np.all(np.isclose(weights, np.array([[0, 1., 2],
+#                                                 [0, 0, 0.31546711],
+#                                                 [0, 0, 0]]), atol=1e-4))
 
 def test_conditional_try_differnt():
     set = [ReLu(), Poly2(), SincAct(), Poly3()]
@@ -790,18 +792,18 @@ def test_conditional_try_differnt():
     f1 = conditional_try_choose_different(0.5, Poly3(), set)
     assert f1.to_string() == "P2"
 
-def test_reroll_value():
-    random.seed(1002)
-
-    d = 1
-    d = reroll_value(0.5, d, -1, 2)
-    assert d == 1
-    d = 2
-    d = reroll_value(0.5, d, -1, 2)
-    assert d == pytest.approx(-0.33716, abs=1e-4)
-    d = 3
-    d = reroll_value(0.5, d, -1, 2)
-    assert d == pytest.approx(0.4518733, abs=1e-4)
+# def test_reroll_value():
+#     random.seed(1002)
+#
+#     d = 1
+#     d = reroll_value(0.5, d, -1, 2)
+#     assert d == 1
+#     d = 2
+#     d = reroll_value(0.5, d, -1, 2)
+#     assert d == pytest.approx(-0.33716, abs=1e-4)
+#     d = 3
+#     d = reroll_value(0.5, d, -1, 2)
+#     assert d == pytest.approx(0.4518733, abs=1e-4)
 
 def test_conditional_value_swap():
     random.seed(1006)
@@ -920,6 +922,231 @@ def test_fco2_cuts():
     assert compare_lists(cuts[6], [3, 2, 1, 2])
     assert compare_lists(cuts[7], [3, 2, 2, 1])
     assert compare_lists(cuts[8], [3, 2, 3, 0])
+
+def test_add_remove_weights():
+    hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
+                                 hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
+
+
+    link1 = np.array([[0., 1, 0, 0, 0],
+                      [0, 0, 1, 1, 1],
+                      [0, 1, 0, 0, 1],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0]])
+
+    wei1 =  np.array([[0, 1, 0, 0, 0],
+                      [0, 0, 3, 5, 7],
+                      [0, 2, 4, 0, 8],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0.]])
+
+    seed = 11002211
+    random.seed(seed)
+    np.random.seed(seed)
+    link2, wei2 = add_or_remove_edges(0.8, link1, wei1, get_weight_mask(1, 2, 5), hrange)
+
+    explink = np.array([[0, 0, 1, 0, 0],
+                        [0, 0, 1, 0, 0],
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0]])
+
+    expwei = np.array([[0, 0, 2.5023659, 0, 0],
+                       [0, 0, 3, 0, 0],
+                       [0, 0, 0, 0, 0],
+                       [0, 0, 0, 0, 0],
+                       [0, 0, 0, 0, 0]])
+
+    assert np.array_equal(explink, link2)
+    assert np.all(np.isclose(expwei, wei2, atol=1e-5))
+
+def test_add_remove_weights_2():
+    hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
+                                 hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
+
+
+    link1 = np.array([[0., 1, 1, 0],
+                      [0 , 0, 1, 1],
+                      [0 , 0, 0, 1],
+                      [0 , 0, 0, 0]])
+
+    wei1 =  np.array([[0., -1, 4, 0],
+                      [0 , 0, -2, 5.5],
+                      [0 , 0, 0, 3],
+                      [0 , 0, 0, 0]])
+
+    seed = 67859404
+    random.seed(seed)
+    np.random.seed(seed)
+    link2, wei2 = add_or_remove_edges(0.8, link1, wei1, get_weight_mask(1, 1, 4), hrange)
+
+    explink = np.array([[0., 0, 0, 0],
+                        [0 , 0, 0, 0],
+                        [0 , 1, 0, 1],
+                        [0 , 0, 0, 0]])
+
+    expwei =  np.array([[0., 0, 0, 0],
+                        [0 , 0, 0, 0],
+                        [0 , 0.89671571, 0, 3],
+                        [0 , 0, 0, 0]])
+
+    assert np.array_equal(explink, link2)
+    assert np.all(np.isclose(expwei, wei2, atol=1e-5))
+
+def test_add_remove_weights_3():
+    hrange = HyperparameterRange(init_wei=(-1, 2), init_bia=(-1, 1), it=(1, 5),
+                                 hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 dstr_mut_prob=(0.44, 0.55))
+
+
+    link1 = np.array([[0., 1, 1, 0],
+                      [0 , 0, 1, 1],
+                      [0 , 0, 0, 1],
+                      [0 , 0, 0, 0]])
+
+    wei1 =  np.array([[0., 0, 0, 0],
+                      [0 , 0, 0, 0],
+                      [0 , 0, 0, 0],
+                      [0 , 0, 0, 0]])
+
+    seed = 67859404
+    random.seed(seed)
+    np.random.seed(seed)
+    link2, wei2 = add_or_remove_edges(0.8, link1, wei1, get_weight_mask(1, 1, 4), hrange)
+
+    explink = np.array([[0., 0, 0, 0],
+                        [0 , 0, 0, 0],
+                        [0 , 1, 0, 1],
+                        [0 , 0, 0, 0]])
+
+    expwei =  np.array([[0., 0, 0, 0],
+                        [0 , 0, 0, 0],
+                        [0 , 0.15868628, 0, 0],
+                        [0 , 0, 0, 0]])
+
+    assert np.array_equal(explink, link2)
+    assert np.all(np.isclose(expwei, wei2, atol=1e-5))
+
+def test_min_max_weights_from_matrix():
+    link1 = np.array([[0., 1, 1, 0],
+                      [0 , 0, 1, 1],
+                      [0 , 0, 0, 1],
+                      [0 , 0, 0, 0]])
+
+    wei1 =  np.array([[0., 0, 0, 0],
+                      [0 , 0, 0, 0],
+                      [0 , 0, 0, 0],
+                      [0 , 0, 0, 0]])
+
+    minW, maxW = get_min_max_values_of_matrix_with_mask(wei1, link1)
+
+    assert minW == 0
+    assert maxW == 0
+
+
+    link1 = np.array([[0., 1, 1, 0],
+                      [0 , 0, 1, 1],
+                      [0 , 0, 0, 1],
+                      [0 , 0, 0, 0]])
+
+    wei1 =  np.array([[0., 0, 0, 1],
+                      [0 , 0, 0, 0],
+                      [0 , 1, 0, 0],
+                      [0 , 0, 0, 0]])
+
+    minW, maxW = get_min_max_values_of_matrix_with_mask(wei1, link1)
+
+    assert minW == 0
+    assert maxW == 0
+
+
+    link1 = np.array([[0., 1, 1, 0],
+                      [0 , 0, 1, 1],
+                      [0 , 0, 0, 1],
+                      [0 , 0, 0, 0]])
+
+    wei1 =  np.array([[0., 2, 3, 0],
+                      [0 , 0, 3, 1],
+                      [0 , 0, 0, 4],
+                      [0 , 0, 0, 0]])
+
+    minW, maxW = get_min_max_values_of_matrix_with_mask(wei1, link1)
+
+    assert minW == 1
+    assert maxW == 4
+
+
+    link1 = np.array([[0., 1, 1, 0],
+                      [0 , 0, 1, 1],
+                      [0 , 0, 0, 1],
+                      [0 , 0, 0, 0]])
+
+    wei1 =  np.array([[0., 2, -3, 0],
+                      [0 , 0, 0, 5],
+                      [0 , 0, 0, 4],
+                      [0 , 0, 0, 0]])
+
+    minW, maxW = get_min_max_values_of_matrix_with_mask(wei1, link1)
+
+    assert minW == -3
+    assert maxW == 5
+
+#TODO - C - ten plik jest za duży
+def test_uniform_value_shift():
+    random.seed(10012001)
+
+    val1 = conditional_uniform_value_shift(0.8, 0.1, 0., 1, 0.1)
+    assert val1 == pytest.approx(0.13521542, abs=1e-5)
+
+    val1 = conditional_uniform_value_shift(0.8, 0.25, 0., 1, 0.15)
+    assert val1 == pytest.approx(0.299193710, abs=1e-5)
+
+    val1 = conditional_uniform_value_shift(0.6, 0.25, 0., 1, 0.15)
+    assert val1 == pytest.approx(0.25, abs=1e-5)
+
+    results = []
+    for i in range(200):
+        results.append(conditional_uniform_value_shift(1, 0.25, 0., 1, i * 0.05))
+
+    assert min(results) >= 0.
+    assert min(results) <= 0.05
+    assert max(results) <= 1.
+    assert max(results) >= 0.95
+
+# random.seed(10012001)
+# print(random.random())
+# print(random.uniform(0, 0.2))
+# print("---")
+# print(random.random())
+# print(random.uniform(0.1, 0.4))
+# print("---")
+# print(random.random())
+# print(random.uniform(0.1, 0.4))
+# print("---")
+
+test_uniform_value_shift()
+
+# test_min_max_weights_from_matrix()
+
+# seed = 67859404
+# random.seed(seed)
+# np.random.seed(seed)
+# n = 4
+# rmat = np.random.random((n, n))
+# rwei = np.random.uniform(-1, 2, (n, n))
+#
+# print(rmat - 0.8)
+# print(rwei)
+
+# test_add_remove_weights()
+# test_add_remove_weights_2()
+# test_add_remove_weights_3()
+
 
 # test_fco2_cuts()
 

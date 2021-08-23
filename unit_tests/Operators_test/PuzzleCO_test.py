@@ -7,7 +7,7 @@
 # from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOperator2
 # from utility.TestingUtility import compare_chaos_network
 #
-# # TODO - A - test this if used
+# # TODO - B - test this if used
 # def test_simple_crossover():
 #     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
 #                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),

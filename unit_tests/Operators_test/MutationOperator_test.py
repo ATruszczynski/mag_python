@@ -89,7 +89,7 @@ def test_struct_mutation():
                                                   [0., 0., 0., 0., 0.]]),
                           desired_weights=np.array([[0., 0., 0., 0., 0.],
                                                     [0., 0., 0., 0., 0.],
-                                                    [0., 0., 0., 6.764458, 0.],
+                                                    [0., 0., 0., 6.88475867, 0.],
                                                     [0., 0., 0., 0., 0.],
                                                     [0., 0., 0., 0., 0.]]),
                           desired_biases=np.array([[0, -1.1922916, -4.12076712, -4.55715203, -5.49155904]]),
@@ -108,10 +108,6 @@ def test_struct_mutation_2():
                                  sqr_mut_prob=(log10(0.4), log10(0.8)), lin_mut_prob=(log10(0.65), log10(0.95)),
                                  p_mutation_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
                                  dstr_mut_prob=(log10(0.59), log10(0.61)))
-    mo = FinalMutationOperator(hrange)
-
-    random.seed(20021234)
-    np.random.seed(20021234)
 
     link1 = np.array([[0, 1, 1, 1, 0, 0],
                       [0, 0, 1, 1, 0, 1],
@@ -133,6 +129,10 @@ def test_struct_mutation_2():
                    lin_mut_prob=log10(0.66), p_mutation_prob=log10(0.74),
                    c_prob=log10(0.15), dstr_mut_prob=log10(0.595))
 
+    mo = FinalMutationOperator(hrange)
+
+    random.seed(20021234)
+    np.random.seed(20021234)
     mutant = mo.mutate(cn1)
 
     compare_chaos_network(net=cn1,
@@ -179,9 +179,9 @@ def test_struct_mutation_2():
                                                   [0., 0., 0., 0., 0., 0.],
                                                   [0., 0., 0., 0., 0., 0.]]),
                           desired_weights=np.array([[ 0.,          2.23563742,  0.        ,  0.        ,  0.        ,  0.        ],
-                                                    [-0.,          0.        ,  0.        ,  0.        ,  0.0125607 ,  0.        ],
-                                                    [-0.,          7.91732588,  0.        ,  7.0406569,  -0.        ,  9.55098225],
-                                                    [-0.,          0.        ,  2.42323777,  0.        ,  0.        ,  4.65590867],
+                                                    [-0.,          0.        ,  0.        ,  0.        ,  1.72372606,  0.        ],
+                                                    [-0.,          7.91732588,  0.        ,  7.49100203,  -0.        ,  9.55098225],
+                                                    [-0.,          0.        ,  3.70193457,  0.        ,  0.        ,  4.65590867],
                                                     [ 0.,         -0.        , -0.        ,  0.        ,  0.        ,  0.        ],
                                                     [-0.,          0.        , -0.        ,  0.        ,  0.        ,  0.        ]]),
                           desired_biases=np.array([[ 0.        , -1.70775246, -3.09250415, -4.        , -5.        , -6.        ]]),
@@ -200,10 +200,6 @@ def test_struct_mutation_3():
                                  sqr_mut_prob=(log10(0.4), log10(0.8)), lin_mut_prob=(log10(0.65), log10(0.95)),
                                  p_mutation_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
                                  dstr_mut_prob=(log10(0.59), log10(0.61)))
-    mo = FinalMutationOperator(hrange)
-
-    random.seed(1112111)
-    np.random.seed(1112111)
 
     link1 = np.array([[0, 1, 1, 1, 0, 0],
                       [0, 0, 1, 1, 0, 1],
@@ -225,6 +221,10 @@ def test_struct_mutation_3():
                    lin_mut_prob=log10(0.66), p_mutation_prob=log10(0.74),
                    c_prob=log10(0.15), dstr_mut_prob=log10(0.595))
 
+    mo = FinalMutationOperator(hrange)
+
+    random.seed(1112111)
+    np.random.seed(1112111)
     mutant = mo.mutate(cn1)
 
     compare_chaos_network(net=cn1,
@@ -272,8 +272,8 @@ def test_struct_mutation_3():
                                                   [0., 0., 0., 0., 0., 0.]]),
                           desired_weights=np.array([[ 0.         , 1.86811848,  0.        ,  0.        , -0.        ,  0.        ],
                                                      [ 0.         , 0.        ,  5.07223363,  6.09991906, -0.        ,  6.69803919],
-                                                     [-0.         , 0.        , -0.        ,  2.90108788,  5.46142271,  0.        ],
-                                                     [-0.         , 2.        ,  8.78228903, -0.        ,  0.        ,  0.        ],
+                                                     [-0.         , 0.        , -0.        ,  4.16703127,  6.19592067 ,  0.        ],
+                                                     [-0.         , 2.        ,  8.82747901, -0.        ,  0.        ,  0.        ],
                                                      [-0.         ,-0.        , -0.        ,  0.        , -0.        , -0.        ],
                                                      [-0.         , 0.        ,  0.        ,  0.        , -0.        ,  0.        ]]),
                           desired_biases=np.array([[-0.        , -2.63499526, -3.        , -3.79587563, -5.10905153, -6.25300831]]),
@@ -294,33 +294,39 @@ seed = 20021234
 random.seed(seed)
 np.random.seed(seed)
 
+
+
 hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
                              sqr_mut_prob=(log10(0.4), log10(0.8)), lin_mut_prob=(log10(0.65), log10(0.95)),
                              p_mutation_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
-                             dstr_mut_prob=(log10(0.79), log10(0.81)))
+                             dstr_mut_prob=(log10(0.59), log10(0.61)))
 
-link1 = np.array([[0, 1, 1, 0, 0],
-                  [0, 0, 1, 0, 1],
-                  [0, 1, 0, 0, 1],
-                  [0, 0, 0, 0, 0],
-                  [0, 0, 0, 0, 0]])
-wei1 = np.array([[0., 1, 2, 0, 0],
-                 [0, 0, 3, 0, 5],
-                 [0, 7, 0, 0, 6],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0]])
-bia1 = np.array([[0., -2, -3, -4, -5]])
-actFuns1 = [None, ReLu(), TanH(), None, None]
+link1 = np.array([[0, 1, 1, 1, 0, 0],
+                  [0, 0, 1, 1, 0, 1],
+                  [0, 1, 0, 0, 0, 1],
+                  [0, 1, 0, 0, 1, 1],
+                  [0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0]])
+wei1 = np.array([[0, 2, 3, 4, 0, 0],
+                 [0, 0, 5, 6, 0, 7],
+                 [0, 8, 0, 0, 0, 9],
+                 [0, 2, 0, 0, 3, 5],
+                 [0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0.]])
+bia1 = np.array([[0., -2, -3, -4, -5, -6]])
+actFuns1 = [None, ReLu(), ReLu(), TanH(), None, None]
 
-cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-               actFuns=actFuns1, aggrFun=TanH(), net_it=2, mutation_radius=log10(0.5), sqr_mut_prob=log10(0.5),
-               lin_mut_prob=log10(0.8), p_mutation_prob=log10(0.7), c_prob=log10(0.3), dstr_mut_prob=log10(0.8))
-aggr1 = TanH()
-net_it = 2
-input_size = 1
-hidden_size = 2
-output_size = 2
-neuron_count = 5
+cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1,
+               aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), sqr_mut_prob=log10(0.75),
+               lin_mut_prob=log10(0.66), p_mutation_prob=log10(0.74),
+               c_prob=log10(0.15), dstr_mut_prob=log10(0.595))
+
+aggr1 = cn1.aggrFun
+net_it = cn1.net_it
+input_size = cn1.input_size
+hidden_size = cn1.hidden_count
+output_size = cn1.output_size
+neuron_count = cn1.neuron_count
 frac=0.1
 
 radius = 10 ** cn1.mutation_radius
@@ -341,7 +347,7 @@ naf.extend(output_size * [None])
 
 nag = conditional_try_choose_different(dstr_mut_prob, aggr1, hrange.actFunSet)
 
-lf, wf = add_remove_weights(dstr_mut_prob, link1, ws, get_weight_mask(input_size, output_size, neuron_count), hrange)
+lf, wf = add_or_remove_edges(dstr_mut_prob, link1, ws, get_weight_mask(input_size, output_size, neuron_count), hrange)
 
 nnit = conditional_try_choose_different(lin_mut_prob, net_it, list(range(hrange.min_it, hrange.max_it + 1)))
 
@@ -382,7 +388,7 @@ print(ncp)
 print("ndstr")
 print(ndstr)
 
-test_struct_mutation()
+test_struct_mutation_2()
 
 
 
