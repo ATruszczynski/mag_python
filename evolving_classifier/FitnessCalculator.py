@@ -35,7 +35,10 @@ class CNFitnessCalculator(FitnessCalculator):
         for i in range(len(to_compute)):
             results[i].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
 
-        #TODO - B - potrzebne?
+        for i in range(len(results)):
+            if np.isnan(results[i].ff):
+                results[i].ff = -np.inf
+
         results = sorted(results, key=lambda x: x.ff, reverse=True)
 
         return results

@@ -79,8 +79,8 @@ class EvolvingClassifier:
 
         self.history = RunHistory()
 
+    # TODO - A - determinism of sync vs async tested?
     def run(self, iterations: int, power: int = 1) -> ChaosNet:
-        #TODO - S - upewnić się, że wszędzie gdzie potrzebne sieci są posortowane
         if power > 1:
             pool = mp.Pool(power)
         else:
@@ -89,30 +89,25 @@ class EvolvingClassifier:
         best = [self.population[0], -math.inf]
 
         for i in range(iterations):
-            eval_pop_unfiltered = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
+            eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
-            eval_pop = [eval_pop_unfiltered[i] for i in range(len(eval_pop_unfiltered)) if not np.isnan(eval_pop_unfiltered[i].ff)]
-            if len(eval_pop) == 0:
-                eval_pop = eval_pop_unfiltered
-
-            sorted_eval = sorted(eval_pop, key=lambda x: x.ff, reverse=True)
-            self.history.add_it_hist(sorted_eval)
+            self.history.add_it_hist(eval_pop)
 
             if i % 10 == 0: # TODO - A - do usunięcia
-                print(f"{i + 1} - {sorted_eval[0].ff} - {sorted_eval[0].net.to_string()},")
+                print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
 
-            if sorted_eval[0].ff >= best[1]:
-                best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
+            if eval_pop[0].ff >= best[1]:
+                best = [eval_pop[0].net.copy(), eval_pop[0].ff]
 
             crossed = []
 
             while len(crossed) < self.pop_size:
-                c1 = self.so.select(val_pop=sorted_eval)
+                c1 = self.so.select(val_pop=eval_pop)
                 cr = random.random()
 
                 if len(crossed) <= self.pop_size - 2 and cr <= 10 ** c1.c_prob:
-                    c2 = self.so.select(val_pop=sorted_eval)
+                    c2 = self.so.select(val_pop=eval_pop)
                     cr_result = self.co.crossover(c1, c2)
                     crossed.extend(cr_result)
                 else:
@@ -132,9 +127,8 @@ class EvolvingClassifier:
         if power > 1:
             pool.close()
 
-        sorted_eval = sorted(eval_pop, key=lambda x: x.ff, reverse=True)
-        if sorted_eval[0].ff >= best[1]:
-            best = [sorted_eval[0].net.copy(), sorted_eval[0].ff]
+        if eval_pop[0].ff >= best[1]:
+            best = [eval_pop[0].net.copy(), eval_pop[0].ff]
 
         return best[0]
 

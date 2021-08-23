@@ -15,7 +15,6 @@ round_prec_rh = 7
 mean_used_id="m.u."
 
 # TODO - B - remove useless code
-# TODO - S - wypisz trochę więcej danych?
 class RunHistory:
     def __init__(self):
         self.it_hist = []
@@ -70,7 +69,7 @@ class RunHistory:
                 cndatapoint = it_nets[rk]
                 net = cndatapoint.net
                 file.write(f"{it + 1},{rk + 1},{net.input_size},{net.output_size},{net.neuron_count},"
-                           f"{net.edge_count()},"
+                           f"{net.get_edge_count()},"
                            f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
                            f"{net.mutation_radius},{net.sqr_mut_prob},{net.lin_mut_prob},"
                            f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{cndatapoint.ff}")

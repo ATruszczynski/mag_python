@@ -2,7 +2,7 @@ import random
 from typing import Any
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from math import ceil, exp, sqrt
+from math import ceil, exp, sqrt, log10
 
 from ann_point.HyperparameterRange import *
 from ann_point.Functions import *
@@ -109,10 +109,10 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 
 #TODO - B - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
 def get_default_hrange():#TODO - S - przemyśl to
-    hrange = HyperparameterRange(init_wei=(-10, 10), init_bia=(-10, 10), it=(1, 10), hidden_count=(0, 100),
+    hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 10), hidden_count=(0, 100),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-2, 0), sqr_mut_prob=(-2, 0), lin_mut_prob=(-2, 0),
-                                 p_mutation_prob=(-2, 0), c_prob=(-2, 0),
+                                 p_mutation_prob=(-2, 0), c_prob=(log10(0.8), 0),
                                  dstr_mut_prob=(-2, 0))
     return hrange
 

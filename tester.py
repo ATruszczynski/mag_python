@@ -1,6 +1,7 @@
 import random
 from statistics import mean
 from sklearn import datasets
+import datetime
 
 from evolving_classifier.operators.PuzzleCO import PuzzleCO
 from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
@@ -17,7 +18,6 @@ np.seterr(all='ignore')
 
 directory_for_tests="algo_tests"
 
-#TODO - S - add some summary report file per test
 # TODO - S - check if everythoing works correctly
 
 def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
@@ -27,6 +27,7 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
         os.mkdir(directory_for_tests)
 
     for tt in tts:
+        print(f"Test {tt.name} has started at {datetime.datetime.now()}")
         subdir_name = f"{directory_for_tests}{os.path.sep}{tt.name}"
         if not os.path.exists(subdir_name):
             os.mkdir(subdir_name)
@@ -36,6 +37,7 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
         create_test_data_file(fpath, tt)
 
         results = []
+        bests = []
         random.seed(tt.seed)
         np.random.seed(tt.seed)
 
@@ -44,28 +46,50 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
             seeds.append(random.randint(0, 10**6))
 
         for i in range(tt.rep):
+            print(f"Progress: {i + 1}/{tt.rep} at {datetime.datetime.now()}")
             ec = EvolvingClassifier()
             ec.prepare(popSize=tt.popSize, nn_data=tt.data, seed=seeds[i], hrange=tt.hrange, ct=tt.ct, mt=tt.mt,
                        st=tt.st, fft=tt.fft, fct=tt.fct)
+
             net = ec.run(iterations=tt.iterations, power=power)
             net.net_to_file(fpath=fpath+f"best_{i + 1}.txt")
             ec.history.to_csv_file(fpath=fpath+f"rep_{i + 1}.csv", reg=tt.reg)
             results.append(net.copy())
-            print()
+
             if tt.reg == False:
                 tr = net.test(tt.data[2], tt.data[3])
-                print(efficiency(tr[0]))
+                tresult = efficiency(tr[0])
             else:
-                tr = net.test(tt.data[2], tt.data[3], lf=tt.fftarg())
-                print(tr[1])
+                tr = net.test(tt.data[2], tt.data[3], lf=tt.fft[1]())
+                tresult = tr[1]
+            bests.append([net, tresult])
 
+            print()
+            print(tresult)
+
+        create_summary_file(fpath, bests, tt)
         resultss.append(results)
+
+        print(f"Test {tt.name} has ended at {datetime.datetime.now()}")
 
     return resultss
 
-def create_test_data_file(fpath: str, tt: TupleForTest):
-    data_file = open(fpath + "data_file.txt", "w")
 
+def create_summary_file(fpath: str, bests: [[ChaosNet, float]], tt: TupleForTest):
+    data_file = open(fpath + "summary_file.txt", "w")
+    write_test_parameters(data_file=data_file, tt=tt)
+
+    data_file.write("\n\nSummary: \n")
+    for i in range(len(bests)):
+        data_file.write(f"Test {i + 1}:\n")
+        data_file.write(f"{bests[i][0].to_string()} - {bests[i][1]}\n\n")
+
+    data_file.close()
+
+
+
+
+def write_test_parameters(data_file, tt:TupleForTest):
     data_file.write(f"test-data:\n")
 
     data_file.write(f"name: {tt.name} \n")
@@ -98,7 +122,6 @@ def create_test_data_file(fpath: str, tt: TupleForTest):
     data_file.write(f"min_hidden: {hrange.min_hidden}\n")
     data_file.write(f"max_hidden: {hrange.max_hidden}\n")
 
-
     data_file.write(f"min_mut_radius: {hrange.min_mut_radius}\n")
     data_file.write(f"max_mut_radius: {hrange.max_mut_radius}\n")
     data_file.write(f"min_wb_mut_prob: {hrange.min_sqr_mut_prob}\n")
@@ -116,10 +139,16 @@ def create_test_data_file(fpath: str, tt: TupleForTest):
     for i in range(len(hrange.actFunSet)):
         data_file.write(hrange.actFunSet[i].to_string() + ", ")
 
+    data_file.write("\n")
+
+
+# TODO - A - change names here
+def create_test_data_file(fpath: str, tt: TupleForTest):
+    data_file = open(fpath + "data_file.txt", "w")
+    write_test_parameters(data_file, tt)
+
     data_file.close()
 
-    pass
-# TODO - S - można zapisywać też inne statystyki sieci imo
 if __name__ == '__main__':
     seed = 22223333
     random.seed(seed)
@@ -143,22 +172,20 @@ if __name__ == '__main__':
     X = [xx[i] for i in range(125, 150)]
     Y = [yy[i] for i in range(125, 150)]
 
-    # count_tr = 500
-    # count_test = 500
-    # size = 5
-    # x,y = generate_counting_problem(count_tr, size)
-    # X,Y = generate_counting_problem(ceil(count_test), size)
+    count_tr = 500
+    count_test = 500
+    size = 5
+    x,y = generate_counting_problem(count_tr, size)
+    X,Y = generate_counting_problem(ceil(count_test), size)
     #
     # x,y = generate_square_problem(200, -5, 5)
     # X,Y = generate_square_problem(200, -5, 5)
-
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(0.001, 1), sqr_mut_prob=(0.001, 1), lin_mut_prob=(0.001, 1), p_mutation_prob=(0.01, 1), c_prob=(0.2, 1),
-                                 dstr_mut_prob=(0, 1))
-
     minrr = -2
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(-0.125, 0),
+                                 mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(-10, -10),
+                                 dstr_mut_prob=(minrr, 0))
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+                                 mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(log10(0.8), 0),
                                  dstr_mut_prob=(minrr, 0))
 
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 10), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
@@ -179,18 +206,18 @@ if __name__ == '__main__':
     #                      ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
     tests = []
-    pops = 200
-    its = 200
-    rep = 1
+    pops = 20
+    its = 20
+    rep = 4
     seed = 12121212
     power = 1
     starg = 6
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF], fct=CNFitnessCalculator, reg=False))
-    tests.append(TupleForTest(name="test_00", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    tests.append(TupleForTest(name="test_00", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
                               ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
-                              fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
+                              fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
     # tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))

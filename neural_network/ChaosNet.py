@@ -95,9 +95,7 @@ class ChaosNet:
 
         return self.act[self.hidden_end_index:]
 
-    #TODO - S - identify which vertices don't need to be processed
     def get_comp_order(self):
-        #TODO - S - jak to reaguje na wierzchołek ukryyt bez wejścia?
         self.hidden_comp_order = []
 
         touched = list(range(self.hidden_start_index))
@@ -105,7 +103,6 @@ class ChaosNet:
 
         hidden_links = self.links[:self.hidden_end_index, :self.hidden_end_index].copy()
 
-        #TODO - S - wyznaczanie które wierzch mają stopień wejśćia jest chyba bez sensu
         while len(touched) < self.hidden_end_index:
             out_of_layer_edges = hidden_links[layers[-1], :]
             oole_col_sums = np.sum(out_of_layer_edges, axis=0)
@@ -163,9 +160,6 @@ class ChaosNet:
 
     # def size(self):
     #     return -666
-
-    def edge_count(self):
-        return sum(self.links)
 
     #TODO - B - dużo z tych funkcji jest do wyrzucenia prawd.
 
@@ -243,15 +237,16 @@ class ChaosNet:
                         lin_mut_prob=self.lin_mut_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
                         dstr_mut_prob=self.dstr_mut_prob)
 
-    def edge_count(self):
+    # TODO - A - test
+    def get_edge_count(self):
         how_many = np.sum(self.links)
         return how_many
 
-    def density(self):
-        how_many = np.sum(self.links)
-        maxi = np.sum(get_weight_mask(self.input_size, self.output_size, self.neuron_count))
-
-        return how_many/maxi
+    # def density(self):
+    #     how_many = np.sum(self.links)
+    #     maxi = np.sum(get_weight_mask(self.input_size, self.output_size, self.neuron_count))
+    #
+    #     return how_many/maxi
 
     def get_act_fun_string(self):
         actFunsString = ""
@@ -272,7 +267,7 @@ class ChaosNet:
         actFunsString = self.get_act_fun_string()
 
         result = ""
-        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.edge_count())}|{self.net_it}|" \
+        result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.get_edge_count())}|{self.net_it}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
                   f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.sqr_mut_prob, 5)}|s:{round(self.lin_mut_prob, 5)}" \
                   f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.dstr_mut_prob, 5)}"
@@ -289,11 +284,17 @@ class ChaosNet:
         file.write(f"biases: \n{self.biases}\n")
         file.write(f"actFuns: \n{self.get_act_fun_string()}\n")
         file.write(f"aggrFun: \n{self.aggrFun.to_string()}\n")
+        file.write(f"net_it: \n{self.net_it}\n")
+
+        file.write(f"mutation_radius: \n{self.mutation_radius}\n")
+        file.write(f"sqr_mut_prob: \n{self.sqr_mut_prob}\n")
+        file.write(f"lin_mut_prob: \n{self.lin_mut_prob}\n")
+        file.write(f"p_mutation_prob: \n{self.p_mutation_prob}\n")
+        file.write(f"c_prob: \n{self.c_prob}\n")
+        file.write(f"dstr_mut_prob: \n{self.dstr_mut_prob}\n")
 
         file.close()
 
-#TODO - S - SAVE NET AT THE END!!!!!!!!!!!
-#TODO - S - flush files
 
 
 

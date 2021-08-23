@@ -6,6 +6,7 @@ eps = 1e-10
 
 # TODO - C - clean up all files from commented code
 
+# TODO - A - every tested?
 class ActFun:
     def compute(self, arg: np.ndarray) -> np.ndarray:
         pass
