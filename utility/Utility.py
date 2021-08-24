@@ -181,13 +181,29 @@ def compare_lists(l1: [int], l2: [int]):
 
     return equal
 
-# TODO - AA - test
 def copy_list_of_arrays(arrays: [np.ndarray]) -> [np.ndarray]:
     results = []
     for i in range(len(arrays)):
         results.append(arrays[i].copy())
 
     return results
+
+
+
+def get_testing_hrange():
+    return HyperparameterRange(
+        init_wei=(0, 1),
+        init_bia=(2, 3),
+        it=(4, 5),
+        hidden_count=(6, 7),
+        actFuns=[ReLu(), Identity(), Sigmoid(), Poly2()],
+        mut_radius=(8, 9),
+        sqr_mut_prob=(10, 11),
+        lin_mut_prob=(12, 13),
+        p_mutation_prob=(14, 15),
+        c_prob=(16, 17),
+        dstr_mut_prob=(18, 19)
+    )
 
 
 

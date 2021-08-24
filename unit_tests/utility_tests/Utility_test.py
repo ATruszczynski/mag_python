@@ -336,6 +336,27 @@ def test_get_in_radius_limits():
     assert min(hist) >= minB
     assert max(hist) <= maxB
 
+def test_copy_list_of_arrays():
+    arrays = [np.zeros((2, 2)), np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), np.ones((2, 4))]
+
+    carray = copy_list_of_arrays(arrays=arrays)
+
+    assert np.array_equal(carray[0], np.zeros((2, 2)))
+    assert np.array_equal(carray[1], np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    assert np.array_equal(carray[2], np.ones((2, 4)))
+
+    arrays[0][-1, -1] = 5
+    assert np.array_equal(arrays[0], np.array([[0, 0], [0, 5]]))
+    assert np.array_equal(carray[0], np.array([[0, 0], [0, 0]]))
+
+    arrays[1][-2, -2] = -1
+    assert np.array_equal(arrays[1], np.array([[1, 2, 3], [4, -1, 6], [7, 8, 9]]))
+    assert np.array_equal(carray[1], np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+
+    arrays[2][-2, -3] = 0
+    assert np.array_equal(arrays[2], np.array([[1, 0, 1, 1], [1, 1, 1, 1]]))
+    assert np.array_equal(carray[2], np.array([[1, 1, 1, 1], [1, 1, 1, 1]]))
+
 # def test_get_network_from_point():
 #     point = AnnPoint(neuronCounts=[2, 4, 4, 3], actFuns=[ReLu(), ReLu(), Softmax()], lossFun=QuadDiff(), learningRate=1, momCoeff=2, batchSize=3)
 #     network = network_from_point(point, 1010)
@@ -524,4 +545,43 @@ def test_wieght_mask_3():
 
 # test_list_comparison()
 # test_generate_population_limits()
-test_generate_population_limits()
+# test_generate_population_limits()
+
+def test_acts_same():
+    acts1 = [ReLu(), TanH(), Sigmoid()]
+    acts2 = [ReLu(), TanH(), Sigmoid()]
+    acts3 = [ReLu(), TanH()]
+    acts4 = [ReLu(), TanH(), SincAct()]
+
+    assert_acts_same(acts1, acts2)
+
+    try:
+        assert_acts_same(acts1, acts3)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+    try:
+        assert_acts_same(acts4, acts1)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+    try:
+        assert_acts_same(acts2, acts4)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+    try:
+        assert_acts_same(acts4, acts3)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+test_acts_same()
+# test_copy_list_of_arrays()

@@ -45,7 +45,7 @@ def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNe
             seeds.append(random.randint(0, 10**6))
 
         for i in range(tt.rep):
-            print(f"Progress: {tt.name} - {i + 1}/{tt.rep} at {datetime.datetime.now()}")
+            print(f"{tt.name} - {i + 1}/{tt.rep} at {datetime.datetime.now()}")
             ec = EvolvingClassifier()
             ec.prepare(popSize=tt.popSize, nn_data=tt.data, seed=seeds[i], hrange=tt.hrange, ct=tt.ct, mt=tt.mt,
                        st=tt.st, fft=tt.fft, fct=tt.fct)
@@ -59,7 +59,7 @@ def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNe
             else:
                 tr = net.test(tt.data[2], tt.data[3], tt.fft[1]())
 
-            net_to_file(net=net, fpath=fpath+f"best_{i + 1}.txt", tresult=tr)
+            net_to_file(net=net, dirpath=fpath + f"best_{i + 1}", tresult=tr)
             bests.append([net.copy(), tr])
 
             # print()
@@ -69,34 +69,32 @@ def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNe
         resultss.append(results)
 
         print(f"Test {tt.name} has ended at {datetime.datetime.now()}")
+        print("------------------------------------------------------")
 
     return resultss
 
-# TODO - A - this should save more data about net
 def create_summary_file(fpath: str, bests: [[ChaosNet, [np.ndarray, float]]], tt: TupleForTest):
     data_file = open(fpath + "summary_file.txt", "w")
     write_test_parameters(data_file=data_file, tt=tt)
 
     data_file.write("\n\nSummary:")
     for i in range(len(bests)):
-        data_file.write(f"\nTest {i + 1}:\n")
+        data_file.write(f"\n\nTest {i + 1}:\n")
         write_down_test_results(data_file, bests[i][0], bests[i][1])
 
     data_file.close()
 
-# TODO - A - better saving to file
-def net_to_file(net: ChaosNet, fpath: str, tresult: [Any]):
-    file = open(fpath, "w")
+def net_to_file(net: ChaosNet, dirpath: str, tresult: [Any]):
+    if not os.path.exists(dirpath):
+        os.mkdir(dirpath)
+
+    file = open(dirpath + os.path.sep + "non_matrix_data.txt", "w")
     file.write(f"input_size: {net.input_size}\n")
     file.write(f"output_size: {net.output_size}\n")
     file.write(f"neuron_count: {net.neuron_count}\n")
-    file.write(f"links: \n{net.links}\n")
-    file.write(f"weights: \n{net.weights}\n")
-    file.write(f"biases: \n{net.biases}\n")
     file.write(f"actFuns: \n{net.get_act_fun_string()}\n")
     file.write(f"aggrFun: \n{net.aggrFun.to_string()}\n")
     file.write(f"net_it: \n{net.net_it}\n")
-
     file.write(f"mutation_radius: \n{net.mutation_radius}\n")
     file.write(f"sqr_mut_prob: \n{net.sqr_mut_prob}\n")
     file.write(f"lin_mut_prob: \n{net.lin_mut_prob}\n")
@@ -108,6 +106,10 @@ def net_to_file(net: ChaosNet, fpath: str, tresult: [Any]):
     write_down_test_results(file, net, tresult)
 
     file.close()
+
+    np.savetxt(dirpath + os.path.sep + "links.csv", net.links, delimiter=",")
+    np.savetxt(dirpath + os.path.sep + "weights.csv", net.weights, delimiter=",")
+    np.savetxt(dirpath + os.path.sep + "biases.csv", net.biases, delimiter=",")
 
 def write_down_test_results(data_file, net: ChaosNet, tr: [Any]):
     data_file.write(f"{net.to_string()}\n")
@@ -242,7 +244,7 @@ if __name__ == '__main__':
     its = 10
     rep = 3
     seed = 12121212
-    power = 12
+    power = 1
     starg = 4
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],

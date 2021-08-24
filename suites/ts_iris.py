@@ -46,12 +46,15 @@ def test_suite_for_iris():
         x, y, X, Y = get_data()
         hrange = get_default_hrange()
 
+        # TODO - S - delete
+        hrange.max_hidden = 15
+
         tests = []
 
-        repetitions = 2
-        population_size = 20
-        iterations = 20
-        starg = 2
+        repetitions = 5
+        population_size = 100
+        iterations = 100
+        starg = 3
 
         tests.append(TupleForTest(name="iris_01", rep=repetitions, seed=random.randint(0, 10**6), popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,

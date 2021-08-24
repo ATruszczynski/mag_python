@@ -1,5 +1,5 @@
 from ann_point.Functions import *
-from utility.TestingUtility import assert_acts_same
+from utility.Utility2 import assert_acts_same
 
 
 class HyperparameterRange:

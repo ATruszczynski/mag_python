@@ -1,3 +1,5 @@
+from ann_point.Functions import *
+from ann_point.HyperparameterRange import HyperparameterRange
 from neural_network.ChaosNet import ChaosNet, ActFun
 import numpy as np
 import pytest
@@ -83,9 +85,4 @@ def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
                                     desired_inp=net2.inp,
                                     desired_act=net2.act)
 
-# TODO - AA - test
-def assert_acts_same(acts1: [ActFun], acts2: [ActFun]):
-    assert len(acts1) == len(acts2)
 
-    for i in range(len(acts1)):
-        assert acts1[i].to_string() == acts2[i].to_string()

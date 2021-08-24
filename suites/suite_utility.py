@@ -2,7 +2,7 @@ from TupleForTest import TupleForTest
 from tester import run_tests
 import os
 
-directory_for_tests=f"..{os.path.sep}algo_test"
+directory_for_tests=f"..{os.path.sep}algo_tests"
 
 # TODO - S - test
 def try_check_if_all_tests_computable(tests: [TupleForTest], power: int):
@@ -19,6 +19,6 @@ def try_check_if_all_tests_computable(tests: [TupleForTest], power: int):
         t.iterations = 5
         ctest.append(t)
 
-    run_tests(ctest, power)
+    run_tests(ctest, directory_for_tests, power)
 
 

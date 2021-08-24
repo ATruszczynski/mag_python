@@ -70,4 +70,4 @@ def test_tt_copy():
     tt1.data[3][2][-2, 0] = 333
     assert tt2.data[3][2][-2, 0] == 0
 
-test_tt_copy()
+# test_tt_copy()
