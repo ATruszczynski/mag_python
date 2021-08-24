@@ -3,6 +3,7 @@ from ann_point.HyperparameterRange import assert_hranges_same
 from utility.Utility import get_testing_hrange
 
 
+# TODO - A - make sure everythings ok here
 def test_same():
     hrange = get_testing_hrange()
     hrange2 = get_testing_hrange()

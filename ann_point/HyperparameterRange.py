@@ -32,7 +32,6 @@ class HyperparameterRange:
         self.min_dstr_mut_prob = dstr_mut_prob[0]
         self.max_dstr_mut_prob = dstr_mut_prob[1]
 
-    # TODO - AA - test
     def copy(self):
         return HyperparameterRange(init_wei=(self.min_init_wei, self.max_init_wei), init_bia=(self.min_init_bia, self.max_init_bia),
                                    it=(self.min_it, self.max_it), hidden_count=(self.min_hidden, self.max_hidden),
@@ -43,7 +42,6 @@ class HyperparameterRange:
                                    c_prob=(self.min_c_prob, self.max_c_prob),
                                    dstr_mut_prob=(self.min_dstr_mut_prob, self.max_dstr_mut_prob))
 
-# TODO - AA - test
 def assert_hranges_same(hrange1: HyperparameterRange, hrange2: HyperparameterRange):
     assert hrange1.min_init_wei == hrange2.min_init_wei
     assert hrange1.max_init_wei == hrange2.max_init_wei

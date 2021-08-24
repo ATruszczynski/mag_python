@@ -1,4 +1,6 @@
 from ann_point.HyperparameterRange import *
+from utility.Utility import get_testing_hrange
+
 
 def test_hparam():
     hrange = HyperparameterRange((1, 2), (3, 4), (1, 5), (10, 20), [ReLu(), Sigmoid(), TanH(), Softmax()], mut_radius=(0, 1),
@@ -32,3 +34,22 @@ def test_hparam():
     assert hrange.max_c_prob == 0.71
     assert hrange.min_dstr_mut_prob == 0.45
     assert hrange.max_dstr_mut_prob == 0.75
+
+def test_hrange_copy():
+    hrange = get_testing_hrange()
+
+    chrange = hrange.copy()
+
+    assert_hranges_same(hrange, chrange)
+
+    hrange.min_it = -100
+    hrange.actFunSet.append(Poly3())
+
+    assert hrange.min_it == -100
+    assert_acts_same(hrange.actFunSet, [ReLu(), Identity(), Sigmoid(), Poly2(), Poly3()])
+
+
+    assert chrange.min_it == 4
+    assert_acts_same(chrange.actFunSet, [ReLu(), Identity(), Sigmoid(), Poly2()])
+
+# test_hrange_copy()
