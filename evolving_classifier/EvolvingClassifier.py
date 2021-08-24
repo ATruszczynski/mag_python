@@ -79,7 +79,6 @@ class EvolvingClassifier:
 
         self.history = RunHistory()
 
-    # TODO - A - determinism of sync vs async tested?
     def run(self, iterations: int, power: int = 1) -> ChaosNet:
         if power > 1:
             pool = mp.Pool(power)
@@ -94,7 +93,7 @@ class EvolvingClassifier:
 
             self.history.add_it_hist(eval_pop)
 
-            if i % 10 == 0: # TODO - A - do usunięcia
+            if i % 50 == 0: # TODO - A - do usunięcia
                 print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
 
             if eval_pop[0].ff >= best[1]:

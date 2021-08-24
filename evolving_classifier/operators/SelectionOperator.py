@@ -22,7 +22,6 @@ class TournamentSelection(SelectionOperator):
         chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
         return chosen_sorted[0].net.copy()
 
-# TODO - A - test
 class TournamentSelectionSized(SelectionOperator):
     def __init__(self, count: int):
         super().__init__()

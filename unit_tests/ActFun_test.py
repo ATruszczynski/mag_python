@@ -1,7 +1,7 @@
 import pytest
 from ann_point.Functions import *
 
-
+# TODO - C - remake test structure
 allActFun = [ReLu(), Sigmoid(), TanH(), Softmax(), LReLu(), GaussAct(), SincAct(), Poly2(), Poly3(), Identity()]
 
 def test_relu():

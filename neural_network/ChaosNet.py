@@ -1,5 +1,7 @@
 from math import inf
 from statistics import mean
+from typing import Any
+from warnings import warn
 
 import numpy as np
 
@@ -30,13 +32,14 @@ class ChaosNet:
         check_cond_in_cn_const(c_prob <= 0)
         check_cond_in_cn_const(dstr_mut_prob <= 0)
 
-        # TODO - A - that is not a correct check; maybe a warning or sth?
         nonzl = np.where(links != 0)
         nonzw = np.where(weights != 0)
-        check_cond_in_cn_const(len(nonzl[0]) == len(nonzw[0]))
-        for i in range(len(nonzl[0])):
-            check_cond_in_cn_const(nonzl[0][i] == nonzw[0][i])
-            check_cond_in_cn_const(nonzl[1][i] == nonzw[1][i])
+        if len(nonzl[0]) != len(nonzw[0]):
+            warn("Edge with weight 0 present")
+        else:
+            for i in range(len(nonzl[0])):
+                check_cond_in_cn_const(nonzl[0][i] == nonzw[0][i])
+                check_cond_in_cn_const(nonzl[1][i] == nonzw[1][i])
 
         self.links = links.copy()
         self.weights = weights.copy()
@@ -75,7 +78,6 @@ class ChaosNet:
         self.c_prob = c_prob
         self.dstr_mut_prob = dstr_mut_prob
 
-    # TODO - A - test run of couple inputs vs input matrix
     def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
             self.compute_comp_order()
@@ -238,7 +240,6 @@ class ChaosNet:
                         lin_mut_prob=self.lin_mut_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
                         dstr_mut_prob=self.dstr_mut_prob)
 
-    # TODO - A - test
     def get_edge_count(self):
         how_many = np.sum(self.links)
         return how_many
@@ -273,7 +274,8 @@ class ChaosNet:
 
         return result
 
-    def net_to_file(self, fpath: str):
+    # TODO - A - make better
+    def net_to_file(self, fpath: str, tresult: Any):
         file = open(fpath, "w")
         file.write(f"input_size: {self.input_size}\n")
         file.write(f"output_size: {self.output_size}\n")
@@ -291,6 +293,9 @@ class ChaosNet:
         file.write(f"p_mutation_prob: \n{self.p_mutation_prob}\n")
         file.write(f"c_prob: \n{self.c_prob}\n")
         file.write(f"dstr_mut_prob: \n{self.dstr_mut_prob}\n")
+
+
+        file.write(f"tresult: \n{tresult}\n")
 
         file.close()
 

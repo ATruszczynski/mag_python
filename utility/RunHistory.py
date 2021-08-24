@@ -19,7 +19,7 @@ class RunHistory:
     def __init__(self):
         self.it_hist = []
 
-    def add_it_hist(self, data_points: [CNDataPoint]): #TODO - A - test
+    def add_it_hist(self, data_points: [CNDataPoint]):
         it_rec = []
         for i in range(len(data_points)):
             it_rec.append(data_points[i].copy())

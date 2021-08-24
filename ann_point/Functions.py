@@ -1,6 +1,6 @@
 import numpy as np
 
-# TODO - C - unmake import stucture
+# TODO - C - remake import stucture
 
 eps = 1e-10
 

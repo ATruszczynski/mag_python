@@ -52,7 +52,6 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
                        st=tt.st, fft=tt.fft, fct=tt.fct)
 
             net = ec.run(iterations=tt.iterations, power=power)
-            net.net_to_file(fpath=fpath+f"best_{i + 1}.txt")
             ec.history.to_csv_file(fpath=fpath+f"rep_{i + 1}.csv", reg=tt.reg)
             results.append(net.copy())
 
@@ -63,6 +62,8 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
                 tr = net.test(tt.data[2], tt.data[3], lf=tt.fft[1]())
                 tresult = tr[1]
             bests.append([net, tresult])
+
+            net.net_to_file(fpath=fpath+f"best_{i + 1}.txt", tresult=tresult)
 
             print()
             print(tresult)
@@ -183,11 +184,11 @@ if __name__ == '__main__':
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                  mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(-10, -10),
                                  dstr_mut_prob=(minrr, 0))
-    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
+    hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (1, 10), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                  mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(log10(0.8), 0),
                                  dstr_mut_prob=(minrr, 0))
 
-    hrange = get_default_hrange()
+    # hrange = get_default_hrange()
 
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 10), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
     #                              mut_radius=(minrr, minrr), wb_mut_prob=(minrr, minrr), s_mut_prob=(minrr, minrr), p_mutation_prob=(minrr, minrr), c_prob=(-0.12, -0.12),
@@ -208,18 +209,20 @@ if __name__ == '__main__':
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
     tests = []
     pops = 300
-    its = 200
-    rep = 4
+    its = 300
+    rep = 5
     seed = 12121212
     power = 12
-    starg = 6
-    hrange.max_hidden = 30
+    starg = 4
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF], fct=CNFitnessCalculator, reg=False))
     tests.append(TupleForTest(name="test_00", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
                               ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
-                              fft=[CNFF5, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                              fft=[CNFF], fct=CNFitnessCalculator, reg=False))
+    tests.append(TupleForTest(name="test_01", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+                              ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
+                              fft=[CNFF], fct=CNFitnessCalculator, reg=False))
     # tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))

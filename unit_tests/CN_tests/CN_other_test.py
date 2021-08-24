@@ -1,11 +1,15 @@
+from math import ceil
+
+from sklearn import datasets
 import numpy as np
+import pytest
 
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet, efficiency
 from utility.TestingUtility import compare_chaos_network
 import random
 
-from utility.Utility import generate_counting_problem
+from utility.Utility import generate_counting_problem, one_hot_endode
 from utility.Utility2 import get_weight_mask
 
 def test_CN_constr():
@@ -161,54 +165,85 @@ def test_CN_copy():
                           desired_p_prob=-4,
                           desired_c_prob=-5,
                           desired_r_prob=-6)
-test_CN_copy()
 
-# TODO - A - make some similar test
-# def test_cn_test_5():
-#     seed = 1001
-#     random.seed(seed)
-#     np.random.seed(seed)
-#
-#     fives_i, fives_o = generate_counting_problem(1000, 5)
-#
-#     links = np.zeros((11, 11))
-#     links[:5, 5:] = 1
-#     # print(links)
-#
-#     wei = np.array([[-10.04604658, -9.74799651, -9.86356132, -9.65934997, -10.00416797],
-#                     [-4.22234218,  -4.20543259, -4.03250108, -4.15155717, -4.30413714],
-#                     [-0.38323539,  -0.26812115, -0.20560072, -0.30525856, -0.58350255],
-#                     [2.01047055,   2.39063375, 2.32230205, 2.40134387, 2.25093187],
-#                     [4.61636766,   4.41484224, 4.5685952, 4.60406886, 4.28679621],
-#                     [7.32939472,   7.52108442, 7.63706206, 7.50769173, 7.39856456]])
-#
-#     weights = np.zeros((11, 11))
-#     weights[:5, 5:] = wei.T
-#
-#     links = np.multiply(links, get_weight_mask(5, 6, 11))
-#     weights = np.multiply(weights, get_weight_mask(5, 6, 11))
-#
-#     biases = np.zeros((1, 11))
-#     biases[0, 5:] = np.array([[14.18236634 ],
-#                               [11.33332699 ],
-#                               [5.72165648  ],
-#                               [-0.84340657 ],
-#                               [-8.69929589 ],
-#                               [-21.69464734]]).T
-#
-#     weights = weights / 100
-#     biases = biases / 100
-#
-#     # print(weights)
-#     # print(biases)
-#
-#     net = ChaosNet(input_size=5, output_size=6, links=links, weights=weights, biases=biases, actFuns=11 * [None],
-#                    aggrFun=Softmax(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3,
-#                    p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
-#     test_res = net.test(fives_i, fives_o, QuadDiff())
-#
-#     assert efficiency(test_res[0]) == 1.0
+def test_edge_count():
+    weights = np.array([[0, 0, 0.5, 0, 0, 0, 0],
+                        [0, 0, 0, -1, 0.5, 0, 0],
+                        [0, 0, 0, 0, 0, 1, 0],
+                        [0, 0, 0, 0, 2, 0, 1],
+                        [0, 0, 0, 0, 0, 0, 0.5],
+                        [0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0]])
+    links =   np.array([[0, 0, 1, 0, 0, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 0, 0, 1, 0],
+                        [0, 0, 0, 0, 1, 0, 1],
+                        [0, 0, 0, 0, 0, 0, 1],
+                        [0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0]])
+    bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
+    actFuns = [None, None, Sigmoid(), TanH(), ReLu(), None, None]
+    net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                   net_it=2, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4,
+                   c_prob=-5, dstr_mut_prob=-6)
+
+    assert net.get_edge_count() == 7
+
+
+def test_cn_for_prob():
+    seed = 22223333
+    random.seed(seed)
+    np.random.seed(seed)
+
+    iris = datasets.load_iris()
+    x = iris.data
+    y = iris.target
+
+    x = [x.reshape((4, 1)) for x in x]
+    y = one_hot_endode(y)
+    perm = list(range(0, len(y)))
+    random.shuffle(perm)
+
+    count_tr = 500
+    count_test = 500
+    size = 3
+    x,y = generate_counting_problem(count_tr, size)
+    X,Y = generate_counting_problem(ceil(count_test), size)
+
+    links = np.array([[0., 0., 0., 1., 0., 1., 0., 0., 0., 0.],
+                      [0., 0., 0., 0., 1., 1., 0., 0., 0., 0.],
+                      [0., 0., 0., 1., 0., 0., 0., 0., 0., 0.],
+                      [0., 0., 0., 0., 0., 1., 1., 0., 1., 1.],
+                      [0., 0., 0., 1., 0., 0., 1., 1., 0., 1.],
+                      [0., 0., 0., 0., 1., 0., 0., 1., 0., 1.],
+                      [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                      [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                      [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                      [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
+
+    wei = np.array([[ 0.         , 0.         , 0.        ,  0.02870241 , 0.         ,-0.65170473, 0.           ,0.          , 0.         , 0.        ],
+                    [ 0.         , 0.         , 0.        ,  0.         ,-0.50803933 ,-0.51046493, 0.           ,0.          , 0.         , 0.        ],
+                    [ 0.         , 0.         , 0.        , -0.59235079 , 0.         , 0.        , 0.           ,0.          , 0.         , 0.        ],
+                    [ 0.         , 0.         , 0.        ,  0.         , 0.         ,-0.26603819, -0.47900631  ,0.          ,-0.7692094  ,-0.84285979],
+                    [-0.         , 0.         , 0.        , -0.3525011  , 0.         , 0.        , 0.00727213   ,-0.17702534 , 0.         ,-0.81879874],
+                    [ 0.         , 0.         , 0.        ,  0.         ,-0.39768254 , 0.        , 0.           ,-0.14567781 , 0.         ,-0.80649623],
+                    [ 0.         , 0.         , 0.        ,  0.         , 0.         , 0.        , 0.           ,0.          , 0.         , 0.        ],
+                    [ 0.         , 0.         , 0.        ,  0.         , 0.         , 0.        , 0.           ,0.          , 0.         , 0.        ],
+                    [ 0.         , 0.         , 0.        ,  0.         , 0.         , 0.        , 0.           ,0.          , 0.         , 0.        ],
+                    [ 0.         , 0.         , 0.        ,  0.         , 0.         , 0.        , 0.           ,0.          , 0.         , 0.        ]])
+
+    biases = np.array([[-0.00000000e+00,  0.00000000e+00,  0.00000000e+00, -6.74547958e-01, -1.01664251e+00, -1.03673969e+00,  3.35911962e-01,  6.39615192e-01,-2.68632982e-02,  6.13634466e-05]])
+
+    acts = [None, None, None, Poly3(), GaussAct(), GaussAct(), None, None, None, None]
+
+    net = ChaosNet(input_size=3, output_size=4, links=links, weights=wei, biases=biases, actFuns=acts,
+                   aggrFun=Sigmoid(), net_it=6, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3,
+                   p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+    test_res = net.test(X, Y)
+
+    assert efficiency(test_res[0]) == pytest.approx(0.8367295847418645, abs=1e-6)
 
 
 
 # test_cn_test_5()
+test_cn_for_prob()

@@ -388,7 +388,7 @@ print(ncp)
 print("ndstr")
 print(ndstr)
 
-test_struct_mutation_2()
+# test_struct_mutation_2()
 
 
 

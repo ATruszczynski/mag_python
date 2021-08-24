@@ -500,7 +500,7 @@ def test_faster_run():
 # test_cn_run()
 # test_run_with_cycle_1_run()
 # test_run_with_cycle_2_run()
-test_faster_run()
+# test_faster_run()
 # test_faster_run()
 
 # test_cn_run2()

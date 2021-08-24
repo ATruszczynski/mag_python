@@ -15,10 +15,7 @@ class CrossoverOperator:
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         pass
 
-#TODO - B - AL zamiast A1 etc?
 # TODO - B - remove needless code from here
-# TODO - A - test
-
 class FinalCO2(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
