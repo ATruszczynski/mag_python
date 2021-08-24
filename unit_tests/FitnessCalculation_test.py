@@ -3,7 +3,7 @@ import pytest
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
 from neural_network.ChaosNet import *
-from utility.TestingUtility import compare_chaos_network, compare_chaos_networks
+from utility.TestingUtility import assert_chaos_network_properties, assert_chaos_networks_same
 from utility.Utility import generate_population, HyperparameterRange
 from ann_point.Functions import *
 
@@ -34,7 +34,7 @@ def test_fitness_calculator_with_pure_eff():
 
     assert len(res) == 2
 
-    compare_chaos_networks(res[0].net, anns[1])
+    assert_chaos_networks_same(res[0].net, anns[1])
     assert res[0].ff == pytest.approx(0.30555, abs=1e-3)
     assert res[0].get_acc() == pytest.approx(0.5, abs=1e-3)
     assert res[0].get_avg_prec() == pytest.approx(0.166666, abs=1e-3)
@@ -43,7 +43,7 @@ def test_fitness_calculator_with_pure_eff():
     assert res[0].get_eff() == pytest.approx(0.30555, abs=1e-3)
     assert res[0].get_meff() == pytest.approx(0.0, abs=1e-3)
 
-    compare_chaos_networks(res[1].net, anns[0])
+    assert_chaos_networks_same(res[1].net, anns[0])
     assert res[1].ff == pytest.approx(0.1875, abs=1e-3)
     assert res[1].get_acc() == pytest.approx(0.25, abs=1e-3)
     assert res[1].get_avg_prec() == pytest.approx(0.16666, abs=1e-3)

@@ -1,7 +1,10 @@
 from TupleForTest import TupleForTest
 from tester import run_tests
+import os
 
-# TODO - A - test
+directory_for_tests=f"..{os.path.sep}algo_test"
+
+# TODO - S - test
 def try_check_if_all_tests_computable(tests: [TupleForTest], power: int):
     for i in range(len(tests) - 1):
         for j in range(i + 1, len(tests)):

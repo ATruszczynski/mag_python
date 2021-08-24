@@ -3,7 +3,7 @@ import pytest
 from evolving_classifier.operators.FinalCO1 import find_possible_cuts
 from evolving_classifier.operators.FinalCO2 import find_possible_cuts7
 from utility.Mut_Utility import *
-from utility.TestingUtility import compare_chaos_network
+from utility.TestingUtility import assert_chaos_network_properties
 from utility.Utility import *
 
 # TODO - B - cleanup
@@ -38,33 +38,33 @@ def test_neuron_increase():
 
     ############################################################################
 
-    compare_chaos_network(net=cn1,
-                          desired_input_size=1,
-                          desited_output_size=2,
-                          desired_neuron_count=5,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=3,
-                          desired_hidden_count=2,
-                          desired_links=np.array([[0, 1, 1, 0, 0],
+    assert_chaos_network_properties(net=cn1,
+                                    desired_input_size=1,
+                                    desited_output_size=2,
+                                    desired_neuron_count=5,
+                                    desired_hidden_start_index=1,
+                                    desired_hidden_end_index=3,
+                                    desired_hidden_count=2,
+                                    desired_links=np.array([[0, 1, 1, 0, 0],
                                                   [0, 0, 1, 1, 1],
                                                   [0, 1, 0, 0, 1],
                                                   [0, 0, 0, 0, 0],
                                                   [0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0., 1, 2, 0, 0],
+                                    desired_weights=np.array([[0., 1, 2, 0, 0],
                                                     [0, 0, 3, 8, 5],
                                                     [0, 7, 0, 0, 6],
                                                     [0, 0, 0, 0, 0],
                                                     [0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0., -2, -3, -4, -5]]),
-                          desired_actFun=[None, ReLu(), Sigmoid(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=-1,
-                          desired_wb_prob=-2,
-                          desired_s_prob=-3,
-                          desired_p_prob=-4,
-                          desired_c_prob=-5,
-                          desired_r_prob=-6)
+                                    desired_biases=np.array([[0., -2, -3, -4, -5]]),
+                                    desired_actFun=[None, ReLu(), Sigmoid(), None, None],
+                                    desired_aggr=TanH(),
+                                    desired_maxit=2,
+                                    desired_mut_rad=-1,
+                                    desired_wb_prob=-2,
+                                    desired_s_prob=-3,
+                                    desired_p_prob=-4,
+                                    desired_c_prob=-5,
+                                    desired_r_prob=-6)
 
 
     ############################################################################
@@ -112,39 +112,39 @@ def test_neuron_increase():
     # assert cn2.aggrFun.to_string() == TanH().to_string()
 
 
-    compare_chaos_network(net=cn2,
-                          desired_input_size=1,
-                          desited_output_size=2,
-                          desired_neuron_count=7,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=5,
-                          desired_hidden_count=4,
-                          desired_links=np.array([[0., 1., 1., 1., 1., 0., 0.],
+    assert_chaos_network_properties(net=cn2,
+                                    desired_input_size=1,
+                                    desited_output_size=2,
+                                    desired_neuron_count=7,
+                                    desired_hidden_start_index=1,
+                                    desired_hidden_end_index=5,
+                                    desired_hidden_count=4,
+                                    desired_links=np.array([[0., 1., 1., 1., 1., 0., 0.],
                                                   [0., 0., 1., 0., 1., 1., 1.],
                                                   [0., 1., 0., 1., 0., 0., 1.],
                                                   [0., 1., 1., 0., 0., 1., 1.],
                                                   [0., 0., 1., 1., 0., 1., 1.],
                                                   [0., 0., 0., 0., 0., 0., 0.],
                                                   [0., 0., 0., 0., 0., 0., 0.]]),
-                          desired_weights=np.array([[0., 1, 2, 1.99852202, 3.53627653, 0, 0],
+                                    desired_weights=np.array([[0., 1, 2, 1.99852202, 3.53627653, 0, 0],
                                                     [0 , 0, 3, 0, 2.08113262, 8, 5],
                                                     [0 , 7, 0, 0.87783263, 0, 0, 6],
                                                     [0., 7.15815828, 0.34053276, 0., 0., 5.35134103, 6.56899812],
                                                     [0., 0., 5.58797454, 4.99502278, 0., 7.54306312, 6.34765188],
                                                     [0 , 0, 0, 0, 0, 0, 0],
                                                     [0 , 0, 0, 0, 0, 0, 0]]),
-                          desired_biases=np.array([[0., -2, -3, -0.54751109, -1.92308629, -4, -5]]),
-                          desired_actFun=[None, ReLu(), Sigmoid(), SincAct(), ReLu(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=-1,
-                          desired_wb_prob=-2,
-                          desired_s_prob=-3,
-                          desired_p_prob=-4,
-                          desired_c_prob=-5,
-                          desired_r_prob=-6,
-                          desired_inp=np.zeros((0,0)),
-                          desired_act=np.zeros((0,0)))
+                                    desired_biases=np.array([[0., -2, -3, -0.54751109, -1.92308629, -4, -5]]),
+                                    desired_actFun=[None, ReLu(), Sigmoid(), SincAct(), ReLu(), None, None],
+                                    desired_aggr=TanH(),
+                                    desired_maxit=2,
+                                    desired_mut_rad=-1,
+                                    desired_wb_prob=-2,
+                                    desired_s_prob=-3,
+                                    desired_p_prob=-4,
+                                    desired_c_prob=-5,
+                                    desired_r_prob=-6,
+                                    desired_inp=np.zeros((0,0)),
+                                    desired_act=np.zeros((0,0)))
 
 def test_neuron_decrease():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
@@ -177,67 +177,67 @@ def test_neuron_decrease():
 
     ##########################################################################
 
-    compare_chaos_network(net=cn1,
-                          desired_input_size=1,
-                          desited_output_size=2,
-                          desired_neuron_count=6,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=4,
-                          desired_hidden_count=3,
-                          desired_links=np.array([[0, 1, 1, 0, 0, 0],
+    assert_chaos_network_properties(net=cn1,
+                                    desired_input_size=1,
+                                    desited_output_size=2,
+                                    desired_neuron_count=6,
+                                    desired_hidden_start_index=1,
+                                    desired_hidden_end_index=4,
+                                    desired_hidden_count=3,
+                                    desired_links=np.array([[0, 1, 1, 0, 0, 0],
                                                   [0, 0, 1, 1, 1, 1],
                                                   [0, 1, 0, 1, 0, 1],
                                                   [0, 1, 1, 0, 0, 1],
                                                   [0, 0, 0, 0, 0, 0],
                                                   [0, 0, 0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 1, 4, 0, 0, 0],
+                                    desired_weights=np.array([[0, 1, 4, 0, 0, 0],
                                                     [0, 0, 5, 7, 9, 11],
                                                     [0, 2, 0, 8, 0, 12],
                                                     [0, 3, 6, 0, 0, 13],
                                                     [0, 0, 0, 0, 0, 0],
                                                     [0, 0, 0, 0, 0, 0.]]),
-                          desired_biases=np.array([[0., -2, -3, -4, -5, -6]]),
-                          desired_actFun=[None, ReLu(), Sigmoid(), SincAct(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=-1,
-                          desired_wb_prob=-2,
-                          desired_s_prob=-3,
-                          desired_p_prob=-4,
-                          desired_c_prob=-5,
-                          desired_r_prob=-6,
-                          desired_inp=np.zeros((0,0)),
-                          desired_act=np.zeros((0,0)))
+                                    desired_biases=np.array([[0., -2, -3, -4, -5, -6]]),
+                                    desired_actFun=[None, ReLu(), Sigmoid(), SincAct(), None, None],
+                                    desired_aggr=TanH(),
+                                    desired_maxit=2,
+                                    desired_mut_rad=-1,
+                                    desired_wb_prob=-2,
+                                    desired_s_prob=-3,
+                                    desired_p_prob=-4,
+                                    desired_c_prob=-5,
+                                    desired_r_prob=-6,
+                                    desired_inp=np.zeros((0,0)),
+                                    desired_act=np.zeros((0,0)))
 
     ##########################################################################
 
-    compare_chaos_network(net=cn2,
-                          desired_input_size=1,
-                          desited_output_size=2,
-                          desired_neuron_count=4,
-                          desired_hidden_start_index=1,
-                          desired_hidden_end_index=2,
-                          desired_hidden_count=1,
-                          desired_links=np.array([[0, 0, 0, 0],
+    assert_chaos_network_properties(net=cn2,
+                                    desired_input_size=1,
+                                    desited_output_size=2,
+                                    desired_neuron_count=4,
+                                    desired_hidden_start_index=1,
+                                    desired_hidden_end_index=2,
+                                    desired_hidden_count=1,
+                                    desired_links=np.array([[0, 0, 0, 0],
                                                   [0, 0, 0, 1],
                                                   [0, 0, 0, 0],
                                                   [0, 0, 0, 0]]),
-                          desired_weights=np.array([[0, 0, 0, 0],
+                                    desired_weights=np.array([[0, 0, 0, 0],
                                                     [0, 0, 0, 13],
                                                     [0, 0, 0, 0],
                                                     [0, 0, 0, 0.]]),
-                          desired_biases=np.array([[0., -4, -5, -6]]),
-                          desired_actFun=[None, SincAct(), None, None],
-                          desired_aggr=TanH(),
-                          desired_maxit=2,
-                          desired_mut_rad=-1,
-                          desired_wb_prob=-2,
-                          desired_s_prob=-3,
-                          desired_p_prob=-4,
-                          desired_c_prob=-5,
-                          desired_r_prob=-6,
-                          desired_inp=np.zeros((0,0)),
-                          desired_act=np.zeros((0,0)))
+                                    desired_biases=np.array([[0., -4, -5, -6]]),
+                                    desired_actFun=[None, SincAct(), None, None],
+                                    desired_aggr=TanH(),
+                                    desired_maxit=2,
+                                    desired_mut_rad=-1,
+                                    desired_wb_prob=-2,
+                                    desired_s_prob=-3,
+                                    desired_p_prob=-4,
+                                    desired_c_prob=-5,
+                                    desired_r_prob=-6,
+                                    desired_inp=np.zeros((0,0)),
+                                    desired_act=np.zeros((0,0)))
 
     ##########################################################################
 
@@ -270,7 +270,7 @@ def test_neuron_decrease():
 # 
 #     ##########################################################################
 # 
-#     compare_chaos_network(net=cn1,
+#     assert_chaos_network_properties(net=cn1,
 #                           desired_input_size=1,
 #                           desited_output_size=2,
 #                           desired_neuron_count=5,
@@ -303,7 +303,7 @@ def test_neuron_decrease():
 # 
 #     ##########################################################################
 # 
-#     compare_chaos_network(net=cn2,
+#     assert_chaos_network_properties(net=cn2,
 #                           desired_input_size=1,
 #                           desited_output_size=2,
 #                           desired_neuron_count=7,
@@ -378,7 +378,7 @@ def test_neuron_decrease():
 # 
 #     ##########################################################################
 # 
-#     compare_chaos_network(net=cn1,
+#     assert_chaos_network_properties(net=cn1,
 #                           desired_input_size=2,
 #                           desited_output_size=2,
 #                           desired_neuron_count=9,
@@ -418,7 +418,7 @@ def test_neuron_decrease():
 # 
 #     ##########################################################################
 # 
-#     compare_chaos_network(net=cn2,
+#     assert_chaos_network_properties(net=cn2,
 #                           desired_input_size=2,
 #                           desited_output_size=2,
 #                           desired_neuron_count=7,

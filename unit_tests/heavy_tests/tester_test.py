@@ -7,7 +7,7 @@ from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from tester import run_tests
 from TupleForTest import TupleForTest
-from utility.TestingUtility import compare_chaos_networks
+from utility.TestingUtility import assert_chaos_networks_same
 from utility.Utility import *
 
 
@@ -54,7 +54,7 @@ def test_tester_same_as_ec_ind():
         results2.append(ec.run(iterations=iterations, power=power))
 
     for i in range(how_many):
-        compare_chaos_networks(results[i], results2[i])
+        assert_chaos_networks_same(results[i], results2[i])
 
 
 def test_tester_determinism():
@@ -116,7 +116,7 @@ def test_tester_determinism():
                 for k in range(len(results1)):
                     net1 = results1[k]
                     net2 = results2[k]
-                    compare_chaos_networks(net1, net2)
+                    assert_chaos_networks_same(net1, net2)
 
 
 # test_tester_same_as_ec_ind()

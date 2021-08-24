@@ -1,7 +1,7 @@
 import numpy as np
 
 from utility.CNDataPoint import CNDataPoint
-from utility.TestingUtility import compare_chaos_networks
+from utility.TestingUtility import assert_chaos_networks_same
 from utility.Utility import get_default_hrange, generate_population
 from utility.Utility2 import *
 
@@ -14,7 +14,7 @@ def test_cndp_constructor():
 
     assert cndp1.ff == 0.
     assert cndp1.conf_mat is None
-    compare_chaos_networks(cndp1.net, cn)
+    assert_chaos_networks_same(cndp1.net, cn)
 
     cn.input_size = 22
 
@@ -35,7 +35,7 @@ def test_add_data():
     assert np.array_equal(cndp1.conf_mat,  np.array([[1, 2, 0],
                                                      [2, 4, 1],
                                                      [0, 2, 4]]))
-    compare_chaos_networks(cndp1.net, cn)
+    assert_chaos_networks_same(cndp1.net, cn)
 
 def test_gets():
     hrange = get_default_hrange()
@@ -78,7 +78,7 @@ def test_copy():
                                   [0, 2, 4]]))
     cp = cndp1.copy()
 
-    compare_chaos_networks(cndp1.net, cp.net)
+    assert_chaos_networks_same(cndp1.net, cp.net)
     assert cndp1.ff == cp.ff
     assert np.array_equal(cndp1.conf_mat, cp.conf_mat)
 

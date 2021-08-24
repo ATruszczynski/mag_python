@@ -16,18 +16,17 @@ import os.path
 
 np.seterr(all='ignore')
 
-directory_for_tests="algo_tests"
+# directory_for_tests=f"..{os.path.sep}algo_tests"
 
-# TODO - A - check if everythoing works correctly
-
-def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
+# TODO - S - check if everythoing works correctly
+def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNet]]:
     resultss = []
 
     if not os.path.exists(directory_for_tests):
         os.mkdir(directory_for_tests)
 
     for tt in tts:
-        print(f"Test {tt.name} has started at {datetime.datetime.now()}")
+        # print(f"Test {tt.name} has started at {datetime.datetime.now()}")
         subdir_name = f"{directory_for_tests}{os.path.sep}{tt.name}"
         if not os.path.exists(subdir_name):
             os.mkdir(subdir_name)
@@ -46,7 +45,7 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
             seeds.append(random.randint(0, 10**6))
 
         for i in range(tt.rep):
-            print(f"Progress: {i + 1}/{tt.rep} at {datetime.datetime.now()}")
+            print(f"Progress: {tt.name} - {i + 1}/{tt.rep} at {datetime.datetime.now()}")
             ec = EvolvingClassifier()
             ec.prepare(popSize=tt.popSize, nn_data=tt.data, seed=seeds[i], hrange=tt.hrange, ct=tt.ct, mt=tt.mt,
                        st=tt.st, fft=tt.fft, fct=tt.fct)
@@ -55,18 +54,16 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
             ec.history.to_csv_file(fpath=fpath+f"rep_{i + 1}.csv", reg=tt.reg)
             results.append(net.copy())
 
-            if tt.reg == False:
+            if len(tt.fft) == 1:
                 tr = net.test(tt.data[2], tt.data[3])
-                tresult = efficiency(tr[0])
             else:
-                tr = net.test(tt.data[2], tt.data[3], lf=tt.fft[1]())
-                tresult = tr[1]
-            bests.append([net, tresult])
+                tr = net.test(tt.data[2], tt.data[3], tt.fft[1]())
 
-            net.net_to_file(fpath=fpath+f"best_{i + 1}.txt", tresult=tresult)
+            net_to_file(net=net, fpath=fpath+f"best_{i + 1}.txt", tresult=tr)
+            bests.append([net.copy(), tr])
 
-            print()
-            print(tresult)
+            # print()
+            # print(efficiency(tr[0]))
 
         create_summary_file(fpath, bests, tt)
         resultss.append(results)
@@ -75,19 +72,53 @@ def run_tests(tts: [TupleForTest], power: int) -> [[ChaosNet]]:
 
     return resultss
 
-
-def create_summary_file(fpath: str, bests: [[ChaosNet, float]], tt: TupleForTest):
+# TODO - A - this should save more data about net
+def create_summary_file(fpath: str, bests: [[ChaosNet, [np.ndarray, float]]], tt: TupleForTest):
     data_file = open(fpath + "summary_file.txt", "w")
     write_test_parameters(data_file=data_file, tt=tt)
 
-    data_file.write("\n\nSummary: \n")
+    data_file.write("\n\nSummary:")
     for i in range(len(bests)):
-        data_file.write(f"Test {i + 1}:\n")
-        data_file.write(f"{bests[i][0].to_string()} - {bests[i][1]}\n\n")
+        data_file.write(f"\nTest {i + 1}:\n")
+        write_down_test_results(data_file, bests[i][0], bests[i][1])
 
     data_file.close()
 
+# TODO - A - better saving to file
+def net_to_file(net: ChaosNet, fpath: str, tresult: [Any]):
+    file = open(fpath, "w")
+    file.write(f"input_size: {net.input_size}\n")
+    file.write(f"output_size: {net.output_size}\n")
+    file.write(f"neuron_count: {net.neuron_count}\n")
+    file.write(f"links: \n{net.links}\n")
+    file.write(f"weights: \n{net.weights}\n")
+    file.write(f"biases: \n{net.biases}\n")
+    file.write(f"actFuns: \n{net.get_act_fun_string()}\n")
+    file.write(f"aggrFun: \n{net.aggrFun.to_string()}\n")
+    file.write(f"net_it: \n{net.net_it}\n")
 
+    file.write(f"mutation_radius: \n{net.mutation_radius}\n")
+    file.write(f"sqr_mut_prob: \n{net.sqr_mut_prob}\n")
+    file.write(f"lin_mut_prob: \n{net.lin_mut_prob}\n")
+    file.write(f"p_mutation_prob: \n{net.p_mutation_prob}\n")
+    file.write(f"c_prob: \n{net.c_prob}\n")
+    file.write(f"dstr_mut_prob: \n{net.dstr_mut_prob}\n")
+
+    file.write(f"results:\n")
+    write_down_test_results(file, net, tresult)
+
+    file.close()
+
+def write_down_test_results(data_file, net: ChaosNet, tr: [Any]):
+    data_file.write(f"{net.to_string()}\n")
+    data_file.write(f"acc: {accuracy(tr[0])}\n")
+    data_file.write(f"av_prec: {average_precision(tr[0])}\n")
+    data_file.write(f"av_rec: {average_recall(tr[0])}\n")
+    data_file.write(f"av_f1: {average_f1_score(tr[0])}\n")
+    data_file.write(f"eff: {efficiency(tr[0])}\n")
+    data_file.write(f"meff: {m_efficiency(tr[0])}\n")
+    if len(tr) == 2:
+        data_file.write(f"err: {tr[1]}")
 
 
 def write_test_parameters(data_file, tt:TupleForTest):
@@ -109,7 +140,6 @@ def write_test_parameters(data_file, tt:TupleForTest):
     data_file.write(f"fct: {tt.fct.__name__} \n")
     data_file.write(f"reg: {tt.reg} \n")
     data_file.write(f"data_len: {len(tt.data[0])} \n")
-
 
     data_file.write(f"\nhyperparameters:\n")
 
@@ -208,9 +238,9 @@ if __name__ == '__main__':
     #                      ct=FinalCrossoverOperator, mt=FinalMutationOperator, st=TournamentSelection,
     #                      fft=CNFF4, fct=CNFitnessCalculator, starg=0.05, fftarg=QuadDiff, reg=True)
     tests = []
-    pops = 300
-    its = 300
-    rep = 5
+    pops = 10
+    its = 10
+    rep = 3
     seed = 12121212
     power = 12
     starg = 4
@@ -222,7 +252,7 @@ if __name__ == '__main__':
                               fft=[CNFF], fct=CNFitnessCalculator, reg=False))
     tests.append(TupleForTest(name="test_01", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
                               ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
-                              fft=[CNFF], fct=CNFitnessCalculator, reg=False))
+                              fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
     # tests.append(TupleForTest(name="test_1", rep=2, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=FinalCrossoverOperator2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
@@ -244,7 +274,7 @@ if __name__ == '__main__':
 
 
     # net = run_tests([test, test2, test3], power=12)[0][0]
-    resultsss = run_tests(tests, power=power)
+    resultsss = run_tests(tests, directory_for_tests="algo_tests", power=power)
     net = resultsss[0][0]
     print(net.to_string())
 
@@ -252,13 +282,13 @@ if __name__ == '__main__':
 
 
 
-    print(net.links)
-    print(net.weights)
-    print(net.biases)
-    print(net.to_string())
-    res = net.test(X, Y)
-    print(res[0])
-    print(efficiency(res[0]))
+    # print(net.links)
+    # print(net.weights)
+    # print(net.biases)
+    # print(net.to_string())
+    # res = net.test(X, Y)
+    # print(res[0])
+    # print(efficiency(res[0]))
     #
     # for i in range(len(args)):
     #     print(net.run(np.array([[args[i]]])))

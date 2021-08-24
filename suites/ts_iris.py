@@ -9,7 +9,7 @@ from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
-from suites.suite_utility import try_check_if_all_tests_computable
+from suites.suite_utility import try_check_if_all_tests_computable, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange
 
@@ -48,10 +48,10 @@ def test_suite_for_iris():
 
         tests = []
 
-        repetitions = 10
-        population_size = 300
-        iterations = 300
-        starg = 6
+        repetitions = 2
+        population_size = 20
+        iterations = 20
+        starg = 2
 
         tests.append(TupleForTest(name="iris_01", rep=repetitions, seed=random.randint(0, 10**6), popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
@@ -59,10 +59,18 @@ def test_suite_for_iris():
                                   fft=[CNFF], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name="iris_02", rep=repetitions, seed=random.randint(0, 10**6), popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection],
+                                  ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
+                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name="iris_03", rep=repetitions, seed=random.randint(0, 10**6), popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
                                   fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name="iris_04", rep=repetitions, seed=random.randint(0, 10**6), popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
+                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         try_check_if_all_tests_computable(tests, 12)
-        run_tests(tts=tests, power=12)
+        run_tests(tts=tests, directory_for_tests=directory_for_tests, power=12)
 
 test_suite_for_iris()

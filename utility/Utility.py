@@ -181,6 +181,14 @@ def compare_lists(l1: [int], l2: [int]):
 
     return equal
 
+# TODO - AA - test
+def copy_list_of_arrays(arrays: [np.ndarray]) -> [np.ndarray]:
+    results = []
+    for i in range(len(arrays)):
+        results.append(arrays[i].copy())
+
+    return results
+
 
 
 

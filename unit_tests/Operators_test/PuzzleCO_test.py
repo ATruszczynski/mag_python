@@ -5,7 +5,7 @@
 # from evolving_classifier.operators.CrossoverOperator import *
 # # from utility.Mut_Utility import resize_layer
 # from evolving_classifier.operators.CrossoverOperator2 import FinalCrossoverOperator2
-# from utility.TestingUtility import compare_chaos_network
+# from utility.TestingUtility import assert_chaos_network_properties
 #
 # # TODO - B - test this if used
 # def test_simple_crossover():
@@ -65,7 +65,7 @@
 #     wei4[8, -3:] = wei2[6, -3:]
 #     wei4 = np.multiply(wei4, get_weight_mask(2, 3, 12))
 #
-#     compare_chaos_network(net=cn3,
+#     assert_chaos_network_properties(net=cn3,
 #                           desired_input_size=2,
 #                           desited_output_size=3,
 #                           desired_neuron_count=11,
@@ -97,7 +97,7 @@
 #
 #     ##################################################################
 #
-#     compare_chaos_network(net=cn4,
+#     assert_chaos_network_properties(net=cn4,
 #                           desired_input_size=2,
 #                           desited_output_size=3,
 #                           desired_neuron_count=12,
@@ -188,7 +188,7 @@
 #     wei4[3:6, -3:] = wei2[3:6, -3:]
 #     wei4 = np.multiply(wei4, get_weight_mask(2, 3, 9))
 #
-#     compare_chaos_network(net=cn3,
+#     assert_chaos_network_properties(net=cn3,
 #                           desired_input_size=2,
 #                           desited_output_size=3,
 #                           desired_neuron_count=8,
@@ -217,7 +217,7 @@
 #
 #     ##################################################################
 #
-#     compare_chaos_network(net=cn4,
+#     assert_chaos_network_properties(net=cn4,
 #                           desired_input_size=2,
 #                           desited_output_size=3,
 #                           desired_neuron_count=9,

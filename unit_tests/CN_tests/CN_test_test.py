@@ -3,7 +3,7 @@ import pytest
 
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
-from utility.TestingUtility import compare_chaos_network
+from utility.TestingUtility import assert_chaos_network_properties
 
 def test_cn_test_cm_only():
     weights = np.array([[0, 0, 0.5, 0 , 0  , 0   , 0  ],

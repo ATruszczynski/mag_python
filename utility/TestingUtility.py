@@ -2,27 +2,27 @@ from neural_network.ChaosNet import ChaosNet, ActFun
 import numpy as np
 import pytest
 
-def compare_chaos_network(net: ChaosNet,
-                          desired_input_size: int,
-                          desited_output_size: int,
-                          desired_neuron_count: int,
-                          desired_hidden_start_index: int,
-                          desired_hidden_end_index: int,
-                          desired_hidden_count: int,
-                          desired_links: np.ndarray,
-                          desired_weights: np.ndarray,
-                          desired_biases: np.ndarray,
-                          desired_actFun: [ActFun],
-                          desired_aggr: ActFun, desired_maxit: int,
-                          desired_mut_rad: float,
-                          desired_wb_prob: float,
-                          desired_s_prob: float,
-                          desired_p_prob: float,
-                          desired_c_prob: float,
-                          desired_r_prob: float,
-                          desired_hidden_comp_order: [int] = None,
-                          desired_inp: np.ndarray = None,
-                          desired_act: np.ndarray = None):
+def assert_chaos_network_properties(net: ChaosNet,
+                                    desired_input_size: int,
+                                    desited_output_size: int,
+                                    desired_neuron_count: int,
+                                    desired_hidden_start_index: int,
+                                    desired_hidden_end_index: int,
+                                    desired_hidden_count: int,
+                                    desired_links: np.ndarray,
+                                    desired_weights: np.ndarray,
+                                    desired_biases: np.ndarray,
+                                    desired_actFun: [ActFun],
+                                    desired_aggr: ActFun, desired_maxit: int,
+                                    desired_mut_rad: float,
+                                    desired_wb_prob: float,
+                                    desired_s_prob: float,
+                                    desired_p_prob: float,
+                                    desired_c_prob: float,
+                                    desired_r_prob: float,
+                                    desired_hidden_comp_order: [int] = None,
+                                    desired_inp: np.ndarray = None,
+                                    desired_act: np.ndarray = None):
     assert net.input_size == desired_input_size
     assert net.output_size == desited_output_size
     assert net.neuron_count == desired_neuron_count
@@ -59,27 +59,33 @@ def compare_chaos_network(net: ChaosNet,
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
     assert net.dstr_mut_prob == pytest.approx(desired_r_prob, 1e-4)
 
-def compare_chaos_networks(net: ChaosNet, net2: ChaosNet):
-    compare_chaos_network(net,
-                          desired_input_size=net2.input_size,
-                          desited_output_size=net2.output_size,
-                          desired_neuron_count=net2.neuron_count,
-                          desired_hidden_start_index=net2.hidden_start_index,
-                          desired_hidden_end_index=net2.hidden_end_index,
-                          desired_hidden_count=net2.hidden_count,
-                          desired_links=net2.links,
-                          desired_weights=net2.weights,
-                          desired_biases=net2.biases,
-                          desired_actFun=net2.actFuns,
-                          desired_aggr=net2.aggrFun,
-                          desired_maxit=net2.net_it,
-                          desired_mut_rad=net2.mutation_radius,
-                          desired_wb_prob=net2.sqr_mut_prob,
-                          desired_s_prob=net2.lin_mut_prob,
-                          desired_p_prob=net2.p_mutation_prob,
-                          desired_c_prob=net2.c_prob,
-                          desired_r_prob=net2.dstr_mut_prob,
-                          desired_hidden_comp_order=net2.hidden_comp_order,
-                          desired_inp=net2.inp,
-                          desired_act=net2.act)
+def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
+    assert_chaos_network_properties(net,
+                                    desired_input_size=net2.input_size,
+                                    desited_output_size=net2.output_size,
+                                    desired_neuron_count=net2.neuron_count,
+                                    desired_hidden_start_index=net2.hidden_start_index,
+                                    desired_hidden_end_index=net2.hidden_end_index,
+                                    desired_hidden_count=net2.hidden_count,
+                                    desired_links=net2.links,
+                                    desired_weights=net2.weights,
+                                    desired_biases=net2.biases,
+                                    desired_actFun=net2.actFuns,
+                                    desired_aggr=net2.aggrFun,
+                                    desired_maxit=net2.net_it,
+                                    desired_mut_rad=net2.mutation_radius,
+                                    desired_wb_prob=net2.sqr_mut_prob,
+                                    desired_s_prob=net2.lin_mut_prob,
+                                    desired_p_prob=net2.p_mutation_prob,
+                                    desired_c_prob=net2.c_prob,
+                                    desired_r_prob=net2.dstr_mut_prob,
+                                    desired_hidden_comp_order=net2.hidden_comp_order,
+                                    desired_inp=net2.inp,
+                                    desired_act=net2.act)
 
+# TODO - AA - test
+def assert_acts_same(acts1: [ActFun], acts2: [ActFun]):
+    assert len(acts1) == len(acts2)
+
+    for i in range(len(acts1)):
+        assert acts1[i].to_string() == acts2[i].to_string()

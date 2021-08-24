@@ -79,7 +79,7 @@ class EvolvingClassifier:
 
         self.history = RunHistory()
 
-    def run(self, iterations: int, power: int = 1) -> ChaosNet:
+    def run(self, iterations: int, power: int = 1, verbose: bool = False) -> ChaosNet:
         if power > 1:
             pool = mp.Pool(power)
         else:
@@ -93,8 +93,18 @@ class EvolvingClassifier:
 
             self.history.add_it_hist(eval_pop)
 
-            if i % 50 == 0: # TODO - A - do usunięcia
-                print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
+            if verbose:
+                if i % 10 == 0:
+                    print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
+            else:
+                if i % 300 == 0:
+                    if i > 0:
+                        print()
+                    print("    ", end="")
+                if i % 20 == 0:
+                    if i % 300 != 0:
+                        print(", ", end="")
+                    print(f"{round(i/iterations * 100, 2)}%", end="")
 
             if eval_pop[0].ff >= best[1]:
                 best = [eval_pop[0].net.copy(), eval_pop[0].ff]
@@ -128,6 +138,9 @@ class EvolvingClassifier:
 
         if eval_pop[0].ff >= best[1]:
             best = [eval_pop[0].net.copy(), eval_pop[0].ff]
+
+        if not verbose:
+            print()
 
         return best[0]
 

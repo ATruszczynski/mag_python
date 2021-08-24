@@ -1,13 +1,50 @@
 import numpy as np
 import random
+import numpy as np
 
 from TupleForTest import TupleForTest, assert_tts_same
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
-from evolving_classifier.FitnessFunction import CNFF
+from evolving_classifier.FitnessFunction import CNFF, CNFF2, QuadDiff
 from evolving_classifier.operators.FinalCO1 import FinalCO1
+from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
-from evolving_classifier.operators.SelectionOperator import TournamentSelection
-from utility.Utility import generate_counting_problem, get_default_hrange
+from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized
+from utility.Utility import generate_counting_problem, get_default_hrange, assert_hranges_same
+
+
+def test_tt_const():
+    data = [np.zeros((1, 1)), np.zeros((2, 2)), np.zeros((3, 3)), np.zeros((4, 4))]
+    hrange = get_default_hrange()
+    tt = TupleForTest(name="d", rep=1, seed=2, popSize=3, data=data, iterations=4, hrange=hrange,
+                      ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, 5], fft=[CNFF2, QuadDiff],
+                      fct=CNFitnessCalculator, reg=True)
+
+    assert tt.name == "d"
+    assert tt.rep == 1
+    assert tt.seed == 2
+    assert tt.popSize == 3
+    assert np.array_equal(data[0], np.zeros((1, 1)))
+    assert np.array_equal(data[1], np.zeros((2, 2)))
+    assert np.array_equal(data[2], np.zeros((3, 3)))
+    assert np.array_equal(data[3], np.zeros((4, 4)))
+    assert tt.iterations == 4
+    assert_hranges_same(tt.hrange, hrange)
+    assert tt.ct == FinalCO2
+    assert tt.mt == FinalMutationOperator
+    assert len(tt.st) == 2
+    assert tt.st[0] == TournamentSelectionSized
+    assert tt.st[1] == 5
+    assert len(tt.fft) == 2
+    assert tt.fft[0] == CNFF2
+    assert tt.fft[1] == QuadDiff
+    assert tt.fct == CNFitnessCalculator
+    assert tt.reg
+
+    hrange.max_it = 222
+    assert tt.hrange.max_it == 10
+
+    data[2][-1, -1] = 222
+    assert tt.data[2][-1, -1] == 0
 
 
 def test_tt_copy():
@@ -25,25 +62,12 @@ def test_tt_copy():
 
     tt2 = tt1.copy()
 
-    assert tt1.name == tt2.name
-    assert tt1.rep == tt2.rep
-    assert tt1.seed == tt2.seed
-    assert tt1.popSize == tt2.popSize
-    assert np.array_equal(tt1.data[0], tt2.data[0])
-    assert np.array_equal(tt1.data[1], tt2.data[1])
-    assert np.array_equal(tt1.data[2], tt2.data[2])
-    assert np.array_equal(tt1.data[3], tt2.data[3])
-    assert tt1.iterations == tt2.iterations
-    assert tt1.hrange == tt2.hrange
-    assert tt1.ct == tt2.ct
-    assert tt1.mt == tt2.mt
-    assert len(tt1.st) == len(tt2.st)
-    for i in range(len(tt1.st)):
-        assert tt1.st[i] == tt2.st[i]
-    assert len(tt1.fft) == len(tt2.fft)
-    for i in range(len(tt1.fft)):
-        assert tt1.fft[i] == tt2.fft[i]
-    assert tt1.fct == tt2.fct
-    assert tt1.reg == tt2.reg
+    assert_tts_same(tt1, tt2)
+
+    tt1.hrange.max_sqr_mut_prob = 222
+    assert tt2.hrange.max_sqr_mut_prob == -2
+
+    tt1.data[3][2][-2, 0] = 333
+    assert tt2.data[3][2][-2, 0] == 0
 
 test_tt_copy()

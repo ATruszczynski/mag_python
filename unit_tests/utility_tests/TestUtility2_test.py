@@ -2,7 +2,7 @@ import random
 
 from neural_network.ChaosNet import *
 # from utility.Mut_Utility import inflate_network
-from utility.TestingUtility import compare_chaos_network, compare_chaos_networks
+from utility.TestingUtility import assert_chaos_network_properties, assert_chaos_networks_same
 import numpy as np
 
 def test_chaos_compare_1():
@@ -51,7 +51,7 @@ def test_chaos_compare_1():
                    c_prob=-11, dstr_mut_prob=-22)
 
     # try:
-    #     compare_chaos_networks(net=cn1, net2=cn2)
+    #     assert_chaos_networks_same(net=cn1, net2=cn2)
     # except AssertionError:
     #     assert True
     # else:
@@ -59,7 +59,7 @@ def test_chaos_compare_1():
 
 
 
-    compare_chaos_networks(net=cn1, net2=cn2)
+    assert_chaos_networks_same(net=cn1, net2=cn2)
 
 def test_chaos_compare_2():
     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
@@ -107,7 +107,7 @@ def test_chaos_compare_2():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -161,7 +161,7 @@ def test_chaos_compare_3():
     cn2.output_size = 2
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -215,7 +215,7 @@ def test_chaos_compare_4():
     cn2.neuron_count = 1
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -268,7 +268,7 @@ def test_chaos_compare_5():
     cn2.hidden_start_index = 0
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -321,7 +321,7 @@ def test_chaos_compare_6():
     cn2.hidden_end_index = -3
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -374,7 +374,7 @@ def test_chaos_compare_7():
     cn2.hidden_count = -14
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -426,7 +426,7 @@ def test_chaos_compare_8():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -476,7 +476,7 @@ def test_chaos_compare_8():
 #                    c_prob=-11, r_prob=-22)
 #
 #     try:
-#         compare_chaos_networks(net=cn1, net2=cn2)
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
 #     except AssertionError:
 #         assert True
 #     else:
@@ -529,7 +529,7 @@ def test_chaos_compare_10():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -581,7 +581,7 @@ def test_chaos_compare_10():
 #                    c_prob=-11, r_prob=-22)
 #
 #     try:
-#         compare_chaos_networks(net=cn1, net2=cn2)
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
 #     except AssertionError:
 #         assert True
 #     else:
@@ -633,7 +633,7 @@ def test_chaos_compare_12():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -685,7 +685,7 @@ def test_chaos_compare_12():
 #                    c_prob=-11, r_prob=-22)
 #
 #     try:
-#         compare_chaos_networks(net=cn1, net2=cn2)
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
 #     except AssertionError:
 #         assert True
 #     else:
@@ -737,7 +737,7 @@ def test_chaos_compare_12():
 #                    c_prob=-11, r_prob=-22)
 #
 #     try:
-#         compare_chaos_networks(net=cn1, net2=cn2)
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
 #     except AssertionError:
 #         assert True
 #     else:
@@ -789,7 +789,7 @@ def test_chaos_compare_15():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -841,7 +841,7 @@ def test_chaos_compare_16():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -893,7 +893,7 @@ def test_chaos_compare_17():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -945,7 +945,7 @@ def test_chaos_compare_18():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -997,7 +997,7 @@ def test_chaos_compare_19():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1049,7 +1049,7 @@ def test_chaos_compare_20():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1103,7 +1103,7 @@ def test_chaos_compare_21():
     cn2.inp = np.array([[-1, -2, -3]])
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1156,7 +1156,7 @@ def test_chaos_compare_22():
     cn2.inp = np.array([[222, 0], [-1, -1.]])
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1209,7 +1209,7 @@ def test_chaos_compare_23():
     cn2.act = np.array([[222, 0], [-1, -1.]])
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1261,7 +1261,7 @@ def test_chaos_compare_24():
                    c_prob=-11, dstr_mut_prob=-22)
     cn2.act = np.zeros((3, 3))
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1313,7 +1313,7 @@ def test_chaos_compare_25():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1367,7 +1367,7 @@ def test_chaos_compare_26():
                    c_prob=-11, dstr_mut_prob=-22)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:
@@ -1421,7 +1421,7 @@ def test_chaos_compare_27():
                    c_prob=-11, dstr_mut_prob=-222)
 
     try:
-        compare_chaos_networks(net=cn1, net2=cn2)
+        assert_chaos_networks_same(net=cn1, net2=cn2)
     except AssertionError:
         assert True
     else:

@@ -274,30 +274,7 @@ class ChaosNet:
 
         return result
 
-    # TODO - A - make better
-    def net_to_file(self, fpath: str, tresult: Any):
-        file = open(fpath, "w")
-        file.write(f"input_size: {self.input_size}\n")
-        file.write(f"output_size: {self.output_size}\n")
-        file.write(f"neuron_count: {self.neuron_count}\n")
-        file.write(f"links: \n{self.links}\n")
-        file.write(f"weights: \n{self.weights}\n")
-        file.write(f"biases: \n{self.biases}\n")
-        file.write(f"actFuns: \n{self.get_act_fun_string()}\n")
-        file.write(f"aggrFun: \n{self.aggrFun.to_string()}\n")
-        file.write(f"net_it: \n{self.net_it}\n")
 
-        file.write(f"mutation_radius: \n{self.mutation_radius}\n")
-        file.write(f"sqr_mut_prob: \n{self.sqr_mut_prob}\n")
-        file.write(f"lin_mut_prob: \n{self.lin_mut_prob}\n")
-        file.write(f"p_mutation_prob: \n{self.p_mutation_prob}\n")
-        file.write(f"c_prob: \n{self.c_prob}\n")
-        file.write(f"dstr_mut_prob: \n{self.dstr_mut_prob}\n")
-
-
-        file.write(f"tresult: \n{tresult}\n")
-
-        file.close()
 
 
 
