@@ -31,7 +31,7 @@ def test_determinism():
             assert np.array_equal(t1[0], t2[0])
 
 def test_sync_async_determinism():
-    if __name__ == "unit_tests.heavy_tests.EC_test" or __name__ == "main":
+    if __name__ == "unit_tests.heavy_tests.EC_test" or __name__ == "__main__":
         random.seed(1001)
         np.random.seed(1001)
 

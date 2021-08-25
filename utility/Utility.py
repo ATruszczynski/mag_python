@@ -124,6 +124,7 @@ def get_default_hrange_es():
                                  dstr_mut_prob=(log10(0.005), log10(0.1)))
     return hrange
 
+# TODO - A - make it generate only one io per combination
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
     inputs = []
     outputs = []

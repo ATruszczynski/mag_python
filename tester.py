@@ -18,7 +18,7 @@ np.seterr(all='ignore')
 
 # directory_for_tests=f"..{os.path.sep}algo_tests"
 
-# TODO - S - check if everythoing works correctly
+# TODO - S - check if everything works correctly
 def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNet]]:
     resultss = []
 

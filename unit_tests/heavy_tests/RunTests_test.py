@@ -113,6 +113,6 @@ def test_check_same_params_diff_names():
         assert False
 
 
-test_check_different()
-test_check_same_names()
-test_check_same_params_diff_names()
+# test_check_different()
+# test_check_same_names()
+# test_check_same_params_diff_names()

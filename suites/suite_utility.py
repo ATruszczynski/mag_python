@@ -6,7 +6,6 @@ directory_for_tests=f"..{os.path.sep}algo_tests"
 trash_can=f"..{os.path.sep}algo_tests{os.path.sep}to_delete"
 
 
-# TODO - S - test
 def try_check_if_all_tests_computable(tests: [TupleForTest], directory, power: int):
     for i in range(len(tests) - 1):
         for j in range(i + 1, len(tests)):

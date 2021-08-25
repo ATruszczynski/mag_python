@@ -7,8 +7,10 @@ from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from tester import run_tests
 from TupleForTest import TupleForTest
+from unit_tests.heavy_tests.RunTests_test import trash_can
 from utility.TestingUtility import assert_chaos_networks_same
 from utility.Utility import *
+import os
 
 
 def test_tester_same_as_ec_ind():
@@ -40,7 +42,7 @@ def test_tester_same_as_ec_ind():
                         ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
                         fft=[CNFF], fct=CNFitnessCalculator, reg=False)
 
-    results = run_tests([test], "to_delete", power=power)[0]
+    results = run_tests([test], trash_can, power=power)[0]
 
     random.seed(seed)
     seeds = []
@@ -58,7 +60,7 @@ def test_tester_same_as_ec_ind():
 
 
 def test_tester_determinism():
-    if __name__ == "unit_tests.heavy_tests.tester_test" or __name__ == "main":
+    if __name__ == "unit_tests.heavy_tests.tester_test" or __name__ == "__main__":
         # hrange = get_default_hrange_ga()
         # io = generate_counting_problem(100, 5)
         seed = 22223333
@@ -83,7 +85,7 @@ def test_tester_determinism():
                                      mut_radius=(-2, 0), sqr_mut_prob=(-2, 0), lin_mut_prob=(-2, 0), p_mutation_prob=(-2, 0), c_prob=(-2, 0),
                                      dstr_mut_prob=(-2, 0))
 
-        test = TupleForTest(name="test_desu", rep=rep, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        test = TupleForTest(name="deter_test_desu", rep=rep, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                             ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
                             fft=[CNFF], fct=CNFitnessCalculator, reg=False)
 
@@ -91,13 +93,13 @@ def test_tester_determinism():
                                      mut_radius=(-2, 0), sqr_mut_prob=(-3, 0), lin_mut_prob=(-2, 0), p_mutation_prob=(-2, 0), c_prob=(-2, 0),
                                      dstr_mut_prob=(-3, 0))
 
-        test2 = TupleForTest(name="test_desu2", rep=2*rep, seed=2*seed, popSize=2*popSize, data=[x, y, X, Y], iterations=2*iterations, hrange=hrange,
+        test2 = TupleForTest(name="deter_test_desu2", rep=2*rep, seed=2*seed, popSize=2*popSize, data=[x, y, X, Y], iterations=2*iterations, hrange=hrange,
                             ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection, 3],
                             fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False)
 
         resultsss = []
         for i in range(ut_rep):
-            resultsss.append(run_tests([test, test2], "to_delete", power=power))
+            resultsss.append(run_tests([test, test2], trash_can, power=power))
 
         for i in range(len(resultsss) - 1):
             resultss1 = resultsss[i]
@@ -120,8 +122,7 @@ def test_tester_determinism():
 
 
 # test_tester_same_as_ec_ind()
-# test_tester_determinism()
-
+test_tester_determinism()
 
 
 
