@@ -12,7 +12,7 @@ from utility.Utility import *
 
 
 def test_tester_same_as_ec_ind():
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     io = generate_counting_problem(100, 5)
 
     seed = 22223333
@@ -40,7 +40,7 @@ def test_tester_same_as_ec_ind():
                         ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
                         fft=[CNFF], fct=CNFitnessCalculator, reg=False)
 
-    results = run_tests([test], power=power)[0]
+    results = run_tests([test], "to_delete", power=power)[0]
 
     random.seed(seed)
     seeds = []
@@ -59,7 +59,7 @@ def test_tester_same_as_ec_ind():
 
 def test_tester_determinism():
     if __name__ == "unit_tests.heavy_tests.tester_test" or __name__ == "main":
-        # hrange = get_default_hrange()
+        # hrange = get_default_hrange_ga()
         # io = generate_counting_problem(100, 5)
         seed = 22223333
         random.seed(seed)
@@ -97,7 +97,7 @@ def test_tester_determinism():
 
         resultsss = []
         for i in range(ut_rep):
-            resultsss.append(run_tests([test, test2], power=power))
+            resultsss.append(run_tests([test, test2], "to_delete", power=power))
 
         for i in range(len(resultsss) - 1):
             resultss1 = resultsss[i]

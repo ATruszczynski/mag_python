@@ -9,12 +9,12 @@ from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized
-from utility.Utility import generate_counting_problem, get_default_hrange, assert_hranges_same
+from utility.Utility import generate_counting_problem, get_default_hrange_ga, assert_hranges_same
 
 
 def test_tt_const():
     data = [np.zeros((1, 1)), np.zeros((2, 2)), np.zeros((3, 3)), np.zeros((4, 4))]
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     tt = TupleForTest(name="d", rep=1, seed=2, popSize=3, data=data, iterations=4, hrange=hrange,
                       ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, 5], fft=[CNFF2, QuadDiff],
                       fct=CNFitnessCalculator, reg=True)
@@ -53,7 +53,7 @@ def test_tt_copy():
     np.random.seed(seed)
     x, y = generate_counting_problem(10, 5)
     X, Y = generate_counting_problem(20, 5)
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
 
     tt1 = TupleForTest(name="iris_01", rep=1, seed=random.randint(0, 10**6), popSize=2,
                               data=[x, y, X, Y], iterations=3, hrange=hrange,

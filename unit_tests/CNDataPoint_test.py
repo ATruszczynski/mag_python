@@ -2,12 +2,12 @@ import numpy as np
 
 from utility.CNDataPoint import CNDataPoint
 from utility.TestingUtility import assert_chaos_networks_same
-from utility.Utility import get_default_hrange, generate_population
+from utility.Utility import get_default_hrange_ga, generate_population
 from utility.Utility2 import *
 
 
 def test_cndp_constructor():
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=3)[0]
 
     cndp1 = CNDataPoint(cn)
@@ -22,7 +22,7 @@ def test_cndp_constructor():
     assert cn.input_size == 22
 
 def test_add_data():
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=3)[0]
 
     cndp1 = CNDataPoint(cn)
@@ -38,7 +38,7 @@ def test_add_data():
     assert_chaos_networks_same(cndp1.net, cn)
 
 def test_gets():
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=3)[0]
 
     cndp1 = CNDataPoint(cn)
@@ -68,7 +68,7 @@ def test_gets():
 
 # TODO - C - this could be better
 def test_copy():
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=3)[0]
 
     cndp1 = CNDataPoint(cn)

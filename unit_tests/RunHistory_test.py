@@ -5,7 +5,7 @@ import pytest
 from utility.CNDataPoint import CNDataPoint
 from utility.RunHistory import RunHistory
 from utility.TestingUtility import assert_chaos_networks_same
-from utility.Utility import generate_population, get_default_hrange, choose_without_repetition
+from utility.Utility import generate_population, get_default_hrange_ga, choose_without_repetition
 import numpy as np
 
 
@@ -13,7 +13,7 @@ def test_add_iteration():
     random.seed(1001)
     np.random.seed(1001)
 
-    hrange = get_default_hrange()
+    hrange = get_default_hrange_ga()
     nets = generate_population(hrange, 5, 2, 3)
     cndps_p = []
     for i in range(len(nets)):

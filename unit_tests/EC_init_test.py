@@ -4,7 +4,7 @@ def test_ec_init():
     #TODO - B - zbadać jakie zostały stworzone sieci?
     ec = EvolvingClassifier()
     ec.prepare(2, [np.array([[0], [1]]), np.array([[1], [2]])], 1001)
-    dhrange = get_default_hrange()
+    dhrange = get_default_hrange_ga()
 
     assert ec.hrange.min_init_wei == dhrange.min_init_wei
     assert ec.hrange.max_init_wei == dhrange.max_init_wei

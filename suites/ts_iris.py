@@ -9,10 +9,9 @@ from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
-from suites.suite_utility import try_check_if_all_tests_computable, directory_for_tests
+from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
-from utility.Utility import one_hot_endode, get_default_hrange
-
+from utility.Utility import one_hot_endode, get_default_hrange_ga
 
 def get_data():
     iris = datasets.load_iris()
@@ -36,7 +35,7 @@ def get_data():
 
     return (x, y, X, Y)
 
-# TODO - A - test?
+# TODO - S - test?
 def test_suite_for_iris():
     if __name__ == '__main__':
         seed = 1001
@@ -44,7 +43,7 @@ def test_suite_for_iris():
         np.random.seed(seed)
 
         x, y, X, Y = get_data()
-        hrange = get_default_hrange()
+        hrange = get_default_hrange_ga()
 
         # TODO - S - delete
         hrange.max_hidden = 15
@@ -73,7 +72,7 @@ def test_suite_for_iris():
                                   ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
-        try_check_if_all_tests_computable(tests, 12)
+        try_check_if_all_tests_computable(tests, trash_can, 12)
         run_tests(tts=tests, directory_for_tests=directory_for_tests, power=12)
 
 test_suite_for_iris()

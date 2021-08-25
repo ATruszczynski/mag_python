@@ -34,7 +34,7 @@ class EvolvingClassifier:
                 seed: int, hrange: HyperparameterRange = None, ct: type = None, mt: type = None, st: [Any] = None, fft: [Any] = None,
                 fct: type = None):
         if hrange is None:
-            self.hrange = get_default_hrange()
+            self.hrange = get_default_hrange_ga()
         else:
             self.hrange = hrange
 

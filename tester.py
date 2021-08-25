@@ -22,14 +22,11 @@ np.seterr(all='ignore')
 def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNet]]:
     resultss = []
 
-    if not os.path.exists(directory_for_tests):
-        os.mkdir(directory_for_tests)
-
     for tt in tts:
         # print(f"Test {tt.name} has started at {datetime.datetime.now()}")
         subdir_name = f"{directory_for_tests}{os.path.sep}{tt.name}"
         if not os.path.exists(subdir_name):
-            os.mkdir(subdir_name)
+            os.makedirs(subdir_name)
 
         fpath = f"{directory_for_tests}{os.path.sep}{tt.name}{os.path.sep}{tt.name}-"
 
@@ -68,7 +65,7 @@ def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNe
         create_summary_file(fpath, bests, tt)
         resultss.append(results)
 
-        print(f"Test {tt.name} has ended at {datetime.datetime.now()}")
+        print(f"{tt.name} has ended at {datetime.datetime.now()}")
         print("------------------------------------------------------")
 
     return resultss
@@ -86,12 +83,12 @@ def create_summary_file(fpath: str, bests: [[ChaosNet, [np.ndarray, float]]], tt
 
 def net_to_file(net: ChaosNet, dirpath: str, tresult: [Any]):
     if not os.path.exists(dirpath):
-        os.mkdir(dirpath)
+        os.makedirs(dirpath)
 
     file = open(dirpath + os.path.sep + "non_matrix_data.txt", "w")
-    file.write(f"input_size: {net.input_size}\n")
-    file.write(f"output_size: {net.output_size}\n")
-    file.write(f"neuron_count: {net.neuron_count}\n")
+    file.write(f"input_size: \n{net.input_size}\n")
+    file.write(f"output_size: \n{net.output_size}\n")
+    file.write(f"neuron_count: \n{net.neuron_count}\n")
     file.write(f"actFuns: \n{net.get_act_fun_string()}\n")
     file.write(f"aggrFun: \n{net.aggrFun.to_string()}\n")
     file.write(f"net_it: \n{net.net_it}\n")
@@ -220,7 +217,7 @@ if __name__ == '__main__':
                                  mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(log10(0.8), 0),
                                  dstr_mut_prob=(minrr, 0))
 
-    # hrange = get_default_hrange()
+    # hrange = get_default_hrange_ga()
 
     # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 10), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
     #                              mut_radius=(minrr, minrr), wb_mut_prob=(minrr, minrr), s_mut_prob=(minrr, minrr), p_mutation_prob=(minrr, minrr), c_prob=(-0.12, -0.12),
@@ -242,14 +239,14 @@ if __name__ == '__main__':
     tests = []
     pops = 10
     its = 10
-    rep = 3
+    rep = 1
     seed = 12121212
     power = 1
     starg = 4
     # tests.append(TupleForTest(name="test_0", rep=1, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
     #                           ct=PuzzleCO, mt=FinalMutationOperator, st=[TournamentSelection, starg],
     #                           fft=[CNFF], fct=CNFitnessCalculator, reg=False))
-    tests.append(TupleForTest(name="test_00", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
+    tests.append(TupleForTest(name=f"test_00", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,
                               ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection, starg],
                               fft=[CNFF], fct=CNFitnessCalculator, reg=False))
     tests.append(TupleForTest(name="test_01", rep=rep, seed=seed, popSize=pops, data=[x, y, X, Y], iterations=its, hrange=hrange,

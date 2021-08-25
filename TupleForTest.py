@@ -16,6 +16,9 @@ class TupleForTest:
         self.rep = rep
         self.seed = seed
         self.popSize = popSize
+        self.data = []
+        for i in range(len(data)):
+            self.data.append(data[i].copy())
         self.iterations = iterations
         self.hrange = hrange.copy()
         self.ct = ct
@@ -23,12 +26,8 @@ class TupleForTest:
         self.st = st
         self.fft = fft
         self.fct = fct
-        self.data = []
-        for i in range(len(data)):
-            self.data.append(data[i].copy())
         self.reg = reg
 
-    # TODO - AA - test
     def copy(self):
         x = copy_list_of_arrays(self.data[0])
         y = copy_list_of_arrays(self.data[1])
@@ -39,7 +38,6 @@ class TupleForTest:
                             hrange=self.hrange.copy(), ct=self.ct, mt=self.mt, st=self.st, fft=self.fft, fct=self.fct,
                             reg=self.reg)
 
-# TODO - AA - test
 def assert_tts_same(tt1: TupleForTest, tt2: TupleForTest):
     assert tt1.name == tt2.name
     assert tt1.rep == tt2.rep

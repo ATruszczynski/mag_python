@@ -5,6 +5,7 @@ from neural_network.ChaosNet import *
 from utility.TestingUtility import assert_chaos_network_properties
 import numpy as np
 
+# TODO - C - zmień nazwy funkcji
 def test_chaos_compare_1():
     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
                       [0, 0, 0, 1, 0, 1, 0],

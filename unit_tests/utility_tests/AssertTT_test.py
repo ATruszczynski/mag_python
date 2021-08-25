@@ -3,7 +3,7 @@ import numpy as np
 from TupleForTest import TupleForTest, assert_tts_same
 from ann_point.Functions import QuadDiff, CrossEntropy
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
-from evolving_classifier.FitnessFunction import CNFF2, CNFF, CNFF5
+from evolving_classifier.FitnessFunction import CNFF2, CNFF, CNFF5, CNFF4
 from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
@@ -30,13 +30,13 @@ def get_testing_tt():
         reg=False
     )
 
-# TODO - A - spr czy wszystko ok
+
 def test_same():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
 
-
     assert_tts_same(tt1, tt2)
+
 
 def test_different_name():
     tt1 = get_testing_tt()
@@ -53,6 +53,7 @@ def test_different_name():
     else:
         assert False
 
+
 def test_different_rep():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -67,6 +68,7 @@ def test_different_rep():
         assert True
     else:
         assert False
+
 
 def test_different_seed():
     tt1 = get_testing_tt()
@@ -83,6 +85,7 @@ def test_different_seed():
     else:
         assert False
 
+
 def test_different_popSize():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -97,6 +100,7 @@ def test_different_popSize():
         assert True
     else:
         assert False
+
 
 def test_different_data_0():
     tt1 = get_testing_tt()
@@ -113,6 +117,7 @@ def test_different_data_0():
     else:
         assert False
 
+
 def test_different_data_1():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -127,6 +132,7 @@ def test_different_data_1():
         assert True
     else:
         assert False
+
 
 def test_different_data_2():
     tt1 = get_testing_tt()
@@ -143,6 +149,7 @@ def test_different_data_2():
     else:
         assert False
 
+
 def test_different_data_3():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -157,6 +164,7 @@ def test_different_data_3():
         assert True
     else:
         assert False
+
 
 def test_different_iterations():
     tt1 = get_testing_tt()
@@ -173,6 +181,7 @@ def test_different_iterations():
     else:
         assert False
 
+
 def test_different_hrange():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -187,6 +196,7 @@ def test_different_hrange():
         assert True
     else:
         assert False
+
 
 def test_different_ct():
     tt1 = get_testing_tt()
@@ -203,6 +213,7 @@ def test_different_ct():
     else:
         assert False
 
+
 def test_different_mt():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -217,6 +228,7 @@ def test_different_mt():
         assert True
     else:
         assert False
+
 
 def test_different_st_wrong_size():
     tt1 = get_testing_tt()
@@ -233,13 +245,14 @@ def test_different_st_wrong_size():
     else:
         assert False
 
+
 def test_different_st_wrong_func():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
 
     assert_tts_same(tt1, tt2)
 
-    tt2.st = [TournamentSelectionSized]
+    tt2.st = [TournamentSelectionSized, 9]
 
     try:
         assert_tts_same(tt1, tt2)
@@ -247,6 +260,7 @@ def test_different_st_wrong_func():
         assert True
     else:
         assert False
+
 
 def test_different_st_wrong_arg():
     tt1 = get_testing_tt()
@@ -263,6 +277,7 @@ def test_different_st_wrong_arg():
     else:
         assert False
 
+
 def test_different_fft_wrong_size():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -278,13 +293,14 @@ def test_different_fft_wrong_size():
     else:
         assert False
 
+
 def test_different_fft_wrong_ff():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
 
     assert_tts_same(tt1, tt2)
 
-    tt2.fft = [CNFF5]
+    tt2.fft = [CNFF4, QuadDiff]
 
     try:
         assert_tts_same(tt1, tt2)
@@ -292,6 +308,7 @@ def test_different_fft_wrong_ff():
         assert True
     else:
         assert False
+
 
 def test_different_fft_wrong_func():
     tt1 = get_testing_tt()
@@ -308,6 +325,7 @@ def test_different_fft_wrong_func():
     else:
         assert False
 
+
 def test_different_ffc():
     tt1 = get_testing_tt()
     tt2 = get_testing_tt()
@@ -322,6 +340,7 @@ def test_different_ffc():
         assert True
     else:
         assert False
+
 
 def test_different_reg():
     tt1 = get_testing_tt()

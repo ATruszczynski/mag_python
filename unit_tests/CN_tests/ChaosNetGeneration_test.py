@@ -1,6 +1,7 @@
 from utility.TestingUtility import assert_chaos_network_properties
 from utility.Utility import *
 
+# TODO - C - clean up those files ffs
 def test_cn_generation():
     random.seed(1001)
     np.random.seed(1001)
@@ -9,7 +10,6 @@ def test_cn_generation():
                                  sqr_mut_prob=(-2, -1), lin_mut_prob=(-3, -2), p_mutation_prob=(-4, -3), c_prob=(-5, -4),
                                  dstr_mut_prob=(-6, -5))
     nets = generate_population(hrange=hrnage, count=2, input_size=2, output_size=1)
-
 
     assert len(nets) == 2
 
