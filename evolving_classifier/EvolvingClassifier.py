@@ -93,16 +93,18 @@ class EvolvingClassifier:
 
             self.history.add_it_hist(eval_pop)
 
+            pc = 20
+            lc = 300
             if verbose:
-                if i % 10 == 0:
+                if i % pc == 0:
                     print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
             else:
-                if i % 300 == 0:
+                if i % lc == 0:
                     if i > 0:
                         print()
                     print("    ", end="")
-                if i % 20 == 0:
-                    if i % 300 != 0:
+                if i % pc == 0:
+                    if i % lc != 0:
                         print(", ", end="")
                     print(f"{round(i/iterations * 100, 2)}%", end="")
 

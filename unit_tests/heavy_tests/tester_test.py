@@ -122,7 +122,7 @@ def test_tester_determinism():
 
 
 # test_tester_same_as_ec_ind()
-test_tester_determinism()
+# test_tester_determinism()
 
 
 

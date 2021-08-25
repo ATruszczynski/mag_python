@@ -37,7 +37,6 @@ def get_data():
 
     return (x, y, X, Y)
 
-# TODO - S - check if every used part is tested
 def test_suite_for_iris():
     if __name__ == '__main__':
         seed = 1001

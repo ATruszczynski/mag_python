@@ -1,4 +1,5 @@
 import random
+from itertools import combinations
 from typing import Any
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
@@ -124,7 +125,6 @@ def get_default_hrange_es():
                                  dstr_mut_prob=(log10(0.005), log10(0.1)))
     return hrange
 
-# TODO - A - make it generate only one io per combination
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
     inputs = []
     outputs = []
@@ -143,6 +143,33 @@ def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
         outputs.append(output)
 
     return [inputs, outputs]
+
+def generate_counting_problem_unique(countTo: int) -> [np.ndarray]:
+    inputs = []
+    outputs = []
+
+    choices = list(range(0, countTo))
+    inds = []
+
+    for i in range(len(choices) + 1):
+        inds.extend(list(combinations(choices, i)))
+
+    for i in range(len(inds)):
+        inp = np.zeros((countTo, 1))
+        out = np.zeros((countTo + 1, 1))
+
+        ind = inds[i]
+
+        inp[ind, 0] = 1
+        out[len(ind), 0] = 1
+
+        inputs.append(inp)
+        outputs.append(out)
+
+    return inputs, outputs
+
+
+
 
 # TODO - B - generate unblaanced counting problem
 # def generate_counting_problem(countTo: int):
