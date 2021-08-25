@@ -103,10 +103,10 @@ class EvolvingClassifier:
                     if i > 0:
                         print()
                     print("    ", end="")
-                if i % pc == 0:
+                if i % pc == 0 or i == iterations - 1:
                     if i % lc != 0:
                         print(", ", end="")
-                    print(f"{round(i/iterations * 100, 2)}%", end="")
+                    print(f"{round((i + 1)/iterations * 100, 2)}%", end="")
 
             if eval_pop[0].ff >= best[1]:
                 best = [eval_pop[0].net.copy(), eval_pop[0].ff]

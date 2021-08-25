@@ -206,7 +206,7 @@ def find_possible_cuts(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparamete
 #     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
 #         if abs(pointA.c_prob - (-0.05795092320281692)) < 1e-6 and pointA.hidden_count == 1 and pointB.hidden_count == 0:
 #             iii = 1
-#         possible_cuts = find_possible_cuts4(pointA, pointB, self.hrange)
+#         possible_cuts = find_possible_cuts_puzzles(pointA, pointB, self.hrange)
 #
 #         # cut1 = possible_cuts[random.randint(0, len(possible_cuts) - 1)]
 #         # cut2 = possible_cuts[random.randint(0, len(possible_cuts) - 1)]

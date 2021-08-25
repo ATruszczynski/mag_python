@@ -46,55 +46,37 @@ def test_suite_for_iris():
         x, y, X, Y = get_data()
         hrange = get_default_hrange_ga()
 
-        # TODO - SS - delete
-        hrange.max_hidden = 50
-
         tests = []
 
-        repetitions = 3
-        population_size = 100
-        iterations = 100
-        starg = 3
+        repetitions = 20
+        population_size = 300
+        iterations = 300
+        starg = 6
 
-        tests.append(TupleForTest(name="iris_01", rep=repetitions, seed=-1, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
-                                  fft=[CNFF], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name="iris_02", rep=repetitions, seed=-1, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
-        #                           fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name="iris_03", rep=repetitions, seed=-1, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
-        #                           fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name="iris_04", rep=repetitions, seed=-1, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, starg],
-        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        seeds = []
+        for i in range(4):
+            seeds.append(random.randint(0, 10**6))
 
-        tests.append(TupleForTest(name="iris_01_sized", rep=repetitions, seed=-1, popSize=population_size,
+        # finals
+        tests.append(TupleForTest(name=f"iris_co2_ff1_sos_2", rep=repetitions, seed=seeds[0], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
                                   fft=[CNFF], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name="iris_02_sized", rep=repetitions, seed=-1, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
-        #                           fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name="iris_03_sized", rep=repetitions, seed=-1, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
-        #                           fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name="iris_04_sized", rep=repetitions, seed=-1, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
-        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-
-        for i in range(len(tests)):
-            tests[i].seed = random.randint(0, 10**6)
+        tests.append(TupleForTest(name=f"iris_co2_ff4_qd_sos_2", rep=repetitions, seed=seeds[1], popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
+                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_co2_ff5_sos_2", rep=repetitions, seed=seeds[2], popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
+                                  fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_co2_ff6_qd_sos_2", rep=repetitions, seed=seeds[3], popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
+                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         try_check_if_all_tests_computable(tests, trash_can, 12)
-        run_tests(tts=tests, directory_for_tests=directory_for_tests, power=12)
-        # run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=12)
+        # run_tests(tts=tests, directory_for_tests=directory_for_tests, power=12)
+        run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=12)
 
 test_suite_for_iris()

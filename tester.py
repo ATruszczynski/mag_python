@@ -73,9 +73,9 @@ def create_summary_file(fpath: str, bests: [[ChaosNet, [np.ndarray, float]]], tt
     data_file = open(fpath + "summary_file.txt", "w")
     write_test_parameters(data_file=data_file, tt=tt)
 
-    data_file.write("\n\nSummary:")
+    data_file.write("\n\nSummary:\n")
     for i in range(len(bests)):
-        data_file.write(f"\n\nTest {i + 1}:\n")
+        data_file.write(f"\nTest {i + 1}:\n")
         write_down_test_results(data_file, bests[i][0], bests[i][1])
 
     data_file.close()

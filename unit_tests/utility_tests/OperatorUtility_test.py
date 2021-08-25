@@ -40,7 +40,7 @@ def test_neuron_increase():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=5,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=3,
@@ -114,7 +114,7 @@ def test_neuron_increase():
 
     assert_chaos_network_properties(net=cn2,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=7,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=5,
@@ -179,7 +179,7 @@ def test_neuron_decrease():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=4,
@@ -213,7 +213,7 @@ def test_neuron_decrease():
 
     assert_chaos_network_properties(net=cn2,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=4,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=2,

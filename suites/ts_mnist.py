@@ -63,8 +63,6 @@ def test_suite_for_mnist():
                                   fft=[CNFF], fct=CNFitnessCalculator, reg=False))
 
 
-        for i in range(len(tests)):
-            tests[i].seed = random.randint(0, 10**6)
 
         try_check_if_all_tests_computable(tests, trash_can, power)
         run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)

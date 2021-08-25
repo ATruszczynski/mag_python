@@ -6,7 +6,7 @@ import pytest
 
 def assert_chaos_network_properties(net: ChaosNet,
                                     desired_input_size: int,
-                                    desited_output_size: int,
+                                    desired_output_size: int,
                                     desired_neuron_count: int,
                                     desired_hidden_start_index: int,
                                     desired_hidden_end_index: int,
@@ -26,7 +26,7 @@ def assert_chaos_network_properties(net: ChaosNet,
                                     desired_inp: np.ndarray = None,
                                     desired_act: np.ndarray = None):
     assert net.input_size == desired_input_size
-    assert net.output_size == desited_output_size
+    assert net.output_size == desired_output_size
     assert net.neuron_count == desired_neuron_count
     assert net.hidden_start_index == desired_hidden_start_index
     assert net.hidden_end_index == desired_hidden_end_index
@@ -64,7 +64,7 @@ def assert_chaos_network_properties(net: ChaosNet,
 def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
     assert_chaos_network_properties(net,
                                     desired_input_size=net2.input_size,
-                                    desited_output_size=net2.output_size,
+                                    desired_output_size=net2.output_size,
                                     desired_neuron_count=net2.neuron_count,
                                     desired_hidden_start_index=net2.hidden_start_index,
                                     desired_hidden_end_index=net2.hidden_end_index,

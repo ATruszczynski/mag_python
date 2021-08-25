@@ -19,7 +19,7 @@ def test_cn_comp_order():
 
     assert_chaos_network_properties(net=cn,
                                     desired_input_size=2,
-                                    desited_output_size=1,
+                                    desired_output_size=1,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=2,
                                     desired_hidden_end_index=5,
@@ -62,7 +62,7 @@ def test_cn_comp_order_2():
 
     assert_chaos_network_properties(net=cn,
                                     desired_input_size=1,
-                                    desited_output_size=1,
+                                    desired_output_size=1,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=5,
@@ -105,7 +105,7 @@ def test_cn_comp_order_3():
 
     assert_chaos_network_properties(net=cn,
                                     desired_input_size=1,
-                                    desited_output_size=1,
+                                    desired_output_size=1,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=5,
@@ -177,7 +177,7 @@ def test_cn_comp_order_rec():
 
     assert_chaos_network_properties(net=cn,
                                     desired_input_size=2,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=9,
                                     desired_hidden_start_index=2,
                                     desired_hidden_end_index=7,

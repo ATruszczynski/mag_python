@@ -35,7 +35,7 @@ def test_CN_constr():
 
     assert_chaos_network_properties(net=net,
                                     desired_input_size=2,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=7,
                                     desired_hidden_start_index=2,
                                     desired_hidden_end_index=5,
@@ -96,7 +96,7 @@ def test_CN_copy():
 
     assert_chaos_network_properties(net=net,
                                     desired_input_size=2,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=7,
                                     desired_hidden_start_index=2,
                                     desired_hidden_end_index=5,
@@ -136,7 +136,7 @@ def test_CN_copy():
 
     assert_chaos_network_properties(net=net2,
                                     desired_input_size=2,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=7,
                                     desired_hidden_start_index=2,
                                     desired_hidden_end_index=5,

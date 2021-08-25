@@ -42,7 +42,7 @@ def test_struct_mutation():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=5,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=3,
@@ -77,7 +77,7 @@ def test_struct_mutation():
 
     assert_chaos_network_properties(net=mutant,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=5,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=3,
@@ -137,7 +137,7 @@ def test_struct_mutation_2():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=4,
@@ -167,7 +167,7 @@ def test_struct_mutation_2():
 
     assert_chaos_network_properties(net=mutant,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=4,
@@ -229,7 +229,7 @@ def test_struct_mutation_3():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=4,
@@ -259,7 +259,7 @@ def test_struct_mutation_3():
 
     assert_chaos_network_properties(net=mutant,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=6,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=4,

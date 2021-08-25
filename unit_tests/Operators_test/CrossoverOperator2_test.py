@@ -9,6 +9,7 @@ from utility.TestingUtility import assert_chaos_network_properties
 #TODO - B - test multiple runs vs single run (done?)
 #TODO - B - ec test multiple runs vs single run? (done?)
 
+# TODO - A - test find possible cuts
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 20), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
@@ -60,7 +61,7 @@ def test_simple_crossover():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=5,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=3,
@@ -90,7 +91,7 @@ def test_simple_crossover():
 
     assert_chaos_network_properties(net=cn2,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=5,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=3,
@@ -120,7 +121,7 @@ def test_simple_crossover():
 
     assert_chaos_network_properties(net=cn3,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=4,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=2,
@@ -148,7 +149,7 @@ def test_simple_crossover():
 
     assert_chaos_network_properties(net=cn4,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=5,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=3,
@@ -229,7 +230,7 @@ def test_simple_crossover_2():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=4,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=2,
@@ -257,7 +258,7 @@ def test_simple_crossover_2():
 
     assert_chaos_network_properties(net=cn2,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=8,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=6,
@@ -294,7 +295,7 @@ def test_simple_crossover_2():
 
     assert_chaos_network_properties(net=cn3,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=3,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=1,
@@ -320,7 +321,7 @@ def test_simple_crossover_2():
 
     assert_chaos_network_properties(net=cn4,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=8,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=6,
@@ -395,7 +396,7 @@ def test_simple_crossover_3():
 
     assert_chaos_network_properties(net=cn1,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=3,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=1,
@@ -421,7 +422,7 @@ def test_simple_crossover_3():
 
     assert_chaos_network_properties(net=cn2,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=3,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=1,
@@ -448,7 +449,7 @@ def test_simple_crossover_3():
 
     assert_chaos_network_properties(net=cn3,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=3,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=1,
@@ -474,7 +475,7 @@ def test_simple_crossover_3():
 
     assert_chaos_network_properties(net=cn4,
                                     desired_input_size=1,
-                                    desited_output_size=2,
+                                    desired_output_size=2,
                                     desired_neuron_count=3,
                                     desired_hidden_start_index=1,
                                     desired_hidden_end_index=1,

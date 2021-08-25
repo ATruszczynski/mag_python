@@ -110,10 +110,18 @@ class CNConstructorException(Exception):
     def __init__(self):
         pass
 
-
+# TODO - A - add a None tests
 def assert_acts_same(acts1: [ActFun], acts2: [ActFun]):
     assert len(acts1) == len(acts2)
 
     for i in range(len(acts1)):
-        assert acts1[i].to_string() == acts2[i].to_string()
+        a1 = acts1[i]
+        a2 = acts2[i]
+
+        if a1 is None:
+            assert a2 is None
+        elif a2 is None:
+            assert a1 is None
+        else:
+            assert acts1[i].to_string() == acts2[i].to_string()
 

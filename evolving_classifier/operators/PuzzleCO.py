@@ -20,7 +20,7 @@ class PuzzleCO(CrossoverOperator):
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         if abs(pointA.c_prob - (-0.05795092320281692)) < 1e-6 and pointA.hidden_count == 1 and pointB.hidden_count == 0:
             iii = 1
-        possible_cuts = find_possible_cuts4(pointA, pointB, self.hrange)
+        possible_cuts = find_possible_cuts_puzzles(pointA, pointB, self.hrange)
 
         # cut1 = possible_cuts[random.randint(0, len(possible_cuts) - 1)]
         # cut2 = possible_cuts[random.randint(0, len(possible_cuts) - 1)]
@@ -295,7 +295,7 @@ def piece_together_from_puzzles(i: int, o: int, left_puzzles: [np.ndarray], righ
 
 
 #TODO - B - jak reaguje na puste sieci
-def find_possible_cuts4(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
+def find_possible_cuts_puzzles(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden
     minh = hrange.min_hidden
