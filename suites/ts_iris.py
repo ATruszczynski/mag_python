@@ -52,9 +52,9 @@ def test_suite_for_iris():
 
         tests = []
 
-        repetitions = 5
+        repetitions = 2
         population_size = 100
-        iterations = 100
+        iterations = 500
         starg = ceil(0.02 * population_size)
         power = 12
 
@@ -88,7 +88,11 @@ def test_suite_for_iris():
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelectionSized2, starg],
         #                           fft=[CNFF], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"iris_sos_001_ff4", rep=repetitions, seed=seeds[3], popSize=population_size,
+        tests.append(TupleForTest(name=f"iris_co3_sos2_ff1", rep=repetitions, seed=seeds[3], popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelectionSized, starg],
+                                  fft=[CNFF], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_co3_sos2_ff4", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelectionSized2, starg],
                                   fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))

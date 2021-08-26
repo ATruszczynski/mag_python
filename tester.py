@@ -18,11 +18,11 @@ np.seterr(all='ignore')
 
 # directory_for_tests=f"..{os.path.sep}algo_tests"
 
-# TODO - A - could print test number
 def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNet]]:
     resultss = []
 
-    for tt in tts:
+    for ddd in range(len(tts)):
+        tt = tts[ddd]
         # print(f"Test {tt.name} has started at {datetime.datetime.now()}")
         subdir_name = f"{directory_for_tests}{os.path.sep}{tt.name}"
         if not os.path.exists(subdir_name):
@@ -42,7 +42,7 @@ def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNe
             seeds.append(random.randint(0, 10**6))
 
         for i in range(tt.rep):
-            print(f"{tt.name} - {i + 1}/{tt.rep} at {datetime.datetime.now()}")
+            print(f"{tt.name} - (Test: {ddd+1}/{len(tts)}, rep: {i + 1}/{tt.rep}) - at {datetime.datetime.now()}")
             ec = EvolvingClassifier()
             ec.prepare(popSize=tt.popSize, nn_data=tt.data, seed=seeds[i], hrange=tt.hrange, ct=tt.ct, mt=tt.mt,
                        st=tt.st, fft=tt.fft, fct=tt.fct)

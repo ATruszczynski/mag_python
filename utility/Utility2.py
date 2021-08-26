@@ -110,7 +110,6 @@ class CNConstructorException(Exception):
     def __init__(self):
         pass
 
-# TODO - A - add a None tests
 def assert_acts_same(acts1: [ActFun], acts2: [ActFun]):
     assert len(acts1) == len(acts2)
 

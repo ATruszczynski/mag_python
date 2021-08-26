@@ -92,6 +92,27 @@ def test_copy():
                                             [0, 2, 4]]))
 
 
+def test_copy_2():
+    hrange = get_default_hrange_ga()
+    cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=3)[0]
+
+    cndp1 = CNDataPoint(cn)
+
+    cndp1.add_data(0.5, None)
+    cp = cndp1.copy()
+
+    assert_chaos_networks_same(cndp1.net, cp.net)
+    assert cndp1.ff == cp.ff
+    assert cp.conf_mat is None
+
+    cndp1.net.input_size = 222
+    assert cp.net.input_size == 2
+    cndp1.ff = -23213123
+    cndp1.conf_mat = np.zeros((1, 1))
+    assert cp.ff == 0.5
+    assert cp.conf_mat is None
+test_copy_2()
+
 
 # test_cndp_constructor()
 # test_add_data()

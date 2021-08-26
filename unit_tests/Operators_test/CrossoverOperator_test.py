@@ -8,7 +8,6 @@ from utility.TestingUtility import assert_chaos_network_properties
 #TODO - B - test multiple runs vs single run (done?)
 #TODO - B - ec test multiple runs vs single run? (done?)
 
-# TODO - A - test find possible cuts
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                                  sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),

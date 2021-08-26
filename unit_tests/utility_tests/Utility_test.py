@@ -583,5 +583,32 @@ def test_acts_same():
     else:
         assert False
 
-test_acts_same()
+    acts5 = [ReLu(), None, None]
+    acts6 = [ReLu(), None]
+    acts7 = [ReLu(), None, None]
+
+    assert_acts_same(acts5, acts7)
+
+    try:
+        assert_acts_same(acts1, acts5)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+    try:
+        assert_acts_same(acts5, acts6)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+    try:
+        assert_acts_same(acts1, acts6)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+# test_acts_same()
 # test_copy_list_of_arrays()

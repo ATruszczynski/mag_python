@@ -144,7 +144,6 @@ def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
 
     return [inputs, outputs]
 
-# TODO - A - test (too few examples?)
 def generate_counting_problem_unique(countTo: int) -> [np.ndarray]:
     inputs = []
     outputs = []

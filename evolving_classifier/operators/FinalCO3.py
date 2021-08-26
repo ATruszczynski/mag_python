@@ -210,7 +210,6 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
 
     return result
 
-# TODO - A - test if possible cuts takes hrange into consideration
 def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
     input_size = pointA.input_size
     output_size = pointA.output_size
