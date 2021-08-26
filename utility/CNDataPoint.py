@@ -34,7 +34,11 @@ class CNDataPoint():
     def copy(self):
         ncn = CNDataPoint(self.net.copy())
         ncn.ff = self.ff
-        ncn.conf_mat = self.conf_mat.copy()
+        # TODO - A - test that
+        if self.conf_mat is None:
+            ncn.conf_mat = None
+        else:
+            ncn.conf_mat = self.conf_mat.copy()
 
         return ncn
 

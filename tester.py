@@ -18,6 +18,7 @@ np.seterr(all='ignore')
 
 # directory_for_tests=f"..{os.path.sep}algo_tests"
 
+# TODO - A - could print test number
 def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNet]]:
     resultss = []
 
@@ -116,7 +117,7 @@ def write_down_test_results(data_file, net: ChaosNet, tr: [Any]):
     data_file.write(f"eff: {efficiency(tr[0])}\n")
     data_file.write(f"meff: {m_efficiency(tr[0])}\n")
     if len(tr) == 2:
-        data_file.write(f"err: {tr[1]}")
+        data_file.write(f"err: {tr[1]}\n")
 
 
 def write_test_parameters(data_file, tt:TupleForTest):

@@ -95,6 +95,137 @@ def test_select_sized():
     assert adp4.net.to_string() == (MockCN(-1, np.array([[4, 3, 4, 4]]))).to_string()
     assert chosen.to_string() == (MockCN(2, np.array([[4, 4, 4, 4]]))).to_string()
 
+def test_select_sized_2_positive():
+    random.seed(1010)
+
+    cn1 = MockCN(1, np.array([[1]]))
+    cn2 = MockCN(4, np.array([[2, 2]]))
+    cn3 = MockCN(3, np.array([[3, 3, 3]]))
+    cn4 = MockCN(2, np.array([[4, 4, 4, 4]]))
+
+    adp1 = CNDataPoint(cn1)
+    adp1.ff = 0.7
+    adp2 = CNDataPoint(cn2)
+    adp2.ff = 0.9
+    adp3 = CNDataPoint(cn3)
+    adp3.ff = 0.2
+    adp4 = CNDataPoint(cn4)
+    adp4.ff = 0.9
+
+    list = [adp1, adp2, adp3, adp4]
+
+    so = TournamentSelectionSized2(2)
+
+    chosen = so.select(list)
+
+    assert adp4.net.to_string() == chosen.to_string()
+
+    adp4.net.mat[0][1] = 3
+    adp4.net.neuron_count = -1
+
+    assert adp4.net.to_string() == (MockCN(-1, np.array([[4, 3, 4, 4]]))).to_string()
+    assert chosen.to_string() == (MockCN(2, np.array([[4, 4, 4, 4]]))).to_string()
+
+def test_select_sized_2_positive_edge_cases():
+
+    cn1 = MockCN(1, np.array([[1]]))
+    cn2 = MockCN(4, np.array([[2, 2]]))
+    cn3 = MockCN(3, np.array([[3, 3, 3]]))
+    cn4 = MockCN(2, np.array([[4, 4, 4, 4]]))
+
+    adp1 = CNDataPoint(cn1)
+    adp1.ff = 0.7
+    adp2 = CNDataPoint(cn2)
+    adp2.ff = 0.9
+    adp3 = CNDataPoint(cn3)
+    adp3.ff = 0.4
+    adp4 = CNDataPoint(cn4)
+    adp4.ff = 0.9 - 0.001
+
+    list = [adp1, adp2, adp3, adp4]
+
+    random.seed(1010)
+    so = TournamentSelectionSized2(2)
+    chosen = so.select(list)
+    assert adp4.net.to_string() == chosen.to_string()
+
+    adp1.ff = 0.7
+    adp2.ff = 0.9
+    adp3.ff = 0.4
+    adp4.ff = 0.9 - 0.002
+
+    list = [adp1, adp2, adp3, adp4]
+
+    random.seed(1010)
+    so = TournamentSelectionSized2(2)
+    chosen = so.select(list)
+    assert adp2.net.to_string() == chosen.to_string()
+
+def test_select_sized_2_negative():
+    random.seed(1010)
+
+    cn1 = MockCN(1, np.array([[1]]))
+    cn2 = MockCN(4, np.array([[2, 2]]))
+    cn3 = MockCN(3, np.array([[3, 3, 3]]))
+    cn4 = MockCN(2, np.array([[4, 4, 4, 4]]))
+
+    adp1 = CNDataPoint(cn1)
+    adp1.ff = -1.8
+    adp2 = CNDataPoint(cn2)
+    adp2.ff = -5.4
+    adp3 = CNDataPoint(cn3)
+    adp3.ff = -2.4
+    adp4 = CNDataPoint(cn4)
+    adp4.ff = -5.4
+
+    list = [adp1, adp2, adp3, adp4]
+
+    so = TournamentSelectionSized2(2)
+
+    chosen = so.select(list)
+
+    assert adp4.net.to_string() == chosen.to_string()
+
+    adp4.net.mat[0][1] = 3
+    adp4.net.neuron_count = -1
+
+    assert adp4.net.to_string() == (MockCN(-1, np.array([[4, 3, 4, 4]]))).to_string()
+    assert chosen.to_string() == (MockCN(2, np.array([[4, 4, 4, 4]]))).to_string()
+
+def test_select_sized_2_negative_edge_cases():
+    cn1 = MockCN(1, np.array([[1]]))
+    cn2 = MockCN(4, np.array([[2, 2]]))
+    cn3 = MockCN(3, np.array([[3, 3, 3]]))
+    cn4 = MockCN(2, np.array([[4, 4, 4, 4]]))
+
+    adp1 = CNDataPoint(cn1)
+    adp1.ff = -1.8
+    adp2 = CNDataPoint(cn2)
+    adp2.ff = -5.4
+    adp3 = CNDataPoint(cn3)
+    adp3.ff = -2.4
+    adp4 = CNDataPoint(cn4)
+    adp4.ff = -5.4 * 1.01
+
+    list = [adp1, adp2, adp3, adp4]
+
+    random.seed(1010)
+    so = TournamentSelectionSized2(2)
+    chosen = so.select(list)
+    assert adp4.net.to_string() == chosen.to_string()
+
+    adp1.ff = -1.8
+    adp2.ff = -5.4
+    adp3.ff = -2.4
+    adp4.ff = -5.4 * 1.02
+
+    list = [adp1, adp2, adp3, adp4]
+
+    random.seed(1010)
+    so = TournamentSelectionSized2(2)
+    chosen = so.select(list)
+    assert adp2.net.to_string() == chosen.to_string()
+
 
 def test_select_too_few():
     random.seed(1010)
@@ -125,3 +256,5 @@ def test_select_too_few():
 # test_select()
 # test_select_too_few()
 # test_select_sized()
+# test_select_sized_2_positive()
+# test_select_sized_2_positive_edge_cases()
