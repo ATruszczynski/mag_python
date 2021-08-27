@@ -56,6 +56,32 @@ def get_point2():
 
     return cn
 
+def get_point3():
+    links = np.array([[0, 0, 1, 1, 1, 0, 0, 0, 0],
+                      [0, 0, 1, 1, 1, 0, 0, 0, 0],
+                      [0, 0, 0, 1, 1, 1, 1, 1, 1],
+                      [0, 0, 1, 0, 1, 1, 1, 1, 1],
+                      [0, 0, 1, 1, 0, 1, 1, 1, 1],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    weights = np.array([[0, 0, 1, 2, 1, 0, 0, 0, 0],
+                        [0, 0, -1, 1, -1, 0, 0, 0, 0],
+                        [0, 0, 0, 1, -2, 1, 1, 1, -1],
+                        [0, 0, 1, 0, 1, 1, 1, 1, -0.5],
+                        [0, 0, 1, 1, 0, -2, 0.5, 1, 1],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+    bias = np.array([[0, 0, 0.5, 1, -1, 0.5, 0.5, -0.5, 0.75]])
+    actFuns = [None, None, Sigmoid(), ReLu(), Identity(), Sigmoid(), None, None, None]
+    cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                  net_it=4, mutation_radius=0, sqr_mut_prob=0, lin_mut_prob=0, p_mutation_prob=0, c_prob=0, dstr_mut_prob=0)
+
+    return cn
+
 def get_io():
     inputs = [np.array([[0], [0]]), np.array([[0], [1]]), np.array([[1], [0]]), np.array([[1], [1]])]
     output = [np.array([[1], [0], [0]]), np.array([[0], [1], [0]]), np.array([[0], [1], [0]]), np.array([[0], [0], [1]])]
@@ -70,6 +96,17 @@ def get_io():
 def get_io2():
     inputs = [np.array([[0.], [0]]), np.array([[0.], [1]]), np.array([[1.], [0]]), np.array([[1.], [1]])]
     output = [np.array([[1.], [0], [0], [0]]), np.array([[0.], [1], [0], [0]]), np.array([[0.], [0], [1], [0]]), np.array([[0.], [0], [0], [1]])]
+
+    inputs.extend([gaussian_shift(c.copy(), np.ones(c.shape), 1, 1) for c in inputs])
+    inputs.extend([gaussian_shift(c.copy(), np.ones(c.shape), 1, 1) for c in inputs])
+    output.extend([c.copy() for c in output])
+    output.extend([c.copy() for c in output])
+
+    return inputs, output
+
+def get_io3():
+    inputs = [np.array([[0.], [0]]), np.array([[0.], [1]]), np.array([[1.], [0]]), np.array([[1.], [1]])]
+    output = [np.array([[1.], [0]]), np.array([[0.], [1]]), np.array([[1.], [0]]), np.array([[0.], [1]])]
 
     inputs.extend([gaussian_shift(c.copy(), np.ones(c.shape), 1, 1) for c in inputs])
     inputs.extend([gaussian_shift(c.copy(), np.ones(c.shape), 1, 1) for c in inputs])
@@ -389,29 +426,29 @@ def test_mixed_meff_loss_2():
 #
 # test_meff_loss_2()
 
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point()
-i, o = get_io()
-
-test = net.test(i, o, QuadDiff())
-print(-(1.01 - m_efficiency(test[0]))*test[1])
-print(test[0])
-
-test_mixed_meff_loss_1()
-
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point2()
-i, o = get_io2()
-
-test = net.test(i, o, QuadDiff())
-print(-(1.01 - m_efficiency(test[0]))*test[1])
-print(test[0])
-
-test_mixed_meff_loss_2()
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-(1.01 - m_efficiency(test[0]))*test[1])
+# print(test[0])
+#
+# test_mixed_meff_loss_1()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-(1.01 - m_efficiency(test[0]))*test[1])
+# print(test[0])
+#
+# test_mixed_meff_loss_2()
 
 
 

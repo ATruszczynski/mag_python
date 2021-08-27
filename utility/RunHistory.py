@@ -61,6 +61,9 @@ class RunHistory:
         file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,sqrp,linp,pmp,cp,dstp,ff")
         if not reg:
             file.write(",eff,meff,acc,prc,rec,f1s")
+        if self.it_hist[0][0].net.output_size == 2:
+            file.write(",tp,fn,fp,tn")
+
         file.write("\n")
 
         for it in range(len(self.it_hist)):
@@ -80,6 +83,11 @@ class RunHistory:
                     file.write(f",{cndatapoint.get_avg_prec()}")
                     file.write(f",{cndatapoint.get_avg_rec()}")
                     file.write(f",{cndatapoint.get_avg_f1()}")
+                if self.it_hist[0][0].net.output_size == 2:
+                    file.write(f",{cndatapoint.get_TP_perc()}")
+                    file.write(f",{cndatapoint.get_FN_perc()}")
+                    file.write(f",{cndatapoint.get_FP_perc()}")
+                    file.write(f",{cndatapoint.get_TN_perc()}")
                 file.write("\n")
         file.close()
 

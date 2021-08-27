@@ -89,5 +89,36 @@ class CNFF6(FitnessFunction):
 
         return [result, cm]
 
+# TODO - A - test
+class CNFF7(FitnessFunction):
+    def __init__(self):
+        super().__init__()
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
+
+        cm = test_results[0]
+
+        result = cm[0, 1] + 5 * cm[1, 0]
+        result = -result
+
+        return [result, cm]
+
+# TODO - A - test
+class CNFF8(FitnessFunction):
+    def __init__(self, lossFun: LossFun):
+        super().__init__()
+        self.lossFun = lossFun
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
+
+        cm = test_results[0]
+
+        result = cm[0, 1] + 5 * cm[1, 0]
+        result = -result * test_results[1]
+
+        return [result, cm]
+
 
 

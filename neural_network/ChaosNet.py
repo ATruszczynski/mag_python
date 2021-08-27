@@ -25,7 +25,7 @@ class ChaosNet:
         check_cond_in_cn_const(biases.shape[1] == weights.shape[1])
         check_cond_in_cn_const(len(actFuns) == biases.shape[1])
         check_cond_in_cn_const(net_it >= 1)
-        check_cond_in_cn_const(mutation_radius <= 0)
+        # check_cond_in_cn_const(mutation_radius <= 0)
         check_cond_in_cn_const(sqr_mut_prob <= 0)
         check_cond_in_cn_const(lin_mut_prob <= 0)
         check_cond_in_cn_const(p_mutation_prob <= 0)

@@ -92,9 +92,11 @@ class EvolvingClassifier:
                                        trainOutputs=self.trainOutputs)
 
             self.history.add_it_hist(eval_pop)
+            if eval_pop[0].ff >= best[1]:
+                best = [eval_pop[0].net.copy(), eval_pop[0].ff]
 
-            pc = 20
-            lc = 300
+            pc = 5
+            lc = 150
             if verbose:
                 if i % pc == 0:
                     print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")
@@ -106,10 +108,9 @@ class EvolvingClassifier:
                 if i % pc == 0 or i == iterations - 1:
                     if i % lc != 0:
                         print(", ", end="")
-                    print(f"{round((i + 1)/iterations * 100, 2)}%", end="")
+                    print(f"{round((i + 1)/iterations * 100, 2)}%-{round(best[1], 4)}", end="")
 
-            if eval_pop[0].ff >= best[1]:
-                best = [eval_pop[0].net.copy(), eval_pop[0].ff]
+
 
             crossed = []
 

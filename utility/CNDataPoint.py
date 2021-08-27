@@ -31,6 +31,19 @@ class CNDataPoint():
     def get_meff(self):
         return m_efficiency(self.conf_mat)
 
+    def get_TP_perc(self):
+        return self.conf_mat[0, 0] / np.sum(self.conf_mat)
+
+    def get_FN_perc(self):
+        return self.conf_mat[0, 1] / np.sum(self.conf_mat)
+
+    def get_FP_perc(self):
+        return self.conf_mat[1, 0] / np.sum(self.conf_mat)
+
+    def get_TN_perc(self):
+        return self.conf_mat[1, 1] / np.sum(self.conf_mat)
+
+
     def copy(self):
         ncn = CNDataPoint(self.net.copy())
         ncn.ff = self.ff

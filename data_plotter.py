@@ -30,7 +30,7 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
     df_max.plot(kind='line',x='name',y='max', color='red', ax=ax, label="max")
 
     if parameter_name == "ff":
-        plt.ylim((1, 1e6))
+        plt.ylim((1, 1e3))
         plt.yscale("log")
     if parameter_name == "eff" or parameter_name == "meff":
         plt.ylim((-0.1, 1.1))
@@ -57,108 +57,129 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
 
 
-# frame = read_data_from_file(r"C:\Users\aleks\Desktop\mag_python\algo_tests\iris_sos_ff4\iris_sos_ff4-rep_1.csv")
-#
-# print(frame.columns)
-#
-#
-# means = frame.groupby("it").mean()
-# max = frame.groupby("it").max()
-#
-# print(means)
-# print(max)
+# dir_name = "iris_co1_ff1_so"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
-# pats = [r"C:\Users\aleks\Desktop\mag_python\algo_tests\iris_sos_ff4\iris_sos_ff4-rep_1.csv",
-#         r"C:\Users\aleks\Desktop\mag_python\algo_tests\iris_sos_ff4\iris_sos_ff4-rep_2.csv"]
-#
-# plot_min_max_avg(data_paths=pats, parameter_name="meff")
-
-# dfs =  read_all_frames_from_directory(r"algo_tests\cmp_sos1_count_co3_ff1")
-# plot_min_max_avg(dfs, "nc", "nc-cmp_sos1_count_co3_ff1")
-# plot_min_max_avg(dfs, "eff", "eff-cmp_sos1_count_co3_ff1")
-#
-#
-# dfs =  read_all_frames_from_directory(r"algo_tests\cmp_sos2_count_co3_ff1")
-# plot_min_max_avg(dfs, "nc", "nc-cmp_sos2_count_co3_ff1")
-# plot_min_max_avg(dfs, "eff", "eff-cmp_sos2_count_co3_ff1")
-#
-#
-# dfs =  read_all_frames_from_directory(r"algo_tests\cmp_sos3_count_co3_ff1")
-# plot_min_max_avg(dfs, "nc", "nc-cmp_sos3_count_co3_ff1")
-# plot_min_max_avg(dfs, "eff", "eff-cmp_sos3_count_co3_ff1")
-#
-#
-# dfs =  read_all_frames_from_directory(r"algo_tests\cmp_sos1_count_co3_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-cmp_sos1_count_co3_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-cmp_sos1_count_co3_ff4")
-#
-#
-# dfs =  read_all_frames_from_directory(r"algo_tests\cmp_sos2_count_co3_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-cmp_sos2_count_co3_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-cmp_sos2_count_co3_ff4")
-#
-#
-# dfs =  read_all_frames_from_directory(r"algo_tests\cmp_sos3_count_co3_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-cmp_sos3_count_co3_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-cmp_sos3_count_co3_ff4")
+# dir_name = "iris_co1_ff1_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
 
+# dir_name = "iris_co3_ff1_so"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
-# dfs =  read_all_frames_from_directory(r"algo_tests\iris_co3_sos2_ff1")
-# plot_min_max_avg(dfs, "nc", "nc-iris_co3_sos2_ff1")
-# plot_min_max_avg(dfs, "eff", "eff-iris_co3_sos2_ff1")
+# dir_name = "iris_co3_ff1_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+
+
+# dir_name = "iris_co1_ff4_so"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\iris_co3_sos2_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-iris_co3_sos2_ff4")
-# plot_min_max_avg(dfs, "ff", "eff-iris_co3_sos2_ff4")
-
-
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos1_ff1")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos1_ff1")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos1_ff1")
+# dir_name = "iris_co1_ff4_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos2_ff1")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos2_ff1")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos2_ff1")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos1_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos1_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos1_ff4")
+# dir_name = "iris_co3_ff4_so"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos2_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos2_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos2_ff4")
+# dir_name = "iris_co3_ff4_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
 
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos3_002_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos3_002_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos3_002_ff4")
+# dir_name = "iris_co1_ff5_so"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos3_005_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos3_005_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos3_005_ff4")
-
+# dir_name = "iris_co1_ff5_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos3_001_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos3_001_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos3_001_ff4")
 #
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos3_001_ff4_2")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos3_001_ff4_2")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos3_001_ff4_2")
+# dir_name = "iris_co3_ff5_so"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+#
+# dir_name = "iris_co3_ff5_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+
+# dir_name = "iris_co3_ff4_sos"
+# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+#
+# dir_name = "iris_co3_ff4_sos_2"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+#
+#
+# dir_name = "iris_co3_ff4_sos_3"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
 
-dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos1_ff4")
-plot_min_max_avg(dfs, "nc", "nc-count_co3_sos1_ff4")
-plot_min_max_avg(dfs, "eff", "eff-count_co3_sos1_ff4")
+# dir_name = "german_ff7"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# # plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
+# # plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")
+# # plot_min_max_avg(dfs, "fp", f"fp-{dir_name}")
+# # plot_min_max_avg(dfs, "tn", f"tn-{dir_name}")
 
-# dfs =  read_all_frames_from_directory(r"algo_tests\count_co3_sos3_001_ff4")
-# plot_min_max_avg(dfs, "nc", "nc-count_co3_sos3_001_ff4")
-# plot_min_max_avg(dfs, "eff", "eff-count_co3_sos3_001_ff4")
+# dir_name = "german_ff8_es"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "cp", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "sqrp", f"eff-{dir_name}")
+
+# dir_name = "german_ff7_es"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "cp", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "sqrp", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
+# plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")
+# plot_min_max_avg(dfs, "fp", f"fp-{dir_name}")
+# plot_min_max_avg(dfs, "tn", f"tn-{dir_name}")
 
 
 
-
+dir_name = "german_ff5_ga32"
+dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
+# plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")
+# plot_min_max_avg(dfs, "fp", f"fp-{dir_name}")
+# plot_min_max_avg(dfs, "tn", f"tn-{dir_name}")
 
 plt.show()
 
