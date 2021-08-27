@@ -44,7 +44,7 @@ class TournamentSelectionSized2(SelectionOperator):
         chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
 
         eps = 1e-10
-        perc = 0.01
+        perc = 0.5
 
         bestff = abs(chosen_sorted[0].ff)
         if math.isnan(bestff) or math.isinf(bestff):
