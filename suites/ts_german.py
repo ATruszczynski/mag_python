@@ -54,7 +54,7 @@ def test_suite_for_german():
 
         repetitions = 1
         population_size = 100
-        iterations = 300
+        iterations = 50
         starg = max(ceil(0.05 * population_size), 2)
         starg = 2
         power = 12
@@ -125,7 +125,6 @@ def test_suite_for_german():
         print(m_efficiency(res[0]))
         if len(res) == 2:
             print(res[1])
-        print(5 * res[0][1, 0] + res[0][0, 1])
         # print(net.inp[net.hidden_start_index:])
         # print(net.weights[0:net.hidden_end_index, net.hidden_start_index:])
 

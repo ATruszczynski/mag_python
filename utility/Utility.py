@@ -167,11 +167,12 @@ def get_default_hrange_es3():
                                  mut_radius=(-4, log10(d)), sqr_mut_prob=(-3, 0), lin_mut_prob=(-3, 0),
                                  p_mutation_prob=(-3, 0), c_prob=(log10(0.6), log10(1)),
                                  dstr_mut_prob=(-3, 0))
-    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
-    #                              actFuns=[ReLu(), LReLu(), Identity(), Poly2(), Poly3()],
-    #                              mut_radius=(-4, log10(d)), sqr_mut_prob=(-3, 0), lin_mut_prob=(-3, 0),
-    #                              p_mutation_prob=(-3, 0), c_prob=(-100, -100),
-    #                              dstr_mut_prob=(-3, 0))
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(10, 20),
+                                 actFuns=[ReLu(), LReLu(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-3, log10(d)), sqr_mut_prob=(-2, 0), lin_mut_prob=(-1, 0),
+                                 p_mutation_prob=(-3, 0), c_prob=(log10(0.6), log10(1)),
+                                 dstr_mut_prob=(-3, 0))
+    # c_prob=(-100, -100)
     return hrange
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:

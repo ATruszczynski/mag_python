@@ -30,7 +30,7 @@ def get_data():
     cols_to_norm = data_frame.columns[:-1]
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
-    div = 200
+    div = 400
 
     train = data_frame.iloc[:div, :]
     test = data_frame.iloc[div:, :]
@@ -56,9 +56,9 @@ def test_suite_for_wine():
 
         tests = []
 
-        repetitions = 4
-        population_size = 50
-        iterations = 200
+        repetitions = 1
+        population_size = 200
+        iterations = 300
         starg = ceil(0.02 * population_size)
         power = 12
         seed = 1001
@@ -70,12 +70,25 @@ def test_suite_for_wine():
 
         tests.append(TupleForTest(name=f"wines", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelectionSized, 4],
-                                  fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
+                                  ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelectionSized, 2],
+                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
 
         # try_check_if_all_tests_computable(tests, trash_can, power=power)
-        run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)
+        res = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)
+
+
+        net = res[0][0]
+        restr = net.test(test_input=x, test_output=y)
+        print(restr[0])
+        print(m_efficiency(restr[0]))
+        res = net.test(test_input=X, test_output=Y)
+        print(res[0])
+        np.set_printoptions(suppress=True)
+        print(m_efficiency(res[0]))
+        if len(res) == 2:
+            print(res[1])
+        print(5 * res[0][1, 0] + res[0][0, 1])
         # run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)
 
 test_suite_for_wine()
