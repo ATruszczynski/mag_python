@@ -58,7 +58,7 @@ class RunHistory:
 
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")
-        file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,sqrp,linp,pmp,cp,dstp,ff")
+        file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,sqrp,linp,pmp,cp,dstp,afp,ff")
         if not reg:
             file.write(",eff,meff,acc,prc,rec,f1s")
         if self.it_hist[0][0].net.output_size == 2:
@@ -75,7 +75,7 @@ class RunHistory:
                            f"{net.get_edge_count()},"
                            f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
                            f"{net.mutation_radius},{net.sqr_mut_prob},{net.lin_mut_prob},"
-                           f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{cndatapoint.ff}")
+                           f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{net.act_mut_prob},{cndatapoint.ff}")
                 if not reg:
                     file.write(f",{cndatapoint.get_eff()}")
                     file.write(f",{cndatapoint.get_meff()}")

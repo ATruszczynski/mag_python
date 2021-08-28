@@ -1,3 +1,5 @@
+from math import log10
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,8 +32,15 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
     df_max.plot(kind='line',x='name',y='max', color='red', ax=ax, label="max")
 
     if parameter_name == "ff":
-        plt.ylim((1, 1e6))
-        plt.yscale("log")
+        maxff = df_mean.max()
+        if maxff <= 1:
+            plt.ylim((0, 1))
+        elif maxff >= 1000:
+            plt.ylim((1, 1e4))
+            plt.yscale("log")
+        elif maxff >= 10000:
+            plt.ylim((1, 1e6))
+            plt.yscale("log")
     if parameter_name == "eff" or parameter_name == "meff":
         plt.ylim((-0.1, 1.1))
     plt.ylabel(parameter_name)
@@ -171,19 +180,35 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
 
 
-dir_name = "wines"
-dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# dir_name = "wines2_co1"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# # plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 # plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
+#
+# plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
+# plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
+# plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
+# plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
+# plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
+# plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
+# plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
 
-plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
-plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
-plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
-plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
-plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
-plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
+# dir_name = "wines2_cp2"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+# plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
+
+dir_name = "wines2_co1"
+dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+plot_min_max_avg(dfs, "sqrp", f"cp-{dir_name}")
+
+# dir_name = "wines2_co3"
+# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
+# plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
 
 # plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
 # plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")

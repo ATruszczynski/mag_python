@@ -13,6 +13,22 @@ class SelectionOperator:
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
         pass
 
+class TournamentSelection06(SelectionOperator):
+    def __init__(self, count: int):
+        super().__init__()
+        self.count = count
+
+    def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
+        chosen = choose_without_repetition(options=val_pop, count=self.count)
+        chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
+
+        for i in range(len(chosen) - 1):
+            p = random.random()
+            if p <= 0.5:
+                return chosen_sorted[i].net.copy()
+
+        return chosen_sorted[-1].net.copy()
+
 class TournamentSelection(SelectionOperator):
     def __init__(self, count: int):
         super().__init__()

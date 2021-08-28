@@ -74,16 +74,20 @@ class PuzzleCO2(CrossoverOperator):
 
         C_r_prob, D_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
+        # act fun prob
+
+        new_A_act_prob, new_B_act_prob = conditional_value_swap(0.5, pointA.act_mut_prob, pointB.act_mut_prob)
+
 
         pointC = ChaosNet(input_size=input_size, output_size=output_size, links=C_links, weights=C_weights,
                           biases=C_biases, actFuns=C_acts, aggrFun=C_aggr, net_it=C_maxit, mutation_radius=C_mut_rad,
                           sqr_mut_prob=C_wb_prob, lin_mut_prob=C_s_prob, p_mutation_prob=C_p_prob,
-                          c_prob=C_c_prob, dstr_mut_prob=C_r_prob)
+                          c_prob=C_c_prob, dstr_mut_prob=C_r_prob, act_mut_prob=new_A_act_prob)
 
         pointD = ChaosNet(input_size=input_size, output_size=output_size, links=D_links, weights=D_weights,
                           biases=D_biases, actFuns=D_acts, aggrFun=D_aggr, net_it=D_maxit, mutation_radius=D_mut_rad,
                           sqr_mut_prob=D_wb_prob, lin_mut_prob=D_s_prob, p_mutation_prob=D_p_prob,
-                          c_prob=D_c_prob, dstr_mut_prob=D_r_prob)
+                          c_prob=D_c_prob, dstr_mut_prob=D_r_prob, act_mut_prob=new_B_act_prob)
 
         return pointC, pointD
 

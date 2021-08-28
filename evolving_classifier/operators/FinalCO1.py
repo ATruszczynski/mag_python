@@ -128,15 +128,19 @@ class FinalCO1(CrossoverOperator):
 
         new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
+        # act fun prob
+
+        new_A_act_prob, new_B_act_prob = conditional_value_swap(0.5, pointA.act_mut_prob, pointB.act_mut_prob)
+
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
                           sqr_mut_prob=new_A_wb_prob, lin_mut_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
-                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob)
+                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob, act_mut_prob=new_A_act_prob)
 
         pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
                           biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_maxit, mutation_radius=new_B_mut_rad,
                           sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
-                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob)
+                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob, act_mut_prob=new_B_act_prob)
 
         return pointA, pointB
 
