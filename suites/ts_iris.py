@@ -15,7 +15,7 @@ from evolving_classifier.operators.SelectionOperator import TournamentSelection,
     TournamentSelectionSized2
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
-from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es
+from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3
 import os
 
 
@@ -49,6 +49,7 @@ def test_suite_for_iris():
 
         x, y, X, Y = get_data()
         hrange = get_default_hrange_ga()
+        hrange = get_default_hrange_es3()
 
         tests = []
 

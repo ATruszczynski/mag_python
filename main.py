@@ -18,9 +18,12 @@ from io import StringIO
 #
 # b = np.genfromtxt("d.csv", delimiter=",")
 # print(b)
-from utility.Utility import generate_counting_problem_unique
+# from utility.Utility import generate_counting_problem_unique
+#
+# x, y = generate_counting_problem_unique(countTo=4)
+from ann_point.Functions import QuasiCrossEntropy
 
-x, y = generate_counting_problem_unique(countTo=4)
+d = QuasiCrossEntropy()
+res = d.compute( np.array([[1], [0]]), np.array([[1], [0]]))
+print(res)
 
-print(x)
-print(y)

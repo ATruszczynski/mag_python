@@ -96,7 +96,7 @@ class EvolvingClassifier:
                 best = [eval_pop[0].net.copy(), eval_pop[0].ff]
 
             pc = 5
-            lc = 150
+            lc = pc * 10
             if verbose:
                 if i % pc == 0:
                     print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].net.to_string()},")

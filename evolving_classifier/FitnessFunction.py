@@ -100,6 +100,7 @@ class CNFF7(FitnessFunction):
         cm = test_results[0]
 
         result = cm[0, 1] + 5 * cm[1, 0]
+        result = (1.01 - m_efficiency(cm)) * result
         result = -result
 
         return [result, cm]
@@ -115,8 +116,24 @@ class CNFF8(FitnessFunction):
 
         cm = test_results[0]
 
-        result = cm[0, 1] + 5 * cm[1, 0]
+        result = (cm[0, 1] + 5 * cm[1, 0] + 1)
         result = -result * test_results[1]
+
+        return [result, cm]
+
+
+# TODO - A - test
+class CNFF9(FitnessFunction):
+    def __init__(self):
+        super().__init__()
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
+
+        cm = test_results[0]
+
+        result = cm[0, 1] + 5 * cm[1, 0]
+        result = -result
 
         return [result, cm]
 

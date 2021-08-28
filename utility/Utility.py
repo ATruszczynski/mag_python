@@ -1,5 +1,6 @@
 import random
 from itertools import combinations
+from statistics import mean
 from typing import Any
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
@@ -89,6 +90,20 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
         r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
 
+        # mut_radius = hrange.max_mut_radius
+        # wb_mut_prob = hrange.max_sqr_mut_prob
+        # s_mut_prob = hrange.max_lin_mut_prob
+        # p_mut_prob = hrange.max_p_mut_prob
+        # c_prob = hrange.max_c_prob
+        # r_prob = hrange.max_dstr_mut_prob
+
+        # mut_radius = mean([hrange.min_mut_radius, hrange.max_mut_radius])
+        # wb_mut_prob = mean([hrange.min_sqr_mut_prob, hrange.max_sqr_mut_prob])
+        # s_mut_prob = mean([hrange.min_lin_mut_prob, hrange.max_lin_mut_prob])
+        # p_mut_prob = mean([hrange.min_p_mut_prob, hrange.max_p_mut_prob])
+        # c_prob = mean([hrange.min_c_prob, hrange.max_c_prob])
+        # r_prob = mean([hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob])
+
 
         result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
                                biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
@@ -101,6 +116,7 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
     mask = get_weight_mask(input_size, output_size, neuron_count)
 
     density = random.random()
+    # density = 1
     link_prob = np.random.random((neuron_count, neuron_count))
     conn_ind = np.where(link_prob <= density)
     links = np.zeros((neuron_count, neuron_count))
@@ -111,19 +127,51 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 
 #TODO - B - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
 def get_default_hrange_ga():#TODO - S - przemyśl to
-    hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 10), hidden_count=(0, 50),
+    hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 50),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-1, -1), sqr_mut_prob=(-2, -2), lin_mut_prob=(-1, -1),
                                  p_mutation_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
                                  dstr_mut_prob=(log10(0.005), log10(0.005)))
     return hrange
 
-def get_default_hrange_es():
-    hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 10), hidden_count=(0, 50),
+#TODO - B - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
+def get_default_hrange_ga2():#TODO - S - przemyśl to
+    hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 30),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-3, 0), sqr_mut_prob=(-3, -1), lin_mut_prob=(-3, -1),
+                                 mut_radius=(-3.5, -3.5), sqr_mut_prob=(-2.5, -2.5), lin_mut_prob=(-1.5, -1.5),
+                                 p_mutation_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
+                                 dstr_mut_prob=(log10(0.001), log10(0.001)))
+    return hrange
+
+def get_default_hrange_es():
+    hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 50),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-5, -2), sqr_mut_prob=(-3, -1), lin_mut_prob=(-3, -1),
                                  p_mutation_prob=(-2, 0), c_prob=(log10(0.6), log10(1)),
                                  dstr_mut_prob=(log10(0.005), log10(0.1)))
+    return hrange
+
+def get_default_hrange_es2():
+    hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 30),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-5, 0), sqr_mut_prob=(-3, 0), lin_mut_prob=(-3, 0),
+                                 p_mutation_prob=(-2, 0), c_prob=(log10(0.6), log10(1)),
+                                 dstr_mut_prob=(-5, 0))
+    return hrange
+
+def get_default_hrange_es3():
+    d = 0.1
+    ddd = (-d, d)
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(20, 20),
+                                 actFuns=[ReLu(), LReLu(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, log10(d)), sqr_mut_prob=(-3, 0), lin_mut_prob=(-3, 0),
+                                 p_mutation_prob=(-3, 0), c_prob=(log10(0.6), log10(1)),
+                                 dstr_mut_prob=(-3, 0))
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
+    #                              actFuns=[ReLu(), LReLu(), Identity(), Poly2(), Poly3()],
+    #                              mut_radius=(-4, log10(d)), sqr_mut_prob=(-3, 0), lin_mut_prob=(-3, 0),
+    #                              p_mutation_prob=(-3, 0), c_prob=(-100, -100),
+    #                              dstr_mut_prob=(-3, 0))
     return hrange
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:
@@ -264,6 +312,11 @@ def divide_frame_into_columns(data_frame: pd.DataFrame) -> [np.ndarray]:
         res.append(data_frame.iloc[:, i].to_numpy().reshape(-1, 1))
 
     return res
+
+def translate_wines(data_frame: pd.DataFrame, fpath: str):
+    data_frame.iloc[:, -1] = data_frame.iloc[:, -1] - data_frame.iloc[:, -1].max()
+
+    ori = 1
 
 
 
