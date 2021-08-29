@@ -85,10 +85,10 @@ class EvolvingClassifier:
         else:
             pool = None
 
-        best = [self.population[0], -math.inf]
+        best = [self.population[0].net, -math.inf]
 
         for i in range(iterations):
-            eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
+            eval_pop = self.fc.compute(pool=pool, results=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)
 
             self.history.add_it_hist(eval_pop)
@@ -118,7 +118,7 @@ class EvolvingClassifier:
                 c1 = self.so.select(val_pop=eval_pop)
                 cr = random.random()
 
-                if len(crossed) <= self.pop_size - 2 and cr <= 10 ** c1.c_prob:
+                if len(crossed) <= self.pop_size - 2 and cr <= 10 ** c1.net.c_prob:
                     c2 = self.so.select(val_pop=eval_pop)
                     cr_result = self.co.crossover(c1, c2)
                     crossed.extend(cr_result)
@@ -133,7 +133,7 @@ class EvolvingClassifier:
 
             self.population = new_pop
 
-        eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
+        eval_pop = self.fc.compute(pool=pool, results=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                    trainOutputs=self.trainOutputs)
 
         if power > 1:

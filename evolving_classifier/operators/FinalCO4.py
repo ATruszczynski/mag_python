@@ -4,6 +4,7 @@ from ann_point import HyperparameterRange
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
+from utility.CNDataPoint import CNDataPoint
 from utility.Mut_Utility import conditional_value_swap, get_weight_mask
 from utility.Utility import choose_without_repetition
 
@@ -21,7 +22,10 @@ class FinalCO4(CrossoverOperator):
         super().__init__()
         self.hrange = hrange
 
-    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+    def crossover(self, cndpA: CNDataPoint, cndpB: CNDataPoint) -> [CNDataPoint, CNDataPoint]:
+        pointA = cndpA.net
+        pointB = cndpB.net
+
         cut1 = random.randint(pointA.hidden_start_index, pointB.neuron_count)
         cut2 = random.randint(cut1 + 1, pointB.neuron_count + 1)
 
@@ -215,7 +219,9 @@ class FinalCO4(CrossoverOperator):
                           sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
                           c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob, act_mut_prob=new_B_act_prob)
 
-        return pointA, pointB
+        cndpA.net = pointA
+        cndpB.net = pointB
+        return cndpA.copy(), cndpB.copy()
 
 
 def find_possible_cuts999(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):

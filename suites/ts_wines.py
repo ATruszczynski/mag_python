@@ -20,7 +20,7 @@ from evolving_classifier.operators.SelectionOperator import TournamentSelection,
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3, \
-    translate_wines, divide_frame_into_columns, get_default_hrange_es4
+    translate_wines, divide_frame_into_columns, get_default_hrange_es4, get_default_hrange_es5
 import os
 import pandas as pd
 
@@ -33,7 +33,7 @@ def get_data():
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
     qualities = data_frame["quality"].unique()
-    tt = 75
+    tt = 300
     frames = []
     for i in qualities:
         df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
@@ -67,14 +67,14 @@ def test_suite_for_wine():
         np.random.seed(seed)
 
         x, y, X, Y = get_data()
-        hrange = get_default_hrange_es4()
+        hrange = get_default_hrange_es5()
 
         tests = []
 
         repetitions = 1
-        population_size = 500
-        iterations = 100
-        starg = ceil(0.1 * population_size)
+        population_size = 200
+        iterations = 300
+        starg = max(2, ceil(0.1 * population_size))
         power = 12
         seed = 1001
 
@@ -86,7 +86,7 @@ def test_suite_for_wine():
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
         #                           fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines15_co4", rep=repetitions, seed=seeds[3], popSize=population_size,
+        tests.append(TupleForTest(name=f"wines16_co4", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO4, mt=FinalMutationOperatorP, st=[TournamentSelection06, starg],
                                   fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
@@ -116,10 +116,12 @@ def test_suite_for_wine():
         restr = net.test(test_input=x, test_output=y)
         print(restr[0])
         print(m_efficiency(restr[0]))
+        print(efficiency(restr[0]))
         res = net.test(test_input=X, test_output=Y)
         print(res[0])
         np.set_printoptions(suppress=True)
         print(m_efficiency(res[0]))
+        print(efficiency(res[0]))
         if len(res) == 2:
             print(res[1])
         # run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)

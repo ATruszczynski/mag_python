@@ -9,6 +9,7 @@ from math import ceil, exp, sqrt, log10
 from ann_point.HyperparameterRange import *
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
+from utility.CNDataPoint import CNDataPoint
 from utility.Utility2 import get_weight_mask
 import pandas as pd
 
@@ -94,21 +95,29 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
         a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
 
+        # mut_radius = hrange.max_mut_radius
+        # wb_mut_prob = hrange.max_sqr_mut_prob
+        # s_mut_prob = hrange.max_lin_mut_prob
+        # p_mut_prob = hrange.max_p_mut_prob
+        # c_prob = hrange.max_c_prob
+        # r_prob = hrange.max_dstr_mut_prob
+        # a_prob = hrange.max_act_mut_prob
+        #
         mut_radius = hrange.max_mut_radius
-        wb_mut_prob = hrange.max_sqr_mut_prob
-        s_mut_prob = hrange.max_lin_mut_prob
-        p_mut_prob = hrange.max_p_mut_prob
-        c_prob = hrange.max_c_prob
-        r_prob = hrange.max_dstr_mut_prob
-        a_prob = hrange.max_act_mut_prob
-
-        mut_radius = hrange.max_mut_radius
-        wb_mut_prob = hrange.max_sqr_mut_prob
-        s_mut_prob = hrange.max_lin_mut_prob
+        wb_mut_prob = hrange.min_sqr_mut_prob
+        s_mut_prob = hrange.min_lin_mut_prob
         p_mut_prob = hrange.min_p_mut_prob # !!!
         c_prob = hrange.max_c_prob
         r_prob = hrange.max_dstr_mut_prob
         a_prob = hrange.max_act_mut_prob
+
+        # mut_radius = random.uniform((hrange.min_mut_radius + hrange.max_mut_radius)/2, hrange.max_mut_radius)
+        # wb_mut_prob = random.uniform(hrange.min_sqr_mut_prob, (hrange.min_sqr_mut_prob + hrange.max_sqr_mut_prob)/2)
+        # s_mut_prob = random.uniform(hrange.min_lin_mut_prob, (hrange.min_lin_mut_prob + hrange.max_lin_mut_prob)/2)
+        # p_mut_prob = random.uniform(hrange.min_p_mut_prob, (hrange.min_p_mut_prob + hrange.max_p_mut_prob)/2)
+        # c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
+        # r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
+        # a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
 
 
         cn = ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
@@ -116,8 +125,10 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
                       sqr_mut_prob=wb_mut_prob, lin_mut_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
                       c_prob=c_prob, dstr_mut_prob=r_prob, act_mut_prob=a_prob)
 
+        cndp = CNDataPoint(cn)
+
         cn.bun = 1
-        result.append(cn)
+        result.append(cndp)
 
     return result
 
@@ -156,11 +167,11 @@ def get_default_hrange_ga2():#TODO - S - przemyśl to
     return hrange
 
 def get_default_hrange_es():
-    hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 50),
+    hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(30, 30),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-5, -2), sqr_mut_prob=(-3, -1), lin_mut_prob=(-3, -1),
                                  p_mutation_prob=(-2, 0), c_prob=(log10(0.6), log10(1)),
-                                 dstr_mut_prob=(log10(0.005), log10(0.1)))
+                                 dstr_mut_prob=(log10(0.005), log10(0.1)), act_mut_prob=(-2, -1))
     return hrange
 
 def get_default_hrange_es2():
@@ -220,11 +231,24 @@ def get_default_hrange_es4():
     d = 0
     ddd = (-d, d)
 
-    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(20, 20),
-                                 actFuns=[ReLu(), Sigmoid(), TanH()],
-                                 mut_radius=(-3, -1), sqr_mut_prob=(log10(0.1), log10(1)),
-                                 lin_mut_prob=(log10(0.01), log10(0.1)),
-                                 p_mutation_prob=(-2.5, -1), c_prob=(log10(0.8), log10(0.8)),
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(15, 15),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, -1), sqr_mut_prob=(log10(0.01), log10(1)),
+                                 lin_mut_prob=(log10(0.1), log10(1)),
+                                 p_mutation_prob=(-3, -1), c_prob=(log10(0.8), log10(0.8)),
+                                 dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
+
+    return hrange
+
+def get_default_hrange_es5():
+    d = 0.0
+    ddd = (-d, d)
+
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(3, 3), hidden_count=(15, 15),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, -1), sqr_mut_prob=(log10(0.01), log10(1)),
+                                 lin_mut_prob=(log10(0.1), log10(1)),
+                                 p_mutation_prob=(-2, -1), c_prob=(log10(0.8), log10(0.8)),
                                  dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
 
     return hrange
