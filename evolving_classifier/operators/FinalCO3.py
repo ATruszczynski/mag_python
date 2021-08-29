@@ -196,10 +196,6 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
 
     result = np.zeros((n, n))
 
-    # Put in piece #4
-    result[i:i+left_nc, i+left_nc:i+left_nc+left_puzzles[3].shape[1]] = left_puzzles[3]
-    result[-(o+right_nc):-o, -(o+right_nc+right_puzzles[3].shape[1]):-(o+right_nc)] = right_puzzles[3]
-
     # Put in piece #1
     result[i:i+left_puzzles[0].shape[0], i:i+left_nc] = left_puzzles[0]
     result[-(o + right_puzzles[0].shape[0]):-o, aEnd:aEnd+right_nc] = right_puzzles[0]
@@ -211,6 +207,10 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
     # Put in piece #3
     result[i:i+left_nc, -o:] = left_puzzles[2]
     result[aEnd:aEnd+right_nc, -o:] = right_puzzles[2]
+
+    # Put in piece #4
+    result[i:i+left_nc, i+left_nc:i+left_nc+left_puzzles[3].shape[1]] = left_puzzles[3]
+    result[-(o+right_nc):-o, -(o+right_nc+right_puzzles[3].shape[1]):-(o+right_nc)] = right_puzzles[3]
 
     return result
 

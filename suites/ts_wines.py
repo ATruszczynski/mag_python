@@ -16,36 +16,47 @@ from evolving_classifier.operators.MutationOperators import FinalMutationOperato
 from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
 from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
 from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized, \
-    TournamentSelectionSized2, TournamentSelection06
+    TournamentSelectionSized2, TournamentSelection06, RoulletteSelection
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3, \
-    translate_wines, divide_frame_into_columns
+    translate_wines, divide_frame_into_columns, get_default_hrange_es4
 import os
 import pandas as pd
 
 
 def get_data():
     data_frame = pd.read_csv(fr"..{os.path.sep}data_sets{os.path.sep}winequality-white.csv")
-    data_frame = data_frame.sample(frac=1)
 
     cols_to_norm = [1, 4, 12]
     cols_to_norm = data_frame.columns[:-1]
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
-    data_frame = data_frame.loc[data_frame["quality"].isin([5, 6])]
+    qualities = data_frame["quality"].unique()
+    tt = 75
+    frames = []
+    for i in qualities:
+        df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
+        if df.shape[0] >= tt:
+            frames.append(df)
 
-    div = 1000
+    data_frame = pd.concat(frames,ignore_index=True)
+    data_frame = data_frame.sample(frac=1)
+
+    div = ceil(0.8 * data_frame.shape[0])
 
     train = data_frame.iloc[:div, :]
+    print(len(train["quality"].unique()))
     test = data_frame.iloc[div:, :]
 
     x = divide_frame_into_columns(train.iloc[:, :-1].transpose())
     X = divide_frame_into_columns(test.iloc[:, :-1].transpose())
 
     Ys = one_hot_endode(data_frame.iloc[:, -1].tolist())
+    # Ys = data_frame.iloc[:, [-1]].to_numpy()
     y = Ys[:div]
     Y = Ys[div:]
+
 
     return (x, y, X, Y)
 
@@ -56,15 +67,14 @@ def test_suite_for_wine():
         np.random.seed(seed)
 
         x, y, X, Y = get_data()
-        hrange = get_default_hrange_es3()
+        hrange = get_default_hrange_es4()
 
         tests = []
 
         repetitions = 1
         population_size = 500
-        iterations = 200
-        starg = ceil(0.02 * population_size)
-        starg = 2
+        iterations = 100
+        starg = ceil(0.1 * population_size)
         power = 12
         seed = 1001
 
@@ -76,7 +86,7 @@ def test_suite_for_wine():
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
         #                           fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines13_co4", rep=repetitions, seed=seeds[3], popSize=population_size,
+        tests.append(TupleForTest(name=f"wines15_co4", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO4, mt=FinalMutationOperatorP, st=[TournamentSelection06, starg],
                                   fft=[CNFF5], fct=CNFitnessCalculator, reg=False))

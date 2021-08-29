@@ -24,7 +24,7 @@ class TournamentSelection06(SelectionOperator):
 
         for i in range(len(chosen) - 1):
             p = random.random()
-            if p <= 0.75:
+            if p <= 0.5:
                 return chosen_sorted[i].net.copy()
 
         return chosen_sorted[-1].net.copy()

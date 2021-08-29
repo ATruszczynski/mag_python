@@ -80,6 +80,8 @@ class ChaosNet:
         self.dstr_mut_prob = dstr_mut_prob
         self.act_mut_prob = act_mut_prob
 
+        self.bun = 0
+
     def run(self, inputs: np.ndarray) -> np.ndarray:
         if self.hidden_comp_order is None:
             self.compute_comp_order()

@@ -164,15 +164,15 @@ def uniform_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, minS: float
 
     return result
 
-# def reroll_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float, minV: float, maxV: float):
-#     result = matrix.copy()
-#
-#     probs = np.random.random(matrix.shape)
-#     to_change = np.where(probs <= prob)
-#     result[to_change] = np.random.uniform(minV, maxV, matrix.shape)[to_change]
-#     result = np.multiply(result, mask)
-#
-#     return result
+def reroll_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float, minV: float, maxV: float):
+    result = matrix.copy()
+
+    probs = np.random.random(matrix.shape)
+    to_change = np.where(probs <= prob)
+    result[to_change] = np.random.uniform(minV, maxV, matrix.shape)[to_change]
+    result = np.multiply(result, mask)
+
+    return result
 #
 # def reroll_value(p: float, value: float, minV: float, maxV: float):
 #     result = value

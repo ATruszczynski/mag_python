@@ -56,23 +56,26 @@ class FinalMutationOperatorP(MutationOperator):
             # dstr_mut_prob = conditional_uniform_value_shift(1, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
             # act_mut_prob = conditional_uniform_value_shift(1, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
 
-            mutation_radius = conditional_gaussian_value_shift(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
-            sqr_mut_prob = conditional_gaussian_value_shift(p_pm, point.sqr_mut_prob, self.hrange.min_sqr_mut_prob, self.hrange.max_sqr_mut_prob, rad_frac)
-            lin_mut_prob = conditional_gaussian_value_shift(p_pm, point.lin_mut_prob, self.hrange.min_lin_mut_prob, self.hrange.max_lin_mut_prob, rad_frac)
-            p_mutation_prob = conditional_gaussian_value_shift(p_pm, point.p_mutation_prob, self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob, rad_frac)
-            c_prob = conditional_gaussian_value_shift(p_pm, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)
-            dstr_mut_prob = conditional_gaussian_value_shift(p_pm, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
-            act_mut_prob = conditional_gaussian_value_shift(p_pm, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
+            mutation_radius = conditional_gaussian_value_shift(1, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
+            sqr_mut_prob = conditional_gaussian_value_shift(1, point.sqr_mut_prob, self.hrange.min_sqr_mut_prob, self.hrange.max_sqr_mut_prob, rad_frac)
+            lin_mut_prob = conditional_gaussian_value_shift(1, point.lin_mut_prob, self.hrange.min_lin_mut_prob, self.hrange.max_lin_mut_prob, rad_frac)
+            p_mutation_prob = conditional_gaussian_value_shift(1, point.p_mutation_prob, self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob, rad_frac)
+            c_prob = conditional_gaussian_value_shift(1, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)
+            dstr_mut_prob = conditional_gaussian_value_shift(1, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
+            act_mut_prob = conditional_gaussian_value_shift(1, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
 
         else:
             rolls = choose_without_repetition(list(range(point.hidden_start_index, point.neuron_count)), max(1, ceil(0.2 * point.hidden_count)))
 
-            # weights[:, rolls] = gaussian_shift(weights[:, rolls], point.links[:, rolls], sqr_pm, radius)
-            weights[rolls, :] = gaussian_shift(weights[rolls, :], point.links[rolls, :], sqr_pm, radius)
+            weights[:, rolls] = gaussian_shift(weights[:, rolls], point.links[:, rolls], sqr_pm, radius)
+            # weights[rolls, :] = gaussian_shift(weights[rolls, :], point.links[rolls, :], sqr_pm, radius)
 
             biases[:, rolls] = gaussian_shift(biases[:, rolls], get_bias_mask(point.input_size, point.neuron_count)[:, rolls], lin_pm, radius)
 
-            links[:, rolls], weights[:, rolls] = add_or_remove_edges(dstr_pm, links[:, rolls], weights[:, rolls], point.input_size, point.output_size, get_weight_mask(point.input_size, point.output_size, point.neuron_count)[:, rolls], hrange=self.hrange)
+            # links[:, rolls], weights[:, rolls] = add_or_remove_edges(dstr_pm, links[:, rolls], weights[:, rolls], point.input_size, point.output_size, get_weight_mask(point.input_size, point.output_size, point.neuron_count)[:, rolls], hrange=self.hrange)
+            # minV, maxV = get_min_max_values_of_matrix_with_mask(mask=links, matrix=weights)
+            # weights[:, rolls] = reroll_matrix(matrix=weights[:, rolls], mask=links[:, rolls], prob=dstr_pm, minV=minV, maxV=maxV)
+
 
             nact = point.input_size * [None]
             for i in range(point.hidden_start_index, point.hidden_end_index):

@@ -54,6 +54,26 @@ class FinalCO4(CrossoverOperator):
             new_A_weights[cut1:cut2, :] = pointB.weights[cut1:cut2, :]
             new_B_weights[cut1:cut2, :] = pointA.weights[cut1:cut2, :]
 
+        # new_A_links = pointA.links.copy()
+        # new_B_links = pointB.links.copy()
+        #
+        # new_A_weights = pointA.weights.copy()
+        # new_B_weights = pointB.weights.copy()
+        #
+        # new_A_links[:, cut1:cut2] = pointB.links[:, cut1:cut2]
+        # new_B_links[:, cut1:cut2] = pointA.links[:, cut1:cut2]
+        #
+        # new_A_weights[:, cut1:cut2] = pointB.weights[:, cut1:cut2]
+        # new_B_weights[:, cut1:cut2] = pointA.weights[:, cut1:cut2]
+        #
+        # new_A_links[cut1:cut2, :] = pointB.links[cut1:cut2, :]
+        # new_B_links[cut1:cut2, :] = pointA.links[cut1:cut2, :]
+        #
+        # new_A_weights[cut1:cut2, :] = pointB.weights[cut1:cut2, :]
+        # new_B_weights[cut1:cut2, :] = pointA.weights[cut1:cut2, :]
+
+
+
 
         new_A_biases = pointA.biases.copy()
         new_B_biases = pointB.biases.copy()

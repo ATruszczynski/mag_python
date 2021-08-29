@@ -94,20 +94,30 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
         a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
 
-        # mut_radius = hrange.max_mut_radius
-        # wb_mut_prob = hrange.max_sqr_mut_prob
-        # s_mut_prob = hrange.max_lin_mut_prob
-        # p_mut_prob = hrange.max_p_mut_prob
-        # c_prob = hrange.max_c_prob
-        # r_prob = hrange.max_dstr_mut_prob
-        # a_prob = hrange.max_act_mut_prob
+        mut_radius = hrange.max_mut_radius
+        wb_mut_prob = hrange.max_sqr_mut_prob
+        s_mut_prob = hrange.max_lin_mut_prob
+        p_mut_prob = hrange.max_p_mut_prob
+        c_prob = hrange.max_c_prob
+        r_prob = hrange.max_dstr_mut_prob
+        a_prob = hrange.max_act_mut_prob
+
+        mut_radius = hrange.max_mut_radius
+        wb_mut_prob = hrange.max_sqr_mut_prob
+        s_mut_prob = hrange.max_lin_mut_prob
+        p_mut_prob = hrange.min_p_mut_prob # !!!
+        c_prob = hrange.max_c_prob
+        r_prob = hrange.max_dstr_mut_prob
+        a_prob = hrange.max_act_mut_prob
 
 
+        cn = ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
+                      biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
+                      sqr_mut_prob=wb_mut_prob, lin_mut_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
+                      c_prob=c_prob, dstr_mut_prob=r_prob, act_mut_prob=a_prob)
 
-        result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
-                               biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
-                               sqr_mut_prob=wb_mut_prob, lin_mut_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
-                               c_prob=c_prob, dstr_mut_prob=r_prob, act_mut_prob=a_prob))
+        cn.bun = 1
+        result.append(cn)
 
     return result
 
@@ -115,7 +125,7 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
     mask = get_weight_mask(input_size, output_size, neuron_count)
 
     density = random.random()
-    # density = 1
+    density = 1
     # density = 0.5
     link_prob = np.random.random((neuron_count, neuron_count))
     conn_ind = np.where(link_prob <= density)
@@ -162,18 +172,61 @@ def get_default_hrange_es2():
     return hrange
 
 def get_default_hrange_es3():
-    d = 0.1
+    d = 0
     ddd = (-d, d)
 
-    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 2), hidden_count=(20, 20),
-                                 actFuns=[GaussAct(), SincAct(), TanH(), Sigmoid()],
-                                 mut_radius=(log10(d/10), log10(d)), sqr_mut_prob=(log10(0.8), log10(0.8)),
-                                 lin_mut_prob=(log10(1), log10(1)),
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(20, 20),
+                                 actFuns=[ReLu()],
+                                 mut_radius=(-2, -1), sqr_mut_prob=(log10(0.05), log10(0.5)),
+                                 lin_mut_prob=(log10(0.01), log10(0.1)),
                                  p_mutation_prob=(-1, -1), c_prob=(log10(0.8), log10(0.8)),
-                                 dstr_mut_prob=(-2, -1), act_mut_prob=(-2, -2))
+                                 dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
+
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
+    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
+    #                              mut_radius=(log10(d/10), log10(d)), sqr_mut_prob=(log10(0.8), log10(0.8)),
+    #                              lin_mut_prob=(log10(1), log10(1)),
+    #                              p_mutation_prob=(-1, -1), c_prob=(-100, -100),
+    #                              dstr_mut_prob=(-2, -1), act_mut_prob=(-2, -2))
+
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
+    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
+    #                              mut_radius=(-100, -100), sqr_mut_prob=(-100, -100),
+    #                              lin_mut_prob=(-100, -100),
+    #                              p_mutation_prob=(-100, -100), c_prob=(-100, -100),
+    #                              dstr_mut_prob=(-2, -2), act_mut_prob=(-100, -100))
+
+    #
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
+    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
+    #                              mut_radius=(-100, -100), sqr_mut_prob=(-100, -100),
+    #                              lin_mut_prob=(-100, -100),
+    #                              p_mutation_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
+    #                              dstr_mut_prob=(-2, -2), act_mut_prob=(-100, -100))
+
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
+    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
+    #                              mut_radius=(log10(d/10), log10(10*d)), sqr_mut_prob=(log10(0.8), log10(0.8)),
+    #                              lin_mut_prob=(log10(1), log10(1)),
+    #                              p_mutation_prob=(-1, -1), c_prob=(-100, -100),
+    #                              dstr_mut_prob=(-2, -1), act_mut_prob=(-2, -2))
+
     # c_prob=(-100, -100)
     # c_prob=(log10(0.6), log10(1))
-    # c_prob=(log10(0.8), log10(1))
+    # c_prob=(log10(0.8), log10(0.8))
+    return hrange
+
+def get_default_hrange_es4():
+    d = 0
+    ddd = (-d, d)
+
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(20, 20),
+                                 actFuns=[ReLu(), Sigmoid(), TanH()],
+                                 mut_radius=(-3, -1), sqr_mut_prob=(log10(0.1), log10(1)),
+                                 lin_mut_prob=(log10(0.01), log10(0.1)),
+                                 p_mutation_prob=(-2.5, -1), c_prob=(log10(0.8), log10(0.8)),
+                                 dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
+
     return hrange
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:

@@ -123,7 +123,7 @@ class EvolvingClassifier:
                     cr_result = self.co.crossover(c1, c2)
                     crossed.extend(cr_result)
                 else:
-                    crossed.append(c1)
+                    crossed.append(c1.copy())
 
             new_pop = []
 
