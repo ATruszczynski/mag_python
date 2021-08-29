@@ -22,18 +22,69 @@ class FinalCO4(CrossoverOperator):
         self.hrange = hrange
 
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
-        possible_cuts = find_possible_cuts999(pointA, pointB, self.hrange)
+        cut1 = random.randint(pointA.hidden_start_index, pointB.neuron_count)
+        cut2 = random.randint(cut1 + 1, pointB.neuron_count + 1)
 
-        cuts = choose_without_repetition(options=possible_cuts, count=2)
+        p = random.random()
 
-        # if len(cuts) == 1: # obie sieci mają zero neuronów ukrytych
-        #     cuts.append([1, 0, 1, 0])
+        if p <= 0.5:
+            new_A_links = pointA.links.copy()
+            new_B_links = pointB.links.copy()
 
-        input_size = pointA.input_size
-        output_size = pointA.output_size
+            new_A_links[:, cut1:cut2] = pointB.links[:, cut1:cut2]
+            new_B_links[:, cut1:cut2] = pointA.links[:, cut1:cut2]
 
-        new_A_links, new_A_weights, new_A_biases, new_A_func = get_link_weights_biases_acts79(pointA=pointA, pointB=pointB, cut=cuts[0])
-        new_B_links, new_B_weights, new_B_biases, new_B_func = get_link_weights_biases_acts79(pointA=pointA, pointB=pointB, cut=cuts[1])
+
+            new_A_weights = pointA.weights.copy()
+            new_B_weights = pointB.weights.copy()
+
+            new_A_weights[:, cut1:cut2] = pointB.weights[:, cut1:cut2]
+            new_B_weights[:, cut1:cut2] = pointA.weights[:, cut1:cut2]
+        else:
+            new_A_links = pointA.links.copy()
+            new_B_links = pointB.links.copy()
+
+            new_A_links[cut1:cut2, :] = pointB.links[cut1:cut2, :]
+            new_B_links[cut1:cut2, :] = pointA.links[cut1:cut2, :]
+
+
+            new_A_weights = pointA.weights.copy()
+            new_B_weights = pointB.weights.copy()
+
+            new_A_weights[cut1:cut2, :] = pointB.weights[cut1:cut2, :]
+            new_B_weights[cut1:cut2, :] = pointA.weights[cut1:cut2, :]
+
+
+        new_A_biases = pointA.biases.copy()
+        new_B_biases = pointB.biases.copy()
+
+        new_A_biases[:, cut1:cut2] = pointB.biases[:, cut1:cut2]
+        new_B_biases[:, cut1:cut2] = pointA.biases[:, cut1:cut2]
+
+
+        new_A_func = []
+        new_B_func = []
+
+        for i in range(pointA.neuron_count):
+            if pointA.actFuns[i] is None:
+                new_A_func.append(None)
+                new_B_func.append(None)
+            else:
+                if cut1 <= i < cut2:
+                    new_A_func.append(pointB.actFuns[i].copy())
+                    new_B_func.append(pointA.actFuns[i].copy())
+                else:
+                    new_A_func.append(pointA.actFuns[i].copy())
+                    new_B_func.append(pointB.actFuns[i].copy())
+
+
+
+
+
+
+
+
+
 
         # cut_A = cut[1]
         # cut_B = cut[2]
@@ -130,15 +181,19 @@ class FinalCO4(CrossoverOperator):
 
         new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
+        # act fun prob
+
+        new_A_act_prob, new_B_act_prob = conditional_value_swap(0.5, pointA.act_mut_prob, pointB.act_mut_prob)
+
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
                           sqr_mut_prob=new_A_wb_prob, lin_mut_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
-                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob)
+                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob, act_mut_prob=new_A_act_prob)
 
         pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
                           biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_maxit, mutation_radius=new_B_mut_rad,
                           sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
-                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob)
+                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob, act_mut_prob=new_B_act_prob)
 
         return pointA, pointB
 

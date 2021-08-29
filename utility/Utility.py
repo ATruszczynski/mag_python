@@ -67,9 +67,12 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         links = get_links(input_size, output_size, neuron_count)
 
         weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
+        weights = np.random.normal(0, hrange.max_init_wei, (neuron_count, neuron_count))#!!!
         weights = np.multiply(weights, links)
 
         biases = np.random.uniform(hrange.min_init_bia, hrange.max_init_bia, (1, neuron_count))
+        biases = np.random.normal(0, hrange.max_init_bia, (1, neuron_count))#!!!
+
         biases[0, :input_size] = 0
 
         actFuns = []
@@ -91,6 +94,14 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
         a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
 
+        # mut_radius = hrange.max_mut_radius
+        # wb_mut_prob = hrange.max_sqr_mut_prob
+        # s_mut_prob = hrange.max_lin_mut_prob
+        # p_mut_prob = hrange.max_p_mut_prob
+        # c_prob = hrange.max_c_prob
+        # r_prob = hrange.max_dstr_mut_prob
+        # a_prob = hrange.max_act_mut_prob
+
 
 
         result.append(ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
@@ -105,10 +116,13 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 
     density = random.random()
     # density = 1
+    # density = 0.5
     link_prob = np.random.random((neuron_count, neuron_count))
     conn_ind = np.where(link_prob <= density)
     links = np.zeros((neuron_count, neuron_count))
     links[conn_ind] = 1
+    # links[:input_size, input_size:-output_size] = 1
+    # links[input_size:-output_size, -output_size:] = 1
     links = np.multiply(links, mask)
 
     return links
@@ -148,16 +162,18 @@ def get_default_hrange_es2():
     return hrange
 
 def get_default_hrange_es3():
-    d = 1
+    d = 0.1
     ddd = (-d, d)
 
-    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(10, 30),
-                                 actFuns=[ReLu(), LReLu(), Identity()],
-                                 mut_radius=(-3, log10(d)), sqr_mut_prob=(-2, 0), lin_mut_prob=(-1, 0),
-                                 p_mutation_prob=(-2, 0), c_prob=(log10(0.8), log10(1)),
-                                 dstr_mut_prob=(-3, 0), act_mut_prob=(-2, 0))
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 2), hidden_count=(20, 20),
+                                 actFuns=[GaussAct(), SincAct(), TanH(), Sigmoid()],
+                                 mut_radius=(log10(d/10), log10(d)), sqr_mut_prob=(log10(0.8), log10(0.8)),
+                                 lin_mut_prob=(log10(1), log10(1)),
+                                 p_mutation_prob=(-1, -1), c_prob=(log10(0.8), log10(0.8)),
+                                 dstr_mut_prob=(-2, -1), act_mut_prob=(-2, -2))
     # c_prob=(-100, -100)
     # c_prob=(log10(0.6), log10(1))
+    # c_prob=(log10(0.8), log10(1))
     return hrange
 
 def generate_counting_problem(howMany: int, countTo: int) -> [np.ndarray]:

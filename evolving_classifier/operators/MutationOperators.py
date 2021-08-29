@@ -39,7 +39,7 @@ class FinalMutationOperator(MutationOperator):
 
         aggr = conditional_try_choose_different(act_pm, point.aggrFun, self.hrange.actFunSet)
 
-        links_rev, weights_rev = add_or_remove_edges(dstr_pm, point.links, weights_shifted, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
+        links_rev, weights_rev = add_or_remove_edges(dstr_pm, point.links, weights_shifted, point.input_size, point.output_size, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
 
         net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
 
@@ -52,13 +52,13 @@ class FinalMutationOperator(MutationOperator):
         dstr_mut_prob = conditional_uniform_value_shift(p_pm, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
         act_mut_prob = conditional_uniform_value_shift(p_pm, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
 
-        mutation_radius = conditional_gaussian_value_shift(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
-        sqr_mut_prob = conditional_gaussian_value_shift(p_pm, point.sqr_mut_prob, self.hrange.min_sqr_mut_prob, self.hrange.max_sqr_mut_prob, rad_frac)
-        lin_mut_prob = conditional_gaussian_value_shift(p_pm, point.lin_mut_prob, self.hrange.min_lin_mut_prob, self.hrange.max_lin_mut_prob, rad_frac)
-        p_mutation_prob = conditional_gaussian_value_shift(p_pm, point.p_mutation_prob, self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob, rad_frac)
-        c_prob = conditional_gaussian_value_shift(p_pm, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)
-        dstr_mut_prob = conditional_gaussian_value_shift(p_pm, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
-        act_mut_prob = conditional_gaussian_value_shift(p_pm, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
+        # mutation_radius = conditional_gaussian_value_shift(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
+        # sqr_mut_prob = conditional_gaussian_value_shift(p_pm, point.sqr_mut_prob, self.hrange.min_sqr_mut_prob, self.hrange.max_sqr_mut_prob, rad_frac)
+        # lin_mut_prob = conditional_gaussian_value_shift(p_pm, point.lin_mut_prob, self.hrange.min_lin_mut_prob, self.hrange.max_lin_mut_prob, rad_frac)
+        # p_mutation_prob = conditional_gaussian_value_shift(p_pm, point.p_mutation_prob, self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob, rad_frac)
+        # c_prob = conditional_gaussian_value_shift(p_pm, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)
+        # dstr_mut_prob = conditional_gaussian_value_shift(p_pm, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
+        # act_mut_prob = conditional_gaussian_value_shift(p_pm, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
 
 
         np = ChaosNet(input_size=point.input_size, output_size=point.output_size, links=links_rev, weights=weights_rev,

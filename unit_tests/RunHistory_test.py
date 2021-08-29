@@ -93,8 +93,8 @@ def test_add_iteration():
     assert rh.it_hist[0][1].ff == pytest.approx(222)
     assert rh.it_hist[1][2].ff == pytest.approx(0.1)
 
-random.seed(1001)
-np.random.seed(1001)
-order = choose_without_repetition([0, 1, 2, 3, 4], 5)
-print(order)
-test_add_iteration()
+# random.seed(1001)
+# np.random.seed(1001)
+# order = choose_without_repetition([0, 1, 2, 3, 4], 5)
+# print(order)
+# test_add_iteration()

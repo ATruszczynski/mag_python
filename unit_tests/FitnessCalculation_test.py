@@ -85,7 +85,7 @@ def test_fitness_calculator_with_pure_eff():
 # print(f"meff: {m_efficiency(cm2)}")
 #
 #
-test_fitness_calculator_with_pure_eff()
+# test_fitness_calculator_with_pure_eff()
 
 
 

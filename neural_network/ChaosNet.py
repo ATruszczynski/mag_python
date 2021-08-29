@@ -97,6 +97,7 @@ class ChaosNet:
 
         self.inp[self.hidden_end_index:, :] = np.dot(self.weights[:, self.hidden_end_index:].T, self.act) + self.biases[0, self.hidden_end_index:].reshape(-1, 1)
         self.act[self.hidden_end_index:, :] = self.aggrFun.compute(self.inp[self.hidden_end_index:, :])
+        self.act[self.hidden_end_index:, :] = self.inp[self.hidden_end_index:, :]
 
         return self.act[self.hidden_end_index:]
 

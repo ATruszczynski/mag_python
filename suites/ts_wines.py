@@ -11,7 +11,9 @@ from evolving_classifier.FitnessFunction import *
 from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.FinalCO3 import FinalCO3
+from evolving_classifier.operators.FinalCO4 import FinalCO4
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
+from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
 from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
 from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized, \
     TournamentSelectionSized2, TournamentSelection06
@@ -31,7 +33,9 @@ def get_data():
     cols_to_norm = data_frame.columns[:-1]
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
-    div = 500
+    data_frame = data_frame.loc[data_frame["quality"].isin([5, 6])]
+
+    div = 1000
 
     train = data_frame.iloc[:div, :]
     test = data_frame.iloc[div:, :]
@@ -56,11 +60,11 @@ def test_suite_for_wine():
 
         tests = []
 
-        repetitions = 2
+        repetitions = 1
         population_size = 500
-        iterations = 25
+        iterations = 200
         starg = ceil(0.02 * population_size)
-        starg = 3
+        starg = 2
         power = 12
         seed = 1001
 
@@ -68,11 +72,14 @@ def test_suite_for_wine():
         for i in range(4):
             seeds.append(random.randint(0, 10**6))
 
-
-        tests.append(TupleForTest(name=f"wines2_cp2", rep=repetitions, seed=seeds[3], popSize=population_size,
+        # tests.append(TupleForTest(name=f"wines10_co3", rep=repetitions, seed=seeds[3], popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+        #                           fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"wines13_co4", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=PuzzleCO2, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
-                                  fft=[CNFF], fct=CNFitnessCalculator, reg=False))
+                                  ct=FinalCO4, mt=FinalMutationOperatorP, st=[TournamentSelection06, starg],
+                                  fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"wines2_co1", rep=repetitions, seed=seeds[3], popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
@@ -88,6 +95,14 @@ def test_suite_for_wine():
 
 
         net = res[0][0]
+
+        # print(net.run(x[0]))
+        # print(net.run(x[1]))
+        # print(net.run(x[2]))
+
+
+
+
         restr = net.test(test_input=x, test_output=y)
         print(restr[0])
         print(m_efficiency(restr[0]))

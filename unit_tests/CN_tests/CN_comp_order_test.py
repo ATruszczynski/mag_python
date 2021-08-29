@@ -133,7 +133,6 @@ def test_cn_comp_order_3():
                                     desired_c_prob=-5,
                                     desired_r_prob=-6,
                                     desired_hidden_comp_order=[1])
-test_cn_comp_order_3()
 
 
 # def test_cn_comp_order_2():

@@ -111,7 +111,7 @@ def test_copy_2():
     cndp1.conf_mat = np.zeros((1, 1))
     assert cp.ff == 0.5
     assert cp.conf_mat is None
-test_copy_2()
+# test_copy_2()
 
 
 # test_cndp_constructor()
