@@ -113,27 +113,27 @@ class FinalCO3(CrossoverOperator):
 
         # mutation radius swap
 
-        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(p_pm, pointA.mutation_radius, pointB.mutation_radius)
+        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(0.5, pointA.mutation_radius, pointB.mutation_radius)
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(p_pm, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(p_pm, pointA.lin_mut_prob, pointB.lin_mut_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
 
         # p prob swap
 
-        new_A_p_prob, new_B_p_prob = conditional_value_swap(p_pm, pointA.p_mutation_prob, pointB.p_mutation_prob)
+        new_A_p_prob, new_B_p_prob = conditional_value_swap(0.5, pointA.p_mutation_prob, pointB.p_mutation_prob)
 
         # c prob swap
 
-        new_A_c_prob, new_B_c_prob = conditional_value_swap(p_pm, pointA.c_prob, pointB.c_prob)
+        new_A_c_prob, new_B_c_prob = conditional_value_swap(0.5, pointA.c_prob, pointB.c_prob)
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(p_pm, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
         # act fun prob
 

@@ -157,6 +157,34 @@ def test_select_05_3():
 
     assert adp3.net.to_string() == chosen.to_string()
 
+def test_select_05_4():
+    random.seed(1001)
+
+    cn1 = MockCN(1, np.array([[1]]))
+    cn2 = MockCN(2, np.array([[2, 2]]))
+    cn3 = MockCN(6, np.array([[3, 3, 3]]))
+    cn4 = MockCN(4, np.array([[4, 4, 4, 4]]))
+    cn5 = MockCN(5, np.array([[5, 5, 5, 5, 5]]))
+
+    adp1 = CNDataPoint(cn1)
+    adp1.ff = [0, 1.8, -1]
+    adp2 = CNDataPoint(cn2)
+    adp2.ff = [0, 5.4, -2]
+    adp3 = CNDataPoint(cn3)
+    adp3.ff = [0, 5.0, -6]
+    adp4 = CNDataPoint(cn4)
+    adp4.ff = [0, 5.0, -4]
+    adp5 = CNDataPoint(cn5)
+    adp5.ff = [0, 5.4, -5]
+
+    list = [adp1, adp2, adp3, adp4, adp5]
+
+    so = TournamentSelection05(3)
+
+    chosen = so.select(list)
+
+    assert adp3.net.to_string() == chosen.to_string()
+
 # def test_select_sized():
 #     random.seed(1010)
 #
@@ -355,3 +383,5 @@ def test_select_too_few():
 #     if p > 0.5 and r <= 0.5:
 #         print(seed)
 #         break
+
+test_select_05_4()

@@ -90,7 +90,7 @@ class CNFF6(FitnessFunction):
 
         result = -(1.00 - mmeff) * test_results[1]
 
-        return [[result], cm]
+        return [[mmeff, -test_results[1]], cm]
 
 # TODO - A - test
 class CNFF7(FitnessFunction):
