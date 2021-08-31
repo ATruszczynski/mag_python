@@ -306,15 +306,15 @@ def get_default_hrange_es7():
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(50, 100),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(10, 10),
                                  actFuns=[ReLu(), TanH()],
                                  # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-3, -3),
+                                 mut_radius=(-2, -2),
                                  c_prob=(log10(0.8), log10(0.8)),
                                  sqr_mut_prob=(log10(0.001), log10(0.001)),
                                  lin_mut_prob=(-100, -100),
                                  p_mutation_prob=(log10(0.05), log10(0.05)),
-                                 dstr_mut_prob=(log10(0.001), log10(0.001)), act_mut_prob=(-100, -100)) #598
+                                 dstr_mut_prob=(log10(0.001), log10(0.001))) #598
 
     # hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(30, 50),
     #                              actFuns=[ReLu(), TanH()],

@@ -15,8 +15,7 @@ from evolving_classifier.operators.FinalCO4 import FinalCO4
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
 from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized, \
-    TournamentSelectionSized2, TournamentSelection06, RoulletteSelection
+from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection06, RoulletteSelection
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3, \
@@ -72,7 +71,7 @@ def test_suite_for_wine():
         tests = []
 
         repetitions = 10
-        population_size = 500
+        population_size = 100
         iterations = 300
         # population_size = 250
         # iterations = 100

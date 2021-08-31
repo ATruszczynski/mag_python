@@ -102,35 +102,38 @@ class FinalCO3(CrossoverOperator):
         # for i in range(output_size):
         #     new_B_func.append(None)
 
-        new_A_aggr, new_B_aggr = conditional_value_swap(pointA.p_mutation_prob, pointA.aggrFun, pointB.aggrFun)
+        dstr_pm = 10 ** pointA.dstr_mut_prob
+        p_pm = 0
+
+        new_A_aggr, new_B_aggr = conditional_value_swap(dstr_pm, pointA.aggrFun, pointB.aggrFun)
 
         # maxIt swap
 
-        new_A_maxit, new_B_maxit = conditional_value_swap(pointA.p_mutation_prob, pointA.net_it, pointB.net_it)
+        new_A_maxit, new_B_maxit = conditional_value_swap(dstr_pm, pointA.net_it, pointB.net_it)
 
         # mutation radius swap
 
-        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(pointA.p_mutation_prob, pointA.mutation_radius, pointB.mutation_radius)
+        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(p_pm, pointA.mutation_radius, pointB.mutation_radius)
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(p_pm, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.lin_mut_prob, pointB.lin_mut_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(p_pm, pointA.lin_mut_prob, pointB.lin_mut_prob)
 
         # p prob swap
 
-        new_A_p_prob, new_B_p_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.p_mutation_prob, pointB.p_mutation_prob)
+        new_A_p_prob, new_B_p_prob = conditional_value_swap(p_pm, pointA.p_mutation_prob, pointB.p_mutation_prob)
 
         # c prob swap
 
-        new_A_c_prob, new_B_c_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.c_prob, pointB.c_prob)
+        new_A_c_prob, new_B_c_prob = conditional_value_swap(p_pm, pointA.c_prob, pointB.c_prob)
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(p_pm, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
         # act fun prob
 
@@ -156,15 +159,17 @@ def find_possible_cuts99(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparame
 
     for i in range(pointA.hidden_start_index, pointA.hidden_end_index + 1):
         for j in range(pointB.hidden_start_index, pointB.hidden_end_index + 1):
-            lhc = i - pointA.input_size
-            rhc = pointB.hidden_end_index - j
+            A_lhc = i - pointA.input_size
+            A_rhc = pointA.hidden_count - A_lhc
+            B_rhc = pointB.hidden_end_index - j
+            B_lhc = pointB.hidden_count - B_rhc
 
-            # if lhc + rhc >= minh and lhc + rhc <= maxh:
-            #     possible_cuts.append([i, lhc, j, rhc])
+            # if A_lhc + B_rhc >= minh and A_lhc + B_rhc <= maxh:
+            #     possible_cuts.append([i, A_lhc, j, B_rhc])
             tol = max(1, ceil(0.1 * (hrange.max_hidden - hrange.min_hidden)))
-            tol = 1
-            if (abs(pointA.hidden_count - (lhc + rhc)) <= tol or abs(pointB.hidden_count - (lhc + rhc)) <= tol) and lhc + rhc >= minh and lhc + rhc <= maxh:
-                possible_cuts.append([i, lhc, j, rhc])
+            tol = 2
+            if min(B_rhc - A_rhc, A_lhc - B_lhc) <= tol and A_lhc + B_rhc >= minh and A_lhc + B_rhc <= maxh:
+                possible_cuts.append([i, A_lhc, j, B_rhc])
 
     while len(possible_cuts) <= 2:
         possible_cuts.append([pointA.hidden_start_index, 0, pointB.hidden_end_index, 0])
@@ -242,16 +247,17 @@ def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]
     biases = np.zeros((1, nc))
     acts = nc * [None]
     for i in range(cut[1]):
-        biases[0, input_size + i] = pointA.biases[0, input_size + i]
         acts[input_size + i] = pointA.actFuns[input_size + i].copy()
     for i in range(cut[3]):
-        biases[0, input_size + cut[1] + i] = pointB.biases[0, cut[2] + i]
         acts[input_size + cut[1] + i] = pointB.actFuns[cut[2] + i].copy()
+
+    biases[0, input_size:input_size+cut[1]] = pointA.biases[0, input_size:cut[0]]
+    biases[0, input_size+cut[1]:input_size+cut[1]+cut[3]] = pointB.biases[0, cut[2]:-output_size]
 
     # TODO - C - logika losowania jest odwrócona
     for i in range(output_size):
         swap = random.random()
-        if swap >= 0.5:
+        if swap <= 0.5:
             biases[0, -output_size + i] = pointA.biases[0, -output_size + i]
         else:
             biases[0, -output_size + i] = pointB.biases[0, -output_size + i]

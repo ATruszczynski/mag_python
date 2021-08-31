@@ -13,11 +13,11 @@ from evolving_classifier.operators.FinalCO3 import FinalCO3
 from evolving_classifier.operators.FinalCO4 import FinalCO4
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized, \
-    TournamentSelectionSized2, TournamentSelection06
+from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection06
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
-from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3
+from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3, \
+    get_default_hrange_es7
 import os
 
 
@@ -50,12 +50,12 @@ def test_suite_for_iris():
         np.random.seed(seed)
 
         x, y, X, Y = get_data()
-        hrange = get_default_hrange_es3()
+        hrange = get_default_hrange_es7()
 
         tests = []
 
         repetitions = 1
-        population_size = 300
+        population_size = 200
         iterations = 100
         starg = 4
         power = 12
@@ -67,7 +67,7 @@ def test_suite_for_iris():
 
         tests.append(TupleForTest(name=f"iris", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO4, mt=FinalMutationOperatorP, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         # finals

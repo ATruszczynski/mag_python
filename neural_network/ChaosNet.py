@@ -168,7 +168,7 @@ class ChaosNet:
 
         test_res = [confusion_matrix]
         if lf is not None:
-            test_res.append(sum(resultt))
+            test_res.append(mean(resultt))
         return test_res
 
     # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
