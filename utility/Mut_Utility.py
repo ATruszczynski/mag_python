@@ -234,7 +234,7 @@ def conditional_gaussian_value_shift(p: float, value: float, minV: float, maxV: 
 
     return value
 
-def add_or_remove_edges(s_pm: float, links: np.ndarray, weights: np.ndarray, i: int, o: int, mask, hrange: HyperparameterRange):
+def add_or_remove_edges(s_pm: float, links: np.ndarray, weights: np.ndarray, mask, hrange: HyperparameterRange):
     probs = np.random.random(links.shape)
     to_change = np.where(probs <= s_pm)
     swap_links = links.copy()

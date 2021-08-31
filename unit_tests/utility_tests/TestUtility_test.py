@@ -60,11 +60,11 @@ def test_chaos_compare_1():
                                     desired_aggr=Sigmoid(),
                                     desired_maxit=10,
                                     desired_mut_rad=-1,
-                                    desired_wb_prob=-2.5,
-                                    desired_s_prob=-1,
+                                    desired_wb_prob=log10(1 / 7),
+                                    desired_s_prob=log10(1/ 7),
                                     desired_p_prob=-0.44,
                                     desired_c_prob=-11,
-                                    desired_r_prob=-22,
+                                    desired_r_prob=log10(1/7**2),
                                     desired_inp=np.zeros((0,0)),
                                     desired_act=np.zeros((0,0)))
 
@@ -123,11 +123,11 @@ def test_chaos_compare_2():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -190,11 +190,11 @@ def test_chaos_compare_3():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -257,11 +257,11 @@ def test_chaos_compare_4():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -324,11 +324,11 @@ def test_chaos_compare_5():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -391,11 +391,11 @@ def test_chaos_compare_6():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -458,11 +458,11 @@ def test_chaos_compare_7():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -525,11 +525,11 @@ def test_chaos_compare_8():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -590,11 +590,11 @@ def test_chaos_compare_9():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -657,11 +657,11 @@ def test_chaos_compare_10():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -720,11 +720,11 @@ def test_chaos_compare_11():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -787,11 +787,11 @@ def test_chaos_compare_12():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -854,11 +854,11 @@ def test_chaos_compare_13():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -921,11 +921,11 @@ def test_chaos_compare_14():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -988,11 +988,11 @@ def test_chaos_compare_15():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1055,11 +1055,11 @@ def test_chaos_compare_16():
                                         desired_aggr=LReLu(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1122,11 +1122,11 @@ def test_chaos_compare_17():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=-10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1189,11 +1189,11 @@ def test_chaos_compare_18():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-10,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1201,139 +1201,139 @@ def test_chaos_compare_18():
     else:
         assert False
 
-def test_chaos_compare_19():
-    link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+# def test_chaos_compare_19():
+#     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     np.random.seed(1001)
+#     random.seed(1001)
+#
+#     ##########################################################################
+#
+#     try:
+#         assert_chaos_network_properties(net=cn1,
+#                                         desired_input_size=3,
+#                                         desired_output_size=1,
+#                                         desired_neuron_count=7,
+#                                         desired_hidden_start_index=3,
+#                                         desired_hidden_end_index=6,
+#                                         desired_hidden_count=3,
+#                                         desired_links=np.array([[0, 0, 0, 0, 1, 0, 0],
+#                                                   [0, 0, 0, 1, 0, 1, 0],
+#                                                   [0, 0, 0, 1, 1, 0, 0],
+#                                                   [0, 0, 0, 0, 1, 1, 0],
+#                                                   [0, 0, 0, 1, 0, 1, 1],
+#                                                   [0, 0, 0, 1, 1, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0 , 0 ]]),
+#                                         desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                                                     [0, 0, 0, 1, 0, 9 , 0 ],
+#                                                     [0, 0, 0, 2, 6, 0 , 0],
+#                                                     [0, 0, 0, 0, 7, 10, 0 ],
+#                                                     [0, 0, 0, 3, 0, 11, 14],
+#                                                     [0, 0, 0, 4, 8, 0 , 15],
+#                                                     [0, 0, 0, 0, 0, 0 , 0 ]]),
+#                                         desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
+#                                         desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
+#                                         desired_aggr=Sigmoid(),
+#                                         desired_maxit=10,
+#                                         desired_mut_rad=-1,
+#                                         desired_wb_prob=-2.55,
+#                                         desired_s_prob=log10(1/ 7),
+#                                         desired_p_prob=-0.44,
+#                                         desired_c_prob=-11,
+#                                         desired_r_prob=log10(1/7**2),
+#                                         desired_inp=np.zeros((0,0)),
+#                                         desired_act=np.zeros((0,0)))
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
-    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    np.random.seed(1001)
-    random.seed(1001)
-
-    ##########################################################################
-
-    try:
-        assert_chaos_network_properties(net=cn1,
-                                        desired_input_size=3,
-                                        desired_output_size=1,
-                                        desired_neuron_count=7,
-                                        desired_hidden_start_index=3,
-                                        desired_hidden_end_index=6,
-                                        desired_hidden_count=3,
-                                        desired_links=np.array([[0, 0, 0, 0, 1, 0, 0],
-                                                  [0, 0, 0, 1, 0, 1, 0],
-                                                  [0, 0, 0, 1, 1, 0, 0],
-                                                  [0, 0, 0, 0, 1, 1, 0],
-                                                  [0, 0, 0, 1, 0, 1, 1],
-                                                  [0, 0, 0, 1, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0 , 0 ]]),
-                                        desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 0],
-                                                    [0, 0, 0, 1, 0, 9 , 0 ],
-                                                    [0, 0, 0, 2, 6, 0 , 0],
-                                                    [0, 0, 0, 0, 7, 10, 0 ],
-                                                    [0, 0, 0, 3, 0, 11, 14],
-                                                    [0, 0, 0, 4, 8, 0 , 15],
-                                                    [0, 0, 0, 0, 0, 0 , 0 ]]),
-                                        desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
-                                        desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
-                                        desired_aggr=Sigmoid(),
-                                        desired_maxit=10,
-                                        desired_mut_rad=-1,
-                                        desired_wb_prob=-2.55,
-                                        desired_s_prob=-1,
-                                        desired_p_prob=-0.44,
-                                        desired_c_prob=-11,
-                                        desired_r_prob=-22,
-                                        desired_inp=np.zeros((0,0)),
-                                        desired_act=np.zeros((0,0)))
-    except AssertionError:
-        assert True
-    else:
-        assert False
-
-def test_chaos_compare_20():
-    link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    np.random.seed(1001)
-    random.seed(1001)
-
-    ##########################################################################
-
-    try:
-        assert_chaos_network_properties(net=cn1,
-                                        desired_input_size=3,
-                                        desired_output_size=1,
-                                        desired_neuron_count=7,
-                                        desired_hidden_start_index=3,
-                                        desired_hidden_end_index=6,
-                                        desired_hidden_count=3,
-                                        desired_links=np.array([[0, 0, 0, 0, 1, 0, 0],
-                                                  [0, 0, 0, 1, 0, 1, 0],
-                                                  [0, 0, 0, 1, 1, 0, 0],
-                                                  [0, 0, 0, 0, 1, 1, 0],
-                                                  [0, 0, 0, 1, 0, 1, 1],
-                                                  [0, 0, 0, 1, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0 , 0 ]]),
-                                        desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 0],
-                                                    [0, 0, 0, 1, 0, 9 , 0 ],
-                                                    [0, 0, 0, 2, 6, 0 , 0],
-                                                    [0, 0, 0, 0, 7, 10, 0 ],
-                                                    [0, 0, 0, 3, 0, 11, 14],
-                                                    [0, 0, 0, 4, 8, 0 , 15],
-                                                    [0, 0, 0, 0, 0, 0 , 0 ]]),
-                                        desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
-                                        desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
-                                        desired_aggr=Sigmoid(),
-                                        desired_maxit=10,
-                                        desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=111,
-                                        desired_p_prob=-0.44,
-                                        desired_c_prob=-11,
-                                        desired_r_prob=-22,
-                                        desired_inp=np.zeros((0,0)),
-                                        desired_act=np.zeros((0,0)))
-    except AssertionError:
-        assert True
-    else:
-        assert False
+# def test_chaos_compare_20():
+#     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     np.random.seed(1001)
+#     random.seed(1001)
+#
+#     ##########################################################################
+#
+#     try:
+#         assert_chaos_network_properties(net=cn1,
+#                                         desired_input_size=3,
+#                                         desired_output_size=1,
+#                                         desired_neuron_count=7,
+#                                         desired_hidden_start_index=3,
+#                                         desired_hidden_end_index=6,
+#                                         desired_hidden_count=3,
+#                                         desired_links=np.array([[0, 0, 0, 0, 1, 0, 0],
+#                                                   [0, 0, 0, 1, 0, 1, 0],
+#                                                   [0, 0, 0, 1, 1, 0, 0],
+#                                                   [0, 0, 0, 0, 1, 1, 0],
+#                                                   [0, 0, 0, 1, 0, 1, 1],
+#                                                   [0, 0, 0, 1, 1, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0 , 0 ]]),
+#                                         desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                                                     [0, 0, 0, 1, 0, 9 , 0 ],
+#                                                     [0, 0, 0, 2, 6, 0 , 0],
+#                                                     [0, 0, 0, 0, 7, 10, 0 ],
+#                                                     [0, 0, 0, 3, 0, 11, 14],
+#                                                     [0, 0, 0, 4, 8, 0 , 15],
+#                                                     [0, 0, 0, 0, 0, 0 , 0 ]]),
+#                                         desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
+#                                         desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
+#                                         desired_aggr=Sigmoid(),
+#                                         desired_maxit=10,
+#                                         desired_mut_rad=-1,
+#                                         desired_wb_prob=log10(1 / 7),
+#                                         desired_s_prob=111,
+#                                         desired_p_prob=-0.44,
+#                                         desired_c_prob=-11,
+#                                         desired_r_prob=log10(1/7**2),
+#                                         desired_inp=np.zeros((0,0)),
+#                                         desired_act=np.zeros((0,0)))
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
 def test_chaos_compare_21():
     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
@@ -1390,11 +1390,11 @@ def test_chaos_compare_21():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.array([[0., 0., 0., 0., 0., 0., 1.]]),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1457,11 +1457,11 @@ def test_chaos_compare_22():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.array([[0., 0., 0., 0., 0., 0., 0., 0]]),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1524,11 +1524,11 @@ def test_chaos_compare_23():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.array([[0., -222., 0., 0., 0., 0., 0.]]))
     except AssertionError:
@@ -1591,11 +1591,11 @@ def test_chaos_compare_24():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.array([[0., 0., 0., 0.]]))
     except AssertionError:
@@ -1658,11 +1658,11 @@ def test_chaos_compare_25():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=0.444,
                                         desired_c_prob=-11,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1727,11 +1727,11 @@ def test_chaos_compare_26():
                                         desired_aggr=Sigmoid(),
                                         desired_maxit=10,
                                         desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
+                                        desired_wb_prob=log10(1 / 7),
+                                        desired_s_prob=log10(1/ 7),
                                         desired_p_prob=-0.44,
                                         desired_c_prob=-111,
-                                        desired_r_prob=-22,
+                                        desired_r_prob=log10(1/7**2),
                                         desired_inp=np.zeros((0,0)),
                                         desired_act=np.zeros((0,0)))
     except AssertionError:
@@ -1741,72 +1741,72 @@ def test_chaos_compare_26():
 
 
 
-def test_chaos_compare_27():
-    link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    np.random.seed(1001)
-    random.seed(1001)
-
-    ##########################################################################
-
-    try:
-        assert_chaos_network_properties(net=cn1,
-                                        desired_input_size=3,
-                                        desired_output_size=1,
-                                        desired_neuron_count=7,
-                                        desired_hidden_start_index=3,
-                                        desired_hidden_end_index=6,
-                                        desired_hidden_count=3,
-                                        desired_links=np.array([[0, 0, 0, 0, 1, 0, 0],
-                                                  [0, 0, 0, 1, 0, 1, 0],
-                                                  [0, 0, 0, 1, 1, 0, 0],
-                                                  [0, 0, 0, 0, 1, 1, 0],
-                                                  [0, 0, 0, 1, 0, 1, 1],
-                                                  [0, 0, 0, 1, 1, 0, 1],
-                                                  [0, 0, 0, 0, 0, 0 , 0 ]]),
-                                        desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 0],
-                                                    [0, 0, 0, 1, 0, 9 , 0 ],
-                                                    [0, 0, 0, 2, 6, 0 , 0],
-                                                    [0, 0, 0, 0, 7, 10, 0 ],
-                                                    [0, 0, 0, 3, 0, 11, 14],
-                                                    [0, 0, 0, 4, 8, 0 , 15],
-                                                    [0, 0, 0, 0, 0, 0 , 0 ]]),
-                                        desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
-                                        desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
-                                        desired_aggr=Sigmoid(),
-                                        desired_maxit=10,
-                                        desired_mut_rad=-1,
-                                        desired_wb_prob=-2.5,
-                                        desired_s_prob=-1,
-                                        desired_p_prob=-0.44,
-                                        desired_c_prob=-11,
-                                        desired_r_prob=222,
-                                        desired_inp=np.zeros((0,0)),
-                                        desired_act=np.zeros((0,0)))
-    except AssertionError:
-        assert True
-    else:
-        assert False
+# def test_chaos_compare_27():
+#     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     np.random.seed(1001)
+#     random.seed(1001)
+#
+#     ##########################################################################
+#
+#     try:
+#         assert_chaos_network_properties(net=cn1,
+#                                         desired_input_size=3,
+#                                         desired_output_size=1,
+#                                         desired_neuron_count=7,
+#                                         desired_hidden_start_index=3,
+#                                         desired_hidden_end_index=6,
+#                                         desired_hidden_count=3,
+#                                         desired_links=np.array([[0, 0, 0, 0, 1, 0, 0],
+#                                                   [0, 0, 0, 1, 0, 1, 0],
+#                                                   [0, 0, 0, 1, 1, 0, 0],
+#                                                   [0, 0, 0, 0, 1, 1, 0],
+#                                                   [0, 0, 0, 1, 0, 1, 1],
+#                                                   [0, 0, 0, 1, 1, 0, 1],
+#                                                   [0, 0, 0, 0, 0, 0 , 0 ]]),
+#                                         desired_weights=np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                                                     [0, 0, 0, 1, 0, 9 , 0 ],
+#                                                     [0, 0, 0, 2, 6, 0 , 0],
+#                                                     [0, 0, 0, 0, 7, 10, 0 ],
+#                                                     [0, 0, 0, 3, 0, 11, 14],
+#                                                     [0, 0, 0, 4, 8, 0 , 15],
+#                                                     [0, 0, 0, 0, 0, 0 , 0 ]]),
+#                                         desired_biases=np.array([[0., 0, 0, -1, -2, -3, -4]]),
+#                                         desired_actFun=[None, None,  None, ReLu(), SincAct(), ReLu(), None],
+#                                         desired_aggr=Sigmoid(),
+#                                         desired_maxit=10,
+#                                         desired_mut_rad=-1,
+#                                         desired_wb_prob=log10(1 / 7),
+#                                         desired_s_prob=log10(1/ 7),
+#                                         desired_p_prob=-0.44,
+#                                         desired_c_prob=-11,
+#                                         desired_r_prob=222,
+#                                         desired_inp=np.zeros((0,0)),
+#                                         desired_act=np.zeros((0,0)))
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
 
 # test_chaos_compare_1()

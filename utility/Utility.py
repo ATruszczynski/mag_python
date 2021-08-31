@@ -70,17 +70,17 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         non_input_count = neuron_count - input_size
         links = get_links(input_size, output_size, neuron_count)
 
-        # weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
+        weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
         # var = 1/sqrt((non_input_count ** 2 - (input_size * output_size)))
-        var = 1 / sqrt(non_input_count)
-        weights = np.random.normal(0, var, (neuron_count, neuron_count))#!!!
+        # var = 1 / sqrt(non_input_count)
+        # weights = np.random.normal(0, var, (neuron_count, neuron_count))#!!!
         # weights = np.zeros((neuron_count, neuron_count))
 
         weights = np.multiply(weights, links)
 
         biases = np.random.uniform(hrange.min_init_bia, hrange.max_init_bia, (1, neuron_count))
-        biases = np.random.normal(0, hrange.max_init_bia, (1, neuron_count))#!!!
-        biases = np.random.normal(0, var, (1, neuron_count))#!!!
+        # biases = np.random.normal(0, hrange.max_init_bia, (1, neuron_count))#!!!
+        # biases = np.random.normal(0, var, (1, neuron_count))#!!!
         # biases = np.zeros((1, neuron_count))
 
         biases[0, :input_size] = 0
@@ -96,13 +96,14 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         aggrFun = hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)]
         maxit = random.randint(hrange.min_it, hrange.max_it)
 
+        # wb_mut_prob = random.uniform(hrange.min_sqr_mut_prob, hrange.max_sqr_mut_prob)
+        # s_mut_prob = random.uniform(hrange.min_lin_mut_prob, hrange.max_lin_mut_prob)
+        # r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
+        # a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
+
         mut_radius = random.uniform(hrange.min_mut_radius, hrange.max_mut_radius)
-        wb_mut_prob = random.uniform(hrange.min_sqr_mut_prob, hrange.max_sqr_mut_prob)
-        s_mut_prob = random.uniform(hrange.min_lin_mut_prob, hrange.max_lin_mut_prob)
         p_mut_prob = random.uniform(hrange.min_p_mut_prob, hrange.max_p_mut_prob)
         c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
-        r_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
-        a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
 
         # mut_radius = hrange.max_mut_radius
         # wb_mut_prob = hrange.max_sqr_mut_prob
@@ -131,13 +132,10 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
 
         cn = ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
                       biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
-                      sqr_mut_prob=wb_mut_prob, lin_mut_prob=s_mut_prob, p_mutation_prob=p_mut_prob,
-                      c_prob=c_prob, dstr_mut_prob=r_prob, act_mut_prob=a_prob)
+                      sqr_mut_prob=0, lin_mut_prob=0, p_mutation_prob=p_mut_prob,
+                      c_prob=c_prob, dstr_mut_prob=0)
 
-        cndp = CNDataPoint(cn)
-
-        cn.bun = 1
-        result.append(cndp)
+        result.append(cn)
 
     return result
 

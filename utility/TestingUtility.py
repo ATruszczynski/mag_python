@@ -1,3 +1,5 @@
+from math import log10
+
 from ann_point.Functions import *
 from ann_point.HyperparameterRange import HyperparameterRange
 from neural_network.ChaosNet import ChaosNet, ActFun
@@ -55,10 +57,14 @@ def assert_chaos_network_properties(net: ChaosNet,
 
     assert net.net_it == desired_maxit
     assert net.mutation_radius == pytest.approx(desired_mut_rad, 1e-4)
-    assert net.sqr_mut_prob == pytest.approx(desired_wb_prob, 1e-4)
-    assert net.lin_mut_prob == pytest.approx(desired_s_prob, 1e-4)
     assert net.p_mutation_prob == pytest.approx(desired_p_prob, 1e-4)
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
+
+    desired_wb_prob = log10(1 / desired_neuron_count)
+    desired_s_prob = log10(1 / desired_neuron_count)
+    desired_r_prob = log10(1 / desired_neuron_count**2)
+    assert net.sqr_mut_prob == pytest.approx(desired_wb_prob, 1e-4)
+    assert net.lin_mut_prob == pytest.approx(desired_s_prob, 1e-4)
     assert net.dstr_mut_prob == pytest.approx(desired_r_prob, 1e-4)
 
 def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):

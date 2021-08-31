@@ -70,7 +70,7 @@ class CNFF5(FitnessFunction):
         eff = efficiency(cm)
         meff = m_efficiency(cm)
 
-        result = (9. * meff + eff) / 10.
+        result = mean([eff, meff])
 
         return [result, cm]
 
@@ -88,9 +88,7 @@ class CNFF6(FitnessFunction):
 
         mmeff = mean([eff, meff])
 
-        mmeff = (9. * meff + eff) / 10.
-
-        result = -(1.00 - mmeff + 1e-3)**4 * test_results[1]
+        result = -(1.00 - mmeff) * test_results[1]
 
         return [result, cm]
 

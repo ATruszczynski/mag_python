@@ -7,7 +7,7 @@ from evolving_classifier.FitnessFunction import CNFF2, CNFF, CNFF5, CNFF4
 from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized
+from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from utility.MockFC import MockFC
 from utility.MockMutOp import MockMO
 from utility.Utility import get_testing_hrange
@@ -245,21 +245,21 @@ def test_different_st_wrong_size():
     else:
         assert False
 
-
-def test_different_st_wrong_func():
-    tt1 = get_testing_tt()
-    tt2 = get_testing_tt()
-
-    assert_tts_same(tt1, tt2)
-
-    tt2.st = [TournamentSelectionSized, 9]
-
-    try:
-        assert_tts_same(tt1, tt2)
-    except AssertionError:
-        assert True
-    else:
-        assert False
+#
+# def test_different_st_wrong_func():
+#     tt1 = get_testing_tt()
+#     tt2 = get_testing_tt()
+#
+#     assert_tts_same(tt1, tt2)
+#
+#     tt2.st = [TournamentSelectionSized, 9]
+#
+#     try:
+#         assert_tts_same(tt1, tt2)
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
 
 def test_different_st_wrong_arg():

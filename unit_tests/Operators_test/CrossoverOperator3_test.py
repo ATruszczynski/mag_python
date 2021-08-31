@@ -833,7 +833,9 @@ def test_pieceing_together():
 # print(f"swap_r_prob: \n {random.random()}")
 # test_simple_crossover_2()
 
-# test_simple_crossover_2()
-# test_simple_crossover_3()
-# test_simple_crossover()
+
+# test_find_cuts()
+# test_find_cuts_2()
 # test_pieceing_together()
+# test_simple_crossover()
+# test_simple_crossover_2()

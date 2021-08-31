@@ -25,9 +25,9 @@ class TournamentSelection06(SelectionOperator):
         for i in range(len(chosen) - 1):
             p = random.random()
             if p <= 0.5:
-                return chosen_sorted[i].copy()
+                return chosen_sorted[i].net.copy()
 
-        return chosen_sorted[-1].copy()
+        return chosen_sorted[-1].net.copy()
 
 class TournamentSelection(SelectionOperator):
     def __init__(self, count: int):
@@ -39,38 +39,38 @@ class TournamentSelection(SelectionOperator):
         chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
         return chosen_sorted[0].net.copy()
 
-class TournamentSelectionSized(SelectionOperator):
-    def __init__(self, count: int):
-        super().__init__()
-        self.count = count
+# class TournamentSelectionSized(SelectionOperator):
+#     def __init__(self, count: int):
+#         super().__init__()
+#         self.count = count
+#
+#     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
+#         chosen = choose_without_repetition(options=val_pop, count=self.count)
+#         size_sorted = sorted(chosen, key=lambda x: x.net.neuron_count)
+#         chosen_sorted = sorted(size_sorted, key=lambda x: x.ff, reverse=True)
+#         return chosen_sorted[0].net.copy()
 
-    def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
-        chosen = choose_without_repetition(options=val_pop, count=self.count)
-        size_sorted = sorted(chosen, key=lambda x: x.net.neuron_count)
-        chosen_sorted = sorted(size_sorted, key=lambda x: x.ff, reverse=True)
-        return chosen_sorted[0].net.copy()
-
-class TournamentSelectionSized2(SelectionOperator):
-    def __init__(self, count: int):
-        super().__init__()
-        self.count = count
-
-    def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
-        chosen = choose_without_repetition(options=val_pop, count=self.count)
-        chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
-
-        eps = 1e-10
-        perc = 0.5
-
-        bestff = abs(chosen_sorted[0].ff)
-        if math.isnan(bestff) or math.isinf(bestff):
-            chosen_filtered = chosen_sorted
-        else:
-            tol = perc * bestff
-            chosen_filtered = [cs for cs in chosen_sorted if abs(abs(cs.ff) - bestff) <= tol + eps]
-
-        chosen_size_sorted = sorted(chosen_filtered, key=lambda x: x.net.neuron_count)
-        return chosen_size_sorted[0].net.copy()
+# class TournamentSelectionSized2(SelectionOperator):
+#     def __init__(self, count: int):
+#         super().__init__()
+#         self.count = count
+#
+#     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
+#         chosen = choose_without_repetition(options=val_pop, count=self.count)
+#         chosen_sorted = sorted(chosen, key=lambda x: x.ff, reverse=True)
+#
+#         eps = 1e-10
+#         perc = 0.5
+#
+#         bestff = abs(chosen_sorted[0].ff)
+#         if math.isnan(bestff) or math.isinf(bestff):
+#             chosen_filtered = chosen_sorted
+#         else:
+#             tol = perc * bestff
+#             chosen_filtered = [cs for cs in chosen_sorted if abs(abs(cs.ff) - bestff) <= tol + eps]
+#
+#         chosen_size_sorted = sorted(chosen_filtered, key=lambda x: x.net.neuron_count)
+#         return chosen_size_sorted[0].net.copy()
 
 class RoulletteSelection(SelectionOperator):
     def __init__(self):

@@ -7,14 +7,10 @@ class CNDataPoint():
     def __init__(self, net: ChaosNet):
         self.net = net.copy()
         self.ff = 0.
-        self.hff = []
         self.conf_mat = None
 
     def add_data(self, new_ff: float, new_conf_mat: np.ndarray):
-        self.hff.append(new_ff)
-        if len(self.hff) > 1:
-            self.hff = self.hff[1:]
-        self.ff = mean(self.hff)
+        self.ff = new_ff
         self.conf_mat = new_conf_mat
 
     def get_eff(self):
@@ -51,8 +47,6 @@ class CNDataPoint():
     def copy(self):
         ncn = CNDataPoint(self.net.copy())
         ncn.ff = self.ff
-        for i in range(len(self.hff)):
-            ncn.hff.append(self.hff[i])
         if self.conf_mat is None:
             ncn.conf_mat = None
         else:

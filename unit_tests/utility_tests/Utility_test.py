@@ -185,11 +185,12 @@ def test_generate_population_limits():
     all_aggr_funs = []
 
     all_mut_rad = []
-    all_wb_mut = []
-    all_s_mut = []
     all_p_mut = []
     all_c_prob = []
-    all_r_prob = []
+
+    # all_wb_mut = []
+    # all_s_mut = []
+    # all_r_prob = []
 
     for i in range(len(pop)):
         net = pop[i]
@@ -228,11 +229,16 @@ def test_generate_population_limits():
             all_weights.append(net.weights[r, c])
 
         all_mut_rad.append(net.mutation_radius)
-        all_wb_mut.append(net.sqr_mut_prob)
-        all_s_mut.append(net.lin_mut_prob)
         all_p_mut.append(net.p_mutation_prob)
         all_c_prob.append(net.c_prob)
-        all_r_prob.append(net.dstr_mut_prob)
+
+        # all_wb_mut.append(net.sqr_mut_prob)
+        # all_s_mut.append(net.lin_mut_prob)
+        # all_r_prob.append(net.dstr_mut_prob)
+
+        assert net.sqr_mut_prob == log10(1 / net.neuron_count)
+        assert net.lin_mut_prob == log10(1 / net.neuron_count)
+        assert net.dstr_mut_prob == log10(1 / net.neuron_count ** 2)
 
     assert max(all_weights) <= 2
     assert max(all_weights) > 1.95
@@ -273,15 +279,15 @@ def test_generate_population_limits():
     assert max(all_mut_rad) <= 0
     assert max(all_mut_rad) >= -0.05
 
-    assert min(all_wb_mut) >= -2
-    assert min(all_wb_mut) <= -1.95
-    assert max(all_wb_mut) <= -1
-    assert max(all_wb_mut) >= -1.05
-
-    assert min(all_s_mut) >= -3
-    assert min(all_s_mut) <= -2.95
-    assert max(all_s_mut) <= -2
-    assert max(all_s_mut) >= -2.05
+    # assert min(all_wb_mut) >= -2
+    # assert min(all_wb_mut) <= -1.95
+    # assert max(all_wb_mut) <= -1
+    # assert max(all_wb_mut) >= -1.05
+    #
+    # assert min(all_s_mut) >= -3
+    # assert min(all_s_mut) <= -2.95
+    # assert max(all_s_mut) <= -2
+    # assert max(all_s_mut) >= -2.05
 
     assert min(all_p_mut) >= -4
     assert min(all_p_mut) <= -3.95
@@ -293,10 +299,10 @@ def test_generate_population_limits():
     assert max(all_c_prob) <= -4
     assert max(all_c_prob) >= -4.05
 
-    assert min(all_r_prob) >= -6
-    assert min(all_r_prob) <= -5.95
-    assert max(all_r_prob) <= -5
-    assert max(all_r_prob) >= -5.05
+    # assert min(all_r_prob) >= -6
+    # assert min(all_r_prob) <= -5.95
+    # assert max(all_r_prob) <= -5
+    # assert max(all_r_prob) >= -5.05
 
 
 

@@ -21,6 +21,12 @@ def test_add_iteration():
         cndp.add_data(i * 0.1, np.array([[i, 2-i], [i**2, 0]]))
         cndps_p.append(cndp)
 
+
+    for i in range(len(nets)):
+        nets[i].links = np.zeros((0, 0))
+        nets[i].weights = np.zeros((0, 0))
+        nets[i].biases = np.zeros((0, 0))
+
     random.seed(1001)
     np.random.seed(1001)
     order = choose_without_repetition([0, 1, 2, 3, 4], 5)

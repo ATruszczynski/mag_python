@@ -154,4 +154,5 @@ def test_cn_test_full_2():
 #     sum += ef.compute(result[:, i].reshape(-1, 1), outputs[i])
 #     print(sum)
 #
+# test_cn_test_cm_only()
 # test_cn_test_full_2()

@@ -952,109 +952,109 @@ def test_chaos_compare_18():
     else:
         assert False
 
-def test_chaos_compare_19():
-    link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+# def test_chaos_compare_19():
+#     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     link2 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei2 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia2 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns2 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn2 = ChaosNet(input_size=3, output_size=1, links=link2.copy(), weights=wei2.copy(), biases=bia2.copy(),
+#                    actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.53, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     try:
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
-    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    link2 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei2 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia2 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns2 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn2 = ChaosNet(input_size=3, output_size=1, links=link2.copy(), weights=wei2.copy(), biases=bia2.copy(),
-                   actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.53, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    try:
-        assert_chaos_networks_same(net=cn1, net2=cn2)
-    except AssertionError:
-        assert True
-    else:
-        assert False
-
-def test_chaos_compare_20():
-    link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    link2 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei2 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia2 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns2 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn2 = ChaosNet(input_size=3, output_size=1, links=link2.copy(), weights=wei2.copy(), biases=bia2.copy(),
-                   actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-16, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    try:
-        assert_chaos_networks_same(net=cn1, net2=cn2)
-    except AssertionError:
-        assert True
-    else:
-        assert False
+# def test_chaos_compare_20():
+#     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     link2 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei2 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia2 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns2 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn2 = ChaosNet(input_size=3, output_size=1, links=link2.copy(), weights=wei2.copy(), biases=bia2.copy(),
+#                    actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-16, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     try:
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
 def test_chaos_compare_21():
     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
@@ -1376,57 +1376,57 @@ def test_chaos_compare_26():
 
 
 
-def test_chaos_compare_27():
-    link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-22)
-
-    link2 = np.array([[0, 0, 0, 0, 1, 0, 0],
-                      [0, 0, 0, 1, 0, 1, 0],
-                      [0, 0, 0, 1, 1, 0, 0],
-                      [0, 0, 0, 0, 1, 1, 0],
-                      [0, 0, 0, 1, 0, 1, 1],
-                      [0, 0, 0, 1, 1, 0, 1],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    wei2 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
-                      [0, 0, 0, 1, 0, 9 , 0 ],
-                      [0, 0, 0, 2, 6, 0 , 0],
-                      [0, 0, 0, 0, 7, 10, 0 ],
-                      [0, 0, 0, 3, 0, 11, 14],
-                      [0, 0, 0, 4, 8, 0 , 15],
-                      [0, 0, 0, 0, 0, 0 , 0 ]])
-    bia2 = np.array([[0., 0, 0, -1, -2, -3, -4]])
-    actFuns2 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
-
-    cn2 = ChaosNet(input_size=3, output_size=1, links=link2.copy(), weights=wei2.copy(), biases=bia2.copy(),
-                   actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
-                   mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
-                   c_prob=-11, dstr_mut_prob=-222)
-
-    try:
-        assert_chaos_networks_same(net=cn1, net2=cn2)
-    except AssertionError:
-        assert True
-    else:
-        assert False
+# def test_chaos_compare_27():
+#     link1 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei1 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia1 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns1 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
+#                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-22)
+#
+#     link2 = np.array([[0, 0, 0, 0, 1, 0, 0],
+#                       [0, 0, 0, 1, 0, 1, 0],
+#                       [0, 0, 0, 1, 1, 0, 0],
+#                       [0, 0, 0, 0, 1, 1, 0],
+#                       [0, 0, 0, 1, 0, 1, 1],
+#                       [0, 0, 0, 1, 1, 0, 1],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     wei2 =  np.array([[0, 0, 0, 0, 5, 0 , 0],
+#                       [0, 0, 0, 1, 0, 9 , 0 ],
+#                       [0, 0, 0, 2, 6, 0 , 0],
+#                       [0, 0, 0, 0, 7, 10, 0 ],
+#                       [0, 0, 0, 3, 0, 11, 14],
+#                       [0, 0, 0, 4, 8, 0 , 15],
+#                       [0, 0, 0, 0, 0, 0 , 0 ]])
+#     bia2 = np.array([[0., 0, 0, -1, -2, -3, -4]])
+#     actFuns2 = [None, None,  None, ReLu(), SincAct(), ReLu(), None]
+#
+#     cn2 = ChaosNet(input_size=3, output_size=1, links=link2.copy(), weights=wei2.copy(), biases=bia2.copy(),
+#                    actFuns=actFuns2, aggrFun=Sigmoid().copy(), net_it=10,
+#                    mutation_radius=-1, sqr_mut_prob=-2.5, lin_mut_prob=-1, p_mutation_prob=-0.44,
+#                    c_prob=-11, dstr_mut_prob=-222)
+#
+#     try:
+#         assert_chaos_networks_same(net=cn1, net2=cn2)
+#     except AssertionError:
+#         assert True
+#     else:
+#         assert False
 
 
 # test_chaos_compare_1()
