@@ -13,7 +13,7 @@ from evolving_classifier.operators.FinalCO3 import FinalCO3
 from evolving_classifier.operators.FinalCO4 import FinalCO4
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection06
+from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection05
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3, \
@@ -67,7 +67,7 @@ def test_suite_for_iris():
 
         tests.append(TupleForTest(name=f"iris", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         # finals

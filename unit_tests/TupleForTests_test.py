@@ -8,7 +8,7 @@ from evolving_classifier.FitnessFunction import CNFF, CNFF2, QuadDiff
 from evolving_classifier.operators.FinalCO1 import FinalCO1
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection06
+from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection05
 from utility.Utility import generate_counting_problem, get_default_hrange_ga, assert_hranges_same
 
 
@@ -16,7 +16,7 @@ def test_tt_const():
     data = [np.zeros((1, 1)), np.zeros((2, 2)), np.zeros((3, 3)), np.zeros((4, 4))]
     hrange = get_default_hrange_ga()
     tt = TupleForTest(name="d", rep=1, seed=2, popSize=3, data=data, iterations=4, hrange=hrange,
-                      ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection06, 5], fft=[CNFF2, QuadDiff],
+                      ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection05, 5], fft=[CNFF2, QuadDiff],
                       fct=CNFitnessCalculator, reg=True)
 
     assert tt.name == "d"
@@ -32,7 +32,7 @@ def test_tt_const():
     assert tt.ct == FinalCO2
     assert tt.mt == FinalMutationOperator
     assert len(tt.st) == 2
-    assert tt.st[0] == TournamentSelection06
+    assert tt.st[0] == TournamentSelection05
     assert tt.st[1] == 5
     assert len(tt.fft) == 2
     assert tt.fft[0] == CNFF2

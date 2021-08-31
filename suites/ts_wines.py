@@ -15,7 +15,7 @@ from evolving_classifier.operators.FinalCO4 import FinalCO4
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
 from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection06, RoulletteSelection
+from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection05, RoulletteSelection
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, get_default_hrange_es3, \
@@ -94,23 +94,23 @@ def test_suite_for_wine():
         #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name=f"wines_nm_1_2", rep=2, seed=seeds[0], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name=f"wines_nm_2_2", rep=2, seed=seeds[1], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name=f"wines_nm_3_2", rep=2, seed=seeds[2], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name=f"wines_nm_4_2", rep=2, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name=f"wines_nm_5_2", rep=2, seed=seeds[4], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"wines16_10", rep=repetitions, seed=seeds[3], popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,

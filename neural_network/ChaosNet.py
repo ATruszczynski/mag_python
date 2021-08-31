@@ -151,7 +151,7 @@ class ChaosNet:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
 
-        resultt = []
+        resultt = 0
 
         cont_inputs = np.hstack(test_input)
         net_results = self.run(cont_inputs)
@@ -164,11 +164,11 @@ class ChaosNet:
             confusion_matrix[corr_class, pred_class] += 1
             if lf is not None:
                 lfcc = lf.compute(net_result, to)
-                resultt.append(lfcc)
+                resultt += lfcc
 
         test_res = [confusion_matrix]
         if lf is not None:
-            test_res.append(mean(resultt))
+            test_res.append(resultt)
         return test_res
 
     # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
