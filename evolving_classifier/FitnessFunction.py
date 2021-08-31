@@ -140,5 +140,18 @@ class CNFF9(FitnessFunction):
 
         return [result, cm]
 
+class CNF1(FitnessFunction):
+    def __init__(self):
+        super().__init__()
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
+
+        cm = test_results[0]
+
+        result = average_f1_score(cm)
+
+        return [result, cm]
+
 
 
