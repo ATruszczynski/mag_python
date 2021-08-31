@@ -70,7 +70,7 @@ class CNFF5(FitnessFunction):
         eff = efficiency(cm)
         meff = m_efficiency(cm)
 
-        result = mean([eff, meff])
+        result = (9. * meff + eff) / 10.
 
         return [result, cm]
 
@@ -83,9 +83,14 @@ class CNFF6(FitnessFunction):
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
 
         cm = test_results[0]
+        eff = efficiency(cm)
         meff = m_efficiency(cm)
 
-        result = -(1.01 - meff) * test_results[1]
+        mmeff = mean([eff, meff])
+
+        mmeff = (9. * meff + eff) / 10.
+
+        result = -(1.00 - mmeff + 1e-3)**4 * test_results[1]
 
         return [result, cm]
 

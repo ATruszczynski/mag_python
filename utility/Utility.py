@@ -63,16 +63,25 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
     # TODO - C - stabilise names
     for i in range(count):
         hidden_size = random.randint(hrange.min_hidden, hrange.max_hidden)
+        # hidden_size = hrange.min_hidden
+        # hidden_size = ceil(mean([hrange.min_hidden, hrange.max_hidden]))
 
         neuron_count = input_size + hidden_size + output_size
+        non_input_count = neuron_count - input_size
         links = get_links(input_size, output_size, neuron_count)
 
-        weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
-        weights = np.random.normal(0, hrange.max_init_wei, (neuron_count, neuron_count))#!!!
+        # weights = np.random.uniform(hrange.min_init_wei, hrange.max_init_wei, (neuron_count, neuron_count))
+        # var = 1/sqrt((non_input_count ** 2 - (input_size * output_size)))
+        var = 1 / sqrt(non_input_count)
+        weights = np.random.normal(0, var, (neuron_count, neuron_count))#!!!
+        # weights = np.zeros((neuron_count, neuron_count))
+
         weights = np.multiply(weights, links)
 
         biases = np.random.uniform(hrange.min_init_bia, hrange.max_init_bia, (1, neuron_count))
         biases = np.random.normal(0, hrange.max_init_bia, (1, neuron_count))#!!!
+        biases = np.random.normal(0, var, (1, neuron_count))#!!!
+        # biases = np.zeros((1, neuron_count))
 
         biases[0, :input_size] = 0
 
@@ -103,13 +112,13 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         # r_prob = hrange.max_dstr_mut_prob
         # a_prob = hrange.max_act_mut_prob
         #
-        mut_radius = hrange.max_mut_radius
-        wb_mut_prob = hrange.min_sqr_mut_prob
-        s_mut_prob = hrange.min_lin_mut_prob
-        p_mut_prob = hrange.min_p_mut_prob # !!!
-        c_prob = hrange.max_c_prob
-        r_prob = hrange.max_dstr_mut_prob
-        a_prob = hrange.max_act_mut_prob
+        # mut_radius = hrange.min_mut_radius
+        # wb_mut_prob = hrange.min_sqr_mut_prob
+        # s_mut_prob = hrange.min_lin_mut_prob
+        # p_mut_prob = hrange.max_p_mut_prob # !!!
+        # c_prob = hrange.max_c_prob
+        # r_prob = hrange.min_dstr_mut_prob
+        # a_prob = hrange.min_act_mut_prob
 
         # mut_radius = random.uniform((hrange.min_mut_radius + hrange.max_mut_radius)/2, hrange.max_mut_radius)
         # wb_mut_prob = random.uniform(hrange.min_sqr_mut_prob, (hrange.min_sqr_mut_prob + hrange.max_sqr_mut_prob)/2)
@@ -136,8 +145,9 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
     mask = get_weight_mask(input_size, output_size, neuron_count)
 
     density = random.random()
-    density = 1
+    # density = 1
     # density = 0.5
+    # density = 0
     link_prob = np.random.random((neuron_count, neuron_count))
     conn_ind = np.where(link_prob <= density)
     links = np.zeros((neuron_count, neuron_count))
@@ -244,12 +254,79 @@ def get_default_hrange_es5():
     d = 0.0
     ddd = (-d, d)
 
-    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(3, 3), hidden_count=(15, 15),
+    hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(3, 3), hidden_count=(5, 5),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-4, -1), sqr_mut_prob=(log10(0.01), log10(1)),
                                  lin_mut_prob=(log10(0.1), log10(1)),
                                  p_mutation_prob=(-2, -1), c_prob=(log10(0.8), log10(0.8)),
                                  dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
+
+    return hrange
+
+def get_default_hrange_es6():
+    d = 0.01
+    dd = (-d, d)
+    ddd = (-d*10, d*10)
+
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(2, 2), hidden_count=(10, 10),
+    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+    #                              mut_radius=(-4, -1), sqr_mut_prob=(log10(0.005), log10(1)),
+    #                              lin_mut_prob=(log10(0.05), log10(1)),
+    #                              p_mutation_prob=(-3, 0), c_prob=(log10(0.5), log10(1)),
+    #                              dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
+    #
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(3, 3), hidden_count=(10, 10),
+    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+    #                              mut_radius=(-3, -1), sqr_mut_prob=(log10(0.005), log10(1)),
+    #                              lin_mut_prob=(log10(0.05), log10(1)),
+    #                              p_mutation_prob=(-3, 0), c_prob=(log10(0.5), log10(1)),
+    #                              dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100)) #568
+
+    # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(5, 5), hidden_count=(10, 10),
+    #                              actFuns=[TanH(), ReLu()],
+    #                              mut_radius=(-3, -1), sqr_mut_prob=(log10(0.01), log10(1)),
+    #                              lin_mut_prob=(log10(0.05), log10(1)),
+    #                              p_mutation_prob=(-3, 0), c_prob=(log10(0.5), log10(1)),
+    #                              dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100)) #598
+
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 10), hidden_count=(5, 20),
+                                 actFuns=[ReLu(), TanH()],
+                                 # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, -1),
+                                 c_prob=(log10(0.8), log10(0.8)),
+                                 sqr_mut_prob=(log10(0.001), log10(0.001)),
+                                 lin_mut_prob=(-100, -100),
+                                 p_mutation_prob=(log10(0.1), log10(0.1)),
+                                 dstr_mut_prob=(log10(0.001), log10(0.001)), act_mut_prob=(-100, -100)) #598
+
+
+    return hrange
+
+
+def get_default_hrange_es7():
+    d = 0.01
+    dd = (-d, d)
+    ddd = (-d*10, d*10)
+
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(50, 100),
+                                 actFuns=[ReLu(), TanH()],
+                                 # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-3, -3),
+                                 c_prob=(log10(0.8), log10(0.8)),
+                                 sqr_mut_prob=(log10(0.001), log10(0.001)),
+                                 lin_mut_prob=(-100, -100),
+                                 p_mutation_prob=(log10(0.05), log10(0.05)),
+                                 dstr_mut_prob=(log10(0.001), log10(0.001)), act_mut_prob=(-100, -100)) #598
+
+    # hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(30, 50),
+    #                              actFuns=[ReLu(), TanH()],
+    #                              # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+    #                              mut_radius=(-3, 0),
+    #                              c_prob=(log10(0.8), log10(0.8)),
+    #                              sqr_mut_prob=(log10(0.001), log10(0.001)),
+    #                              lin_mut_prob=(-100, -100),
+    #                              p_mutation_prob=(log10(0.05), log10(0.05)),
+    #                              dstr_mut_prob=(log10(0.001), log10(0.001)), act_mut_prob=(-100, -100)) #598
 
     return hrange
 

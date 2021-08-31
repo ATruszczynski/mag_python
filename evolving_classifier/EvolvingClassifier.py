@@ -86,11 +86,12 @@ class EvolvingClassifier:
             pool = None
 
         best = [self.population[0].net, -math.inf]
+        for i in range(len(self.population)):
+            self.population[i].conf_mat = np.ones((1, 1))
 
         for i in range(iterations):
             eval_pop = self.fc.compute(pool=pool, results=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
-                                       trainOutputs=self.trainOutputs)
-
+                                       trainOutputs=self.trainOutputs)# TODO - S - restore
             self.history.add_it_hist(eval_pop)
             if eval_pop[0].ff >= best[1]:
                 best = [eval_pop[0].net.copy(), eval_pop[0].ff]
@@ -109,7 +110,6 @@ class EvolvingClassifier:
                     if i % lc != 0:
                         print(", ", end="")
                     print(f"{i} - ({round((i + 1)/iterations * 100, 2)}%) - {round(best[1], 4)}", end="")
-
 
 
             crossed = []

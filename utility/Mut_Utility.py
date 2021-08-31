@@ -173,6 +173,16 @@ def reroll_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float, minV: float
     result = np.multiply(result, mask)
 
     return result
+
+def zero_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float):
+    result = matrix.copy()
+
+    probs = np.random.random(matrix.shape)
+    to_change = np.where(probs <= prob)
+    result[to_change] = np.zeros(matrix.shape)[to_change]
+    result = np.multiply(result, mask)
+
+    return result
 #
 # def reroll_value(p: float, value: float, minV: float, maxV: float):
 #     result = value

@@ -22,7 +22,11 @@ class RunHistory:
     def add_it_hist(self, data_points: [CNDataPoint]):
         it_rec = []
         for i in range(len(data_points)):
-            it_rec.append(data_points[i].copy())
+            dp = data_points[i].copy()
+            dp.net.weights = np.zeros((0, 0))
+            dp.net.links = np.zeros((0, 0))
+            dp.net.biases = np.zeros((0, 0))
+            it_rec.append(dp)
         self.it_hist.append(it_rec)
 
     # def get_it_best(self, iteration: int) -> CNDataPoint:

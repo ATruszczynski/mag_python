@@ -1,5 +1,4 @@
 import random
-
 from ann_point.HyperparameterRange import HyperparameterRange
 from unit_tests.utility_tests.OperatorUtility_test import gaussian_shift
 from utility.Mut_Utility import *
@@ -10,7 +9,6 @@ from utility.Utility2 import *
 class MutationOperator:
     def __init__(self, hrange: HyperparameterRange):
         self.hrange = hrange
-
     def mutate(self, point: ChaosNet) -> ChaosNet:
         pass
 
@@ -20,8 +18,10 @@ class FinalMutationOperator(MutationOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__(hrange)
 
-    def mutate(self, point: ChaosNet) -> ChaosNet:
-        point = point.copy()
+    def mutate(self, cndp: CNDataPoint) -> CNDataPoint:
+        point = cndp.net
+
+        # point = point.copy()
         sqr_pm =    10 ** point.sqr_mut_prob
         lin_pm =    10 ** point.lin_mut_prob
         p_pm =      10 ** point.p_mutation_prob
@@ -31,6 +31,18 @@ class FinalMutationOperator(MutationOperator):
 
         weights_shifted = gaussian_shift(point.weights, point.links, sqr_pm, radius)
         biases_shifted = gaussian_shift(point.biases, get_bias_mask(point.input_size, point.neuron_count), lin_pm, radius)
+        # dr = random.random()
+        # neuron = choose_without_repetition(list(range(point.hidden_start_index, point.neuron_count)), 1)
+        # if dr <= 0.5:
+        #     weights_shifted[:, neuron] = gaussian_shift(point.weights[:, neuron], point.links[:, neuron], sqr_pm, radius)
+        #
+        # else:
+        #     weights_shifted[neuron, :] = gaussian_shift(point.weights[neuron, :], point.links[neuron, :], sqr_pm, radius)
+
+        # minV, maxV = get_min_max_values_of_matrix_with_mask(mask=point.links, matrix=weights_shifted)
+        # if minV < maxV:
+        #     weights_shifted = reroll_matrix(matrix=weights_shifted, mask=point.links, prob=dstr_pm, minV=minV, maxV=maxV)
+        # weights_shifted = zero_matrix(matrix=weights_shifted, mask=point.links, prob=dstr_pm)
 
         nact = point.input_size * [None]
         for i in range(point.hidden_start_index, point.hidden_end_index):
@@ -40,8 +52,12 @@ class FinalMutationOperator(MutationOperator):
         aggr = conditional_try_choose_different(act_pm, point.aggrFun, self.hrange.actFunSet)
 
         links_rev, weights_rev = add_or_remove_edges(dstr_pm, point.links, weights_shifted, point.input_size, point.output_size, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
+        # links_rev = point.links
+        # weights_rev = weights_shifted
 
-        net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(self.hrange.min_it, self.hrange.max_it + 1)))
+        minn = max(self.hrange.min_it, point.net_it - 1)
+        maxn = min(self.hrange.max_it, point.net_it + 1)
+        net_it = conditional_try_choose_different(lin_pm, point.net_it, list(range(minn, maxn + 1)))
 
         rad_frac = 0.1
         mutation_radius = conditional_uniform_value_shift(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
@@ -65,4 +81,5 @@ class FinalMutationOperator(MutationOperator):
                        biases=biases_shifted, actFuns=nact, aggrFun=aggr, net_it=net_it, mutation_radius=mutation_radius, sqr_mut_prob=sqr_mut_prob,
                        lin_mut_prob=lin_mut_prob, p_mutation_prob=p_mutation_prob, c_prob=c_prob, dstr_mut_prob=dstr_mut_prob, act_mut_prob=act_mut_prob)
 
-        return np
+        cndp.net = np
+        return cndp.copy()

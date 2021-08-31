@@ -3,6 +3,7 @@ import random
 from ann_point import HyperparameterRange
 from evolving_classifier.operators.FinalCO1 import find_possible_cuts4
 from neural_network.ChaosNet import ChaosNet
+from utility.CNDataPoint import CNDataPoint
 from utility.Mut_Utility import conditional_value_swap
 from utility.Utility import choose_without_repetition
 from utility.Utility2 import *
@@ -25,7 +26,9 @@ class PuzzleCO2(CrossoverOperator):
         super().__init__()
         self.hrange = hrange
 
-    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+    def crossover(self, cndpA: CNDataPoint, cndpB: CNDataPoint) -> [CNDataPoint, CNDataPoint]:
+        pointA = cndpA.net
+        pointB = cndpB.net
 
         possible_cuts = find_possible_cuts4(pointA, pointB, self.hrange)
 
@@ -89,7 +92,10 @@ class PuzzleCO2(CrossoverOperator):
                           sqr_mut_prob=D_wb_prob, lin_mut_prob=D_s_prob, p_mutation_prob=D_p_prob,
                           c_prob=D_c_prob, dstr_mut_prob=D_r_prob, act_mut_prob=new_B_act_prob)
 
-        return pointC, pointD
+        cndpA.net = pointC
+        cndpB.net = pointD
+
+        return cndpA.copy(), cndpB.copy()
 
 def get_link_weights_biases_acts(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
     input_size = pointA.input_size

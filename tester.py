@@ -110,6 +110,7 @@ def net_to_file(net: ChaosNet, dirpath: str, tresult: [Any]):
 
 def write_down_test_results(data_file, net: ChaosNet, tr: [Any]):
     data_file.write(f"{net.to_string()}\n")
+    data_file.write(f"cm:\n{tr[0]}\n")
     data_file.write(f"acc: {accuracy(tr[0])}\n")
     data_file.write(f"av_prec: {average_precision(tr[0])}\n")
     data_file.write(f"av_rec: {average_recall(tr[0])}\n")

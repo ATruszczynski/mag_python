@@ -1,5 +1,5 @@
-from math import inf
-from statistics import mean
+from math import inf, log10, sqrt
+from statistics import mean, median
 from typing import Any
 from warnings import warn
 
@@ -73,12 +73,34 @@ class ChaosNet:
         self.net_it = net_it
 
         self.mutation_radius = mutation_radius
+
         self.sqr_mut_prob = sqr_mut_prob
         self.lin_mut_prob = lin_mut_prob
         self.p_mutation_prob = p_mutation_prob
         self.c_prob = c_prob
         self.dstr_mut_prob = dstr_mut_prob
         self.act_mut_prob = act_mut_prob
+
+        # self.mutation_radius = log10(sqrt(1. / self.get_max_edge_count()))
+        # self.sqr_mut_prob = log10(1. / sqrt(self.get_max_edge_count()))
+        # self.lin_mut_prob = log10(1. / sqrt(self.neuron_count))
+        # self.dstr_mut_prob = log10(1. / (2 * sqrt(self.get_max_edge_count())))
+
+
+        # maxV = np.max(weights)
+        # if maxV > 0:
+        #     self.mutation_radius = log10(maxV / self.neuron_count)
+        # else:
+        #     self.mutation_radius = log10(sqrt(1. / self.get_max_edge_count()))
+
+        # self.mutation_radius = log10(1. / self.neuron_count ** 2)
+        # self.mutation_radius = log10(1. / self.neuron_count)
+        # self.mutation_radius = 0
+
+        self.sqr_mut_prob = log10(1. / self.neuron_count)
+        self.lin_mut_prob = log10(1. / self.neuron_count)
+        self.dstr_mut_prob = log10(1. / self.neuron_count**2)
+        self.act_mut_prob = log10(1. / self.neuron_count**2)
 
         self.bun = 0
 
@@ -102,6 +124,25 @@ class ChaosNet:
         # self.act[self.hidden_end_index:, :] = self.inp[self.hidden_end_index:, :]
 
         return self.act[self.hidden_end_index:]
+
+    # def run(self, inputs: np.ndarray) -> np.ndarray:
+    #     # if self.hidden_comp_order is None:
+    #     #     self.compute_comp_order()
+    #
+    #     self.act = np.zeros((self.neuron_count, inputs.shape[1]))
+    #     self.inp = np.zeros((self.neuron_count, inputs.shape[1]))
+    #
+    #     self.act[:self.input_size, :] = inputs
+    #
+    #     for i in range(self.net_it + 1):
+    #         self.inp = np.dot(self.weights.T, self.act) + self.biases.T
+    #         self.act = self.inp
+    #         for j in range(self.hidden_start_index, self.hidden_end_index):
+    #             self.act[j, :] = self.actFuns[j].compute(self.act[j, :])
+    #
+    #     self.act[self.hidden_end_index:, :] = self.aggrFun.compute(self.inp[self.hidden_end_index:, :])
+    #
+    #     return self.act[self.hidden_end_index:]
 
     def compute_comp_order(self):
         self.hidden_comp_order = []
@@ -131,7 +172,7 @@ class ChaosNet:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
 
-        resultt = 0
+        resultt = []
 
         cont_inputs = np.hstack(test_input)
         net_results = self.run(cont_inputs)
@@ -144,11 +185,11 @@ class ChaosNet:
             confusion_matrix[corr_class, pred_class] += 1
             if lf is not None:
                 lfcc = lf.compute(net_result, to)
-                resultt += lfcc
+                resultt.append(lfcc)
 
         test_res = [confusion_matrix]
         if lf is not None:
-            test_res.append(resultt)
+            test_res.append(mean(resultt))
         return test_res
 
     # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
@@ -248,6 +289,9 @@ class ChaosNet:
     def get_edge_count(self):
         how_many = np.sum(self.links)
         return how_many
+
+    def get_max_edge_count(self):
+        return np.sum(get_weight_mask(self.input_size, self.output_size, self.neuron_count))
 
     # def density(self):
     #     how_many = np.sum(self.links)

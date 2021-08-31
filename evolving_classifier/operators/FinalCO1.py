@@ -21,7 +21,11 @@ class FinalCO1(CrossoverOperator):
         super().__init__()
         self.hrange = hrange
 
-    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+    def crossover(self, cndpA: CNDataPoint, cndpB: CNDataPoint) -> [CNDataPoint, CNDataPoint]:
+        pointA = cndpA.net
+        pointB = cndpB.net
+
+
         possible_cuts = find_possible_cuts(pointA, pointB, self.hrange)
 
         cut = possible_cuts[random.randint(0, len(possible_cuts) - 1)]
@@ -142,7 +146,10 @@ class FinalCO1(CrossoverOperator):
                           sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
                           c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob, act_mut_prob=new_B_act_prob)
 
-        return pointA, pointB
+        cndpA.net = pointA
+        cndpB.net = pointB
+
+        return cndpA.copy(), cndpB.copy()
 
 
 

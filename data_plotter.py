@@ -33,8 +33,10 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
 
     if parameter_name == "ff":
         maxff = df_mean.max()
-        if maxff <= 1:
+        if 0.3 <= maxff <= 1:
             plt.ylim((0, 1))
+        elif maxff <= 0.3:
+            plt.yscale("log")
         elif maxff >= 1000:
             plt.ylim((1, 1e4))
             plt.yscale("log")
@@ -180,18 +182,19 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
 
 
-dir_name = "wines16_co4"
+dir_name = "wines_nm_1"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
 plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
 plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
 plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
+plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
 
 plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
-plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
+# plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
 # plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
-plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
+# plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
 # plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
 # plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
 # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")

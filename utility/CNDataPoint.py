@@ -12,7 +12,7 @@ class CNDataPoint():
 
     def add_data(self, new_ff: float, new_conf_mat: np.ndarray):
         self.hff.append(new_ff)
-        if len(self.hff) > 10:
+        if len(self.hff) > 1:
             self.hff = self.hff[1:]
         self.ff = mean(self.hff)
         self.conf_mat = new_conf_mat

@@ -1,9 +1,11 @@
 import random
+from math import ceil
 
 from ann_point import HyperparameterRange
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
+from utility.CNDataPoint import CNDataPoint
 from utility.Mut_Utility import conditional_value_swap, get_weight_mask
 from utility.Utility import choose_without_repetition
 
@@ -21,7 +23,10 @@ class FinalCO3(CrossoverOperator):
         super().__init__()
         self.hrange = hrange
 
-    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+    def crossover(self, cndpA: CNDataPoint, cndpB: CNDataPoint) -> [CNDataPoint, CNDataPoint]:
+        pointA = cndpA.net
+        pointB = cndpB.net
+
         possible_cuts = find_possible_cuts99(pointA, pointB, self.hrange)
 
         cuts = choose_without_repetition(options=possible_cuts, count=2)
@@ -100,39 +105,39 @@ class FinalCO3(CrossoverOperator):
         # for i in range(output_size):
         #     new_B_func.append(None)
 
-        new_A_aggr, new_B_aggr = conditional_value_swap(0.5, pointA.aggrFun, pointB.aggrFun)
+        new_A_aggr, new_B_aggr = conditional_value_swap(pointA.p_mutation_prob, pointA.aggrFun, pointB.aggrFun)
 
         # maxIt swap
 
-        new_A_maxit, new_B_maxit = conditional_value_swap(0.5, pointA.net_it, pointB.net_it)
+        new_A_maxit, new_B_maxit = conditional_value_swap(pointA.p_mutation_prob, pointA.net_it, pointB.net_it)
 
         # mutation radius swap
 
-        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(0.5, pointA.mutation_radius, pointB.mutation_radius)
+        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(pointA.p_mutation_prob, pointA.mutation_radius, pointB.mutation_radius)
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.lin_mut_prob, pointB.lin_mut_prob)
 
         # p prob swap
 
-        new_A_p_prob, new_B_p_prob = conditional_value_swap(0.5, pointA.p_mutation_prob, pointB.p_mutation_prob)
+        new_A_p_prob, new_B_p_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.p_mutation_prob, pointB.p_mutation_prob)
 
         # c prob swap
 
-        new_A_c_prob, new_B_c_prob = conditional_value_swap(0.5, pointA.c_prob, pointB.c_prob)
+        new_A_c_prob, new_B_c_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.c_prob, pointB.c_prob)
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
 
         # act fun prob
 
-        new_A_act_prob, new_B_act_prob = conditional_value_swap(0.5, pointA.act_mut_prob, pointB.act_mut_prob)
+        new_A_act_prob, new_B_act_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.act_mut_prob, pointB.act_mut_prob)
 
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
@@ -144,10 +149,15 @@ class FinalCO3(CrossoverOperator):
                           sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
                           c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob, act_mut_prob=new_B_act_prob)
 
-        return pointA, pointB
+        cndpA.net = pointA
+        cndpB.net = pointB
+        return cndpA.copy(), cndpB.copy()
 
 
 def find_possible_cuts99(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
+
+
+
     possible_cuts = []
     maxh = hrange.max_hidden
     minh = hrange.min_hidden
@@ -157,7 +167,11 @@ def find_possible_cuts99(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparame
             lhc = i - pointA.input_size
             rhc = pointB.hidden_end_index - j
 
-            if lhc + rhc >= minh and lhc + rhc <= maxh:
+            # if lhc + rhc >= minh and lhc + rhc <= maxh:
+            #     possible_cuts.append([i, lhc, j, rhc])
+            tol = max(1, ceil(0.1 * (hrange.max_hidden - hrange.min_hidden)))
+            tol = 1
+            if (abs(pointA.hidden_count - (lhc + rhc)) <= tol or abs(pointB.hidden_count - (lhc + rhc)) <= tol) and lhc + rhc >= minh and lhc + rhc <= maxh:
                 possible_cuts.append([i, lhc, j, rhc])
 
     while len(possible_cuts) <= 2:
@@ -196,6 +210,10 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
 
     result = np.zeros((n, n))
 
+    # Put in piece #4
+    result[i:i+left_nc, i+left_nc:i+left_nc+left_puzzles[3].shape[1]] = left_puzzles[3]
+    result[-(o+right_nc):-o, -(o+right_nc+right_puzzles[3].shape[1]):-(o+right_nc)] = right_puzzles[3]
+
     # Put in piece #1
     result[i:i+left_puzzles[0].shape[0], i:i+left_nc] = left_puzzles[0]
     result[-(o + right_puzzles[0].shape[0]):-o, aEnd:aEnd+right_nc] = right_puzzles[0]
@@ -208,43 +226,11 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
     result[i:i+left_nc, -o:] = left_puzzles[2]
     result[aEnd:aEnd+right_nc, -o:] = right_puzzles[2]
 
-    # Put in piece #4
-    result[i:i+left_nc, i+left_nc:i+left_nc+left_puzzles[3].shape[1]] = left_puzzles[3]
-    result[-(o+right_nc):-o, -(o+right_nc+right_puzzles[3].shape[1]):-(o+right_nc)] = right_puzzles[3]
-
     return result
 
 def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
     input_size = pointA.input_size
     output_size = pointA.output_size
-
-    if cut[1] != 0:
-        lA = cut[0] - pointA.hidden_start_index
-        rA = pointA.hidden_end_index - cut[0] - cut[1]
-    else:
-        lA = 0
-        rA = 0
-
-    if cut[3] != 0:
-        lB = cut[2] - pointB.hidden_start_index
-        rB = pointB.hidden_end_index - cut[2] - cut[3]
-    else:
-        lB = 0
-        rB = 0
-
-    # if lA + rB > rA + lB:
-    #     tmp = pointA
-    #     pointA = pointB
-    #     pointB = tmp
-    #
-    #     tmp = cut[0]
-    #     cut[0] = cut[2]
-    #     cut[2] = tmp
-    #
-    #     tmp = cut[1]
-    #     cut[1] = cut[3]
-    #     cut[3] = tmp
-
 
     links = piece_together_from_puzzles7(i=input_size, o=output_size,
                                          left_puzzles=cut_into_puzzles99(matrix=pointA.links, i=input_size, o=output_size,
