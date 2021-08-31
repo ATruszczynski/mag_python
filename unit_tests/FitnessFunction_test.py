@@ -125,7 +125,8 @@ def test_pure_fitness_function():
     ff = CNFF()
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(0.19999, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(0.19999, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                            [4., 0., 0.]]))
@@ -142,7 +143,8 @@ def test_pure_fitness_function2():
     ff = CNFF()
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(0.3546063, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(0.3546063, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -158,7 +160,8 @@ def test_mixed_loss_1_fun():
     ff = CNFF2(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-2.72808896, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-2.72808896, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -173,7 +176,8 @@ def test_mixed_loss_1_fun2():
     ff = CNFF2(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-2.1653777, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-2.1653777, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -189,7 +193,8 @@ def test_mixed_loss_2_fun():
     ff = CNFF3(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-2.18247117, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-2.18247117, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -204,7 +209,8 @@ def test_mixed_loss_2_fun2():
     ff = CNFF3(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-1.39752112, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-1.39752112, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -220,7 +226,8 @@ def test_pure_loss_fun():
     ff = CNFF4(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-3.4101112, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-3.4101112, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -235,7 +242,8 @@ def test_pure_loss_fun2():
     ff = CNFF4(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-3.355127, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-3.355127, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -250,7 +258,8 @@ def test_meff_loss_1():
     ff = CNFF5()
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(0.0999999, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(0.0999999, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -265,7 +274,8 @@ def test_meff_loss_2():
     ff = CNFF5()
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(0.177303165, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(0.177303165, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -280,7 +290,8 @@ def test_mixed_meff_loss_1():
     ff = CNFF6(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-3.0691000, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-3.0691000, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -295,7 +306,8 @@ def test_mixed_meff_loss_2():
     ff = CNFF6(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert res[0] == pytest.approx(-2.76025245, abs=1e-3)
+    assert len(res[0]) == 1
+    assert res[0][0] == pytest.approx(-2.76025245, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],

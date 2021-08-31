@@ -93,14 +93,14 @@ class EvolvingClassifier:
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)# TODO - S - restore
             self.history.add_it_hist(eval_pop)
-            if eval_pop[0].ff >= best[1]:
-                best = [eval_pop[0].net.copy(), eval_pop[0].ff]
+            if eval_pop[0].ff[0] >= best[1]:
+                best = [eval_pop[0].net.copy(), eval_pop[0].ff[0]]
 
             pc = 1
             lc = pc * 8
             if verbose:
                 if i % pc == 0:
-                    print(f"{i + 1} - {eval_pop[0].ff} - {eval_pop[0].to_string()},")
+                    print(f"{i + 1} - {eval_pop[0].ff[0]} - {eval_pop[0].to_string()},")
             else:
                 if i % lc == 0:
                     if i > 0:
@@ -139,8 +139,8 @@ class EvolvingClassifier:
         if power > 1:
             pool.close()
 
-        if eval_pop[0].ff >= best[1]:
-            best = [eval_pop[0].net.copy(), eval_pop[0].ff]
+        if eval_pop[0].ff[0] >= best[1]:
+            best = [eval_pop[0].net.copy(), eval_pop[0].ff[0]]
 
         if not verbose:
             print()

@@ -74,15 +74,15 @@ def test_select_05_1():
     cn5 = MockCN(5, np.array([[5, 5, 5, 5, 5]]))
 
     adp1 = CNDataPoint(cn1)
-    adp1.ff = 1.8
+    adp1.ff = [1.8, -1]
     adp2 = CNDataPoint(cn2)
-    adp2.ff = 5.4
+    adp2.ff = [5.4, -2]
     adp3 = CNDataPoint(cn3)
-    adp3.ff = 2.4
+    adp3.ff = [2.4, -3]
     adp4 = CNDataPoint(cn4)
-    adp4.ff = 5.4
+    adp4.ff = [5.4, -4]
     adp5 = CNDataPoint(cn5)
-    adp5.ff = 5.4
+    adp5.ff = [5.4, -5]
 
     list = [adp1, adp2, adp3, adp4, adp5]
 
@@ -109,15 +109,15 @@ def test_select_05_2():
     cn5 = MockCN(5, np.array([[5, 5, 5, 5, 5]]))
 
     adp1 = CNDataPoint(cn1)
-    adp1.ff = 1.8
+    adp1.ff = [1.8, -1]
     adp2 = CNDataPoint(cn2)
-    adp2.ff = 5.4
+    adp2.ff = [5.4, -2]
     adp3 = CNDataPoint(cn3)
-    adp3.ff = 5.0
+    adp3.ff = [5.0, -6]
     adp4 = CNDataPoint(cn4)
-    adp4.ff = 5.0
+    adp4.ff = [5.0, -4]
     adp5 = CNDataPoint(cn5)
-    adp5.ff = 5.4
+    adp5.ff = [5.4, -5]
 
     list = [adp1, adp2, adp3, adp4, adp5]
 
@@ -139,15 +139,15 @@ def test_select_05_3():
     cn5 = MockCN(5, np.array([[5, 5, 5, 5, 5]]))
 
     adp1 = CNDataPoint(cn1)
-    adp1.ff = 1.8
+    adp1.ff = [1.8, -1]
     adp2 = CNDataPoint(cn2)
-    adp2.ff = 5.4
+    adp2.ff = [5.4, -2]
     adp3 = CNDataPoint(cn3)
-    adp3.ff = 5.0
+    adp3.ff = [5.0, -6]
     adp4 = CNDataPoint(cn4)
-    adp4.ff = 5.0
+    adp4.ff = [5.0, -4]
     adp5 = CNDataPoint(cn5)
-    adp5.ff = 5.4
+    adp5.ff = [5.4, -5]
 
     list = [adp1, adp2, adp3, adp4, adp5]
 

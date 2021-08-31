@@ -12,7 +12,8 @@ def test_cndp_constructor():
 
     cndp1 = CNDataPoint(cn)
 
-    assert cndp1.ff == 0.
+    assert len(cndp1.ff) == 1
+    assert cndp1.ff[0] == 0.
     assert cndp1.conf_mat is None
     assert_chaos_networks_same(cndp1.net, cn)
 
@@ -73,19 +74,24 @@ def test_copy():
 
     cndp1 = CNDataPoint(cn)
 
-    cndp1.add_data(0.5, np.array([[1, 2, 0],
+    cndp1.add_data([0.5, -1, -1e4], np.array([[1, 2, 0],
                                   [2, 4, 1],
                                   [0, 2, 4]]))
     cp = cndp1.copy()
 
     assert_chaos_networks_same(cndp1.net, cp.net)
-    assert cndp1.ff == cp.ff
+    assert len(cndp1.ff) == len(cp.ff)
+    assert cndp1.ff[0] == cp.ff[0]
+    assert cndp1.ff[1] == cp.ff[1]
+    assert cndp1.ff[2] == cp.ff[2]
     assert np.array_equal(cndp1.conf_mat, cp.conf_mat)
 
     cndp1.net.input_size = 222
     assert cp.net.input_size == 2
-    cndp1.ff = -23213123
-    assert cp.ff == 0.5
+    cndp1.ff[0] = -23213123
+    cndp1.ff[2] = -111
+    assert cp.ff[0] == 0.5
+    assert cp.ff[2] == -1e4
     cndp1.conf_mat[1, 1] = 22222
     assert np.array_equal(cp.conf_mat, np.array([[1, 2, 0],
                                             [2, 4, 1],
@@ -98,18 +104,20 @@ def test_copy_2():
 
     cndp1 = CNDataPoint(cn)
 
-    cndp1.add_data(0.5, None)
+    cndp1.add_data([0.5, -12], None)
     cp = cndp1.copy()
 
     assert_chaos_networks_same(cndp1.net, cp.net)
-    assert cndp1.ff == cp.ff
+    assert len(cndp1.ff) == 2
+    assert cndp1.ff[0] == cp.ff[0]
+    assert cndp1.ff[1] == cp.ff[1]
     assert cp.conf_mat is None
 
     cndp1.net.input_size = 222
     assert cp.net.input_size == 2
-    cndp1.ff = -23213123
+    cndp1.ff[0] = -23213123
     cndp1.conf_mat = np.zeros((1, 1))
-    assert cp.ff == 0.5
+    assert cp.ff[0] == 0.5
     assert cp.conf_mat is None
 # test_copy_2()
 

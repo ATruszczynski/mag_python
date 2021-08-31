@@ -36,9 +36,9 @@ class CNFitnessCalculator(FitnessCalculator):
             results[i].add_data(new_fitnesses[i][0], new_fitnesses[i][1])
 
         for i in range(len(results)):
-            if np.isnan(results[i].ff):
-                results[i].ff = -np.inf
+            if np.isnan(results[i].ff[0]):
+                results[i].ff[0] = -np.inf
 
-        results = sorted(results, key=lambda x: x.ff, reverse=True)
+        results = sorted(results, key=lambda x: x.ff[0], reverse=True)
 
         return results

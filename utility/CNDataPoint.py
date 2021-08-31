@@ -6,10 +6,10 @@ from ann_point.Functions import *
 class CNDataPoint():
     def __init__(self, net: ChaosNet):
         self.net = net.copy()
-        self.ff = 0.
+        self.ff = [0]
         self.conf_mat = None
 
-    def add_data(self, new_ff: float, new_conf_mat: np.ndarray):
+    def add_data(self, new_ff: [float], new_conf_mat: np.ndarray):
         self.ff = new_ff
         self.conf_mat = new_conf_mat
 
@@ -46,7 +46,9 @@ class CNDataPoint():
     # TODO - A - test
     def copy(self):
         ncn = CNDataPoint(self.net.copy())
-        ncn.ff = self.ff
+        ncn.ff = []
+        for i in range(len(self.ff)):
+            ncn.ff.append(self.ff[i])
         if self.conf_mat is None:
             ncn.conf_mat = None
         else:

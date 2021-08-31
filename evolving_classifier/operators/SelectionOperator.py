@@ -20,8 +20,9 @@ class TournamentSelection05(SelectionOperator):
 
     def select(self, val_pop: [CNDataPoint]) -> ChaosNet:
         chosen = choose_without_repetition(options=val_pop, count=self.count)
-        chosen_sorted_size = sorted(chosen, key=lambda x: x.net.neuron_count)
-        chosen_sorted = sorted(chosen_sorted_size, key=lambda x: x.ff, reverse=True)
+        chosen_sorted = chosen
+        for i in reversed(range(len(val_pop[0].ff))):
+            chosen_sorted = sorted(chosen_sorted, key=lambda x: x.ff[i], reverse=True)
 
         for i in range(len(chosen_sorted) - 1):
             p = random.random()

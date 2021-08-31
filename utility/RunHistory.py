@@ -79,7 +79,7 @@ class RunHistory:
                            f"{net.edge_count},"
                            f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
                            f"{net.mutation_radius},{net.sqr_mut_prob},{net.lin_mut_prob},"
-                           f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{net.act_mut_prob},{cndatapoint.ff}")
+                           f"{net.p_mutation_prob},{net.c_prob},{net.dstr_mut_prob},{net.act_mut_prob},{cndatapoint.ff[0]}")
                 if not reg:
                     file.write(f",{cndatapoint.get_eff()}")
                     file.write(f",{cndatapoint.get_meff()}")
