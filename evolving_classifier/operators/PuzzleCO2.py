@@ -26,9 +26,7 @@ class PuzzleCO2(CrossoverOperator):
         super().__init__()
         self.hrange = hrange
 
-    def crossover(self, cndpA: CNDataPoint, cndpB: CNDataPoint) -> [CNDataPoint, CNDataPoint]:
-        pointA = cndpA.net
-        pointB = cndpB.net
+    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
 
         possible_cuts = find_possible_cuts4(pointA, pointB, self.hrange)
 
@@ -85,17 +83,15 @@ class PuzzleCO2(CrossoverOperator):
         pointC = ChaosNet(input_size=input_size, output_size=output_size, links=C_links, weights=C_weights,
                           biases=C_biases, actFuns=C_acts, aggrFun=C_aggr, net_it=C_maxit, mutation_radius=C_mut_rad,
                           depr=C_wb_prob, multi=C_s_prob, p_prob=C_p_prob,
-                          c_prob=C_c_prob, p_rad=C_r_prob, act_mut_prob=new_A_act_prob)
+                          c_prob=C_c_prob, p_rad=C_r_prob)
 
         pointD = ChaosNet(input_size=input_size, output_size=output_size, links=D_links, weights=D_weights,
                           biases=D_biases, actFuns=D_acts, aggrFun=D_aggr, net_it=D_maxit, mutation_radius=D_mut_rad,
                           depr=D_wb_prob, multi=D_s_prob, p_prob=D_p_prob,
-                          c_prob=D_c_prob, p_rad=D_r_prob, act_mut_prob=new_B_act_prob)
+                          c_prob=D_c_prob, p_rad=D_r_prob)
 
-        cndpA.net = pointC
-        cndpB.net = pointD
 
-        return cndpA.copy(), cndpB.copy()
+        return pointC.copy(), pointD.copy()
 
 def get_link_weights_biases_acts(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
     input_size = pointA.input_size

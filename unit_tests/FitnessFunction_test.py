@@ -323,11 +323,11 @@ def test_avmin_loss_1():
 
     point = get_point()
     i, o = get_io()
-    ff = AVMIN(QuadDiff())
+    ff = AVMAX(QuadDiff())
     res = ff.compute(point, i, o)
 
     assert len(res[0]) == 1
-    assert res[0][0] == pytest.approx(-0.23142119, abs=1e-3)
+    assert res[0][0] == pytest.approx(-0.2232926431627285, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -339,11 +339,11 @@ def test_avmin_loss_2():
 
     point = get_point2()
     i, o = get_io2()
-    ff = AVMIN(QuadDiff())
+    ff = AVMAX(QuadDiff())
     res = ff.compute(point, i, o)
 
     assert len(res[0]) == 1
-    assert res[0][0] == pytest.approx(-0.24596954, abs=1e-3)
+    assert res[0][0] == pytest.approx(-0.229847722, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -502,31 +502,31 @@ def test_avmin_loss_2():
 
 
 
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point()
-i, o = get_io()
-
-test = net.test(i, o, QuadDiff())
-qd = -(test[1] + 9 * test[2])/10
-print(qd)
-print(test[0])
-
-test_avmin_loss_1()
-
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point2()
-i, o = get_io2()
-
-test = net.test(i, o, QuadDiff())
-qd = -(test[1] + 9 * test[2])/10
-print(qd)
-print(test[0])
-
-test_avmin_loss_2()
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# qd = -(test[1] + test[2])/2
+# print(qd)
+# print(test[0])
+#
+# test_avmin_loss_1()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# qd = -(test[1] + test[2])/2
+# print(qd)
+# print(test[0])
+#
+# test_avmin_loss_2()
 
 
 

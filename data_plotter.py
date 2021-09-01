@@ -36,7 +36,7 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
     df_max.plot(kind='line',x='name',y='max', color='red', ax=ax, label="max")
 
     if "ff1" is parameter_name or "ff2" is parameter_name or "ff3" is parameter_name:
-        maxff = df_max.max()
+        maxff = df_min.max()
         if 0.2 <= maxff <= 1:
             plt.ylim((0, 1))
         elif maxff <= 0.3:
@@ -47,6 +47,8 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
         elif maxff >= 10000:
             plt.ylim((1, 1e6))
             plt.yscale("log")
+        else:
+            plt.ylim((0, maxff))
     if parameter_name == "eff" or parameter_name == "meff":
         plt.ylim((-0.1, 1.1))
     plt.ylabel(parameter_name)
@@ -72,121 +74,30 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
 
 
-# dir_name = "iris_co1_ff1_so"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-
-# dir_name = "iris_co1_ff1_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
 
-# dir_name = "iris_co3_ff1_so"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 
-# dir_name = "iris_co3_ff1_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-
-
-# dir_name = "iris_co1_ff4_so"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-# dir_name = "iris_co1_ff4_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-#
-# dir_name = "iris_co3_ff4_so"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-# dir_name = "iris_co3_ff4_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-
-
-# dir_name = "iris_co1_ff5_so"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-# dir_name = "iris_co1_ff5_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-#
-# dir_name = "iris_co3_ff5_so"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-# dir_name = "iris_co3_ff5_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-
-# dir_name = "iris_co3_ff4_sos"
-# dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-#
-# dir_name = "iris_co3_ff4_sos_2"
+# dir_name = "wwiness_avmin"
 # dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 # plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
+# plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
+# # plot_min_max_avg(dfs, "ff2", f"ff2-{dir_name}")
 # plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
+# plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
+# plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
+# # plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
 #
-#
-# dir_name = "iris_co3_ff4_sos_3"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# # plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
+# # plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
+# # plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
+# # plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
+# # plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
+# # plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
+# # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
 
 
-# dir_name = "german_ff7"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-# # plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
-# # plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")
-# # plot_min_max_avg(dfs, "fp", f"fp-{dir_name}")
-# # plot_min_max_avg(dfs, "tn", f"tn-{dir_name}")
-
-# dir_name = "german_ff8_es"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "cp", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "sqrp", f"eff-{dir_name}")
-
-# dir_name = "german_ff7_es"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "cp", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "sqrp", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
-# plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")
-# plot_min_max_avg(dfs, "fp", f"fp-{dir_name}")
-# plot_min_max_avg(dfs, "tn", f"tn-{dir_name}")
-
-
-
-dir_name = "wwiness_cnmeff"
+dir_name = "iris_avmax_nmo"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
 plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
@@ -194,7 +105,7 @@ plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
 plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
 plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
 plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
-plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
+# plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
 # plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
 
 plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
@@ -202,7 +113,7 @@ plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
 plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
 # plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
 # plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
-# plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
+plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
 # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
 
 # dir_name = "wines2_cp2"

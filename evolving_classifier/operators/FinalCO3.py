@@ -105,6 +105,8 @@ class FinalCO3(CrossoverOperator):
         dstr_pm = 10 ** pointA.p_rad
         p_pm = 0
 
+        dd = 10 ** pointA.depr
+
         new_A_aggr, new_B_aggr = conditional_value_swap(dstr_pm, pointA.aggrFun, pointB.aggrFun)
 
         # maxIt swap
@@ -113,27 +115,27 @@ class FinalCO3(CrossoverOperator):
 
         # mutation radius swap
 
-        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(0.5, pointA.mutation_radius, pointB.mutation_radius)
+        new_A_mut_rad, new_B_mut_rad = conditional_value_swap(dd, pointA.mutation_radius, pointB.mutation_radius)
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.depr, pointB.depr)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(dd, pointA.depr, pointB.depr)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.multi, pointB.multi)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(dd, pointA.multi, pointB.multi)
 
         # p prob swap
 
-        new_A_p_prob, new_B_p_prob = conditional_value_swap(0.5, pointA.p_prob, pointB.p_prob)
+        new_A_p_prob, new_B_p_prob = conditional_value_swap(dd, pointA.p_prob, pointB.p_prob)
 
         # c prob swap
 
-        new_A_c_prob, new_B_c_prob = conditional_value_swap(0.5, pointA.c_prob, pointB.c_prob)
+        new_A_c_prob, new_B_c_prob = conditional_value_swap(dd, pointA.c_prob, pointB.c_prob)
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.p_rad, pointB.p_rad)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(dd, pointA.p_rad, pointB.p_rad)
 
         # act fun prob
 
@@ -164,12 +166,16 @@ def find_possible_cuts99(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparame
             B_rhc = pointB.hidden_end_index - j
             B_lhc = pointB.hidden_count - B_rhc
 
+            nrhc = A_lhc + B_rhc
+
             # if A_lhc + B_rhc >= minh and A_lhc + B_rhc <= maxh:
             #     possible_cuts.append([i, A_lhc, j, B_rhc])
             tol = max(1, ceil(0.1 * (hrange.max_hidden - hrange.min_hidden)))
             tol = 2
-            if min(B_rhc - A_rhc, A_lhc - B_lhc) <= tol and A_lhc + B_rhc >= minh and A_lhc + B_rhc <= maxh:
-                possible_cuts.append([i, A_lhc, j, B_rhc])
+            if nrhc >= minh and nrhc <= maxh:
+                if min(B_rhc - A_rhc, A_lhc - B_lhc) <= tol:
+                    if abs(pointA.hidden_count - (nrhc)) <= tol or abs(pointB.hidden_count - (nrhc)) <= tol:
+                        possible_cuts.append([i, A_lhc, j, B_rhc])
 
     while len(possible_cuts) <= 2:
         possible_cuts.append([pointA.hidden_start_index, 0, pointB.hidden_end_index, 0])

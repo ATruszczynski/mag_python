@@ -92,6 +92,8 @@ class EvolvingClassifier:
         for i in range(iterations):
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
                                        trainOutputs=self.trainOutputs)# TODO - S - restore
+
+
             self.history.add_it_hist(eval_pop)
             if eval_pop[0].ff[0] >= best[1]:
                 best = [eval_pop[0].net.copy(), eval_pop[0].ff[0]]

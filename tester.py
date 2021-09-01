@@ -169,8 +169,12 @@ def write_test_parameters(data_file, tt:TupleForTest):
     data_file.write("actfuns: ")
     for i in range(len(hrange.actFunSet)):
         data_file.write(hrange.actFunSet[i].to_string() + ", ")
-
     data_file.write("\n")
+    if hrange.aggrFuns is not None:
+        data_file.write("aggrfuns: ")
+        for i in range(len(hrange.aggrFuns)):
+            data_file.write(hrange.aggrFuns[i].to_string() + ", ")
+        data_file.write("\n")
 
 
 def create_test_data_file(fpath: str, tt: TupleForTest):

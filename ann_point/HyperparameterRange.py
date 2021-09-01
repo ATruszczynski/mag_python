@@ -5,7 +5,7 @@ from utility.Utility2 import assert_acts_same
 class HyperparameterRange:
     def __init__(self, init_wei: (float, float), init_bia: (float, float), it: (int, int), hidden_count: (int, int),
                  actFuns: [ActFun], mut_radius: (float, float), depr: (float, float), multi: (float, float),
-                 p_prob: (float, float), c_prob: (float, float), p_rad: (float, float)):
+                 p_prob: (float, float), c_prob: (float, float), p_rad: (float, float), aggrFuns: [ActFun] = None):
         self.min_init_wei = init_wei[0]
         self.max_init_wei = init_wei[1]
         self.min_init_bia = init_bia[0]
@@ -18,6 +18,14 @@ class HyperparameterRange:
         self.actFunSet = []
         for i in range(len(actFuns)):
             self.actFunSet.append(actFuns[i].copy())
+
+        if aggrFuns is None:
+            self.aggrFuns = aggrFuns
+        else:
+            self.aggrFuns = []
+            for i in range(len(aggrFuns)):
+                self.aggrFuns.append(aggrFuns[i].copy())
+
 
         self.min_mut_radius = mut_radius[0]
         self.max_mut_radius = mut_radius[1]
@@ -40,7 +48,7 @@ class HyperparameterRange:
                                    multi=(self.min_multi, self.max_multi),
                                    p_prob=(self.min_p_prob, self.max_p_prob),
                                    c_prob=(self.min_c_prob, self.max_c_prob),
-                                   p_rad=(self.min_p_rad, self.max_p_rad))
+                                   p_rad=(self.min_p_rad, self.max_p_rad), aggrFuns=self.aggrFuns)
 
 def assert_hranges_same(hrange1: HyperparameterRange, hrange2: HyperparameterRange):
     assert hrange1.min_init_wei == hrange2.min_init_wei

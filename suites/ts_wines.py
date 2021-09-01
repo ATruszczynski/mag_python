@@ -33,7 +33,7 @@ def get_data():
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
     qualities = data_frame["quality"].unique()
-    tt = 25
+    tt = 20
     frames = []
     for i in qualities:
         df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
@@ -71,12 +71,11 @@ def test_suite_for_wine():
         tests = []
 
         repetitions = 2
-        population_size = 100
-        iterations = 200
+        population_size = 600
+        iterations = 150
         # population_size = 250
         # iterations = 100
-        starg = max(2, ceil(0.01 * population_size))
-        starg = 4
+        starg = max(2, ceil(0.05 * population_size))
         power = 12
         seed = 1001
 
@@ -85,42 +84,10 @@ def test_suite_for_wine():
             seeds.append(random.randint(0, 10**6))
         hrange = get_default_hrange_es7()
 
-        # tests.append(TupleForTest(name=f"wines10_co3", rep=repetitions, seed=seeds[3], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
-        #                           fft=[CNFF5], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name=f"wines16_50_10_2_10", rep=repetitions, seed=seeds[3], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection06, starg],
-        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name=f"winess", rep=repetitions, seed=seeds[0], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name=f"winesss", rep=repetitions, seed=seeds[0], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-        #                           fft=[CNF1], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name=f"winessss2", rep=repetitions, seed=seeds[0], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 4],
-        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        # tests.append(TupleForTest(name=f"winess_meff", rep=repetitions, seed=seeds[0], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-        #                           fft=[CNMEFF], fct=CNFitnessCalculator, reg=False))#ciekwe rez dla F1 ff
-        # tests.append(TupleForTest(name=f"wwiness_qdmeff", rep=repetitions, seed=seeds[0], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))#ciekwe rez dla F1 ff
-        # tests.append(TupleForTest(name=f"wwiness_cnmeff", rep=repetitions, seed=seeds[0], popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-        #                           fft=[CNMEFF], fct=CNFitnessCalculator, reg=False))
         tests.append(TupleForTest(name=f"wwiness_avmin", rep=repetitions, seed=seeds[0], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMIN, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"7_winesss", rep=repetitions, seed=seeds[0], popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],

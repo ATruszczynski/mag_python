@@ -38,7 +38,11 @@ class FinalMutationOperator(MutationOperator):
             nact.append(conditional_try_choose_different(dstr_pm, point.actFuns[i], self.hrange.actFunSet))
         nact.extend(point.output_size * [None])
 
-        aggr = conditional_try_choose_different(dstr_pm, point.aggrFun, self.hrange.actFunSet)
+        if self.hrange.aggrFuns is None:
+            aggr = conditional_try_choose_different(dstr_pm, point.aggrFun, self.hrange.actFunSet)
+        else:
+            aggr = conditional_try_choose_different(dstr_pm, point.aggrFun, self.hrange.aggrFuns)
+
 
         links_rev, weights_rev = add_or_remove_edges(dstr_pm, point.links, weights_shifted, get_weight_mask(point.input_size, point.output_size, point.neuron_count), hrange=self.hrange)
 

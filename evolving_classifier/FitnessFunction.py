@@ -186,7 +186,7 @@ class CNFFT2(FitnessFunction):
 
         return [result, cm]
 
-class CNMEFF(FitnessFunction):
+class MEFF(FitnessFunction):
     def __init__(self):
         super().__init__()
 
@@ -197,7 +197,7 @@ class CNMEFF(FitnessFunction):
 
         return [[m_efficiency(cm), efficiency(cm), -net.neuron_count], cm]
 
-class AVMIN(FitnessFunction):
+class AVMAX(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__()
         self.lossFun = lossFun
@@ -209,7 +209,7 @@ class AVMIN(FitnessFunction):
         av_qd = test_results[1]
         min_qd = test_results[2]
 
-        qd = (av_qd + 9 * min_qd)/10
+        qd = (av_qd + min_qd)/2
 
         return [[-qd], cm]
 
