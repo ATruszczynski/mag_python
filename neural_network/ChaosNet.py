@@ -26,11 +26,11 @@ class ChaosNet:
         check_cond_in_cn_const(len(actFuns) == biases.shape[1])
         check_cond_in_cn_const(net_it >= 1)
         # check_cond_in_cn_const(mutation_radius <= 0)
-        check_cond_in_cn_const(sqr_mut_prob <= 0)
-        check_cond_in_cn_const(lin_mut_prob <= 0)
+        # check_cond_in_cn_const(sqr_mut_prob <= 0)
+        # check_cond_in_cn_const(lin_mut_prob <= 0)
         check_cond_in_cn_const(p_mutation_prob <= 0)
         check_cond_in_cn_const(c_prob <= 0)
-        check_cond_in_cn_const(dstr_mut_prob <= 0)
+        # check_cond_in_cn_const(dstr_mut_prob <= 0)
 
         nonzl = np.where(links != 0)
         nonzw = np.where(weights != 0)
@@ -73,13 +73,12 @@ class ChaosNet:
 
         self.mutation_radius = mutation_radius
 
-        self.p_mutation_prob = p_mutation_prob
+        self.sqr_mut_prob = sqr_mut_prob
+        self.modi_nc = lin_mut_prob
         self.c_prob = c_prob
-
-        self.sqr_mut_prob = log10(1. / self.neuron_count)
-        self.lin_mut_prob = log10(1. / self.neuron_count)
-        self.dstr_mut_prob = log10(1. / self.neuron_count**2)
-        self.act_mut_prob = log10(1. / self.neuron_count**2)
+        self.p_mutation_prob = p_mutation_prob
+        self.p_rad = dstr_mut_prob
+        # self.act_mut_prob = act_mut_prob
 
         self.edge_count = np.sum(self.links)
 
@@ -262,8 +261,8 @@ class ChaosNet:
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
                         , net_it=self.net_it, mutation_radius=self.mutation_radius, sqr_mut_prob=self.sqr_mut_prob,
-                        lin_mut_prob=self.lin_mut_prob, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
-                        dstr_mut_prob=self.dstr_mut_prob)
+                        lin_mut_prob=self.modi_nc, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
+                        dstr_mut_prob=self.p_rad)
 
     def get_edge_count(self):
         how_many = np.sum(self.links)
@@ -297,8 +296,8 @@ class ChaosNet:
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.get_edge_count())}|{self.net_it}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
-                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.sqr_mut_prob, 5)}|s:{round(self.lin_mut_prob, 5)}" \
-                  f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.dstr_mut_prob, 5)}"
+                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.sqr_mut_prob, 5)}|s:{round(self.modi_nc, 5)}" \
+                  f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.p_rad, 5)}"
 
         return result
 

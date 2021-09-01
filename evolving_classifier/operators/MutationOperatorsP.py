@@ -26,9 +26,9 @@ class FinalMutationOperatorP(MutationOperator):
 
         point = point.copy()
         sqr_pm =    10 ** point.sqr_mut_prob
-        lin_pm =    10 ** point.lin_mut_prob
+        lin_pm =    10 ** point.modi_nc
         p_pm =      10 ** point.p_mutation_prob
-        dstr_pm =  10 ** point.dstr_mut_prob
+        dstr_pm =  10 ** point.p_rad
         act_pm = 10 ** point.act_mut_prob
         radius =    10 ** point.mutation_radius
 
@@ -41,10 +41,10 @@ class FinalMutationOperatorP(MutationOperator):
 
         mutation_radius = point.mutation_radius
         sqr_mut_prob = point.sqr_mut_prob
-        lin_mut_prob = point.lin_mut_prob
+        lin_mut_prob = point.modi_nc
         p_mutation_prob = point.p_mutation_prob
         c_prob = point.c_prob
-        dstr_mut_prob = point.dstr_mut_prob
+        dstr_mut_prob = point.p_rad
         act_mut_prob = point.act_mut_prob
 
         p = random.random()
@@ -53,10 +53,10 @@ class FinalMutationOperatorP(MutationOperator):
             rad_frac = 0.1
             mutation_radius = conditional_uniform_value_shift(1, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
             sqr_mut_prob = conditional_uniform_value_shift(1, point.sqr_mut_prob, self.hrange.min_sqr_mut_prob, self.hrange.max_sqr_mut_prob, rad_frac)
-            lin_mut_prob = conditional_uniform_value_shift(1, point.lin_mut_prob, self.hrange.min_lin_mut_prob, self.hrange.max_lin_mut_prob, rad_frac)
+            lin_mut_prob = conditional_uniform_value_shift(1, point.modi_nc, self.hrange.min_lin_mut_prob, self.hrange.max_lin_mut_prob, rad_frac)
             p_mutation_prob = conditional_uniform_value_shift(1, point.p_mutation_prob, self.hrange.min_p_mut_prob, self.hrange.max_p_mut_prob, rad_frac)
             c_prob = conditional_uniform_value_shift(1, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)
-            dstr_mut_prob = conditional_uniform_value_shift(1, point.dstr_mut_prob, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
+            dstr_mut_prob = conditional_uniform_value_shift(1, point.p_rad, self.hrange.min_dstr_mut_prob, self.hrange.max_dstr_mut_prob, rad_frac)
             act_mut_prob = conditional_uniform_value_shift(1, point.act_mut_prob, self.hrange.min_act_mut_prob, self.hrange.max_act_mut_prob, rad_frac)
 
             # mutation_radius = conditional_gaussian_value_shift(1, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)

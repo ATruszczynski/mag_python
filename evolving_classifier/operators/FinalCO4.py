@@ -191,7 +191,7 @@ class FinalCO4(CrossoverOperator):
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.modi_nc, pointB.modi_nc)
 
         # p prob swap
 
@@ -203,7 +203,7 @@ class FinalCO4(CrossoverOperator):
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.p_rad, pointB.p_rad)
 
         # act fun prob
 

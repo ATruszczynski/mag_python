@@ -290,8 +290,9 @@ def test_mixed_meff_loss_1():
     ff = CNFF6(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 1
-    assert res[0][0] == pytest.approx(-3.0691000, abs=1e-3)
+    assert len(res[0]) == 2
+    assert res[0][0] == pytest.approx(-3.410111209, abs=1e-3)
+    assert res[0][1] == pytest.approx(0.199999999, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -306,8 +307,9 @@ def test_mixed_meff_loss_2():
     ff = CNFF6(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 1
-    assert res[0][0] == pytest.approx(-2.76025245, abs=1e-3)
+    assert len(res[0]) == 2
+    assert res[0][0] == pytest.approx(-3.355127113, abs=1e-3)
+    assert res[0][1] == pytest.approx(0.3546063, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -438,29 +440,31 @@ def test_mixed_meff_loss_2():
 #
 # test_meff_loss_2()
 
-# seed = 1001
-# random.seed(seed)
-# np.random.seed(seed)
-# net = get_point()
-# i, o = get_io()
-#
-# test = net.test(i, o, QuadDiff())
-# print(-(1.0 - mean([m_efficiency(test[0]), efficiency(test[0])]))*test[1])
-# print(test[0])
-#
-# test_mixed_meff_loss_1()
-#
-# seed = 1001
-# random.seed(seed)
-# np.random.seed(seed)
-# net = get_point2()
-# i, o = get_io2()
-#
-# test = net.test(i, o, QuadDiff())
-# print(-(1.0 - mean([m_efficiency(test[0]), efficiency(test[0])]))*test[1])
-# print(test[0])
-#
-# test_mixed_meff_loss_2()
+seed = 1001
+random.seed(seed)
+np.random.seed(seed)
+net = get_point()
+i, o = get_io()
+
+test = net.test(i, o, QuadDiff())
+print(-(1.0 - m_efficiency(test[0]))*test[1])
+print(efficiency(test[0]))
+print(test[0])
+
+test_mixed_meff_loss_1()
+
+seed = 1001
+random.seed(seed)
+np.random.seed(seed)
+net = get_point2()
+i, o = get_io2()
+
+test = net.test(i, o, QuadDiff())
+print(-(1.0 - m_efficiency(test[0]))*test[1])
+print(efficiency(test[0]))
+print(test[0])
+
+test_mixed_meff_loss_2()
 
 
 

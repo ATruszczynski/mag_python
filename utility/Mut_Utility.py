@@ -55,8 +55,8 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
 
     return ChaosNet(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
-                    sqr_mut_prob=net.sqr_mut_prob, lin_mut_prob=net.lin_mut_prob, p_mutation_prob=net.p_mutation_prob,
-                    c_prob=net.c_prob, dstr_mut_prob=net.dstr_mut_prob)
+                    sqr_mut_prob=net.sqr_mut_prob, lin_mut_prob=net.modi_nc, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, dstr_mut_prob=net.p_rad)
 
 
 def decrease_neuron_count(net: ChaosNet, to_remove: int):
@@ -77,8 +77,8 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
 
     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
-                    sqr_mut_prob=net.sqr_mut_prob, lin_mut_prob=net.lin_mut_prob, p_mutation_prob=net.p_mutation_prob,
-                    c_prob=net.c_prob, dstr_mut_prob=net.dstr_mut_prob)
+                    sqr_mut_prob=net.sqr_mut_prob, lin_mut_prob=net.modi_nc, p_mutation_prob=net.p_mutation_prob,
+                    c_prob=net.c_prob, dstr_mut_prob=net.p_rad)
 
 # def inflate_network(net: ChaosNet, to_add: int): #TODO - D - tests missed wrong maxit
 #     new_neuron_count = net.neuron_count + to_add

@@ -102,7 +102,7 @@ class FinalCO3(CrossoverOperator):
         # for i in range(output_size):
         #     new_B_func.append(None)
 
-        dstr_pm = 10 ** pointA.dstr_mut_prob
+        dstr_pm = 10 ** pointA.p_rad
         p_pm = 0
 
         new_A_aggr, new_B_aggr = conditional_value_swap(dstr_pm, pointA.aggrFun, pointB.aggrFun)
@@ -121,7 +121,7 @@ class FinalCO3(CrossoverOperator):
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.modi_nc, pointB.modi_nc)
 
         # p prob swap
 
@@ -133,7 +133,7 @@ class FinalCO3(CrossoverOperator):
 
         # r prob swap
 
-        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
+        new_A_r_prob, new_B_r_prob = conditional_value_swap(0.5, pointA.p_rad, pointB.p_rad)
 
         # act fun prob
 

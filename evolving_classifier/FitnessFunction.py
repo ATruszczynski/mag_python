@@ -90,7 +90,10 @@ class CNFF6(FitnessFunction):
 
         result = -(1.00 - mmeff) * test_results[1]
 
-        return [[mmeff, -test_results[1]], cm]
+        lf = test_results[1]
+
+
+        return [[-(1 - meff) * lf, eff], cm]
 
 # TODO - A - test
 class CNFF7(FitnessFunction):
@@ -151,7 +154,7 @@ class CNF1(FitnessFunction):
 
         result = average_f1_score(cm)
 
-        return [[result], cm]
+        return [[result, -net.neuron_count], cm]
 
 class CNFFT(FitnessFunction):
     def __init__(self, lossFun: LossFun):
@@ -167,6 +170,32 @@ class CNFFT(FitnessFunction):
         result = [average_f1_score(cm), -qd]
 
         return [result, cm]
+
+class CNFFT2(FitnessFunction):
+    def __init__(self, lossFun: LossFun):
+        super().__init__()
+        self.lossFun = lossFun
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
+
+        cm = test_results[0]
+        qd = test_results[1]
+
+        result = [0, -qd]
+
+        return [result, cm]
+
+class CNMEFF(FitnessFunction):
+    def __init__(self):
+        super().__init__()
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
+
+        cm = test_results[0]
+
+        return [[m_efficiency(cm), efficiency(cm), -net.neuron_count], cm]
 
 
 

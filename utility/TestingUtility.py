@@ -60,12 +60,12 @@ def assert_chaos_network_properties(net: ChaosNet,
     assert net.p_mutation_prob == pytest.approx(desired_p_prob, 1e-4)
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
 
-    desired_wb_prob = log10(1 / desired_neuron_count)
-    desired_s_prob = log10(1 / desired_neuron_count)
-    desired_r_prob = log10(1 / desired_neuron_count**2)
+    # desired_wb_prob = log10(1 / desired_neuron_count)
+    # desired_s_prob = log10(1 / desired_neuron_count)
+    # desired_r_prob = log10(1 / desired_neuron_count**2)
     assert net.sqr_mut_prob == pytest.approx(desired_wb_prob, 1e-4)
-    assert net.lin_mut_prob == pytest.approx(desired_s_prob, 1e-4)
-    assert net.dstr_mut_prob == pytest.approx(desired_r_prob, 1e-4)
+    assert net.modi_nc == pytest.approx(desired_s_prob, 1e-4)
+    assert net.p_rad == pytest.approx(desired_r_prob, 1e-4)
 
 def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
     assert_chaos_network_properties(net,
@@ -83,10 +83,10 @@ def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
                                     desired_maxit=net2.net_it,
                                     desired_mut_rad=net2.mutation_radius,
                                     desired_wb_prob=net2.sqr_mut_prob,
-                                    desired_s_prob=net2.lin_mut_prob,
+                                    desired_s_prob=net2.modi_nc,
                                     desired_p_prob=net2.p_mutation_prob,
                                     desired_c_prob=net2.c_prob,
-                                    desired_r_prob=net2.dstr_mut_prob,
+                                    desired_r_prob=net2.p_rad,
                                     desired_hidden_comp_order=net2.hidden_comp_order,
                                     desired_inp=net2.inp,
                                     desired_act=net2.act)

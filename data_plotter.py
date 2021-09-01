@@ -15,7 +15,11 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
     with pd.option_context('mode.use_inf_as_na', True):
         for i in range(len(frames)):
             frame = frames[i]
-            frame['ff'] = frame['ff'].abs()
+            frame['ff1'] = frame['ff1'].abs()
+            if "ff2" in frame.index:
+                frame['ff2'] = frame['ff2'].abs()
+            if "ff3" in frame.index:
+                frame['ff3'] = frame['ff3'].abs()
             frame.replace([np.inf, -np.inf], np.nan, inplace=True)
             mins.append(frame.groupby("it").min()[parameter_name])
             means.append(frame.groupby("it").mean()[parameter_name])
@@ -31,9 +35,9 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
     df_mean.plot(kind='line',x='name',y='mean', color='green', ax=ax, label="mean")
     df_max.plot(kind='line',x='name',y='max', color='red', ax=ax, label="max")
 
-    if parameter_name == "ff":
-        maxff = df_mean.max()
-        if 0.3 <= maxff <= 1:
+    if "ff1" is parameter_name or "ff2" is parameter_name or "ff3" is parameter_name:
+        maxff = df_max.max()
+        if 0.2 <= maxff <= 1:
             plt.ylim((0, 1))
         elif maxff <= 0.3:
             plt.yscale("log")
@@ -182,19 +186,20 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
 
 
-dir_name = "winessss2"
+dir_name = "wwiness_qdmeff"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
-# plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
-# # plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
+plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
+# plot_min_max_avg(dfs, "ff2", f"ff2-{dir_name}")
+plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
+plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
+plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
 # plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
 
 plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
 # plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
-# plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
+plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
 # plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
 # plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
 # plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")

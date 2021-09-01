@@ -36,12 +36,12 @@ def test_fitness_calculator_with_pure_eff():
 
     assert_chaos_networks_same(res[0].net, anns[1])
     assert len(res[0].ff) == 1
-    assert res[0].ff[0] == pytest.approx(0.19999999, abs=1e-3)
-    assert res[0].get_acc() == pytest.approx(0.25, abs=1e-3)
-    assert res[0].get_avg_prec() == pytest.approx(0.0833333, abs=1e-3)
+    assert res[0].ff[0] == pytest.approx(0.3055555555555555, abs=1e-3)
+    assert res[0].get_acc() == pytest.approx(0.5, abs=1e-3)
+    assert res[0].get_avg_prec() == pytest.approx(0.1666666, abs=1e-3)
     assert res[0].get_avg_rec() == pytest.approx(0.3333333, abs=1e-3)
-    assert res[0].get_avg_f1() == pytest.approx(0.1333333, abs=1e-3)
-    assert res[0].get_eff() == pytest.approx(0.19999999, abs=1e-3)
+    assert res[0].get_avg_f1() == pytest.approx(0.222222222, abs=1e-3)
+    assert res[0].get_eff() == pytest.approx(0.30555555, abs=1e-3)
     assert res[0].get_meff() == pytest.approx(0.0, abs=1e-3)
 
     assert_chaos_networks_same(res[1].net, anns[0])

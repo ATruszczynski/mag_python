@@ -63,7 +63,7 @@ class PuzzleCO2(CrossoverOperator):
 
         # s prob swap
 
-        C_s_prob, D_s_prob = conditional_value_swap(0.5, pointA.lin_mut_prob, pointB.lin_mut_prob)
+        C_s_prob, D_s_prob = conditional_value_swap(0.5, pointA.modi_nc, pointB.modi_nc)
 
         # p prob swap
 
@@ -75,7 +75,7 @@ class PuzzleCO2(CrossoverOperator):
 
         # r prob swap
 
-        C_r_prob, D_r_prob = conditional_value_swap(0.5, pointA.dstr_mut_prob, pointB.dstr_mut_prob)
+        C_r_prob, D_r_prob = conditional_value_swap(0.5, pointA.p_rad, pointB.p_rad)
 
         # act fun prob
 

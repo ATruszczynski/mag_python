@@ -94,10 +94,10 @@ def net_to_file(net: ChaosNet, dirpath: str, tresult: [Any]):
     file.write(f"net_it: \n{net.net_it}\n")
     file.write(f"mutation_radius: \n{net.mutation_radius}\n")
     file.write(f"sqr_mut_prob: \n{net.sqr_mut_prob}\n")
-    file.write(f"lin_mut_prob: \n{net.lin_mut_prob}\n")
+    file.write(f"lin_mut_prob: \n{net.modi_nc}\n")
     file.write(f"p_mutation_prob: \n{net.p_mutation_prob}\n")
     file.write(f"c_prob: \n{net.c_prob}\n")
-    file.write(f"dstr_mut_prob: \n{net.dstr_mut_prob}\n")
+    file.write(f"dstr_mut_prob: \n{net.p_rad}\n")
 
     file.write(f"results:\n")
     write_down_test_results(file, net, tresult)

@@ -216,19 +216,15 @@ def test_simple_crossover():
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
                    aggrFun=SincAct(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2,
-                   lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+                   lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=log10(0.75))
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
                    aggrFun=GaussAct(), net_it=10, mutation_radius=-10, sqr_mut_prob=-20,
                    lin_mut_prob=-30, p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
-
     co = FinalCO3(hrange)
 
     seed = 1006
     random.seed(seed)
     np.random.seed(seed)
-
-    cn1.p_mutation_prob = log10(0.4)
-    cn1.dstr_mut_prob = log10(0.75)
 
     cn3, cn4 = co.crossover(cn1, cn2)
 
@@ -315,10 +311,10 @@ def test_simple_crossover():
                                     desired_maxit=10,
                                     desired_mut_rad=-1,
                                     desired_wb_prob=-2,
-                                    desired_s_prob=-3,
-                                    desired_p_prob=log10(0.4),
-                                    desired_c_prob=-5,
-                                    desired_r_prob=log10(0.4))
+                                    desired_s_prob=-30,
+                                    desired_p_prob=-40,
+                                    desired_c_prob=-50,
+                                    desired_r_prob=log10(0.75))
 
     ##################################################################
 
@@ -345,9 +341,9 @@ def test_simple_crossover():
                                     desired_maxit=1,
                                     desired_mut_rad=-10,
                                     desired_wb_prob=-20,
-                                    desired_s_prob=-30,
-                                    desired_p_prob=-40,
-                                    desired_c_prob=-50,
+                                    desired_s_prob=-3,
+                                    desired_p_prob=-4,
+                                    desired_c_prob=-5,
                                     desired_r_prob=-60)
 
 def test_simple_crossover_2():
@@ -389,7 +385,7 @@ def test_simple_crossover_2():
 
     cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
                    aggrFun=SincAct(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3,
-                   p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+                   p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=log10(0.4))
     cn2 = ChaosNet(input_size=1, output_size=1, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
                    aggrFun=GaussAct(), net_it=10, mutation_radius=-10, sqr_mut_prob=-20, lin_mut_prob=-30,
                    p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
@@ -399,7 +395,6 @@ def test_simple_crossover_2():
     seed = 1002
     random.seed(seed)
     np.random.seed(seed)
-    cn1.dstr_mut_prob = log10(0.75)
     cn3, cn4 = co.crossover(cn1, cn2)
 
 
@@ -498,13 +493,13 @@ def test_simple_crossover_2():
                                     desired_biases=np.array([[0., -2, -3, -40, -50, -60, -70, -5]]),
                                     desired_actFun=[None, ReLu(), ReLu(), TanH(), TanH(), TanH(), TanH(), None],
                                     desired_aggr=GaussAct(),
-                                    desired_maxit=10,
+                                    desired_maxit=1,
                                     desired_mut_rad=-1,
                                     desired_wb_prob=-2,
                                     desired_s_prob=-3,
-                                    desired_p_prob=-4,
-                                    desired_c_prob=-5,
-                                    desired_r_prob=log10(0.75))
+                                    desired_p_prob=-40,
+                                    desired_c_prob=-50,
+                                    desired_r_prob=-60)
 
     ###################################################################
 
@@ -526,13 +521,13 @@ def test_simple_crossover_2():
                                     desired_biases=np.array([[0., -2, -3, -5]]),
                                     desired_actFun=[None, ReLu(), ReLu(), None],
                                     desired_aggr=SincAct(),
-                                    desired_maxit=1,
+                                    desired_maxit=10,
                                     desired_mut_rad=-10,
                                     desired_wb_prob=-20,
                                     desired_s_prob=-30,
-                                    desired_p_prob=-40,
-                                    desired_c_prob=-50,
-                                    desired_r_prob=-60)
+                                    desired_p_prob=-4,
+                                    desired_c_prob=-5,
+                                    desired_r_prob=log10(0.4))
 
 def test_pieceing_together():
     seed = 1001
@@ -843,53 +838,59 @@ def test_pieceing_together():
 
 
 
-hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 20), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
+hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
                              sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
-                             dstr_mut_prob=(0, 0)) # values irrelevant aside from neuron count
+                             dstr_mut_prob=(0, 0))
 
-link1 = np.array([[0, 1, 1, 0, 0],
-                  [0, 0, 1, 0, 1],
-                  [0, 1, 0, 0, 1],
-                  [0, 0, 0, 0, 0],
+link1 = np.array([[0, 1, 1, 1, 0],
+                  [0, 0, 1, 1, 1],
+                  [0, 1, 0, 1, 1],
+                  [0, 1, 1, 0, 1],
                   [0, 0, 0, 0, 0]])
-wei1 = np.array([[0., 1, 2, 0, 0],
-                 [0 , 0, 3, 0, 5],
-                 [0 , 7, 0, 0, 6],
-                 [0 , 0, 0, 0, 0],
-                 [0 , 0, 0, 0, 0]])
-bia1 = np.array([[0., -2, -3, -4, -5]])
-actFuns1 = [None, ReLu(), ReLu(), None, None]
+wei1 = np.array([[0,  -1,  -2,  -3,   0],
+                 [0,   0,  -4,  -5,  -6],
+                 [0,  -7,   0,  -8,  -9],
+                 [0, -10, -11,   0, -12],
+                 [0,   0,   0,   0,   0]])
+bia1 = np.array([[0., -2, -3, -4, -5.]])
+actFuns1 = [None, ReLu(), ReLu(), ReLu(), None]
 
-link2 = np.array([[0, 0, 0, 0, 0],
-                  [0, 0, 1, 1, 0],
-                  [0, 0, 0, 1, 1],
-                  [0, 0, 0, 0, 0],
-                  [0, 0, 0, 0, 0]])
-wei2 = np.array([[0, 0, 0,  0,  0],
-                 [0, 0, 10, 20, 0],
-                 [0, 0, 0,  30, 40],
-                 [0, 0, 0,  0,  0],
-                 [0, 0, 0,  0,  0]])
-bia2 = np.array([[0., -20, -30, -40, -50]])
-actFuns2 = [None, TanH(), TanH(), None, None]
+link2 = np.array([[0, 1, 1, 1, 1, 1, 1, 0],
+                  [0, 0, 1, 1, 1, 1, 1, 1],
+                  [0, 1, 0, 1, 1, 1, 1, 1],
+                  [0, 1, 1, 0, 1, 1, 1, 1],
+                  [0, 1, 1, 1, 0, 1, 1, 1],
+                  [0, 1, 1, 1, 1, 0, 1, 1],
+                  [0, 1, 1, 1, 1, 1, 0, 1],
+                  [0, 0, 0, 0, 0, 0, 0, 0]])
+wei2 = np.array([[0,   1,   2,   3,   4,   5,   6,   0],
+                 [0,   0,   7,   8,   8,  10,  11,  12],
+                 [0,  13,   0,  14,  15,  16,  17,  18],
+                 [0,  19,  20,   0,  21,  22,  23,  24],
+                 [0,  25,  26,  27,   0,  28,  29,  30],
+                 [0,  31,  32,  33,  34,   0,  35,  36],
+                 [0,  37,  38,  39,  40,  41,   0,  42],
+                 [0,   0,   0,   0,   0,   0,   0,   0]])
+bia2 = np.array([[0, -20, -30, -40, -50, -60, -70, -80]])
+actFuns2 = [None, TanH(), TanH(), TanH(), TanH(), TanH(), TanH(), None]
 
-cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-               aggrFun=SincAct(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2,
-               lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
-cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-               aggrFun=GaussAct(), net_it=10, mutation_radius=-10, sqr_mut_prob=-20,
-               lin_mut_prob=-30, p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
+cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
+               aggrFun=SincAct(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3,
+               p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=log10(0.4))
+cn2 = ChaosNet(input_size=1, output_size=1, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
+               aggrFun=GaussAct(), net_it=10, mutation_radius=-10, sqr_mut_prob=-20, lin_mut_prob=-30,
+               p_mutation_prob=-40, c_prob=-50, dstr_mut_prob=-60)
 
-seed = 1006
+seed = 1002
 random.seed(seed)
 np.random.seed(seed)
 cuts = choose_without_repetition(find_possible_cuts99(cn1, cn2, hrange), 2)
 print(f"choice: {cuts[0]}")
 print(f"choice: {cuts[1]}")
 print(f"bias_swap_1_1: \n {random.random()}")
-print(f"bias_swap_1_2: \n {random.random()}")
+# print(f"bias_swap_1_2: \n {random.random()}")
 print(f"bias_swap_2_1: \n {random.random()}")
-print(f"bias_swap_2_2: \n {random.random()}")
+# print(f"bias_swap_2_2: \n {random.random()}")
 print(f"prob_swap_aggr: \n {random.random()}")
 print(f"prob_swap_maxit: \n {random.random()}")
 print(f"swap_mut_rad: \n {random.random()}")
