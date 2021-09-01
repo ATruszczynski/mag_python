@@ -55,13 +55,12 @@ def test_suite_for_iris():
 
         tests = []
 
-        repetitions = 3
-        population_size = 300
-        iterations = 50
-        starg = 4
+        repetitions = 2
+        population_size = 500
+        iterations = 150
         starg = max(2, ceil(0.05 * population_size))
         power = 12
-        seed = 1001
+        seed = 10011001
 
         # seeds = []
         # for i in range(4):
@@ -72,10 +71,18 @@ def test_suite_for_iris():
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
         #                           fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
         hrange = get_default_hrange_es7()
-        tests.append(TupleForTest(name=f"iris_avmax_nmo", rep=repetitions, seed=seed, popSize=population_size,
+        # tests.append(TupleForTest(name=f"iris_avmax_ff6", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_avmax_ff6_10", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],
+                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        # tests.append(TupleForTest(name=f"iris_avmax_so_50", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 50],
+        #                           fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"iris_avmax", rep=repetitions, seed=seed, popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 2*starg],

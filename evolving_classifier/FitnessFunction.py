@@ -88,12 +88,10 @@ class CNFF6(FitnessFunction):
 
         mmeff = mean([eff, meff])
 
-        result = -(1.00 - mmeff) * test_results[1]
-
         lf = test_results[1]
 
 
-        return [[-(1 - meff) * lf, eff], cm]
+        return [[-(1 - meff) * lf, -lf], cm]
 
 # TODO - A - test
 class CNFF7(FitnessFunction):
