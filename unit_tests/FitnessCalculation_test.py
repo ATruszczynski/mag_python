@@ -16,8 +16,8 @@ def get_io():
 
 def points():
     result = generate_population(HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 3), [ReLu(), Sigmoid(), SincAct()], mut_radius=(-10, 0),
-                                                     sqr_mut_prob=(-0.05, 0), lin_mut_prob=(-0.6, 0), p_mutation_prob=(-0.4, 0.), c_prob=(-0.001, 0.),
-                                                     dstr_mut_prob=(-0.1, 0)), 2, 2, 3)
+                                                     depr=(-0.05, 0), multi=(-0.6, 0), p_prob=(-0.4, 0.), c_prob=(-0.001, 0.),
+                                                     p_rad=(-0.1, 0)), 2, 2, 3)
     return result
 
 

@@ -186,7 +186,7 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
 
 
-dir_name = "wwiness_qdmeff"
+dir_name = "wwiness_cnmeff"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
 plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")

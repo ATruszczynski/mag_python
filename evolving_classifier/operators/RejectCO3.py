@@ -142,15 +142,15 @@ class RejectCO3(CrossoverOperator):
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.depr, pointB.depr)
 
         # s prob swap
 
-        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.modi_nc, pointB.modi_nc)
+        new_A_s_prob, new_B_s_prob = conditional_value_swap(0.5, pointA.multi, pointB.multi)
 
         # p prob swap
 
-        new_A_p_prob, new_B_p_prob = conditional_value_swap(0.5, pointA.p_mutation_prob, pointB.p_mutation_prob)
+        new_A_p_prob, new_B_p_prob = conditional_value_swap(0.5, pointA.p_prob, pointB.p_prob)
 
         # c prob swap
 
@@ -162,13 +162,13 @@ class RejectCO3(CrossoverOperator):
 
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
-                          sqr_mut_prob=new_A_wb_prob, lin_mut_prob=new_A_s_prob, p_mutation_prob=new_A_p_prob,
-                          c_prob=new_A_c_prob, dstr_mut_prob=new_A_r_prob)
+                          depr=new_A_wb_prob, multi=new_A_s_prob, p_prob=new_A_p_prob,
+                          c_prob=new_A_c_prob, p_rad=new_A_r_prob)
 
         pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
                           biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_maxit, mutation_radius=new_B_mut_rad,
-                          sqr_mut_prob=new_B_wb_prob, lin_mut_prob=new_B_s_prob, p_mutation_prob=new_B_p_prob,
-                          c_prob=new_B_c_prob, dstr_mut_prob=new_B_r_prob)
+                          depr=new_B_wb_prob, multi=new_B_s_prob, p_prob=new_B_p_prob,
+                          c_prob=new_B_c_prob, p_rad=new_B_r_prob)
 
         return pointA, pointB
 

@@ -49,15 +49,15 @@ class PuzzleCO(CrossoverOperator):
 
         # wb prob swap
 
-        C_wb_prob, D_wb_prob = conditional_value_swap(0.5, pointA.sqr_mut_prob, pointB.sqr_mut_prob)
+        C_wb_prob, D_wb_prob = conditional_value_swap(0.5, pointA.depr, pointB.depr)
 
         # s prob swap
 
-        C_s_prob, D_s_prob = conditional_value_swap(0.5, pointA.modi_nc, pointB.modi_nc)
+        C_s_prob, D_s_prob = conditional_value_swap(0.5, pointA.multi, pointB.multi)
 
         # p prob swap
 
-        C_p_prob, D_p_prob = conditional_value_swap(0.5, pointA.p_mutation_prob, pointB.p_mutation_prob)
+        C_p_prob, D_p_prob = conditional_value_swap(0.5, pointA.p_prob, pointB.p_prob)
 
         # c prob swap
 
@@ -70,13 +70,13 @@ class PuzzleCO(CrossoverOperator):
 
         pointC = ChaosNet(input_size=input_size, output_size=output_size, links=C_links, weights=C_weights,
                           biases=C_biases, actFuns=C_acts, aggrFun=C_aggr, net_it=C_maxit, mutation_radius=C_mut_rad,
-                          sqr_mut_prob=C_wb_prob, lin_mut_prob=C_s_prob, p_mutation_prob=C_p_prob,
-                          c_prob=C_c_prob, dstr_mut_prob=C_r_prob)
+                          depr=C_wb_prob, multi=C_s_prob, p_prob=C_p_prob,
+                          c_prob=C_c_prob, p_rad=C_r_prob)
 
         pointD = ChaosNet(input_size=input_size, output_size=output_size, links=D_links, weights=D_weights,
                           biases=D_biases, actFuns=D_acts, aggrFun=D_aggr, net_it=D_maxit, mutation_radius=D_mut_rad,
-                          sqr_mut_prob=D_wb_prob, lin_mut_prob=D_s_prob, p_mutation_prob=D_p_prob,
-                          c_prob=D_c_prob, dstr_mut_prob=D_r_prob)
+                          depr=D_wb_prob, multi=D_s_prob, p_prob=D_p_prob,
+                          c_prob=D_c_prob, p_rad=D_r_prob)
 
         return pointC, pointD
 

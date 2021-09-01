@@ -4,8 +4,8 @@ from utility.Utility import get_testing_hrange
 
 def test_hparam():
     hrange = HyperparameterRange((1, 2), (3, 4), (1, 5), (10, 20), [ReLu(), Sigmoid(), TanH(), Softmax()], mut_radius=(0, 1),
-                                 sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
-                                 dstr_mut_prob=(0.45, 0.75))
+                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
+                                 p_rad=(0.45, 0.75))
 
     assert hrange.min_init_wei == 1
     assert hrange.max_init_wei == 2
@@ -24,16 +24,16 @@ def test_hparam():
 
     assert hrange.min_mut_radius == 0
     assert hrange.max_mut_radius == 1
-    assert hrange.min_sqr_mut_prob == 0.05
-    assert hrange.max_sqr_mut_prob == 0.1
-    assert hrange.min_lin_mut_prob == 0.6
-    assert hrange.max_lin_mut_prob == 0.7
-    assert hrange.min_p_mut_prob == 0.4
-    assert hrange.max_p_mut_prob == 0.6
+    assert hrange.min_depr == 0.05
+    assert hrange.max_depr == 0.1
+    assert hrange.min_multi == 0.6
+    assert hrange.max_multi == 0.7
+    assert hrange.min_p_prob == 0.4
+    assert hrange.max_p_prob == 0.6
     assert hrange.min_c_prob == 0.61
     assert hrange.max_c_prob == 0.71
-    assert hrange.min_dstr_mut_prob == 0.45
-    assert hrange.max_dstr_mut_prob == 0.75
+    assert hrange.min_p_rad == 0.45
+    assert hrange.max_p_rad == 0.75
 
 def test_hrange_copy():
     hrange = get_testing_hrange()

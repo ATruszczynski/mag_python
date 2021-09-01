@@ -64,8 +64,8 @@ def test_tt_copy():
 
     assert_tts_same(tt1, tt2)
 
-    tt1.hrange.max_sqr_mut_prob = 222
-    assert tt2.hrange.max_sqr_mut_prob == -2
+    tt1.hrange.max_depr = 222
+    assert tt2.hrange.max_depr == -2
 
     tt1.data[3][2][-2, 0] = 333
     assert tt2.data[3][2][-2, 0] == 0

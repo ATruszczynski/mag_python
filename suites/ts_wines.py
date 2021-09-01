@@ -33,7 +33,7 @@ def get_data():
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
     qualities = data_frame["quality"].unique()
-    tt = 200
+    tt = 25
     frames = []
     for i in qualities:
         df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
@@ -71,8 +71,8 @@ def test_suite_for_wine():
         tests = []
 
         repetitions = 2
-        population_size = 500
-        iterations = 50
+        population_size = 100
+        iterations = 200
         # population_size = 250
         # iterations = 100
         starg = max(2, ceil(0.01 * population_size))
@@ -113,10 +113,14 @@ def test_suite_for_wine():
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
         #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))#ciekwe rez dla F1 ff
-        tests.append(TupleForTest(name=f"wwiness_cnmeff", rep=repetitions, seed=seeds[0], popSize=population_size,
+        # tests.append(TupleForTest(name=f"wwiness_cnmeff", rep=repetitions, seed=seeds[0], popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[CNMEFF], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"wwiness_avmin", rep=repetitions, seed=seeds[0], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[CNMEFF], fct=CNFitnessCalculator, reg=False))
+                                  fft=[AVMIN, QuadDiff], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"7_winesss", rep=repetitions, seed=seeds[0], popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],

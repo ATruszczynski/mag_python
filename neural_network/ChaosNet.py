@@ -12,8 +12,8 @@ from utility.Utility2 import *
 
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
-                 actFuns: [ActFun], aggrFun: ActFun, net_it: int, mutation_radius: float, sqr_mut_prob: float,
-                 lin_mut_prob: float, p_mutation_prob: float, c_prob: float, dstr_mut_prob: float):
+                 actFuns: [ActFun], aggrFun: ActFun, net_it: int, mutation_radius: float, depr: float,
+                 multi: float, p_prob: float, c_prob: float, p_rad: float):
 
         check_cond_in_cn_const(links.shape[0] == links.shape[1])
         check_cond_in_cn_const(links.shape[0] >= input_size + output_size)
@@ -28,7 +28,7 @@ class ChaosNet:
         # check_cond_in_cn_const(mutation_radius <= 0)
         # check_cond_in_cn_const(sqr_mut_prob <= 0)
         # check_cond_in_cn_const(lin_mut_prob <= 0)
-        check_cond_in_cn_const(p_mutation_prob <= 0)
+        check_cond_in_cn_const(p_prob <= 0)
         check_cond_in_cn_const(c_prob <= 0)
         # check_cond_in_cn_const(dstr_mut_prob <= 0)
 
@@ -73,12 +73,12 @@ class ChaosNet:
 
         self.mutation_radius = mutation_radius
 
-        self.sqr_mut_prob = sqr_mut_prob
-        self.modi_nc = lin_mut_prob
+        self.depr = depr
+        self.multi = multi
         self.c_prob = c_prob
-        self.p_mutation_prob = p_mutation_prob
-        self.p_rad = dstr_mut_prob
-        # self.act_mut_prob = act_mut_prob
+        self.p_prob = p_prob
+        self.p_rad = p_rad
+        self.depr_2 = 0
 
         self.edge_count = np.sum(self.links)
 
@@ -150,7 +150,7 @@ class ChaosNet:
         out_size = self.output_size
         confusion_matrix = np.zeros((out_size, out_size))
 
-        resultt = 0
+        resultt = []
 
         cont_inputs = np.hstack(test_input)
         net_results = self.run(cont_inputs)
@@ -163,11 +163,11 @@ class ChaosNet:
             confusion_matrix[corr_class, pred_class] += 1
             if lf is not None:
                 lfcc = lf.compute(net_result, to)
-                resultt += lfcc
+                resultt.append(lfcc)
 
         test_res = [confusion_matrix]
         if lf is not None:
-            test_res.append(resultt)
+            test_res.extend([mean(resultt), max(resultt)])
         return test_res
 
     # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
@@ -260,9 +260,9 @@ class ChaosNet:
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
-                        , net_it=self.net_it, mutation_radius=self.mutation_radius, sqr_mut_prob=self.sqr_mut_prob,
-                        lin_mut_prob=self.modi_nc, p_mutation_prob=self.p_mutation_prob, c_prob=self.c_prob,
-                        dstr_mut_prob=self.p_rad)
+                        , net_it=self.net_it, mutation_radius=self.mutation_radius, depr=self.depr,
+                        multi=self.multi, p_prob=self.p_prob, c_prob=self.c_prob,
+                        p_rad=self.p_rad)
 
     def get_edge_count(self):
         how_many = np.sum(self.links)
@@ -296,8 +296,8 @@ class ChaosNet:
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.get_edge_count())}|{self.net_it}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
-                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.sqr_mut_prob, 5)}|s:{round(self.modi_nc, 5)}" \
-                  f"|p:{round(self.p_mutation_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.p_rad, 5)}"
+                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.depr, 5)}|s:{round(self.multi, 5)}" \
+                  f"|p:{round(self.p_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.p_rad, 5)}"
 
         return result
 

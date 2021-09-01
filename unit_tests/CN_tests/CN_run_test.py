@@ -25,7 +25,7 @@ def test_cn_run():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   net_it=2, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+                   net_it=2, mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     result = net.run(np.array([[0], [0]]))
 
@@ -124,7 +124,7 @@ def test_cn_run2():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   net_it=2, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+                   net_it=2, mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     result = net.run(np.array([[0], [1]]))
 
@@ -226,8 +226,8 @@ def test_multiple_runs():
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   net_it=2, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5,
-                   dstr_mut_prob=-6)
+                   net_it=2, mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5,
+                   p_rad=-6)
 
     results = []
 
@@ -262,7 +262,7 @@ def test_run_with_cycle_1_run():
     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
     actFun = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun, aggrFun=Softmax(), net_it=1,
-                  mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6)
+                  mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     res1 = cn.run(np.array([[-1, 0.5], [1, -2]]))
 
@@ -334,8 +334,8 @@ def test_run_with_cycle_2_run():
 
     actFun = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), None, None]
     cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun,
-                  aggrFun=Softmax(), net_it=2, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4,
-                  c_prob=-5, dstr_mut_prob=-6)
+                  aggrFun=Softmax(), net_it=2, mutation_radius=-1, depr=-2, multi=-3, p_prob=-4,
+                  c_prob=-5, p_rad=-6)
 
     res1 = cn.run(np.array([[-1, 0.5], [1, -2]]))
 
@@ -449,8 +449,8 @@ def test_faster_run():
     bias = np.array([[0, 0, 0, 0, 1, -0.5]])
     actFuns = [None, None, None, ReLu(), ReLu(), None]
     net = ChaosNet(input_size=3, output_size=1, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Sigmoid(),
-                   net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3, p_mutation_prob=-4, c_prob=-5,
-                   dstr_mut_prob=-6)
+                   net_it=1, mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5,
+                   p_rad=-6)
 
     inputs = np.array([[0, 1], [1, 0], [0, 1]])
     expected = np.array([[0.377540669, 0.182425524]])

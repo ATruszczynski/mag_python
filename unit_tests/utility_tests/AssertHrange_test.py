@@ -223,7 +223,7 @@ def test_diff_min_sqr_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.min_sqr_mut_prob = -100
+    hrange2.min_depr = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -239,7 +239,7 @@ def test_diff_max_sqr_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.max_sqr_mut_prob = -100
+    hrange2.max_depr = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -255,7 +255,7 @@ def test_diff_min_lin_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.min_lin_mut_prob = -100
+    hrange2.min_multi = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -271,7 +271,7 @@ def test_diff_max_lin_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.max_lin_mut_prob = -100
+    hrange2.max_multi = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -287,7 +287,7 @@ def test_diff_min_p_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.min_p_mut_prob = -100
+    hrange2.min_p_prob = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -303,7 +303,7 @@ def test_diff_max_p_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.max_p_mut_prob = -100
+    hrange2.max_p_prob = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -351,7 +351,7 @@ def test_diff_min_dstr_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.min_dstr_mut_prob = -100
+    hrange2.min_p_rad = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -367,7 +367,7 @@ def test_diff_max_dstr_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.max_dstr_mut_prob = -100
+    hrange2.max_p_rad = -100
 
     try:
         assert_hranges_same(hrange, hrange2)

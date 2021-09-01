@@ -4,8 +4,8 @@ from utility.Utility2 import assert_acts_same
 
 class HyperparameterRange:
     def __init__(self, init_wei: (float, float), init_bia: (float, float), it: (int, int), hidden_count: (int, int),
-                 actFuns: [ActFun], mut_radius: (float, float), sqr_mut_prob: (float, float), lin_mut_prob: (float, float),
-                 p_mutation_prob: (float, float), c_prob: (float, float), dstr_mut_prob: (float, float)):
+                 actFuns: [ActFun], mut_radius: (float, float), depr: (float, float), multi: (float, float),
+                 p_prob: (float, float), c_prob: (float, float), p_rad: (float, float)):
         self.min_init_wei = init_wei[0]
         self.max_init_wei = init_wei[1]
         self.min_init_bia = init_bia[0]
@@ -21,26 +21,26 @@ class HyperparameterRange:
 
         self.min_mut_radius = mut_radius[0]
         self.max_mut_radius = mut_radius[1]
-        self.min_sqr_mut_prob = sqr_mut_prob[0]
-        self.max_sqr_mut_prob = sqr_mut_prob[1]
-        self.min_lin_mut_prob = lin_mut_prob[0]
-        self.max_lin_mut_prob = lin_mut_prob[1]
-        self.min_p_mut_prob = p_mutation_prob[0]
-        self.max_p_mut_prob = p_mutation_prob[1]
+        self.min_depr = depr[0]
+        self.max_depr = depr[1]
+        self.min_multi = multi[0]
+        self.max_multi = multi[1]
+        self.min_p_prob = p_prob[0]
+        self.max_p_prob = p_prob[1]
         self.min_c_prob = c_prob[0]
         self.max_c_prob = c_prob[1]
-        self.min_dstr_mut_prob = dstr_mut_prob[0]
-        self.max_dstr_mut_prob = dstr_mut_prob[1]
+        self.min_p_rad = p_rad[0]
+        self.max_p_rad = p_rad[1]
 
     def copy(self):
         return HyperparameterRange(init_wei=(self.min_init_wei, self.max_init_wei), init_bia=(self.min_init_bia, self.max_init_bia),
                                    it=(self.min_it, self.max_it), hidden_count=(self.min_hidden, self.max_hidden),
                                    actFuns=self.actFunSet, mut_radius=(self.min_mut_radius, self.max_mut_radius),
-                                   sqr_mut_prob=(self.min_sqr_mut_prob, self.max_sqr_mut_prob),
-                                   lin_mut_prob=(self.min_lin_mut_prob, self.max_lin_mut_prob),
-                                   p_mutation_prob=(self.min_p_mut_prob, self.max_p_mut_prob),
+                                   depr=(self.min_depr, self.max_depr),
+                                   multi=(self.min_multi, self.max_multi),
+                                   p_prob=(self.min_p_prob, self.max_p_prob),
                                    c_prob=(self.min_c_prob, self.max_c_prob),
-                                   dstr_mut_prob=(self.min_dstr_mut_prob, self.max_dstr_mut_prob))
+                                   p_rad=(self.min_p_rad, self.max_p_rad))
 
 def assert_hranges_same(hrange1: HyperparameterRange, hrange2: HyperparameterRange):
     assert hrange1.min_init_wei == hrange2.min_init_wei
@@ -56,16 +56,16 @@ def assert_hranges_same(hrange1: HyperparameterRange, hrange2: HyperparameterRan
 
     assert hrange1.min_mut_radius == hrange2.min_mut_radius
     assert hrange1.max_mut_radius == hrange2.max_mut_radius
-    assert hrange1.min_sqr_mut_prob == hrange2.min_sqr_mut_prob
-    assert hrange1.max_sqr_mut_prob == hrange2.max_sqr_mut_prob
-    assert hrange1.min_lin_mut_prob == hrange2.min_lin_mut_prob
-    assert hrange1.max_lin_mut_prob == hrange2.max_lin_mut_prob
-    assert hrange1.min_p_mut_prob == hrange2.min_p_mut_prob
-    assert hrange1.max_p_mut_prob == hrange2.max_p_mut_prob
+    assert hrange1.min_depr == hrange2.min_depr
+    assert hrange1.max_depr == hrange2.max_depr
+    assert hrange1.min_multi == hrange2.min_multi
+    assert hrange1.max_multi == hrange2.max_multi
+    assert hrange1.min_p_prob == hrange2.min_p_prob
+    assert hrange1.max_p_prob == hrange2.max_p_prob
     assert hrange1.min_c_prob == hrange2.min_c_prob
     assert hrange1.max_c_prob == hrange2.max_c_prob
-    assert hrange1.min_dstr_mut_prob == hrange2.min_dstr_mut_prob
-    assert hrange1.max_dstr_mut_prob == hrange2.max_dstr_mut_prob
+    assert hrange1.min_p_rad == hrange2.min_p_rad
+    assert hrange1.max_p_rad == hrange2.max_p_rad
 
     
     

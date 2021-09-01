@@ -197,6 +197,22 @@ class CNMEFF(FitnessFunction):
 
         return [[m_efficiency(cm), efficiency(cm), -net.neuron_count], cm]
 
+class AVMIN(FitnessFunction):
+    def __init__(self, lossFun: LossFun):
+        super().__init__()
+        self.lossFun = lossFun
+
+    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+        test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
+
+        cm = test_results[0]
+        av_qd = test_results[1]
+        min_qd = test_results[2]
+
+        qd = (av_qd + 9 * min_qd)/10
+
+        return [[-qd], cm]
+
 
 
 

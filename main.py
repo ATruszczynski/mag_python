@@ -74,8 +74,8 @@ wei1 = np.array([[0, 1, 1, 0],
 bia1 = np.array([[0., -2, -3, -4]])
 actFuns1 = [None, ReLu(), ReLu(), None]
 cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-               aggrFun=ReLu(), net_it=1, mutation_radius=-1, sqr_mut_prob=-2, lin_mut_prob=-3,
-               p_mutation_prob=-4, c_prob=-5, dstr_mut_prob=-6, act_mut_prob=-7)
+               aggrFun=ReLu(), net_it=1, mutation_radius=-1, depr=-2, multi=-3,
+               p_prob=-4, c_prob=-5, p_rad=-6, act_mut_prob=-7)
 
 res = cn1.run(np.array([[1, 2]]))
 

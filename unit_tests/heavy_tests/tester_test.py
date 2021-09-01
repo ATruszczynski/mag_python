@@ -35,8 +35,8 @@ def test_tester_same_as_ec_ind():
     how_many = 10
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(-2, 0), sqr_mut_prob=(-2, 0), lin_mut_prob=(-2, 0), p_mutation_prob=(-2, 0), c_prob=(-2, 0),
-                                 dstr_mut_prob=(-2, 0))
+                                 mut_radius=(-2, 0), depr=(-2, 0), multi=(-2, 0), p_prob=(-2, 0), c_prob=(-2, 0),
+                                 p_rad=(-2, 0))
 
     test = TupleForTest(name="test_desu", rep=how_many, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                         ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
@@ -82,16 +82,16 @@ def test_tester_determinism():
         ut_rep = 10
 
         hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Poly2(), Poly3(), Identity(), ReLu(), Sigmoid(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                     mut_radius=(-2, 0), sqr_mut_prob=(-2, 0), lin_mut_prob=(-2, 0), p_mutation_prob=(-2, 0), c_prob=(-2, 0),
-                                     dstr_mut_prob=(-2, 0))
+                                     mut_radius=(-2, 0), depr=(-2, 0), multi=(-2, 0), p_prob=(-2, 0), c_prob=(-2, 0),
+                                     p_rad=(-2, 0))
 
         test = TupleForTest(name="deter_test_desu", rep=rep, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                             ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
                             fft=[CNFF], fct=CNFitnessCalculator, reg=False)
 
         hrange = HyperparameterRange((-2, 1), (-1, 2), (2, 6), (4, 20), [Poly2(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                     mut_radius=(-2, 0), sqr_mut_prob=(-3, 0), lin_mut_prob=(-2, 0), p_mutation_prob=(-2, 0), c_prob=(-2, 0),
-                                     dstr_mut_prob=(-3, 0))
+                                     mut_radius=(-2, 0), depr=(-3, 0), multi=(-2, 0), p_prob=(-2, 0), c_prob=(-2, 0),
+                                     p_rad=(-3, 0))
 
         test2 = TupleForTest(name="deter_test_desu2", rep=2*rep, seed=2*seed, popSize=2*popSize, data=[x, y, X, Y], iterations=2*iterations, hrange=hrange,
                             ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection, 3],

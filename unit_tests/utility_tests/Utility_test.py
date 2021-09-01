@@ -158,8 +158,8 @@ def test_ohe():
 
 def test_generate_population_limits():
     hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(-1, 0),
-                                 sqr_mut_prob=(-2, -1), lin_mut_prob=(-3, -2), p_mutation_prob=(-4, -3), c_prob=(-5, -4),
-                                 dstr_mut_prob=(-6, -5))
+                                 depr=(-2, -1), multi=(-3, -2), p_prob=(-4, -3), c_prob=(-5, -4),
+                                 p_rad=(-6, -5))
 
     random.seed(1001)
     n = 200
@@ -229,11 +229,11 @@ def test_generate_population_limits():
             all_weights.append(net.weights[r, c])
 
         all_mut_rad.append(net.mutation_radius)
-        all_p_mut.append(net.p_mutation_prob)
+        all_p_mut.append(net.p_prob)
         all_c_prob.append(net.c_prob)
 
-        all_wb_mut.append(net.sqr_mut_prob)
-        all_s_mut.append(net.modi_nc)
+        all_wb_mut.append(net.depr)
+        all_s_mut.append(net.multi)
         all_r_prob.append(net.p_rad)
 
     assert max(all_weights) <= 2

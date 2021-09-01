@@ -80,8 +80,8 @@ class RunHistory:
                 file.write(f"{it + 1},{rk + 1},{net.input_size},{net.output_size},{net.neuron_count},"
                            f"{net.edge_count},"
                            f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
-                           f"{net.mutation_radius},{net.sqr_mut_prob},{net.modi_nc},"
-                           f"{net.p_mutation_prob},{net.c_prob},{net.p_rad},{net.act_mut_prob}")
+                           f"{net.mutation_radius},{net.depr},{net.multi},"
+                           f"{net.p_prob},{net.c_prob},{net.p_rad},{net.depr_2}")
                 for f in range(len(cndatapoint.ff)):
                     file.write(f",{cndatapoint.ff[f]}")
                 if not reg:

@@ -97,19 +97,19 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         maxit = random.randint(hrange.min_it, hrange.max_it)
 
         mut_radius = random.uniform(hrange.min_mut_radius, hrange.max_mut_radius)
-        sqr_mut_prob = random.uniform(hrange.min_sqr_mut_prob, hrange.max_sqr_mut_prob)
-        lin_mut_prob = random.uniform(hrange.min_lin_mut_prob, hrange.max_lin_mut_prob)
-        p_mut_prob = random.uniform(hrange.min_p_mut_prob, hrange.max_p_mut_prob)
+        sqr_mut_prob = random.uniform(hrange.min_depr, hrange.max_depr)
+        lin_mut_prob = random.uniform(hrange.min_multi, hrange.max_multi)
+        p_mut_prob = random.uniform(hrange.min_p_prob, hrange.max_p_prob)
         c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
-        dstr_prob = random.uniform(hrange.min_dstr_mut_prob, hrange.max_dstr_mut_prob)
+        dstr_prob = random.uniform(hrange.min_p_rad, hrange.max_p_rad)
         # a_prob = random.uniform(hrange.min_act_mut_prob, hrange.max_act_mut_prob)
 
 
 
         cn = ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
                       biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
-                      sqr_mut_prob=sqr_mut_prob, lin_mut_prob=lin_mut_prob, p_mutation_prob=p_mut_prob,
-                      c_prob=c_prob, dstr_mut_prob=dstr_prob)
+                      depr=sqr_mut_prob, multi=lin_mut_prob, p_prob=p_mut_prob,
+                      c_prob=c_prob, p_rad=dstr_prob)
 
         result.append(cn)
 
@@ -136,9 +136,9 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 def get_default_hrange_ga():#TODO - S - przemyśl to
     hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 50),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-1, -1), sqr_mut_prob=(-2, -2), lin_mut_prob=(-1, -1),
-                                 p_mutation_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
-                                 dstr_mut_prob=(log10(0.005), log10(0.005)))
+                                 mut_radius=(-1, -1), depr=(-2, -2), multi=(-1, -1),
+                                 p_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
+                                 p_rad=(log10(0.005), log10(0.005)))
     return hrange
 
 # #TODO - B - zasadniczo możnaby wyrzucić tworzenie obiektów funkcji tutaj (done?)
@@ -282,15 +282,15 @@ def get_default_hrange_es7():
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(50, 50),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(20, 20),
                                  actFuns=[ReLu(), TanH()],
                                  # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-3, -0),
+                                 mut_radius=(-4, -0),
                                  c_prob=(log10(0.8), log10(0.8)),
-                                 sqr_mut_prob=(log10(0.001), log10(0.001)),
-                                 lin_mut_prob=(-2, 2),
-                                 p_mutation_prob=(log10(0.01), log10(0.01)),
-                                 dstr_mut_prob=(log10(0.001), log10(0.001)))
+                                 depr=(log10(0.001), log10(0.001)),
+                                 multi=(-2, 2),
+                                 p_prob=(log10(1), log10(1)),
+                                 p_rad=(log10(0.05), log10(0.05)))
 
     # hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(30, 50),
     #                              actFuns=[ReLu(), TanH()],
@@ -413,11 +413,11 @@ def get_testing_hrange():
         hidden_count=(6, 7),
         actFuns=[ReLu(), Identity(), Sigmoid(), Poly2()],
         mut_radius=(8, 9),
-        sqr_mut_prob=(10, 11),
-        lin_mut_prob=(12, 13),
-        p_mutation_prob=(14, 15),
+        depr=(10, 11),
+        multi=(12, 13),
+        p_prob=(14, 15),
         c_prob=(16, 17),
-        dstr_mut_prob=(18, 19)
+        p_rad=(18, 19)
     )
 
 def translate_german(data_frame: pd.DataFrame, fpath: str):

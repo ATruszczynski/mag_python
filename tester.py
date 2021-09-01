@@ -93,9 +93,9 @@ def net_to_file(net: ChaosNet, dirpath: str, tresult: [Any]):
     file.write(f"aggrFun: \n{net.aggrFun.to_string()}\n")
     file.write(f"net_it: \n{net.net_it}\n")
     file.write(f"mutation_radius: \n{net.mutation_radius}\n")
-    file.write(f"sqr_mut_prob: \n{net.sqr_mut_prob}\n")
-    file.write(f"lin_mut_prob: \n{net.modi_nc}\n")
-    file.write(f"p_mutation_prob: \n{net.p_mutation_prob}\n")
+    file.write(f"sqr_mut_prob: \n{net.depr}\n")
+    file.write(f"lin_mut_prob: \n{net.multi}\n")
+    file.write(f"p_mutation_prob: \n{net.p_prob}\n")
     file.write(f"c_prob: \n{net.c_prob}\n")
     file.write(f"dstr_mut_prob: \n{net.p_rad}\n")
 
@@ -155,16 +155,16 @@ def write_test_parameters(data_file, tt:TupleForTest):
 
     data_file.write(f"min_mut_radius: {hrange.min_mut_radius}\n")
     data_file.write(f"max_mut_radius: {hrange.max_mut_radius}\n")
-    data_file.write(f"min_sqr_mut_prob: {hrange.min_sqr_mut_prob}\n")
-    data_file.write(f"max_sqr_mut_prob: {hrange.max_sqr_mut_prob}\n")
-    data_file.write(f"min_lin_mut_prob: {hrange.min_lin_mut_prob}\n")
-    data_file.write(f"max_lin_mut_prob: {hrange.max_lin_mut_prob}\n")
-    data_file.write(f"min_p_mut_prob: {hrange.min_p_mut_prob}\n")
-    data_file.write(f"max_p_mut_prob: {hrange.max_p_mut_prob}\n")
+    data_file.write(f"min_sqr_mut_prob: {hrange.min_depr}\n")
+    data_file.write(f"max_sqr_mut_prob: {hrange.max_depr}\n")
+    data_file.write(f"min_lin_mut_prob: {hrange.min_multi}\n")
+    data_file.write(f"max_lin_mut_prob: {hrange.max_multi}\n")
+    data_file.write(f"min_p_mut_prob: {hrange.min_p_prob}\n")
+    data_file.write(f"max_p_mut_prob: {hrange.max_p_prob}\n")
     data_file.write(f"min_c_prob: {hrange.min_c_prob}\n")
     data_file.write(f"max_c_prob: {hrange.max_c_prob}\n")
-    data_file.write(f"min_dstr_mut_prob: {hrange.min_dstr_mut_prob}\n")
-    data_file.write(f"max_dstr_mut_prob: {hrange.max_dstr_mut_prob}\n")
+    data_file.write(f"min_dstr_mut_prob: {hrange.min_p_rad}\n")
+    data_file.write(f"max_dstr_mut_prob: {hrange.max_p_rad}\n")
 
     data_file.write("actfuns: ")
     for i in range(len(hrange.actFunSet)):
@@ -212,11 +212,11 @@ if __name__ == '__main__':
     # X,Y = generate_square_problem(200, -5, 5)
     minrr = -2
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (0, 20), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(-10, -10),
-                                 dstr_mut_prob=(minrr, 0))
+                                 mut_radius=(minrr, 0), depr=(minrr, 0), multi=(minrr, 0), p_prob=(minrr, 0), c_prob=(-10, -10),
+                                 p_rad=(minrr, 0))
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 10), (1, 10), [Identity(), ReLu(), Sigmoid(), Poly2(), Poly3(), TanH(), Softmax(), GaussAct(), LReLu(), SincAct()],
-                                 mut_radius=(minrr, 0), sqr_mut_prob=(minrr, 0), lin_mut_prob=(minrr, 0), p_mutation_prob=(minrr, 0), c_prob=(log10(0.8), 0),
-                                 dstr_mut_prob=(minrr, 0))
+                                 mut_radius=(minrr, 0), depr=(minrr, 0), multi=(minrr, 0), p_prob=(minrr, 0), c_prob=(log10(0.8), 0),
+                                 p_rad=(minrr, 0))
 
     # hrange = get_default_hrange_ga()
 
