@@ -74,6 +74,7 @@ class CNFF5(FitnessFunction):
 
         return [[result], cm]
 
+# TODO - A - test
 class CNFF6(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__()
@@ -141,6 +142,7 @@ class CNFF9(FitnessFunction):
 
         return [[result], cm]
 
+# TODO - A - test
 class CNF1(FitnessFunction):
     def __init__(self):
         super().__init__()
@@ -154,6 +156,7 @@ class CNF1(FitnessFunction):
 
         return [[result, -net.neuron_count], cm]
 
+# TODO - A - test
 class CNFFT(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__()
@@ -169,6 +172,7 @@ class CNFFT(FitnessFunction):
 
         return [result, cm]
 
+# TODO - A - test
 class CNFFT2(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__()
@@ -193,7 +197,7 @@ class MEFF(FitnessFunction):
 
         cm = test_results[0]
 
-        return [[m_efficiency(cm), efficiency(cm), -net.neuron_count], cm]
+        return [[m_efficiency(cm), average_f1_score(cm), -net.neuron_count], cm]
 
 class AVMAX(FitnessFunction):
     def __init__(self, lossFun: LossFun):

@@ -20,7 +20,7 @@ from suites.suite_utility import try_check_if_all_tests_computable, trash_can, d
 from tester import run_tests
 from utility.Utility import one_hot_endode, \
     translate_wines, divide_frame_into_columns, \
-    get_default_hrange_es7
+    get_default_hrange_es7, get_default_hrange_nco
 import os
 import pandas as pd
 
@@ -33,7 +33,7 @@ def get_data():
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
 
     qualities = data_frame["quality"].unique()
-    tt = 20
+    tt = 100
     frames = []
     for i in qualities:
         df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
@@ -71,11 +71,11 @@ def test_suite_for_wine():
         tests = []
 
         repetitions = 2
-        population_size = 600
-        iterations = 150
+        population_size =  500
+        iterations = 50
         # population_size = 250
         # iterations = 100
-        starg = max(2, ceil(0.05 * population_size))
+        starg = max(2, ceil(0.02 * population_size))
         power = 12
         seed = 1001
 
@@ -87,7 +87,7 @@ def test_suite_for_wine():
         tests.append(TupleForTest(name=f"wwiness_avmin", rep=repetitions, seed=seeds[0], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"7_winesss", rep=repetitions, seed=seeds[0], popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],

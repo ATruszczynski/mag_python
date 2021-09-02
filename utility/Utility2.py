@@ -70,6 +70,7 @@ def efficiency(conf_matrix):
 
     return mean([acc, prec, rec, f1])
 
+# TODO - S - test
 def m_efficiency(conf_matrix):
     acc = accuracy(conf_matrix)
     prec = np.min(get_precisions(conf_matrix))

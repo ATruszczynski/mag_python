@@ -102,16 +102,14 @@ class FinalCO3(CrossoverOperator):
         # for i in range(output_size):
         #     new_B_func.append(None)
 
-        dstr_pm = 10 ** pointA.p_rad
-        p_pm = 0
-
+        # dstr_pm = 10 ** pointA.p_rad
         dd = 10 ** pointA.depr
 
-        new_A_aggr, new_B_aggr = conditional_value_swap(dstr_pm, pointA.aggrFun, pointB.aggrFun)
+        new_A_aggr, new_B_aggr = conditional_value_swap(dd, pointA.aggrFun, pointB.aggrFun)
 
         # maxIt swap
 
-        new_A_maxit, new_B_maxit = conditional_value_swap(dstr_pm, pointA.net_it, pointB.net_it)
+        new_A_maxit, new_B_maxit = conditional_value_swap(dd, pointA.net_it, pointB.net_it)
 
         # mutation radius swap
 

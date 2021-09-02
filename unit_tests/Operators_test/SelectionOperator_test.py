@@ -7,6 +7,8 @@ from ann_point.Functions import *
 from evolving_classifier.operators.SelectionOperator import *
 from utility.CNDataPoint import CNDataPoint
 from utility.MockCN import MockCN
+from utility.Utility import compare_lists
+
 
 def test_roullette_select():
     random.seed(2020)
@@ -100,7 +102,7 @@ def test_select_05_1():
     assert chosen.to_string() == (MockCN(2, np.array([[2, 2]]))).to_string()
 
 def test_select_05_2():
-    random.seed(10101017)
+    random.seed(19611)
 
     cn1 = MockCN(1, np.array([[1]]))
     cn2 = MockCN(2, np.array([[2, 2]]))
@@ -127,10 +129,8 @@ def test_select_05_2():
 
     assert adp3.net.to_string() == chosen.to_string()
 
-
-
 def test_select_05_3():
-    random.seed(1001)
+    random.seed(5888)
 
     cn1 = MockCN(1, np.array([[1]]))
     cn2 = MockCN(2, np.array([[2, 2]]))
@@ -158,7 +158,7 @@ def test_select_05_3():
     assert adp3.net.to_string() == chosen.to_string()
 
 def test_select_05_4():
-    random.seed(1001)
+    random.seed(5888)
 
     cn1 = MockCN(1, np.array([[1]]))
     cn2 = MockCN(2, np.array([[2, 2]]))
@@ -331,7 +331,6 @@ def test_select_05_4():
 #     chosen = so.select(list)
 #     assert adp2.net.to_string() == chosen.to_string()
 
-
 def test_select_too_few():
     random.seed(1010)
 
@@ -363,7 +362,21 @@ def test_select_too_few():
 # test_select_sized()
 # test_select_sized_2_positive()
 # test_select_sized_2_positive_edge_cases()
-#
+
+# test_select_05_1()
+# test_select_05_2()
+# test_select_05_3()
+
+# for i in range(100000):
+#     seed = 1000 + i
+#     random.seed(seed)
+#     outcome = choose_without_repetition([0, 1, 2, 3, 4], 3)
+#     p = random.random()
+#     r = random.random()
+#     if p > 0.95 and r <= 0.95 and compare_lists(outcome, [0, 2, 1]):
+#         print(seed)
+#         break
+
 # random.seed(1001)
 # print(choose_without_repetition([0, 1, 2, 3, 4], 3))
 # print(random.random())
@@ -373,15 +386,4 @@ def test_select_too_few():
 # test_select_05_1()
 # test_select_05_2()
 # test_select_05_3()
-
-# for i in range(100):
-#     seed = 1000 + i
-#     random.seed(seed)
-#     print(choose_without_repetition([0, 1, 2, 3, 4], 3))
-#     p = random.random()
-#     r = random.random()
-#     if p > 0.5 and r <= 0.5:
-#         print(seed)
-#         break
-
-test_select_05_4()
+# test_select_05_4()

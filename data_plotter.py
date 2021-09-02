@@ -97,14 +97,15 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 # # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
 
 
-dir_name = "iris_avmax_nmo"
+dir_name = "wwiness_avmin"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
 plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
-# plot_min_max_avg(dfs, "ff2", f"ff2-{dir_name}")
-plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
-plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
+# # plot_min_max_avg(dfs, "ff2", f"ff2-{dir_name}")
+# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
+# plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
+# plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
+plot_min_max_avg(dfs, "acc", f"acc-{dir_name}")
 # plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
 # plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
 
