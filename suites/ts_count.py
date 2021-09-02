@@ -85,22 +85,22 @@ def test_suite_for_count():
         tests.append(TupleForTest(name=f"2_count_co3_sos3_001_ff6", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelectionSized2, starg],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         tests.append(TupleForTest(name=f"4_count_co3_sos3_001_ff6", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelectionSized2, 2*starg],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         tests.append(TupleForTest(name=f"2_count_co1_sos3_001_ff6", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelectionSized2, starg],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         tests.append(TupleForTest(name=f"4_count_co1_sos3_001_ff6", rep=repetitions, seed=seeds[3], popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelectionSized2, 2*starg],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
 
 

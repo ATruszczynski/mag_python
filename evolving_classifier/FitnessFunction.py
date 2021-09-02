@@ -74,7 +74,7 @@ class CNFF5(FitnessFunction):
 
         return [[result], cm]
 
-class CNFF6(FitnessFunction):
+class MIXFF(FitnessFunction):
     def __init__(self, lossFun: LossFun):
         super().__init__()
         self.lossFun = lossFun
@@ -83,13 +83,9 @@ class CNFF6(FitnessFunction):
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
 
         cm = test_results[0]
-        eff = efficiency(cm)
         meff = m_efficiency(cm)
 
-        mmeff = mean([eff, meff])
-
         lf = test_results[1]
-
 
         return [[-(1 - meff) * lf, -lf], cm]
 

@@ -197,15 +197,18 @@ def get_doc_hrange_eff():
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
+    acts = [ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity()]
+    aggrs = acts
     hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
                                  # actFuns=[ReLu(), TanH()],
-                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-5, 0),
-                                 c_prob=(log10(0.01), log10(0.8)),
-                                 swap=(log10(0.01), log10(0.5)),
-                                 multi=(-5, 5),
-                                 p_prob=(log10(0.01), log10(1)),
-                                 p_rad=(log10(0.001), log10(1)))
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(log10(0.005), log10(0.005)),
+                                 c_prob=(log10(0.5), log10(0.5)),
+                                 swap=(log10(0.1), log10(0.1)),
+                                 multi=(0, 0),
+                                 p_prob=(-100, -100),
+                                 p_rad=(-100, -100),
+                                 aggrFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()])
 
     return hrange
 
@@ -214,8 +217,18 @@ def get_doc_hrange_qd():
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    hrange = get_doc_hrange_eff()
-    hrange.aggrFuns = [Identity()]
+    acts = [ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity()]
+    aggrs = acts
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
+                                 # actFuns=[ReLu(), TanH()],
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(log10(0.005), log10(0.005)),
+                                 c_prob=(log10(0.5), log10(0.5)),
+                                 swap=(log10(0.1), log10(0.1)),
+                                 multi=(0, 0),
+                                 p_prob=(-100, -100),
+                                 p_rad=(-100, -100),
+                                 aggrFuns=[Identity(), Poly2(), Poly3()])
 
     return hrange
 

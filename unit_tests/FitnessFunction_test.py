@@ -305,7 +305,7 @@ def test_mixed_meff_loss_1():
 
     point = get_point()
     i, o = get_io()
-    ff = CNFF6(QuadDiff())
+    ff = MIXFF(QuadDiff())
     res = ff.compute(point, i, o)
 
     assert len(res[0]) == 2
@@ -322,7 +322,7 @@ def test_mixed_meff_loss_2():
 
     point = get_point2()
     i, o = get_io2()
-    ff = CNFF6(QuadDiff())
+    ff = MIXFF(QuadDiff())
     res = ff.compute(point, i, o)
 
     assert len(res[0]) == 2

@@ -101,18 +101,18 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
     return dfs
 
-dir_name = "QD_6"
+dir_name = "iris_doc_avmax"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 
 plot_min_max_avg(frames=dfs, parameter_name="nc", title="nc")
 # plot_min_max_avg(frames=dfs, parameter_name="ec", title="ec")
 # plot_min_max_avg(frames=dfs, parameter_name="ni", title="ni")
-# plot_min_max_avg(frames=dfs, parameter_name="mr", title="mr")
-# plot_min_max_avg(frames=dfs, parameter_name="mult", title="mult")
-# plot_min_max_avg(frames=dfs, parameter_name="ppm", title="ppm")
-# plot_min_max_avg(frames=dfs, parameter_name="prad", title="prad")
-# plot_min_max_avg(frames=dfs, parameter_name="cp", title="cp")
-# plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
+plot_min_max_avg(frames=dfs, parameter_name="mr", title="mr")
+plot_min_max_avg(frames=dfs, parameter_name="mult", title="mult")
+plot_min_max_avg(frames=dfs, parameter_name="ppm", title="ppm")
+plot_min_max_avg(frames=dfs, parameter_name="prad", title="prad")
+plot_min_max_avg(frames=dfs, parameter_name="cp", title="cp")
+plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 # plot_min_max_avg(frames=dfs, parameter_name="meff", title="meff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="acc", lim=[-0.01, 1.01])
