@@ -17,7 +17,7 @@ def test_struct_mutation():
     np.random.seed(seed)
 
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
-                                 depr=(log10(0.4), log10(0.8)), multi=(log10(1), log10(2)),
+                                 swap=(log10(0.4), log10(0.8)), multi=(log10(1), log10(2)),
                                  p_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
                                  p_rad=(log10(0.79), log10(0.81)))
 
@@ -108,7 +108,7 @@ def test_struct_mutation():
 
 def test_struct_mutation_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
-                                 depr=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(100)),
+                                 swap=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(100)),
                                  p_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
                                  p_rad=(log10(0.59), log10(0.61)))
 
@@ -203,7 +203,7 @@ def test_struct_mutation_2():
 
 def test_struct_mutation_3():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
-                                 depr=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(1000)),
+                                 swap=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(1000)),
                                  p_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
                                  p_rad=(log10(0.59), log10(0.61)))
 
@@ -306,7 +306,7 @@ np.random.seed(seed)
 
 
 hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
-                             depr=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(1000)),
+                             swap=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(1000)),
                              p_prob=(log10(0.65), log10(0.75)), c_prob=(log10(0.1), log10(0.4)),
                              p_rad=(log10(0.59), log10(0.61)))
 
@@ -336,7 +336,7 @@ hidden_size = cn1.hidden_count
 output_size = cn1.output_size
 neuron_count = cn1.neuron_count
 
-depr =    10 ** cn1.depr
+depr =    10 ** cn1.swap_prob
 modi_nc =    10 ** cn1.multi
 p_mutation_prob =      10 ** cn1.p_prob
 p_rad =  10 ** cn1.p_rad

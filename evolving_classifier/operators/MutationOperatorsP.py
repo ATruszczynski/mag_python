@@ -25,7 +25,7 @@ class FinalMutationOperatorP(MutationOperator):
         point = cndp.net
 
         point = point.copy()
-        sqr_pm =    10 ** point.depr
+        sqr_pm =    10 ** point.swap_prob
         lin_pm =    10 ** point.multi
         p_pm =      10 ** point.p_prob
         dstr_pm =  10 ** point.p_rad
@@ -40,7 +40,7 @@ class FinalMutationOperatorP(MutationOperator):
         net_it = point.net_it
 
         mutation_radius = point.mutation_radius
-        sqr_mut_prob = point.depr
+        sqr_mut_prob = point.swap_prob
         lin_mut_prob = point.multi
         p_mutation_prob = point.p_prob
         c_prob = point.c_prob
@@ -52,7 +52,7 @@ class FinalMutationOperatorP(MutationOperator):
         if p <= p_pm:
             rad_frac = 0.1
             mutation_radius = conditional_uniform_value_shift(1, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
-            sqr_mut_prob = conditional_uniform_value_shift(1, point.depr, self.hrange.min_depr, self.hrange.max_depr, rad_frac)
+            sqr_mut_prob = conditional_uniform_value_shift(1, point.swap_prob, self.hrange.min_depr, self.hrange.max_depr, rad_frac)
             lin_mut_prob = conditional_uniform_value_shift(1, point.multi, self.hrange.min_multi, self.hrange.max_multi, rad_frac)
             p_mutation_prob = conditional_uniform_value_shift(1, point.p_prob, self.hrange.min_p_prob, self.hrange.max_p_prob, rad_frac)
             c_prob = conditional_uniform_value_shift(1, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)

@@ -19,7 +19,7 @@ class FinalMutationOperator(MutationOperator):
         super().__init__(hrange)
 
     def mutate(self, point: ChaosNet) -> ChaosNet:
-        sqr_pm =    10 ** point.depr
+        sqr_pm =    10 ** point.swap_prob
         modifier =    10 ** point.multi
         radius =    10 ** point.mutation_radius
 
@@ -51,7 +51,7 @@ class FinalMutationOperator(MutationOperator):
         net_it = conditional_try_choose_different(dstr_pm, point.net_it, list(range(minn, maxn + 1)))
 
         mutation_radius = conditional_uniform_value_shift(p_pm, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, p_rad)
-        sqr_mut_prob = conditional_uniform_value_shift(p_pm, point.depr, self.hrange.min_depr, self.hrange.max_depr, p_rad)
+        sqr_mut_prob = conditional_uniform_value_shift(p_pm, point.swap_prob, self.hrange.min_depr, self.hrange.max_depr, p_rad)
         lin_mut_prob = conditional_uniform_value_shift(p_pm, point.multi, self.hrange.min_multi, self.hrange.max_multi, p_rad)
         p_mutation_prob = conditional_uniform_value_shift(p_pm, point.p_prob, self.hrange.min_p_prob, self.hrange.max_p_prob, p_rad)
         c_prob = conditional_uniform_value_shift(p_pm, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, p_rad)

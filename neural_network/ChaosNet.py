@@ -73,7 +73,7 @@ class ChaosNet:
 
         self.mutation_radius = mutation_radius
 
-        self.depr = depr
+        self.swap_prob = depr
         self.multi = multi
         self.c_prob = c_prob
         self.p_prob = p_prob
@@ -260,7 +260,7 @@ class ChaosNet:
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
-                        , net_it=self.net_it, mutation_radius=self.mutation_radius, depr=self.depr,
+                        , net_it=self.net_it, mutation_radius=self.mutation_radius, depr=self.swap_prob,
                         multi=self.multi, p_prob=self.p_prob, c_prob=self.c_prob,
                         p_rad=self.p_rad)
 
@@ -296,7 +296,7 @@ class ChaosNet:
         result = ""
         result += f"{self.input_size}|{self.output_size}|{self.neuron_count}|{round(self.get_edge_count())}|{self.net_it}|" \
                   f"{actFunsString}|" + f"{self.aggrFun.to_string()}|" \
-                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.depr, 5)}|s:{round(self.multi, 5)}" \
+                  f"mr:{round(self.mutation_radius, 5)}|wb:{round(self.swap_prob, 5)}|s:{round(self.multi, 5)}" \
                   f"|p:{round(self.p_prob, 5)}|c:{round(self.c_prob, 5)}|r:{round(self.p_rad, 5)}"
 
         return result

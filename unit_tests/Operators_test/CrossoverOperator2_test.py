@@ -11,7 +11,7 @@ from utility.TestingUtility import assert_chaos_network_properties
 
 def test_simple_crossover():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 20), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
                                  p_rad=(0, 0)) # values irrelevant aside from neuron count
 
     link1 = np.array([[0, 1, 1, 0, 0],
@@ -177,7 +177,7 @@ def test_simple_crossover():
 
 def test_simple_crossover_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
                                  p_rad=(0, 0))
 
     link1 = np.array([[0, 1, 0, 0],
@@ -355,7 +355,7 @@ def test_simple_crossover_2():
 
 def test_simple_crossover_3():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
                                  p_rad=(0, 0))
 
     link1 = np.array([[0, 0, 0],

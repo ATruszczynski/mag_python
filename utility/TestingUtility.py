@@ -57,7 +57,7 @@ def assert_chaos_network_properties(net: ChaosNet,
 
     assert net.net_it == desired_maxit
     assert net.mutation_radius == pytest.approx(desired_mut_rad, 1e-4)
-    assert net.depr == pytest.approx(desired_wb_prob, 1e-4)
+    assert net.swap_prob == pytest.approx(desired_wb_prob, 1e-4)
     assert net.multi == pytest.approx(desired_s_prob, 1e-4)
     assert net.p_prob == pytest.approx(desired_p_prob, 1e-4)
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
@@ -82,7 +82,7 @@ def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
                                     desired_aggr=net2.aggrFun,
                                     desired_maxit=net2.net_it,
                                     desired_mut_rad=net2.mutation_radius,
-                                    desired_wb_prob=net2.depr,
+                                    desired_wb_prob=net2.swap_prob,
                                     desired_s_prob=net2.multi,
                                     desired_p_prob=net2.p_prob,
                                     desired_c_prob=net2.c_prob,

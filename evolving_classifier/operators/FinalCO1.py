@@ -110,7 +110,7 @@ class FinalCO1(CrossoverOperator):
 
         # wb prob swap
 
-        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.depr, pointB.depr)
+        new_A_wb_prob, new_B_wb_prob = conditional_value_swap(0.5, pointA.swap_prob, pointB.swap_prob)
 
         # s prob swap
 

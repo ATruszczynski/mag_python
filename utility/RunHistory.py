@@ -62,7 +62,7 @@ class RunHistory:
     # TODO - S - change names here
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")
-        file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,sqrp,linp,pmp,cp,dstp,afp")
+        file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,mult,ppm,prad,cp,swp,depr")
         for f in range(len(self.it_hist[0][0].ff)):
             file.write(f",ff{f + 1}")
         if not reg:
@@ -80,8 +80,8 @@ class RunHistory:
                 file.write(f"{it + 1},{rk + 1},{net.input_size},{net.output_size},{net.neuron_count},"
                            f"{net.edge_count},"
                            f"{net.get_act_fun_string()},{net.aggrFun.to_string()},{net.net_it},"
-                           f"{net.mutation_radius},{net.depr},{net.multi},"
-                           f"{net.p_prob},{net.c_prob},{net.p_rad},{net.depr_2}")
+                           f"{net.mutation_radius},{net.multi},"
+                           f"{net.p_prob},{net.p_rad},{net.c_prob},{net.swap_prob},{net.depr_2}")
                 for f in range(len(cndatapoint.ff)):
                     file.write(f",{cndatapoint.ff[f]}")
                 if not reg:

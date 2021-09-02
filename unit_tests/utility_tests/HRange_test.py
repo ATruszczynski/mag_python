@@ -3,7 +3,7 @@ from utility.Utility import get_testing_hrange
 
 def test_hparam():
     hrange = HyperparameterRange((1, 2), (3, 4), (1, 5), (10, 20), [ReLu(), Sigmoid(), TanH(), Softmax()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
                                  p_rad=(0.45, 0.75))
 
     assert hrange.min_init_wei == 1
@@ -39,7 +39,7 @@ def test_hparam():
 
 def test_hparam_aggr():
     hrange = HyperparameterRange((1, 2), (3, 4), (1, 5), (10, 20), [ReLu(), Sigmoid(), TanH(), Softmax()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.61, 0.71),
                                  p_rad=(0.45, 0.75), aggrFuns=[Identity(), ReLu()])
 
     assert hrange.min_init_wei == 1

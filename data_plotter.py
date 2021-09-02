@@ -1,4 +1,5 @@
 from math import log10
+from typing import Any
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,12 +9,21 @@ import os
 def plot_neuron_counts():
     pass
 
-# TODO - A - add ff manual scaling
+save_path = f"img"
+
 # TODO - A - add saving pictures
-# TODO - A - add controlling titles
-# TODO - A - add controlling axis
-# TODO - A - add controlling legend pos
-def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
+def plot_min_max_avg(frames: [pd.DataFrame],
+                     parameter_name: str,
+                     title: str = None,
+                     xtitle: str = None,
+                     ytitle: str = None,
+                     lim: [Any] = None,
+                     scale: str = None,
+                     legend_loc: int = -1,
+                     spath: str = None
+                     ):
+
+
     mins = []
     means = []
     maxs = []
@@ -21,9 +31,9 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
         for i in range(len(frames)):
             frame = frames[i]
             frame['ff1'] = frame['ff1'].abs()
-            if "ff2" in frame.index:
+            if "ff2" in frame.columns:
                 frame['ff2'] = frame['ff2'].abs()
-            if "ff3" in frame.index:
+            if "ff3" in frame.columns:
                 frame['ff3'] = frame['ff3'].abs()
             frame.replace([np.inf, -np.inf], np.nan, inplace=True)
             mins.append(frame.groupby("it").min()[parameter_name])
@@ -36,29 +46,39 @@ def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
 
     ax = plt.gca()
 
+    if title is None:
+        title = parameter_name
+
     df_min.plot(kind='line',x='name',y='min', color="blue", ax=ax, label="min", title=title)
     df_mean.plot(kind='line',x='name',y='mean', color='green', ax=ax, label="mean")
     df_max.plot(kind='line',x='name',y='max', color='red', ax=ax, label="max")
 
-    if "ff1" is parameter_name or "ff2" is parameter_name or "ff3" is parameter_name:
-        maxff = df_min.max()
-        if 0.2 <= maxff <= 1:
-            plt.ylim((0, 1))
-        elif maxff <= 0.3:
-            plt.yscale("log")
-        elif maxff >= 1000:
-            plt.ylim((1, 1e4))
-            plt.yscale("log")
-        elif maxff >= 10000:
-            plt.ylim((1, 1e6))
-            plt.yscale("log")
-        else:
-            plt.ylim((0, maxff))
-    if parameter_name == "eff" or parameter_name == "meff":
-        plt.ylim((-0.1, 1.1))
-    plt.ylabel(parameter_name)
-    plt.legend()
+
+    if lim is not None:
+        plt.ylim(lim)
+
+    if scale is not None:
+        plt.yscale(scale)
+
+    if legend_loc >= 0:
+        plt.legend(loc=legend_loc)
+    else:
+        plt.legend()
+
+    if xtitle is not None:
+        plt.xlabel(xtitle)
+
+    if ytitle is not None:
+        plt.ylabel(ytitle)
+    else:
+        plt.ylabel(parameter_name)
+
+    if spath is not None:
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        plt.savefig(f"{save_path}{os.path.sep}{spath}.png")
     plt.show()
+
 
 def read_data_from_file(data_path: str) -> pd.DataFrame:
     frame = pd.read_csv(data_path)
@@ -77,71 +97,10 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
     return dfs
 
-
-
-
-
-
-# dir_name = "wwiness_avmin"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-# plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
-# # plot_min_max_avg(dfs, "ff2", f"ff2-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
-# plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
-# plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
-# # plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
-#
-# # plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
-# # plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
-# # plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
-# # plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
-# # plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
-# # plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
-# # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
-
-
-dir_name = "iris_avmax_meff_10"
+dir_name = "writing test"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
-plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
-# # plot_min_max_avg(dfs, "ff2", f"ff2-{dir_name}")
-# plot_min_max_avg(dfs, "eff", f"eff-{dir_name}")
-# plot_min_max_avg(dfs, "meff", f"meff-{dir_name}")
-# plot_min_max_avg(dfs, "ec", f"ec-{dir_name}")
-plot_min_max_avg(dfs, "acc", f"acc-{dir_name}")
-# plot_min_max_avg(dfs, "ni", f"ni-{dir_name}")
-# plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
-
-plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
-plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
-plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
-plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
-plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
-plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
-# plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
-
-# dir_name = "wines2_cp2"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
-
-# dir_name = "wines2_cp2"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "ec", f"cp-{dir_name}")
-
-# dir_name = "wines2_co3"
-# dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
-# plot_min_max_avg(dfs, "ff", f"ff-{dir_name}")
-# plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
-
-# plot_min_max_avg(dfs, "tp", f"tp-{dir_name}")
-# plot_min_max_avg(dfs, "fn", f"fn-{dir_name}")
-# plot_min_max_avg(dfs, "fp", f"fp-{dir_name}")
-# plot_min_max_avg(dfs, "tn", f"tn-{dir_name}")
-
+plot_min_max_avg(frames=dfs, parameter_name="ff1", title="desu2",
+                 scale="log", legend_loc= 9, spath= "desuuuu")
 plt.show()
 
 

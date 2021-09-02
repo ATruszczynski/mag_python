@@ -3,7 +3,7 @@ from utility.Utility2 import assert_acts_same
 
 class HyperparameterRange:
     def __init__(self, init_wei: (float, float), init_bia: (float, float), it: (int, int), hidden_count: (int, int),
-                 actFuns: [ActFun], mut_radius: (float, float), depr: (float, float), multi: (float, float),
+                 actFuns: [ActFun], mut_radius: (float, float), swap: (float, float), multi: (float, float),
                  p_prob: (float, float), c_prob: (float, float), p_rad: (float, float), aggrFuns: [ActFun] = None):
         self.min_init_wei = init_wei[0]
         self.max_init_wei = init_wei[1]
@@ -28,8 +28,8 @@ class HyperparameterRange:
 
         self.min_mut_radius = mut_radius[0]
         self.max_mut_radius = mut_radius[1]
-        self.min_depr = depr[0]
-        self.max_depr = depr[1]
+        self.min_depr = swap[0]
+        self.max_depr = swap[1]
         self.min_multi = multi[0]
         self.max_multi = multi[1]
         self.min_p_prob = p_prob[0]
@@ -43,7 +43,7 @@ class HyperparameterRange:
         return HyperparameterRange(init_wei=(self.min_init_wei, self.max_init_wei), init_bia=(self.min_init_bia, self.max_init_bia),
                                    it=(self.min_it, self.max_it), hidden_count=(self.min_hidden, self.max_hidden),
                                    actFuns=self.actFunSet, mut_radius=(self.min_mut_radius, self.max_mut_radius),
-                                   depr=(self.min_depr, self.max_depr),
+                                   swap=(self.min_depr, self.max_depr),
                                    multi=(self.min_multi, self.max_multi),
                                    p_prob=(self.min_p_prob, self.max_p_prob),
                                    c_prob=(self.min_c_prob, self.max_c_prob),

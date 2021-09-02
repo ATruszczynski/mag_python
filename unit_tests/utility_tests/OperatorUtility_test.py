@@ -9,7 +9,7 @@ from utility.Utility import *
 # TODO - B - cleanup
 def test_neuron_increase():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
 
     link1 = np.array([[0, 1, 1, 0, 0],
@@ -148,7 +148,7 @@ def test_neuron_increase():
 
 def test_neuron_decrease():
     hrange = HyperparameterRange((-1, 1), (-10, 10), (0, 5), (0, 5), [SincAct(), ReLu(), Sigmoid(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
 
     link1 = np.array([[0, 1, 1, 0, 0, 0],
@@ -455,7 +455,7 @@ def test_neuron_decrease():
 def test_possible_cuts_1():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
     link1 = np.array([[0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0],
@@ -500,7 +500,7 @@ def test_possible_cuts_1():
 def test_possible_cuts_1_2():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
 
     link1 = np.array([[0, 0, 0, 0],
@@ -547,7 +547,7 @@ def test_possible_cuts_1_2():
 
 def test_possible_cuts_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (1, 3), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
     link1 = np.array([[0, 0, 0, 0],
                       [0, 0, 0, 0],
@@ -593,7 +593,7 @@ def test_possible_cuts_2():
 def test_possible_cuts_3():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 3), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
     link1 = np.array([[0, 0, 0, 0],
                       [0, 0, 0, 0],
@@ -632,7 +632,7 @@ def test_possible_cuts_3():
 def test_possible_cuts_4():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
     link1 = np.array([[0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 1, 0, 0, 0, 0, 0],
@@ -874,7 +874,7 @@ def test_uniform_shift():
 
 def test_fco2_cuts():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
                                  p_rad=(0, 0)) # values irrelevant aside from neuron count
 
     link1 = np.array([[0, 1, 1, 0, 0],
@@ -926,7 +926,7 @@ def test_fco2_cuts():
 def test_add_remove_weights():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
 
 
@@ -965,7 +965,7 @@ def test_add_remove_weights():
 def test_add_remove_weights_2():
     hrange = HyperparameterRange(init_wei=(-1, 1), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
 
 
@@ -1000,7 +1000,7 @@ def test_add_remove_weights_2():
 def test_add_remove_weights_3():
     hrange = HyperparameterRange(init_wei=(-1, 2), init_bia=(-1, 1), it=(1, 5),
                                  hidden_count=(0, 4), actFuns=[ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
-                                 depr=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+                                 swap=(0.05, 0.1), multi=(0.6, 0.7), p_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
                                  p_rad=(0.44, 0.55))
 
 

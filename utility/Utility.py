@@ -141,7 +141,7 @@ def get_links(input_size: int, output_size: int, neuron_count: int):
 def get_default_hrange_ga():#TODO - S - przemyśl to
     hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 50),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-1, -1), depr=(-2, -2), multi=(-1, -1),
+                                 mut_radius=(-1, -1), swap=(-2, -2), multi=(-1, -1),
                                  p_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
                                  p_rad=(log10(0.005), log10(0.005)))
     return hrange
@@ -155,132 +155,24 @@ def get_default_hrange_ga():#TODO - S - przemyśl to
 #                                  dstr_mut_prob=(log10(0.001), log10(0.001)))
 #     return hrange
 #
-# def get_default_hrange_es():
-#     hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(30, 30),
-#                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#                                  mut_radius=(-5, -2), sqr_mut_prob=(-3, -1), lin_mut_prob=(-3, -1),
-#                                  p_mutation_prob=(-2, 0), c_prob=(log10(0.6), log10(1)),
-#                                  dstr_mut_prob=(log10(0.005), log10(0.1)), act_mut_prob=(-2, -1))
-#     return hrange
-#
-# def get_default_hrange_es2():
-#     hrange = HyperparameterRange(init_wei=(-0.1, 0.1), init_bia=(-0.1, 0.1), it=(1, 10), hidden_count=(0, 30),
-#                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#                                  mut_radius=(-5, 0), sqr_mut_prob=(-3, 0), lin_mut_prob=(-3, 0),
-#                                  p_mutation_prob=(-2, 0), c_prob=(log10(0.6), log10(1)),
-#                                  dstr_mut_prob=(-5, 0))
-#     return hrange
-#
-# def get_default_hrange_es3():
-#     d = 0
-#     ddd = (-d, d)
-#
-#     hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(20, 20),
-#                                  actFuns=[ReLu()],
-#                                  mut_radius=(-2, -1), sqr_mut_prob=(log10(0.05), log10(0.5)),
-#                                  lin_mut_prob=(log10(0.01), log10(0.1)),
-#                                  p_mutation_prob=(-1, -1), c_prob=(log10(0.8), log10(0.8)),
-#                                  dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
-#
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
-#     #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
-#     #                              mut_radius=(log10(d/10), log10(d)), sqr_mut_prob=(log10(0.8), log10(0.8)),
-#     #                              lin_mut_prob=(log10(1), log10(1)),
-#     #                              p_mutation_prob=(-1, -1), c_prob=(-100, -100),
-#     #                              dstr_mut_prob=(-2, -1), act_mut_prob=(-2, -2))
-#
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
-#     #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
-#     #                              mut_radius=(-100, -100), sqr_mut_prob=(-100, -100),
-#     #                              lin_mut_prob=(-100, -100),
-#     #                              p_mutation_prob=(-100, -100), c_prob=(-100, -100),
-#     #                              dstr_mut_prob=(-2, -2), act_mut_prob=(-100, -100))
-#
-#     #
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
-#     #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
-#     #                              mut_radius=(-100, -100), sqr_mut_prob=(-100, -100),
-#     #                              lin_mut_prob=(-100, -100),
-#     #                              p_mutation_prob=(-100, -100), c_prob=(log10(0.8), log10(0.8)),
-#     #                              dstr_mut_prob=(-2, -2), act_mut_prob=(-100, -100))
-#
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(40, 40),
-#     #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid()],
-#     #                              mut_radius=(log10(d/10), log10(10*d)), sqr_mut_prob=(log10(0.8), log10(0.8)),
-#     #                              lin_mut_prob=(log10(1), log10(1)),
-#     #                              p_mutation_prob=(-1, -1), c_prob=(-100, -100),
-#     #                              dstr_mut_prob=(-2, -1), act_mut_prob=(-2, -2))
-#
-#     # c_prob=(-100, -100)
-#     # c_prob=(log10(0.6), log10(1))
-#     # c_prob=(log10(0.8), log10(0.8))
-#     return hrange
-#
-# def get_default_hrange_es4():
-#     d = 0
-#     ddd = (-d, d)
-#
-#     hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(1, 1), hidden_count=(15, 15),
-#                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#                                  mut_radius=(-4, -1), sqr_mut_prob=(log10(0.01), log10(1)),
-#                                  lin_mut_prob=(log10(0.1), log10(1)),
-#                                  p_mutation_prob=(-3, -1), c_prob=(log10(0.8), log10(0.8)),
-#                                  dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
-#
-#     return hrange
-#
-# def get_default_hrange_es5():
-#     d = 0.0
-#     ddd = (-d, d)
-#
-#     hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(3, 3), hidden_count=(5, 5),
-#                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#                                  mut_radius=(-4, -1), sqr_mut_prob=(log10(0.01), log10(1)),
-#                                  lin_mut_prob=(log10(0.1), log10(1)),
-#                                  p_mutation_prob=(-2, -1), c_prob=(log10(0.8), log10(0.8)),
-#                                  dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
-#
-#     return hrange
-#
-# def get_default_hrange_es6():
-#     d = 0.01
-#     dd = (-d, d)
-#     ddd = (-d*10, d*10)
-#
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(2, 2), hidden_count=(10, 10),
-#     #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#     #                              mut_radius=(-4, -1), sqr_mut_prob=(log10(0.005), log10(1)),
-#     #                              lin_mut_prob=(log10(0.05), log10(1)),
-#     #                              p_mutation_prob=(-3, 0), c_prob=(log10(0.5), log10(1)),
-#     #                              dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100))
-#     #
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(3, 3), hidden_count=(10, 10),
-#     #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#     #                              mut_radius=(-3, -1), sqr_mut_prob=(log10(0.005), log10(1)),
-#     #                              lin_mut_prob=(log10(0.05), log10(1)),
-#     #                              p_mutation_prob=(-3, 0), c_prob=(log10(0.5), log10(1)),
-#     #                              dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100)) #568
-#
-#     # hrange = HyperparameterRange(init_wei=ddd, init_bia=ddd, it=(5, 5), hidden_count=(10, 10),
-#     #                              actFuns=[TanH(), ReLu()],
-#     #                              mut_radius=(-3, -1), sqr_mut_prob=(log10(0.01), log10(1)),
-#     #                              lin_mut_prob=(log10(0.05), log10(1)),
-#     #                              p_mutation_prob=(-3, 0), c_prob=(log10(0.5), log10(1)),
-#     #                              dstr_mut_prob=(-100, -100), act_mut_prob=(-100, -100)) #598
-#
-#     hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 10), hidden_count=(5, 20),
-#                                  actFuns=[ReLu(), TanH()],
-#                                  # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-#                                  mut_radius=(-4, -1),
-#                                  c_prob=(log10(0.8), log10(0.8)),
-#                                  sqr_mut_prob=(log10(0.001), log10(0.001)),
-#                                  lin_mut_prob=(-1, 1),
-#                                  p_mutation_prob=(log10(0.1), log10(0.1)),
-#                                  dstr_mut_prob=(log10(0.001), log10(0.001)), act_mut_prob=(-100, -100)) #598
-#
-#
-#     return hrange
 
+def get_wines_hrange_eff():
+    d = 0.000
+    dd = (-d, d)
+    ddd = (-d*10, d*10)
+
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
+                                 # actFuns=[ReLu(), TanH()],
+                                 actFuns=[ReLu(), LReLu()],
+                                 mut_radius=(-4, 0),
+                                 c_prob=(log10(0.8), log10(0.8)),
+                                 swap=(log10(0.5), log10(0.5)),
+                                 multi=(-2, 2),
+                                 p_prob=(log10(0.01), log10(0.01)),
+                                 p_rad=(log10(0.01), log10(0.01)),
+                                 aggrFuns=[Identity()])
+
+    return hrange
 
 def get_default_hrange_es7():
     d = 0.000
@@ -292,7 +184,7 @@ def get_default_hrange_es7():
                                  actFuns=[ReLu(), LReLu()],
                                  mut_radius=(-4, 0),
                                  c_prob=(log10(0.8), log10(0.8)),
-                                 depr=(log10(0.5), log10(0.5)),
+                                 swap=(log10(0.5), log10(0.5)),
                                  multi=(-2, 2),
                                  p_prob=(log10(0.01), log10(0.01)),
                                  p_rad=(log10(0.01), log10(0.01)),
@@ -310,7 +202,7 @@ def get_doc_hrange_eff():
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-5, 0),
                                  c_prob=(log10(0.01), log10(0.8)),
-                                 depr=(log10(0.01), log10(0.5)),
+                                 swap=(log10(0.01), log10(0.5)),
                                  multi=(-5, 5),
                                  p_prob=(log10(0.01), log10(1)),
                                  p_rad=(log10(0.001), log10(1)))
@@ -337,7 +229,7 @@ def get_default_hrange_nmo():
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity()],
                                  mut_radius=(-4, -0),
                                  c_prob=(log10(0.8), log10(0.8)),
-                                 depr=(log10(0.5), log10(0.5)),
+                                 swap=(log10(0.5), log10(0.5)),
                                  multi=(-100, -100),
                                  p_prob=(log10(0.001), log10(0.001)),
                                  p_rad=(log10(0.01), log10(0.01)),
@@ -464,7 +356,7 @@ def get_testing_hrange():
         hidden_count=(6, 7),
         actFuns=[ReLu(), Identity(), Sigmoid(), Poly2()],
         mut_radius=(8, 9),
-        depr=(10, 11),
+        swap=(10, 11),
         multi=(12, 13),
         p_prob=(14, 15),
         c_prob=(16, 17),

@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from TupleForTest import TupleForTest
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.FinalCO1 import FinalCO1
+from evolving_classifier.operators.FinalCO1 import FinalCO1, HyperparameterRange
 from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.FinalCO3 import FinalCO3
 from evolving_classifier.operators.FinalCO4 import FinalCO4
@@ -19,8 +19,7 @@ from evolving_classifier.operators.SelectionOperator import TournamentSelection,
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, \
-    translate_wines, divide_frame_into_columns, \
-    get_default_hrange_es7, get_doc_hrange_eff, get_doc_hrange_qd
+    translate_wines, divide_frame_into_columns
 import os
 import pandas as pd
 
@@ -57,8 +56,23 @@ def get_data():
     y = Ys[:div]
     Y = Ys[div:]
 
-
     return (x, y, X, Y)
+
+def get_wines_hrange_eff():
+    d = 0.000
+    dd = (-d, d)
+    ddd = (-d*10, d*10)
+
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 30),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-5, 0),
+                                 c_prob=(log10(0.01), log10(0.8)),
+                                 swap=(log10(0.01), log10(0.5)),
+                                 multi=(-5, 5),
+                                 p_prob=(log10(0.01), log10(1)),
+                                 p_rad=(log10(0.001), log10(1)))
+
+    return hrange
 
 def test_suite_for_wine():
     if __name__ == '__main__':
@@ -71,8 +85,8 @@ def test_suite_for_wine():
         tests = []
 
         repetitions = 2
-        population_size = 1000
-        iterations = 50
+        population_size = 200
+        iterations = 100
         # population_size = 250
         # iterations = 100
         starg = max(2, ceil(0.05 * population_size))
@@ -83,41 +97,19 @@ def test_suite_for_wine():
         for i in range(5):
             seeds.append(random.randint(0, 10**6))
 
-        hrange = get_doc_hrange_qd()
-        tests.append(TupleForTest(name=f"wines_mqd_10", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines_mqd_25", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 25],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines_mqd_100", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 100],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines_mqd_4", rep=repetitions, seed=seed, popSize=population_size,
+        hrange = get_wines_hrange_eff()
+        tests.append(TupleForTest(name=f"AT_wines_dco_4", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 4],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-
-
-        tests.append(TupleForTest(name=f"wines_qd_10", rep=repetitions, seed=seed, popSize=population_size,
+                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"AT_wines_dco_10", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],
-                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines_qd_25", rep=repetitions, seed=seed, popSize=population_size,
+                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"AT_wines_dco_20", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 25],
-                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines_qd_100", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 100],
-                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"wines_qd_4", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 4],
-                                  fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 20],
+                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
 
         # hrange = get_doc_hrange_eff()
         # tests.append(TupleForTest(name=f"wines_eff_10", rep=repetitions, seed=seed, popSize=population_size,
