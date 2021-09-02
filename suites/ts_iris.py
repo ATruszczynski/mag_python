@@ -18,7 +18,7 @@ from evolving_classifier.operators.SelectionOperator import TournamentSelection,
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_default_hrange_ga, \
-    get_default_hrange_es7, get_default_hrange_nmo, get_default_hrange_nco
+    get_default_hrange_es7, get_default_hrange_nmo, get_doc_hrange_eff, get_doc_hrange_qd
 import os
 
 
@@ -51,13 +51,13 @@ def test_suite_for_iris():
         np.random.seed(seed)
 
         x, y, X, Y = get_data()
-        hrange = get_default_hrange_es7()
+        hrange = get_doc_hrange_qd()
 
         tests = []
 
         repetitions = 2
-        population_size = 500
-        iterations = 25
+        population_size = 1000
+        iterations = 50
         starg = max(2, ceil(0.05 * population_size))
         power = 12
         seed = 10011001
@@ -75,18 +75,22 @@ def test_suite_for_iris():
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
         #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
-        tests.append(TupleForTest(name=f"iris_avmax_ff6_5", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 5],
-                                  fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"iris_avmax_meff_5", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 5],
-                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
-        tests.append(TupleForTest(name=f"iris_avmax_meff_10", rep=repetitions, seed=seed, popSize=population_size,
+        # tests.append(TupleForTest(name=f"iris_avmax_ff6_5", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 5],
+        #                           fft=[CNFF6, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_avmax_10", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 10],
-                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
+                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_avmax_25", rep=repetitions, seed=seed, popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 50],
+                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        tests.append(TupleForTest(name=f"iris_avmax_100", rep=repetitions, seed=seed, popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 100],
+                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
         # tests.append(TupleForTest(name=f"iris_avmax_so_50", rep=repetitions, seed=seed, popSize=population_size,
         #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
         #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, 50],

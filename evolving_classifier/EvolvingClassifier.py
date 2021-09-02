@@ -91,7 +91,7 @@ class EvolvingClassifier:
 
         for i in range(iterations):
             eval_pop = self.fc.compute(pool=pool, to_compute=self.population, fitnessFunc=self.ff, trainInputs=self.trainInputs,
-                                       trainOutputs=self.trainOutputs)# TODO - S - restore
+                                       trainOutputs=self.trainOutputs)
 
 
             self.history.add_it_hist(eval_pop)

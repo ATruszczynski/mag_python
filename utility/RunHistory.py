@@ -59,7 +59,7 @@ class RunHistory:
     #
     #     return result
 
-
+    # TODO - S - change names here
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")
         file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,sqrp,linp,pmp,cp,dstp,afp")

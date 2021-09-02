@@ -260,7 +260,7 @@ def test_generate_population_limits():
         afh = hrange.actFunSet[i]
         isthere = False
         for j in range(len(all_aggr_funs)):
-            afp = all_act_funs[j]
+            afp = all_aggr_funs[j]
             isthere = isthere or afh.to_string() == afp.to_string()
             if isthere == True:
                 break
@@ -301,6 +301,149 @@ def test_generate_population_limits():
     assert max(all_r_prob) >= -5.05
 
 
+def test_generate_population_limits_aggr():
+    hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(-1, 0),
+                                 depr=(-2, -1), multi=(-3, -2), p_prob=(-4, -3), c_prob=(-5, -4),
+                                 p_rad=(-6, -5), aggrFuns=[LReLu(), SincAct(), Sigmoid()])
+
+    random.seed(1001)
+    n = 200
+    pop = generate_population(hrange, n, 10, 20)
+
+    input_sizes = [pop[i].input_size for i in range(len(pop))]
+    output_sizes = [pop[i].output_size for i in range(len(pop))]
+    hidden_sizes = [pop[i].hidden_end_index - pop[i].hidden_start_index for i in range(len(pop))]
+    its = [pop[i].net_it for i in range(len(pop))]
+
+    assert max(input_sizes) == min(input_sizes)
+    assert max(input_sizes) == 10
+    assert max(output_sizes) == min(output_sizes)
+    assert max(output_sizes) == 20
+    assert max(hidden_sizes) == 20
+    assert min(hidden_sizes) == 10
+    assert min(its) == 1
+    assert max(its) == 5
+
+    all_weights = []
+    all_biases = []
+    all_act_funs = []
+    all_aggr_funs = []
+
+    all_mut_rad = []
+    all_p_mut = []
+    all_c_prob = []
+
+    all_wb_mut = []
+    all_s_mut = []
+    all_r_prob = []
+
+    for i in range(len(pop)):
+        net = pop[i]
+        links = net.links
+
+        assert links.shape[0] == net.neuron_count
+        assert links.shape[1] == net.neuron_count
+        assert net.weights.shape[0] == net.neuron_count
+        assert net.weights.shape[1] == net.neuron_count
+        assert net.biases.shape[0] == 1
+        assert net.biases.shape[1] == net.neuron_count
+
+        non_zero_ind = np.where(links != 0)
+
+        for j in range(len(net.actFuns)):
+            if net.actFuns[j] is not None:
+                all_act_funs.append(net.actFuns[j].copy())
+        all_aggr_funs.append(net.aggrFun.copy())
+
+        weights = net.weights.copy()
+        weights[non_zero_ind] = 0
+        assert np.max(weights) == 0
+        assert np.min(weights) == 0
+
+        for j in range(net.biases.shape[1]):
+            if not np.isnan(net.biases[0, j]):
+                all_biases.append(net.biases[0, j])
+
+        for ind in range(len(non_zero_ind[0])):
+            r = non_zero_ind[0][ind]
+            c = non_zero_ind[1][ind]
+            assert c != r
+            assert c >= net.hidden_start_index
+            assert r < net.hidden_end_index
+
+            all_weights.append(net.weights[r, c])
+
+        all_mut_rad.append(net.mutation_radius)
+        all_p_mut.append(net.p_prob)
+        all_c_prob.append(net.c_prob)
+
+        all_wb_mut.append(net.depr)
+        all_s_mut.append(net.multi)
+        all_r_prob.append(net.p_rad)
+
+    assert max(all_weights) <= 2
+    assert max(all_weights) > 1.95
+    assert min(all_weights) >= 0
+    assert min(all_weights) < 0.05
+
+    assert np.max(all_biases) <= 5
+    assert np.max(all_biases) > 4.95
+    assert np.min(all_biases) >= 0
+    assert np.min(all_biases) < 0.05
+
+    for i in range(len(hrange.actFunSet)):
+        afh = hrange.actFunSet[i]
+        isthere = False
+        for j in range(len(all_act_funs)):
+            afp = all_act_funs[j]
+            isthere = isthere or afh.to_string() == afp.to_string()
+            if isthere == True:
+                break
+        assert isthere
+
+    for i in range(len(hrange.aggrFuns)):
+        afh = hrange.aggrFuns[i]
+        isthere = False
+        for j in range(len(all_aggr_funs)):
+            afp = all_aggr_funs[j]
+            isthere = isthere or afh.to_string() == afp.to_string()
+            if isthere == True:
+                break
+        assert isthere
+
+    # hrange = HyperparameterRange((0, 2), (0, 5), (1, 5), (10, 20), [ReLu(), Sigmoid(), Softmax()], mut_radius=(0, 1),
+    #                              sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.22, 0.33),
+    #                              dstr_mut_prob=(0.44, 0.55))
+
+    assert min(all_mut_rad) >= -1
+    assert min(all_mut_rad) <= -0.95
+    assert max(all_mut_rad) <= 0
+    assert max(all_mut_rad) >= -0.05
+
+    assert min(all_wb_mut) >= -2
+    assert min(all_wb_mut) <= -1.95
+    assert max(all_wb_mut) <= -1
+    assert max(all_wb_mut) >= -1.05
+
+    assert min(all_s_mut) >= -3
+    assert min(all_s_mut) <= -2.95
+    assert max(all_s_mut) <= -2
+    assert max(all_s_mut) >= -2.05
+
+    assert min(all_p_mut) >= -4
+    assert min(all_p_mut) <= -3.95
+    assert max(all_p_mut) <= -3
+    assert max(all_p_mut) >= -3.05
+
+    assert min(all_c_prob) >= -5
+    assert min(all_c_prob) <= -4.95
+    assert max(all_c_prob) <= -4
+    assert max(all_c_prob) >= -4.05
+
+    assert min(all_r_prob) >= -6
+    assert min(all_r_prob) <= -5.95
+    assert max(all_r_prob) <= -5
+    assert max(all_r_prob) >= -5.05
 
 
 # def test_pun_fun():
@@ -614,3 +757,5 @@ def test_acts_same():
 
 # test_acts_same()
 # test_copy_list_of_arrays()
+
+test_generate_population_limits_aggr()

@@ -7,7 +7,8 @@ from evolving_classifier.FitnessFunction import *
 from ann_point.Functions import *
 
 from neural_network.ChaosNet import efficiency
-from utility.Mut_Utility import gaussian_shift
+from utility.Mut_Utility import gaussian_shift, get_default_hrange_ga
+from utility.Utility import generate_population
 
 
 def get_point():
@@ -29,6 +30,21 @@ def get_point():
                   net_it=2, mutation_radius=0, depr=0, multi=0, p_prob=0, c_prob=0, p_rad=0)
 
     return cn
+
+def get_point_3():
+    random.seed(1001)
+    hrange = get_default_hrange_ga()
+    cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=2)[0]
+
+    return cn
+
+def get_point_4():
+    random.seed(1002)
+    hrange = get_default_hrange_ga()
+    cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=2)[0]
+
+    return cn
+
 
 def get_point2():
     links = np.array([[0, 0, 1, 1, 1, 0, 0, 0, 0],
@@ -226,8 +242,9 @@ def test_pure_loss_fun():
     ff = CNFF4(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 1
+    assert len(res[0]) == 2
     assert res[0][0] == pytest.approx(-3.4101112/16, abs=1e-3)
+    assert res[0][1] == pytest.approx(-6, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -242,8 +259,9 @@ def test_pure_loss_fun2():
     ff = CNFF4(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 1
+    assert len(res[0]) == 2
     assert res[0][0] == pytest.approx(-3.355127/16, abs=1e-3)
+    assert res[0][1] == pytest.approx(-9, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -296,7 +314,7 @@ def test_mixed_meff_loss_1():
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
-# TODO - S - lepsze testy meff
+
 def test_mixed_meff_loss_2():
     seed = 1001
     random.seed(seed)
@@ -326,8 +344,9 @@ def test_avmin_loss_1():
     ff = AVMAX(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 1
+    assert len(res[0]) == 2
     assert res[0][0] == pytest.approx(-0.2232926431627285, abs=1e-3)
+    assert res[0][1] == pytest.approx(-6, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -342,8 +361,9 @@ def test_avmin_loss_2():
     ff = AVMAX(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 1
+    assert len(res[0]) == 2
     assert res[0][0] == pytest.approx(-0.229847722, abs=1e-3)
+    assert res[0][1] == pytest.approx(-9, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -388,8 +408,77 @@ def test_MEFF_loss_2():
                                             [2., 1., 1., 0.]]))
 
 
+def test_FFPUNEFF_loss_1():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point_3()
+    i, o = get_io3()
+    ff = FFPUNEFF()
+    res = ff.compute(point, i, o)
+
+    assert len(res[0]) == 3
+    assert res[0][0] == pytest.approx(-40.0, abs=1e-3)
+    assert res[0][1] == pytest.approx(0.33333333, abs=1e-3)
+    assert res[0][2] == pytest.approx(-54, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[8., 0.],
+                                            [8., 0.]]))
+
+def test_FFPUNEFF_loss_2():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point_4()
+    i, o = get_io3()
+    ff = FFPUNEFF()
+    res = ff.compute(point, i, o)
+
+    assert len(res[0]) == 3
+    assert res[0][0] == pytest.approx(-40.0, abs=1e-3)
+    assert res[0][1] == pytest.approx(0.33333333, abs=1e-3)
+    assert res[0][2] == pytest.approx(-37, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[8., 0.],
+                                            [8., 0.]]))
 
 
+
+
+def test_FFPUNQD_loss_1():
+    seed = 1001
+    random.seed(seed)
+    np.random.seed(seed)
+
+    point = get_point()
+    i, o = get_io()
+    ff = FFPUNQD(QuadDiff())
+    res = ff.compute(point, i, o)
+
+    assert len(res[0]) == 2
+    assert res[0][0] == pytest.approx(-8.52527802, abs=1e-3)
+    assert res[0][1] == pytest.approx(-6, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[4., 0., 0.],
+                                            [8., 0., 0.],
+                                            [4., 0., 0.]]))
+
+def test_FFPUNQD_loss_2():
+    seed = 1001
+    random.seed(seed)
+
+    np.random.seed(seed)
+    point = get_point2()
+    i, o = get_io2()
+    ff = FFPUNQD(QuadDiff())
+    res = ff.compute(point, i, o)
+
+    assert len(res[0]) == 2
+    assert res[0][0] == pytest.approx(-3.14543166, abs=1e-3)
+    assert res[0][1] == pytest.approx(-9, abs=1e-3)
+    assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
+                                            [3., 0., 1., 0.],
+                                            [0., 0., 4., 0.],
+                                            [2., 1., 1., 0.]]))
 
 # seed = 1001
 # random.seed(seed)
@@ -568,31 +657,85 @@ def test_MEFF_loss_2():
 #
 # test_avmin_loss_2()
 #
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point()
-i, o = get_io()
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# print(m_efficiency(test[0]))
+# print(average_f1_score(test[0]))
+# print(test[0])
+#
+# test_MEFF_loss_1()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# print(m_efficiency(test[0]))
+# print(average_f1_score(test[0]))
+# print(test[0])
+#
+# test_MEFF_loss_2()
 
-test = net.test(i, o, QuadDiff())
-print(m_efficiency(test[0]))
-print(average_f1_score(test[0]))
-print(test[0])
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point_3()
+# i, o = get_io3()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-(test[0][0, 1] + 5 * test[0][1, 0]))
+# print(average_f1_score(test[0]))
+# print(-net.neuron_count)
+# print(test[0])
+#
+# test_FFPUNEFF_loss_1()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point_4()
+# i, o = get_io3()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-(test[0][0, 1] + 5 * test[0][1, 0]))
+# print(average_f1_score(test[0]))
+# print(-net.neuron_count)
+# print(test[0])
+#
+# test_FFPUNEFF_loss_2()
 
-test_MEFF_loss_1()
-
-seed = 1001
-random.seed(seed)
-np.random.seed(seed)
-net = get_point2()
-i, o = get_io2()
-
-test = net.test(i, o, QuadDiff())
-print(m_efficiency(test[0]))
-print(average_f1_score(test[0]))
-print(test[0])
-
-test_MEFF_loss_2()
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point()
+# i, o = get_io()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-(test[0][0, 1] + 5 * test[0][1, 0]) * test[1])
+# print(-net.neuron_count)
+# print(test[0])
+#
+# test_FFPUNQD_loss_1()
+#
+# seed = 1001
+# random.seed(seed)
+# np.random.seed(seed)
+# net = get_point2()
+# i, o = get_io2()
+#
+# test = net.test(i, o, QuadDiff())
+# print(-(test[0][0, 1] + 5 * test[0][1, 0]) * test[1])
+# print(-net.neuron_count)
+# print(test[0])
+#
+# test_FFPUNQD_loss_2()
 
 
 

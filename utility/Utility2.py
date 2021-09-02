@@ -70,7 +70,6 @@ def efficiency(conf_matrix):
 
     return mean([acc, prec, rec, f1])
 
-# TODO - S - test
 def m_efficiency(conf_matrix):
     acc = accuracy(conf_matrix)
     prec = np.min(get_precisions(conf_matrix))
@@ -112,6 +111,14 @@ class CNConstructorException(Exception):
         pass
 
 def assert_acts_same(acts1: [ActFun], acts2: [ActFun]):
+    if acts1 is None:
+        assert acts2 is None
+        return
+    if acts2 is None:
+        assert acts1 is None
+        return
+
+
     assert len(acts1) == len(acts2)
 
     for i in range(len(acts1)):

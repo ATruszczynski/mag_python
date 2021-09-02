@@ -1,7 +1,6 @@
 from ann_point.Functions import *
 from utility.Utility2 import assert_acts_same
 
-
 class HyperparameterRange:
     def __init__(self, init_wei: (float, float), init_bia: (float, float), it: (int, int), hidden_count: (int, int),
                  actFuns: [ActFun], mut_radius: (float, float), depr: (float, float), multi: (float, float),
@@ -61,6 +60,8 @@ def assert_hranges_same(hrange1: HyperparameterRange, hrange2: HyperparameterRan
     assert hrange1.max_hidden == hrange2.max_hidden
 
     assert_acts_same(hrange1.actFunSet, hrange2.actFunSet)
+
+    assert_acts_same(hrange1.aggrFuns, hrange2.aggrFuns)
 
     assert hrange1.min_mut_radius == hrange2.min_mut_radius
     assert hrange1.max_mut_radius == hrange2.max_mut_radius

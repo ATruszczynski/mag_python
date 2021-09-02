@@ -8,6 +8,11 @@ import os
 def plot_neuron_counts():
     pass
 
+# TODO - A - add ff manual scaling
+# TODO - A - add saving pictures
+# TODO - A - add controlling titles
+# TODO - A - add controlling axis
+# TODO - A - add controlling legend pos
 def plot_min_max_avg(frames: [pd.DataFrame], parameter_name: str, title: str):
     mins = []
     means = []
@@ -97,7 +102,7 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 # # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
 
 
-dir_name = "wwiness_avmin"
+dir_name = "iris_avmax_meff_10"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 plot_min_max_avg(dfs, "nc", f"nc-{dir_name}")
 plot_min_max_avg(dfs, "ff1", f"ff1-{dir_name}")
@@ -110,10 +115,10 @@ plot_min_max_avg(dfs, "acc", f"acc-{dir_name}")
 # plot_min_max_avg(dfs, "f1s", f"f1s-{dir_name}")
 
 plot_min_max_avg(dfs, "mr", f"mr-{dir_name}")
-# plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
+plot_min_max_avg(dfs, "sqrp", f"sqrp-{dir_name}")
 plot_min_max_avg(dfs, "linp", f"linp-{dir_name}")
-# plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
-# plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
+plot_min_max_avg(dfs, "pmp", f"pmp-{dir_name}")
+plot_min_max_avg(dfs, "cp", f"cp-{dir_name}")
 plot_min_max_avg(dfs, "dstp", f"dstp-{dir_name}")
 # plot_min_max_avg(dfs, "afp", f"afp-{dir_name}")
 

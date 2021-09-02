@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from utility.CNDataPoint import CNDataPoint
 from utility.TestingUtility import assert_chaos_networks_same
@@ -119,6 +120,29 @@ def test_copy_2():
     cndp1.conf_mat = np.zeros((1, 1))
     assert cp.ff[0] == 0.5
     assert cp.conf_mat is None
+
+def test_Measures():
+    hrange = get_default_hrange_ga()
+    cn = generate_population(hrange=hrange, count=1, input_size=2, output_size=3)[0]
+
+    cndp1 = CNDataPoint(cn)
+
+    cndp1.add_data([2, 3], np.array([[1, 3], [4, 6]]))
+
+    TP = cndp1.get_TP_perc()
+    FN = cndp1.get_FN_perc()
+    FP = cndp1.get_FP_perc()
+    TN = cndp1.get_TN_perc()
+
+    assert TP == pytest.approx(0.25, abs=1e-4)
+    assert FN == pytest.approx(0.75, abs=1e-4)
+    assert FP == pytest.approx(0.4, abs=1e-4)
+    assert TN == pytest.approx(0.6, abs=1e-4)
+
+
+
+
+
 # test_copy_2()
 
 

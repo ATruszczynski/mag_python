@@ -9,6 +9,15 @@ def test_same():
     assert_hranges_same(hrange, hrange2)
 
 
+def test_same_aggr():
+    hrange = get_testing_hrange()
+    hrange.aggrFuns = [Identity(), ReLu()]
+    hrange2 = get_testing_hrange()
+    hrange2.aggrFuns = [Identity(), ReLu()]
+
+    assert_hranges_same(hrange, hrange2)
+
+
 def test_diff_min_init_wei():
     hrange = get_testing_hrange()
     hrange2 = get_testing_hrange()
@@ -368,6 +377,71 @@ def test_diff_max_dstr_mut_prob():
     assert_hranges_same(hrange, hrange2)
 
     hrange2.max_p_rad = -100
+
+    try:
+        assert_hranges_same(hrange, hrange2)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+def test_nonNone_aggr():
+    hrange = get_testing_hrange()
+    hrange2 = get_testing_hrange()
+
+    assert_hranges_same(hrange, hrange2)
+
+    hrange2.aggrFuns = [Identity()]
+
+    try:
+        assert_hranges_same(hrange, hrange2)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+def test_diff_aggr():
+    hrange = get_testing_hrange()
+    hrange.aggrFuns = [ReLu(), Poly2()]
+    hrange2 = hrange.copy()
+
+    assert_hranges_same(hrange, hrange2)
+
+    hrange2.aggrFuns = [ReLu(), Identity()]
+
+    try:
+        assert_hranges_same(hrange, hrange2)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+
+def test_diff_len_aggr():
+    hrange = get_testing_hrange()
+    hrange.aggrFuns = [ReLu(), Poly2()]
+    hrange2 = hrange.copy()
+
+    assert_hranges_same(hrange, hrange2)
+
+    hrange2.aggrFuns = [ReLu(), Poly2(), Identity()]
+
+    try:
+        assert_hranges_same(hrange, hrange2)
+    except AssertionError:
+        assert True
+    else:
+        assert False
+
+
+def test_diff_None_aggr():
+    hrange = get_testing_hrange()
+    hrange.aggrFuns = [ReLu(), Poly2()]
+    hrange2 = hrange.copy()
+
+    assert_hranges_same(hrange, hrange2)
+
+    hrange2.aggrFuns = [ReLu(), None]
 
     try:
         assert_hranges_same(hrange, hrange2)

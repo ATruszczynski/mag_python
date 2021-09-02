@@ -287,10 +287,10 @@ def get_default_hrange_es7():
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(10, 10),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
                                  # actFuns=[ReLu(), TanH()],
                                  actFuns=[ReLu(), LReLu()],
-                                 mut_radius=(-2, -2),
+                                 mut_radius=(-4, 0),
                                  c_prob=(log10(0.8), log10(0.8)),
                                  depr=(log10(0.5), log10(0.5)),
                                  multi=(-2, 2),
@@ -300,21 +300,30 @@ def get_default_hrange_es7():
 
     return hrange
 
-def get_default_hrange_nco():
+def get_doc_hrange_eff():
     d = 0.000
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(10, 10),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
                                  # actFuns=[ReLu(), TanH()],
-                                 actFuns=[ReLu(), LReLu()],
-                                 mut_radius=(-4, -1),
-                                 c_prob=(log10(1e-100), log10(1e-100)),
-                                 depr=(log10(0.5), log10(0.5)),
-                                 multi=(-2, 2),
-                                 p_prob=(log10(0.001), log10(0.001)),
-                                 p_rad=(log10(0.01), log10(0.01)),
-                                 aggrFuns=[Identity()])
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-5, 0),
+                                 c_prob=(log10(0.01), log10(0.8)),
+                                 depr=(log10(0.01), log10(0.5)),
+                                 multi=(-5, 5),
+                                 p_prob=(log10(0.01), log10(1)),
+                                 p_rad=(log10(0.001), log10(1)))
+
+    return hrange
+
+def get_doc_hrange_qd():
+    d = 0.000
+    dd = (-d, d)
+    ddd = (-d*10, d*10)
+
+    hrange = get_doc_hrange_eff()
+    hrange.aggrFuns = [Identity()]
 
     return hrange
 
