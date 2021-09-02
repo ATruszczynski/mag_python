@@ -232,7 +232,7 @@ def test_diff_min_sqr_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.min_depr = -100
+    hrange2.min_swap = -100
 
     try:
         assert_hranges_same(hrange, hrange2)
@@ -248,7 +248,7 @@ def test_diff_max_sqr_mut_prob():
 
     assert_hranges_same(hrange, hrange2)
 
-    hrange2.max_depr = -100
+    hrange2.max_swap = -100
 
     try:
         assert_hranges_same(hrange, hrange2)

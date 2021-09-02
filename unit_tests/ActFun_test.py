@@ -147,12 +147,48 @@ def test_tanh():
     assert tanh.to_string() == "TH"
     assert isinstance(tanh, TanH)
 
+def test_identity():
+    arg = np.array([[3, 2, 1],
+                    [0.5, 0, -1],
+                    [-3, -10, -100]])
+    exp = np.array([[3, 2, 1],
+                    [0.5, 0, -1],
+                    [-3, -10, -100]])
+    tanh = Identity()
+
+    assert np.all(np.isclose(tanh.compute(arg), exp))
+    assert tanh.to_string() == "ID"
+    assert isinstance(tanh, Identity)
+
+def test_poly2():
+    arg = np.array([[3, 2, 1],
+                    [0.5, 0, -1],
+                    [-3, -10, -100]])
+    exp = np.array([[9, 4, 1],
+                    [0.25, 0, 1],
+                    [9, 100, 10000]])
+    tanh = Poly2()
+
+    assert np.all(np.isclose(tanh.compute(arg), exp))
+    assert tanh.to_string() == "P2"
+    assert isinstance(tanh, Poly2)
+
+def test_poly3():
+    arg = np.array([[3, 2, 1],
+                    [0.5, 0, -1],
+                    [-3, -10, -100]])
+    exp = np.array([[27, 8, 1],
+                    [0.125, 0, -1],
+                    [-27, -1000, -1000000]])
+    tanh = Poly3()
+
+    assert np.all(np.isclose(tanh.compute(arg), exp))
+    assert tanh.to_string() == "P3"
+    assert isinstance(tanh, Poly3)
+
 def test_non_rep_string():
     for i in range(len(allActFun)):
         for j in range(i + 1, len(allActFun)):
             af1 = allActFun[i]
             af2 = allActFun[j]
             assert af1.to_string() != af2.to_string()
-
-
-

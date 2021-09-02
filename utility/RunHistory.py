@@ -59,7 +59,6 @@ class RunHistory:
     #
     #     return result
 
-    # TODO - S - change names here
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")
         file.write("it,rk,is,os,nc,ec,af,ag,ni,mr,mult,ppm,prad,cp,swp,depr")
@@ -74,6 +73,10 @@ class RunHistory:
 
         for it in range(len(self.it_hist)):
             it_nets = self.it_hist[it]
+
+            for ffi in reversed(range(len(it_nets[0].ff))):
+                it_nets = sorted(it_nets, key=lambda x: x.ff[ffi], reverse=True)
+
             for rk in range(len(it_nets)):
                 cndatapoint = it_nets[rk]
                 net = cndatapoint.net

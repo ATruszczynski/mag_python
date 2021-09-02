@@ -1,7 +1,7 @@
 import pytest
 
-from evolving_classifier.operators.FinalCO1 import find_possible_cuts
-from evolving_classifier.operators.FinalCO2 import find_possible_cuts7
+from evolving_classifier.operators.Rejects.FinalCO1 import find_possible_cuts
+from evolving_classifier.operators.Rejects.FinalCO2 import find_possible_cuts7
 from utility.Mut_Utility import *
 from utility.TestingUtility import assert_chaos_network_properties
 from utility.Utility import *
@@ -27,7 +27,7 @@ def test_neuron_increase():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -168,7 +168,7 @@ def test_neuron_decrease():
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=TanH(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     np.random.seed(1001)
     random.seed(1001)
@@ -484,9 +484,9 @@ def test_possible_cuts_1():
     actFuns2 = [None, None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -531,9 +531,9 @@ def test_possible_cuts_1_2():
     actFuns2 = [None, ReLu(), ReLu(), None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -574,9 +574,9 @@ def test_possible_cuts_2():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -618,9 +618,9 @@ def test_possible_cuts_3():
     actFuns2 = [None, None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=2, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     print(possible_cuts)
@@ -671,9 +671,9 @@ def test_possible_cuts_4():
     actFuns2 = [None, None, TanH(), TanH(), None, None, None]
 
     cn1 = ChaosNet(input_size=2, output_size=3, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1, aggrFun=SincAct(), net_it=2,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=2, output_size=3, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2, aggrFun=GaussAct(), net_it=5,
-                   mutation_radius=-1, depr=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+                   mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     possible_cuts = find_possible_cuts(cn1, cn2, hrange)
     # print(possible_cuts)
@@ -904,10 +904,10 @@ def test_fco2_cuts():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=2, mutation_radius=-1, depr=-2,
+                   aggrFun=SincAct(), net_it=2, mutation_radius=-1, swap_prob=-2,
                    multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=5, mutation_radius=-10, depr=-20,
+                   aggrFun=GaussAct(), net_it=5, mutation_radius=-10, swap_prob=-20,
                    multi=-30, p_prob=-40, c_prob=-50, p_rad=-60)
 
     cuts = find_possible_cuts7(cn1, cn2, hrange)

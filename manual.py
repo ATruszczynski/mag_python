@@ -4,7 +4,7 @@ from TupleForTest import TupleForTest
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import CNFF
-from evolving_classifier.operators.FinalCO1 import FinalCO1
+from evolving_classifier.operators.Rejects.FinalCO1 import FinalCO1
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from tester import run_tests

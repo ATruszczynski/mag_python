@@ -25,8 +25,8 @@ def test_hparam():
 
     assert hrange.min_mut_radius == 0
     assert hrange.max_mut_radius == 1
-    assert hrange.min_depr == 0.05
-    assert hrange.max_depr == 0.1
+    assert hrange.min_swap == 0.05
+    assert hrange.max_swap == 0.1
     assert hrange.min_multi == 0.6
     assert hrange.max_multi == 0.7
     assert hrange.min_p_prob == 0.4
@@ -63,8 +63,8 @@ def test_hparam_aggr():
 
     assert hrange.min_mut_radius == 0
     assert hrange.max_mut_radius == 1
-    assert hrange.min_depr == 0.05
-    assert hrange.max_depr == 0.1
+    assert hrange.min_swap == 0.05
+    assert hrange.max_swap == 0.1
     assert hrange.min_multi == 0.6
     assert hrange.max_multi == 0.7
     assert hrange.min_p_prob == 0.4

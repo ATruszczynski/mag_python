@@ -1,25 +1,17 @@
 import random
 from math import ceil
 
-import numpy as np
 from sklearn import datasets
 
 from TupleForTest import TupleForTest
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.FinalCO1 import FinalCO1
-from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.FinalCO3 import FinalCO3
-from evolving_classifier.operators.FinalCO4 import FinalCO4
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
-from evolving_classifier.operators.MutationOperatorsP import FinalMutationOperatorP
-from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection05
+from evolving_classifier.operators.SelectionOperator import TournamentSelection05
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
-from utility.Utility import one_hot_endode, get_default_hrange_ga, \
-    get_default_hrange_es7, get_default_hrange_nmo, get_doc_hrange_eff, get_doc_hrange_qd
-import os
+from utility.Utility import one_hot_endode, get_doc_hrange_qd
 
 
 def get_data():

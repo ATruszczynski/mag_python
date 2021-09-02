@@ -3,9 +3,9 @@ import numpy as np
 from TupleForTest import TupleForTest, assert_tts_same
 from ann_point.Functions import QuadDiff, CrossEntropy
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
-from evolving_classifier.FitnessFunction import CNFF2, CNFF, CNFF5, CNFF4
-from evolving_classifier.operators.FinalCO1 import FinalCO1
-from evolving_classifier.operators.FinalCO2 import FinalCO2
+from evolving_classifier.FitnessFunction import CNFF2, CNFF, CNFF4
+from evolving_classifier.operators.Rejects.FinalCO1 import FinalCO1
+from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from utility.MockFC import MockFC

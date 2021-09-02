@@ -1,14 +1,13 @@
 from TupleForTest import TupleForTest
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import CNFF
-from evolving_classifier.operators.FinalCO1 import FinalCO1
+from evolving_classifier.operators.Rejects.FinalCO1 import FinalCO1
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from suites.suite_utility import try_check_if_all_tests_computable
 import os
-import numpy as np
 
-from utility.Utility import get_testing_hrange, get_default_hrange_ga, generate_counting_problem
+from utility.Utility import get_default_hrange_ga, generate_counting_problem
 
 trash_can = f"..{os.path.sep}..{os.path.sep}algo_tests{os.path.sep}to_delete{os.path.sep}uts"
 

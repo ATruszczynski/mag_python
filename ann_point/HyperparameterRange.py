@@ -25,11 +25,10 @@ class HyperparameterRange:
             for i in range(len(aggrFuns)):
                 self.aggrFuns.append(aggrFuns[i].copy())
 
-
         self.min_mut_radius = mut_radius[0]
         self.max_mut_radius = mut_radius[1]
-        self.min_depr = swap[0]
-        self.max_depr = swap[1]
+        self.min_swap = swap[0]
+        self.max_swap = swap[1]
         self.min_multi = multi[0]
         self.max_multi = multi[1]
         self.min_p_prob = p_prob[0]
@@ -43,7 +42,7 @@ class HyperparameterRange:
         return HyperparameterRange(init_wei=(self.min_init_wei, self.max_init_wei), init_bia=(self.min_init_bia, self.max_init_bia),
                                    it=(self.min_it, self.max_it), hidden_count=(self.min_hidden, self.max_hidden),
                                    actFuns=self.actFunSet, mut_radius=(self.min_mut_radius, self.max_mut_radius),
-                                   swap=(self.min_depr, self.max_depr),
+                                   swap=(self.min_swap, self.max_swap),
                                    multi=(self.min_multi, self.max_multi),
                                    p_prob=(self.min_p_prob, self.max_p_prob),
                                    c_prob=(self.min_c_prob, self.max_c_prob),
@@ -65,8 +64,8 @@ def assert_hranges_same(hrange1: HyperparameterRange, hrange2: HyperparameterRan
 
     assert hrange1.min_mut_radius == hrange2.min_mut_radius
     assert hrange1.max_mut_radius == hrange2.max_mut_radius
-    assert hrange1.min_depr == hrange2.min_depr
-    assert hrange1.max_depr == hrange2.max_depr
+    assert hrange1.min_swap == hrange2.min_swap
+    assert hrange1.max_swap == hrange2.max_swap
     assert hrange1.min_multi == hrange2.min_multi
     assert hrange1.max_multi == hrange2.max_multi
     assert hrange1.min_p_prob == hrange2.min_p_prob

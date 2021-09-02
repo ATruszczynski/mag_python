@@ -22,8 +22,8 @@ def test_ec_init():
 
     assert ec.hrange.min_mut_radius == dhrange.min_mut_radius
     assert ec.hrange.max_mut_radius == dhrange.max_mut_radius
-    assert ec.hrange.min_depr == dhrange.min_depr
-    assert ec.hrange.max_depr == dhrange.max_depr
+    assert ec.hrange.min_swap == dhrange.min_swap
+    assert ec.hrange.max_swap == dhrange.max_swap
     assert ec.hrange.min_multi == dhrange.min_multi
     assert ec.hrange.max_multi == dhrange.max_multi
     assert ec.hrange.min_p_prob == dhrange.min_p_prob

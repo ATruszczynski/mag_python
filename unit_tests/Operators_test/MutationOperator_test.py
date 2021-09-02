@@ -35,7 +35,7 @@ def test_struct_mutation():
     actFuns1 = [None, ReLu(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
-                   actFuns=actFuns1, aggrFun=TanH(), net_it=2, mutation_radius=log10(0.5), depr=log10(0.5),
+                   actFuns=actFuns1, aggrFun=TanH(), net_it=2, mutation_radius=log10(0.5), swap_prob=log10(0.5),
                    multi=log10(1.5), p_prob=log10(0.7), c_prob=log10(0.3), p_rad=log10(0.8))
 
     mo = FinalMutationOperator(hrange)
@@ -128,7 +128,7 @@ def test_struct_mutation_2():
     actFuns1 = [None, ReLu(), ReLu(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), depr=log10(0.75),
+                   aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), swap_prob=log10(0.75),
                    multi=log10(90), p_prob=log10(0.74),
                    c_prob=log10(0.15), p_rad=log10(0.595))
 
@@ -223,7 +223,7 @@ def test_struct_mutation_3():
     actFuns1 = [None, ReLu(), ReLu(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), depr=log10(0.75),
+                   aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), swap_prob=log10(0.75),
                    multi=log10(99), p_prob=log10(0.74),
                    c_prob=log10(0.15), p_rad=log10(0.595))
 
@@ -326,7 +326,7 @@ bia1 = np.array([[0., -2, -3, -4, -5, -6]])
 actFuns1 = [None, ReLu(), ReLu(), TanH(), None, None]
 
 cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bia1, actFuns=actFuns1,
-               aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), depr=log10(0.75),
+               aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), swap_prob=log10(0.75),
                multi=log10(99), p_prob=log10(0.74),
                c_prob=log10(0.15), p_rad=log10(0.595))
 aggr1 = cn1.aggrFun
@@ -367,7 +367,7 @@ nnit = conditional_try_choose_different(dstr_mut_prob, net_it, list(range(minn, 
 
 nmr = conditional_uniform_value_shift(p_mutation_prob, log10(mutation_radius), hrange.min_mut_radius, hrange.max_mut_radius, p_rad)
 
-nsqr = conditional_uniform_value_shift(p_mutation_prob, log10(depr), hrange.min_depr, hrange.max_depr, p_rad)
+nsqr = conditional_uniform_value_shift(p_mutation_prob, log10(depr), hrange.min_swap, hrange.max_swap, p_rad)
 
 nlin = conditional_uniform_value_shift(p_mutation_prob, log10(modi_nc), hrange.min_multi, hrange.max_multi, p_rad)
 

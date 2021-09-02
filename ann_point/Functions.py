@@ -84,6 +84,7 @@ class GaussAct(ActFun):
     def to_string(self):
         return "GS"
 
+
 class SincAct(ActFun):
     def __init__(self):
         pass
@@ -108,6 +109,7 @@ class SincAct(ActFun):
 
     def to_string(self):
         return "SC"
+
 
 class TanH(ActFun):
     def compute(self, arg: np.ndarray) -> np.ndarray:
@@ -176,6 +178,7 @@ class Softmax(ActFun):
 
     def to_string(self):
         return "SM"
+
 
 class Identity(ActFun):
     def compute(self, arg: np.ndarray) -> np.ndarray:

@@ -12,7 +12,7 @@ from utility.Utility2 import *
 
 class ChaosNet:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
-                 actFuns: [ActFun], aggrFun: ActFun, net_it: int, mutation_radius: float, depr: float,
+                 actFuns: [ActFun], aggrFun: ActFun, net_it: int, mutation_radius: float, swap_prob: float,
                  multi: float, p_prob: float, c_prob: float, p_rad: float):
 
         check_cond_in_cn_const(links.shape[0] == links.shape[1])
@@ -73,7 +73,7 @@ class ChaosNet:
 
         self.mutation_radius = mutation_radius
 
-        self.swap_prob = depr
+        self.swap_prob = swap_prob
         self.multi = multi
         self.c_prob = c_prob
         self.p_prob = p_prob
@@ -260,7 +260,7 @@ class ChaosNet:
 
         return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
                         links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
-                        , net_it=self.net_it, mutation_radius=self.mutation_radius, depr=self.swap_prob,
+                        , net_it=self.net_it, mutation_radius=self.mutation_radius, swap_prob=self.swap_prob,
                         multi=self.multi, p_prob=self.p_prob, c_prob=self.c_prob,
                         p_rad=self.p_rad)
 

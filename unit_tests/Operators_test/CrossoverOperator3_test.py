@@ -48,10 +48,10 @@ def test_find_cuts():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2,
                    multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20,
                    multi=-30, p_prob=-40, c_prob=-50, p_rad=-60)
 
     cuts = find_possible_cuts99(cn1, cn2, hrange)
@@ -99,10 +99,10 @@ def test_find_cuts_2():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2,
                    multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20,
                    multi=-30, p_prob=-40, c_prob=-50, p_rad=-60)
 
     cuts = find_possible_cuts99(cn1, cn2, hrange)
@@ -150,10 +150,10 @@ def test_find_cuts_3():
     actFuns2 = [None, TanH(), TanH(), TanH(), TanH(), None]
 
     cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2,
                    multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=1, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20,
                    multi=-30, p_prob=-40, c_prob=-50, p_rad=-60)
 
     cuts = find_possible_cuts99(cn1, cn2, hrange)
@@ -214,10 +214,10 @@ def test_simple_crossover():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=log10(0.5),
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=log10(0.5),
                    multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20,
                    multi=-30, p_prob=-40, c_prob=-50, p_rad=-60)
     co = FinalCO3(hrange)
 
@@ -383,10 +383,10 @@ def test_simple_crossover_2():
     actFuns2 = [None, TanH(), TanH(), TanH(), TanH(), TanH(), TanH(), None]
 
     cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=log10(0.4), multi=-3,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=log10(0.4), multi=-3,
                    p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=1, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20, multi=-30,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20, multi=-30,
                    p_prob=-40, c_prob=-50, p_rad=-60)
 
     co = FinalCO3(hrange)
@@ -576,10 +576,10 @@ def test_pieceing_together():
     actFuns2 = [None, TanH(), TanH(), TanH(), TanH(), TanH(), TanH(), None]
 
     cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2, multi=-3,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2, multi=-3,
                    p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=1, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20, multi=-30,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20, multi=-30,
                    p_prob=-40, c_prob=-50, p_rad=-60)
 
     l, w, b, a = get_link_weights_biases_acts7(cn1, cn2, [3, 2, 2, 5])

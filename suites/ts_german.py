@@ -1,24 +1,18 @@
 import random
 from math import ceil
 
-import numpy as np
-from sklearn import datasets
 from sklearn.preprocessing import StandardScaler
 
 from TupleForTest import TupleForTest
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.FinalCO1 import FinalCO1
-from evolving_classifier.operators.FinalCO2 import FinalCO2
 from evolving_classifier.operators.FinalCO3 import FinalCO3
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
-from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelectionSized, \
-    TournamentSelectionSized2
-from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
+from evolving_classifier.operators.SelectionOperator import TournamentSelectionSized
+from suites.suite_utility import directory_for_tests
 from tester import run_tests
-from utility.Utility import one_hot_endode, get_default_hrange_ga, get_default_hrange_es, \
-    generate_counting_problem_unique, generate_counting_problem, translate_german, divide_frame_into_columns, \
-    get_default_hrange_ga2, get_default_hrange_es2, get_default_hrange_es3
+from utility.Utility import one_hot_endode, divide_frame_into_columns, \
+    get_default_hrange_es3
 import os
 import pandas as pd
 

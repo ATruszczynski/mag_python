@@ -1,8 +1,8 @@
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.FinalCO1 import *
-from evolving_classifier.operators.FinalCO2 import FinalCO2
+from evolving_classifier.operators.Rejects.FinalCO1 import *
+from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from tester import run_tests
@@ -10,7 +10,6 @@ from TupleForTest import TupleForTest
 from unit_tests.heavy_tests.RunTests_test import trash_can
 from utility.TestingUtility import assert_chaos_networks_same
 from utility.Utility import *
-import os
 
 
 def test_tester_same_as_ec_ind():

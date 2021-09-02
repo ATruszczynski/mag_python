@@ -102,7 +102,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
         maxit = random.randint(hrange.min_it, hrange.max_it)
 
         mut_radius = random.uniform(hrange.min_mut_radius, hrange.max_mut_radius)
-        sqr_mut_prob = random.uniform(hrange.min_depr, hrange.max_depr)
+        sqr_mut_prob = random.uniform(hrange.min_swap, hrange.max_swap)
         lin_mut_prob = random.uniform(hrange.min_multi, hrange.max_multi)
         p_mut_prob = random.uniform(hrange.min_p_prob, hrange.max_p_prob)
         c_prob = random.uniform(hrange.min_c_prob, hrange.max_c_prob)
@@ -113,7 +113,7 @@ def generate_population(hrange: HyperparameterRange, count: int, input_size: int
 
         cn = ChaosNet(input_size=input_size, output_size=output_size, links=links, weights=weights,
                       biases=biases, actFuns=actFuns, aggrFun=aggrFun, net_it=maxit, mutation_radius=mut_radius,
-                      depr=sqr_mut_prob, multi=lin_mut_prob, p_prob=p_mut_prob,
+                      swap_prob=sqr_mut_prob, multi=lin_mut_prob, p_prob=p_mut_prob,
                       c_prob=c_prob, p_rad=dstr_prob)
 
         result.append(cn)

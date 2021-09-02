@@ -52,7 +52,7 @@ class FinalMutationOperatorP(MutationOperator):
         if p <= p_pm:
             rad_frac = 0.1
             mutation_radius = conditional_uniform_value_shift(1, point.mutation_radius, self.hrange.min_mut_radius, self.hrange.max_mut_radius, rad_frac)
-            sqr_mut_prob = conditional_uniform_value_shift(1, point.swap_prob, self.hrange.min_depr, self.hrange.max_depr, rad_frac)
+            sqr_mut_prob = conditional_uniform_value_shift(1, point.swap_prob, self.hrange.min_swap, self.hrange.max_swap, rad_frac)
             lin_mut_prob = conditional_uniform_value_shift(1, point.multi, self.hrange.min_multi, self.hrange.max_multi, rad_frac)
             p_mutation_prob = conditional_uniform_value_shift(1, point.p_prob, self.hrange.min_p_prob, self.hrange.max_p_prob, rad_frac)
             c_prob = conditional_uniform_value_shift(1, point.c_prob, self.hrange.min_c_prob, self.hrange.max_c_prob, rad_frac)
@@ -103,7 +103,7 @@ class FinalMutationOperatorP(MutationOperator):
 
 
         np = ChaosNet(input_size=point.input_size, output_size=point.output_size, links=links, weights=weights,
-                      biases=biases, actFuns=nact, aggrFun=aggr, net_it=net_it, mutation_radius=mutation_radius, depr=sqr_mut_prob,
+                      biases=biases, actFuns=nact, aggrFun=aggr, net_it=net_it, mutation_radius=mutation_radius, swap_prob=sqr_mut_prob,
                       multi=lin_mut_prob, p_prob=p_mutation_prob, c_prob=c_prob, p_rad=dstr_mut_prob, act_mut_prob=act_mut_prob)
 
         cndp.net = np

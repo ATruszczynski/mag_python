@@ -1,7 +1,7 @@
 import random
 
 from ann_point import HyperparameterRange
-from evolving_classifier.operators.FinalCO1 import find_possible_cuts4
+from evolving_classifier.operators.Rejects.FinalCO1 import find_possible_cuts4
 from neural_network.ChaosNet import ChaosNet
 import numpy as np
 
@@ -16,10 +16,11 @@ class CrossoverOperator:
     def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
         pass
 
+#TODO - B - AL zamiast A1 etc?
 # TODO - B - remove needless code from here
 # TODO - B - test
 
-class RejectCO2(CrossoverOperator):
+class RejectCO1(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
         self.hrange = hrange
@@ -35,8 +36,8 @@ class RejectCO2(CrossoverOperator):
         input_size = pointA.input_size
         output_size = pointA.output_size
 
-        new_A_links, new_A_weights, new_A_biases, new_A_func = get_link_weights_biases_acts4(pointA=pointA, pointB=pointB, cut=cuts[0])
-        new_B_links, new_B_weights, new_B_biases, new_B_func = get_link_weights_biases_acts4(pointA=pointA, pointB=pointB, cut=cuts[1])
+        new_A_links, new_A_weights, new_A_biases, new_A_func = get_link_weights_biases_acts3(pointA=pointA, pointB=pointB, cut=cuts[0])
+        new_B_links, new_B_weights, new_B_biases, new_B_func = get_link_weights_biases_acts3(pointA=pointA, pointB=pointB, cut=cuts[1])
 
         # cut_A = cut[1]
         # cut_B = cut[2]
@@ -135,33 +136,23 @@ class RejectCO2(CrossoverOperator):
 
         pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
                           biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_maxit, mutation_radius=new_A_mut_rad,
-                          depr=new_A_wb_prob, multi=new_A_s_prob, p_prob=new_A_p_prob,
+                          swap_prob=new_A_wb_prob, multi=new_A_s_prob, p_prob=new_A_p_prob,
                           c_prob=new_A_c_prob, p_rad=new_A_r_prob)
 
         pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
                           biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_maxit, mutation_radius=new_B_mut_rad,
-                          depr=new_B_wb_prob, multi=new_B_s_prob, p_prob=new_B_p_prob,
+                          swap_prob=new_B_wb_prob, multi=new_B_s_prob, p_prob=new_B_p_prob,
                           c_prob=new_B_c_prob, p_rad=new_B_r_prob)
 
         return pointA, pointB
 
-def cut_into_puzzles4(matrix: np.ndarray, i: int, o: int, start: int, num: int) -> [np.ndarray]:
-    # if left:
-    #     P1 = matrix[i:-o, start:start+num]
-    #     P2 = matrix[:i, start:start+num]
-    #     P3 = matrix[i:-o, -o:]
-    # else:
-    #     P1 = matrix[i:-o, start:start+num]
-    #     P2 = matrix[:i, start:start+num]
-    #     P3 = matrix[i:-o, -o:]
+def cut_into_puzzles3(matrix: np.ndarray, o: int, start: int, num: int) -> [np.ndarray]:
+    P1 = matrix[:, start:start + num]
+    P2 = matrix[start:start + num, -o:]
 
-    P1 = matrix[i:-o, start:start+num]
-    P2 = matrix[:i, start:start+num]
-    P3 = matrix[i:-o, -o:]
+    return P1, P2
 
-    return P1, P2, P3
-
-def piece_together_from_puzzles4(i: int, o: int, left_puzzles: [np.ndarray], right_puzzles: [np.ndarray]):
+def piece_together_from_puzzles3(i: int, o: int, left_puzzles: [np.ndarray], right_puzzles: [np.ndarray]):
     left_nc = left_puzzles[0].shape[1]
     right_nc = right_puzzles[0].shape[1]
 
@@ -172,23 +163,19 @@ def piece_together_from_puzzles4(i: int, o: int, left_puzzles: [np.ndarray], rig
     result = np.zeros((n, n))
 
     # Put in pieces #1
-    l1h = min(left_puzzles[0].shape[0], hei-i)
-    result[i:i+l1h, i:aEnd] = left_puzzles[0][:l1h, :]
+    l1h = min(left_puzzles[0].shape[0], hei)
+    r1h = min(right_puzzles[0].shape[0], hei)
 
-    r1h = min(right_puzzles[0].shape[0], hei-i)
-    result[-(r1h + o):-o, aEnd:-o] = right_puzzles[0][-r1h:, :]
+    result[:l1h, i:aEnd] = left_puzzles[0][:l1h, :]
+    result[:r1h, aEnd:-o] = right_puzzles[0][:r1h, :]
 
     # Put in pieces #2
-    result[:i, i:aEnd] = left_puzzles[1]
-    result[:i, aEnd:-o] = right_puzzles[1]
-
-    # Put in pieces #3
-    result[i:i+l1h, -o:] = left_puzzles[2][:l1h, :]
-    result[-(r1h + o):-o, -o:] = right_puzzles[2][-r1h, :]
+    result[i:aEnd, -o:] = left_puzzles[1]
+    result[aEnd:-o, -o:] = right_puzzles[1]
 
     return result
 
-def get_link_weights_biases_acts4(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
+def get_link_weights_biases_acts3(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
     input_size = pointA.input_size
     output_size = pointA.output_size
 
@@ -220,18 +207,18 @@ def get_link_weights_biases_acts4(pointA: ChaosNet, pointB: ChaosNet, cut: [int]
     #     cut[3] = tmp
 
 
-    links = piece_together_from_puzzles4(i=input_size, o=output_size,
-                                         left_puzzles=cut_into_puzzles4(matrix=pointA.links, i=input_size, o=output_size,
-                                                                        start=cut[0], num=cut[1]),
-                                         right_puzzles=cut_into_puzzles4(matrix=pointB.links, i=input_size, o=output_size,
-                                                                         start=cut[2], num=cut[3]))
+    links = piece_together_from_puzzles3(i=input_size, o=output_size,
+                                        left_puzzles=cut_into_puzzles3(matrix=pointA.links, o=output_size,
+                                                                      start=cut[0], num=cut[1]),
+                                        right_puzzles=cut_into_puzzles3(matrix=pointB.links, o=output_size,
+                                                                       start=cut[2], num=cut[3]))
     links = np.multiply(links, get_weight_mask(pointA.input_size, pointA.output_size, links.shape[0]))
 
-    weights = piece_together_from_puzzles4(i=input_size, o=output_size,
-                                           left_puzzles=cut_into_puzzles4(matrix=pointA.weights, i=input_size, o=output_size,
-                                                                          start=cut[0], num=cut[1]),
-                                           right_puzzles=cut_into_puzzles4(matrix=pointB.weights, i=input_size, o=output_size,
-                                                                           start=cut[2], num=cut[3]))
+    weights = piece_together_from_puzzles3(i=input_size, o=output_size,
+                                          left_puzzles=cut_into_puzzles3(matrix=pointA.weights, o=output_size,
+                                                                        start=cut[0], num=cut[1]),
+                                          right_puzzles=cut_into_puzzles3(matrix=pointB.weights, o=output_size,
+                                                                         start=cut[2], num=cut[3]))
     weights = np.multiply(weights, get_weight_mask(pointA.input_size, pointA.output_size, links.shape[0]))
     nc = input_size + output_size + cut[1] + cut[3]
 

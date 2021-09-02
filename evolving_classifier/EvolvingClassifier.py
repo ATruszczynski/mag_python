@@ -1,7 +1,6 @@
-import math
 from evolving_classifier.FitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.FinalCO1 import *
+from evolving_classifier.operators.Rejects.FinalCO1 import *
 from evolving_classifier.operators.MutationOperators import *
 from evolving_classifier.operators.SelectionOperator import *
 from utility.RunHistory import RunHistory

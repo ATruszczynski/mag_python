@@ -1,12 +1,11 @@
-import numpy as np
 import random
 import numpy as np
 
 from TupleForTest import TupleForTest, assert_tts_same
 from evolving_classifier.FitnessCalculator import CNFitnessCalculator
 from evolving_classifier.FitnessFunction import CNFF, CNFF2, QuadDiff
-from evolving_classifier.operators.FinalCO1 import FinalCO1
-from evolving_classifier.operators.FinalCO2 import FinalCO2
+from evolving_classifier.operators.Rejects.FinalCO1 import FinalCO1
+from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
 from evolving_classifier.operators.MutationOperators import FinalMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection, TournamentSelection05
 from utility.Utility import generate_counting_problem, get_default_hrange_ga, assert_hranges_same
@@ -64,8 +63,8 @@ def test_tt_copy():
 
     assert_tts_same(tt1, tt2)
 
-    tt1.hrange.max_depr = 222
-    assert tt2.hrange.max_depr == -2
+    tt1.hrange.max_swap = 222
+    assert tt2.hrange.max_swap == -2
 
     tt1.data[3][2][-2, 0] = 333
     assert tt2.data[3][2][-2, 0] == 0

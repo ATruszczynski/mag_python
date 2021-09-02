@@ -26,7 +26,7 @@ def test_chaos_compare_1():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -88,7 +88,7 @@ def test_chaos_compare_2():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -155,7 +155,7 @@ def test_chaos_compare_3():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -222,7 +222,7 @@ def test_chaos_compare_4():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -289,7 +289,7 @@ def test_chaos_compare_5():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -356,7 +356,7 @@ def test_chaos_compare_6():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -423,7 +423,7 @@ def test_chaos_compare_7():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -490,7 +490,7 @@ def test_chaos_compare_8():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -557,7 +557,7 @@ def test_chaos_compare_9():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -622,7 +622,7 @@ def test_chaos_compare_10():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -689,7 +689,7 @@ def test_chaos_compare_11():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -752,7 +752,7 @@ def test_chaos_compare_12():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -819,7 +819,7 @@ def test_chaos_compare_13():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -886,7 +886,7 @@ def test_chaos_compare_14():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -953,7 +953,7 @@ def test_chaos_compare_15():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1020,7 +1020,7 @@ def test_chaos_compare_16():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1087,7 +1087,7 @@ def test_chaos_compare_17():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1154,7 +1154,7 @@ def test_chaos_compare_18():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1355,7 +1355,7 @@ def test_chaos_compare_21():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1422,7 +1422,7 @@ def test_chaos_compare_22():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1489,7 +1489,7 @@ def test_chaos_compare_23():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1556,7 +1556,7 @@ def test_chaos_compare_24():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1623,7 +1623,7 @@ def test_chaos_compare_25():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)
@@ -1692,7 +1692,7 @@ def test_chaos_compare_26():
 
     cn1 = ChaosNet(input_size=3, output_size=1, links=link1.copy(), weights=wei1.copy(), biases=bia1.copy(),
                    actFuns=actFuns1, aggrFun=Sigmoid(), net_it=10,
-                   mutation_radius=-1, depr=-2.5, multi=-1, p_prob=-0.44,
+                   mutation_radius=-1, swap_prob=-2.5, multi=-1, p_prob=-0.44,
                    c_prob=-11, p_rad=-22)
 
     np.random.seed(1001)

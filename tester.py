@@ -1,14 +1,7 @@
-import random
-from statistics import mean
 from sklearn import datasets
 import datetime
 
-from evolving_classifier.operators.PuzzleCO import PuzzleCO
-from evolving_classifier.operators.PuzzleCO2 import PuzzleCO2
-from evolving_classifier.operators.RejectCO1 import RejectCO1
-from evolving_classifier.operators.RejectCO2 import RejectCO2
-from evolving_classifier.operators.RejectCO3 import RejectCO3
-from evolving_classifier.operators.FinalCO2 import FinalCO2
+from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
 from evolving_classifier.EvolvingClassifier import *
 from TupleForTest import TupleForTest
 import numpy as np
@@ -155,8 +148,8 @@ def write_test_parameters(data_file, tt:TupleForTest):
 
     data_file.write(f"min_mut_radius: {hrange.min_mut_radius}\n")
     data_file.write(f"max_mut_radius: {hrange.max_mut_radius}\n")
-    data_file.write(f"min_sqr_mut_prob: {hrange.min_depr}\n")
-    data_file.write(f"max_sqr_mut_prob: {hrange.max_depr}\n")
+    data_file.write(f"min_sqr_mut_prob: {hrange.min_swap}\n")
+    data_file.write(f"max_sqr_mut_prob: {hrange.max_swap}\n")
     data_file.write(f"min_lin_mut_prob: {hrange.min_multi}\n")
     data_file.write(f"max_lin_mut_prob: {hrange.max_multi}\n")
     data_file.write(f"min_p_mut_prob: {hrange.min_p_prob}\n")

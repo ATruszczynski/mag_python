@@ -1,9 +1,8 @@
 # import numpy as np
-from ann_point.Functions import *
 # from ann_point.AnnPoint2 import *
-from evolving_classifier.operators.FinalCO1 import *
+from evolving_classifier.operators.Rejects.FinalCO1 import *
 # from utility.Mut_Utility import resize_layer
-from evolving_classifier.operators.FinalCO2 import FinalCO2, find_possible_cuts7
+from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
 from utility.TestingUtility import assert_chaos_network_properties
 
 #TODO - B - test multiple runs vs single run (done?)
@@ -41,10 +40,10 @@ def test_simple_crossover():
     actFuns2 = [None, TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2,
                    multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20,
                    multi=-30, p_prob=-40, c_prob=-50, p_rad=-60)
 
     co = FinalCO2(hrange)
@@ -211,10 +210,10 @@ def test_simple_crossover_2():
     actFuns2 = [None, TanH(), TanH(), TanH(), TanH(), TanH(), None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2, multi=-3,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2, multi=-3,
                    p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20, multi=-30,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20, multi=-30,
                    p_prob=-40, c_prob=-50, p_rad=-60)
 
     co = FinalCO2(hrange)
@@ -377,10 +376,10 @@ def test_simple_crossover_3():
     actFuns2 = [None, None, None]
 
     cn1 = ChaosNet(input_size=1, output_size=2, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, depr=-2, multi=-3,
+                   aggrFun=SincAct(), net_it=1, mutation_radius=-1, swap_prob=-2, multi=-3,
                    p_prob=-4, c_prob=-5, p_rad=-6)
     cn2 = ChaosNet(input_size=1, output_size=2, weights=wei2, links=link2, biases=bia2, actFuns=actFuns2,
-                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, depr=-20, multi=-30,
+                   aggrFun=GaussAct(), net_it=10, mutation_radius=-10, swap_prob=-20, multi=-30,
                    p_prob=-40, c_prob=-50, p_rad=-60)
 
     co = FinalCO2(hrange)
