@@ -20,6 +20,7 @@ import pandas as pd
 
 def get_data():
     data_frame = pd.read_csv(fr"..{os.path.sep}data_sets{os.path.sep}winequality-white.csv")
+    # data_frame = pd.read_csv(fr"data_sets{os.path.sep}winequality-white.csv")
 
     cols_to_norm = [1, 4, 12]
     cols_to_norm = data_frame.columns[:-1]
@@ -27,7 +28,7 @@ def get_data():
     data_frame = data_frame.sample(frac=1)
 
     qualities = data_frame["quality"].unique()
-    tt = 200
+    tt = 10000
     frac = 0.6
 
     train_frames = []
@@ -141,19 +142,19 @@ def test_suite_for_wine():
             seeds.append(random.randint(0, 10**6))
 
         hrange = get_wines_hrange_eff()
-        tests.append(TupleForTest(name=f"wines_EFF", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"wwines_EFF", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MEFF], fct=CNFitnessCalculator, reg=False))
 
         hrange = get_wines_hrange_avmax()
-        tests.append(TupleForTest(name=f"wines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"wwines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         hrange = get_wines_hrange_mixff()
-        tests.append(TupleForTest(name=f"wines_MIXFF", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"wwines_MIXFF", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))

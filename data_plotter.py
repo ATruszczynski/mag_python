@@ -101,8 +101,8 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
     return dfs
 
-dir_name = "EFF"
-dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
+dir_name = "wines_EFF"
+dfs =  read_all_frames_from_directory(rf"final_tests\{dir_name}")
 
 plot_min_max_avg(frames=dfs, parameter_name="nc", title="nc")
 # plot_min_max_avg(frames=dfs, parameter_name="ec", title="ec")
@@ -119,7 +119,7 @@ plot_min_max_avg(frames=dfs, parameter_name="meff", title="meff", lim=[-0.01, 1.
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
 # plot_min_max_avg(frames=dfs, parameter_name="rec", title="rec")
 # plot_min_max_avg(frames=dfs, parameter_name="f1s", title="f1s")
-plot_min_max_avg(frames=dfs, parameter_name="ff1", title="ff1", lim=[0.09, 0.2], scale="log")
+# plot_min_max_avg(frames=dfs, parameter_name="ff1", title="ff1", lim=[0.12, 0.13], scale="log")
 # plot_min_max_avg(frames=dfs, parameter_name="ff2", title="ff2")
 # plot_min_max_avg(frames=dfs, parameter_name="ff3", title="ff3")
 

@@ -53,22 +53,8 @@ from neural_network.ChaosNet import ChaosNet
 # c, d = co.crossover(cn1, cn2)
 #
 # ori = 1
+from suites.ts_wines import test_suite_for_wine, get_data
 
-link1 = np.array([[0, 1, 1, 0],
-                  [0, 0, 1, 0],
-                  [0, 1, 0, 1],
-                  [0, 0, 0, 0]])
-wei1 = np.array([[0, 1, 1, 0],
-                 [0, 0, 1, 0],
-                 [0, 1, 0, 1],
-                 [0, 0, 0, 0]])
-bia1 = np.array([[0., -2, -3, -4]])
-actFuns1 = [None, ReLu(), ReLu(), None]
-cn1 = ChaosNet(input_size=1, output_size=1, weights=wei1, links=link1, biases=bia1, actFuns=actFuns1,
-               aggrFun=ReLu(), net_it=1, mutation_radius=-1, swap_prob=-2, multi=-3,
-               p_prob=-4, c_prob=-5, p_rad=-6, act_mut_prob=-7)
+d = get_data()
 
-res = cn1.run(np.array([[1, 2]]))
-
-print(res)
-
+ori = 0
