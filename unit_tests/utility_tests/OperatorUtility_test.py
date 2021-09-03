@@ -1118,6 +1118,28 @@ def test_uniform_value_shift():
     assert max(results) <= 1.
     assert max(results) >= 0.95
 
+def test_gaussian_value_shift():
+    random.seed(10012001)
+
+    val1 = conditional_gaussian_value_shift(0.8, 0.1, 0., 1, 0.1)
+    assert val1 == pytest.approx(0.0573297, abs=1e-5)
+
+    val1 = conditional_gaussian_value_shift(0.8, 0.5, 0., 2, 0.15)
+    assert val1 == pytest.approx(0.244504543, abs=1e-5)
+
+    val1 = conditional_gaussian_value_shift(0.6, 0.25, 0., 1, 0.15)
+    assert val1 == pytest.approx(0.25, abs=1e-5)
+
+    results = []
+    for i in range(200):
+        results.append(conditional_gaussian_value_shift(1, 0.25, 0., 1, i * 0.05))
+
+    assert min(results) == 0.
+    assert min(results) <= 0.05
+    assert max(results) == 1.
+    assert max(results) >= 0.95
+
+
 # random.seed(10012001)
 # print(random.random())
 # print(random.uniform(0, 0.2))
@@ -1337,5 +1359,16 @@ test_uniform_value_shift()
 #
 # test_neuron_increase()
 # test_possible_cuts_4()
+
+
+# random.seed(10012001)
+#
+# print(random.random())
+# print(random.gauss(0.1, 0.1))
+# print(random.random())
+# print(random.gauss(0.5, 0.3))
+# print(random.random())
+#
+# test_gaussian_value_shift()
 
 

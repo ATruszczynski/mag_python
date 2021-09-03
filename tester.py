@@ -10,7 +10,6 @@ import os.path
 np.seterr(all='ignore')
 
 # directory_for_tests=f"..{os.path.sep}algo_tests"
-
 def run_tests(tts: [TupleForTest], directory_for_tests, power: int) -> [[ChaosNet]]:
     resultss = []
 
@@ -86,11 +85,11 @@ def net_to_file(net: ChaosNet, dirpath: str, tresult: [Any]):
     file.write(f"aggrFun: \n{net.aggrFun.to_string()}\n")
     file.write(f"net_it: \n{net.net_it}\n")
     file.write(f"mutation_radius: \n{net.mutation_radius}\n")
-    file.write(f"sqr_mut_prob: \n{net.swap_prob}\n")
-    file.write(f"lin_mut_prob: \n{net.multi}\n")
-    file.write(f"p_mutation_prob: \n{net.p_prob}\n")
+    file.write(f"multi: \n{net.multi}\n")
+    file.write(f"p_prob: \n{net.p_prob}\n")
+    file.write(f"p_rad: \n{net.p_rad}\n")
     file.write(f"c_prob: \n{net.c_prob}\n")
-    file.write(f"dstr_mut_prob: \n{net.p_rad}\n")
+    file.write(f"swap_prob: \n{net.swap_prob}\n")
 
     file.write(f"results:\n")
     write_down_test_results(file, net, tresult)
@@ -110,7 +109,7 @@ def write_down_test_results(data_file, net: ChaosNet, tr: [Any]):
     data_file.write(f"av_f1: {average_f1_score(tr[0])}\n")
     data_file.write(f"eff: {efficiency(tr[0])}\n")
     data_file.write(f"meff: {m_efficiency(tr[0])}\n")
-    if len(tr) == 2:
+    if len(tr) >= 2:
         data_file.write(f"err: {tr[1]}\n")
 
 
@@ -148,16 +147,16 @@ def write_test_parameters(data_file, tt:TupleForTest):
 
     data_file.write(f"min_mut_radius: {hrange.min_mut_radius}\n")
     data_file.write(f"max_mut_radius: {hrange.max_mut_radius}\n")
-    data_file.write(f"min_sqr_mut_prob: {hrange.min_swap}\n")
-    data_file.write(f"max_sqr_mut_prob: {hrange.max_swap}\n")
-    data_file.write(f"min_lin_mut_prob: {hrange.min_multi}\n")
-    data_file.write(f"max_lin_mut_prob: {hrange.max_multi}\n")
-    data_file.write(f"min_p_mut_prob: {hrange.min_p_prob}\n")
-    data_file.write(f"max_p_mut_prob: {hrange.max_p_prob}\n")
+    data_file.write(f"min_multi: {hrange.min_multi}\n")
+    data_file.write(f"max_multi: {hrange.max_multi}\n")
+    data_file.write(f"min_p_prob: {hrange.min_p_prob}\n")
+    data_file.write(f"max_p_prob: {hrange.max_p_prob}\n")
+    data_file.write(f"min_p_rad: {hrange.min_p_rad}\n")
+    data_file.write(f"max_p_rad: {hrange.max_p_rad}\n")
     data_file.write(f"min_c_prob: {hrange.min_c_prob}\n")
     data_file.write(f"max_c_prob: {hrange.max_c_prob}\n")
-    data_file.write(f"min_dstr_mut_prob: {hrange.min_p_rad}\n")
-    data_file.write(f"max_dstr_mut_prob: {hrange.max_p_rad}\n")
+    data_file.write(f"min_swap: {hrange.min_swap}\n")
+    data_file.write(f"max_swap: {hrange.max_swap}\n")
 
     data_file.write("actfuns: ")
     for i in range(len(hrange.actFunSet)):

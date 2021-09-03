@@ -222,7 +222,6 @@ def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: f
 
     return value
 
-# TODO - A - test if used
 # TODO - B - make a mut op using that?
 def conditional_gaussian_value_shift(p: float, value: float, minV: float, maxV: float, frac: float):
     if random.random() <= p:

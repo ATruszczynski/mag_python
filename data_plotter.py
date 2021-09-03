@@ -101,49 +101,66 @@ def read_all_frames_from_directory(dir_path: str) -> [pd.DataFrame]:
 
     return dfs
 
-dir_name = "iris_doc_avmax"
+dir_name = "EFF"
 dfs =  read_all_frames_from_directory(rf"algo_tests\{dir_name}")
 
 plot_min_max_avg(frames=dfs, parameter_name="nc", title="nc")
 # plot_min_max_avg(frames=dfs, parameter_name="ec", title="ec")
-# plot_min_max_avg(frames=dfs, parameter_name="ni", title="ni")
+plot_min_max_avg(frames=dfs, parameter_name="ni", title="ni")
 plot_min_max_avg(frames=dfs, parameter_name="mr", title="mr")
 plot_min_max_avg(frames=dfs, parameter_name="mult", title="mult")
-plot_min_max_avg(frames=dfs, parameter_name="ppm", title="ppm")
-plot_min_max_avg(frames=dfs, parameter_name="prad", title="prad")
-plot_min_max_avg(frames=dfs, parameter_name="cp", title="cp")
-plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
+# plot_min_max_avg(frames=dfs, parameter_name="ppm", title="ppm")
+# plot_min_max_avg(frames=dfs, parameter_name="prad", title="prad")
+# plot_min_max_avg(frames=dfs, parameter_name="cp", title="cp")
+# plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
-# plot_min_max_avg(frames=dfs, parameter_name="meff", title="meff", lim=[-0.01, 1.01])
-plot_min_max_avg(frames=dfs, parameter_name="acc", title="acc", lim=[-0.01, 1.01])
+plot_min_max_avg(frames=dfs, parameter_name="meff", title="meff", lim=[-0.01, 1.01])
+# plot_min_max_avg(frames=dfs, parameter_name="acc", title="acc", lim=[-0.01, 1.01])
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
 # plot_min_max_avg(frames=dfs, parameter_name="rec", title="rec")
 # plot_min_max_avg(frames=dfs, parameter_name="f1s", title="f1s")
-plot_min_max_avg(frames=dfs, parameter_name="ff1", title="ff1", lim=[0.1, 0.15])
+plot_min_max_avg(frames=dfs, parameter_name="ff1", title="ff1", lim=[0.09, 0.2], scale="log")
 # plot_min_max_avg(frames=dfs, parameter_name="ff2", title="ff2")
 # plot_min_max_avg(frames=dfs, parameter_name="ff3", title="ff3")
 
 # param = "mr"
 #
-# dir_name1 = "AT_wines_dco_size_1"
+# nff = True
+#
+# dir_name1 = "iris2_avmax_001" # 0.01
 # dfs1 =  read_all_frames_from_directory(rf"algo_tests\{dir_name1}")
-# plot_min_max_avg(frames=dfs1, parameter_name=param, title=param)
+# if nff:
+#     plot_min_max_avg(frames=dfs1, parameter_name=param, title=param)
+# else:
+#     plot_min_max_avg(frames=dfs1, parameter_name=param, title=param, lim=[0.1, 0.4], scale="log")
 #
-# dir_name2 = "AT_wines_dco_size_2"
+# dir_name2 = "iris2_avmax_0001"# 0.001
 # dfs2 =  read_all_frames_from_directory(rf"algo_tests\{dir_name2}")
-# plot_min_max_avg(frames=dfs2, parameter_name=param, title=param)
+# if nff:
+#     plot_min_max_avg(frames=dfs2, parameter_name=param, title=param)
+# else:
+#     plot_min_max_avg(frames=dfs2, parameter_name=param, title=param, lim=[0.1, 0.4], scale="log")
 #
-# dir_name3 = "AT_wines_dco_size_3"
+# dir_name3 = "iris2_avmax_005" #0.001
 # dfs3 =  read_all_frames_from_directory(rf"algo_tests\{dir_name3}")
-# plot_min_max_avg(frames=dfs3, parameter_name=param, title=param)
+# if nff:
+#     plot_min_max_avg(frames=dfs3, parameter_name=param, title=param)
+# else:
+#     plot_min_max_avg(frames=dfs3, parameter_name=param, title=param, lim=[0.1, 0.4], scale="log")
 #
-# dir_name4 = "AT_wines_dco_size_4"
+# dir_name4 = "iris2_avmax_5" # 0.1
 # dfs4 =  read_all_frames_from_directory(rf"algo_tests\{dir_name4}")
-# plot_min_max_avg(frames=dfs4, parameter_name=param, title=param)
-
-# dir_name5 = "AT_wines_dco_size_5"
+# if nff:
+#     plot_min_max_avg(frames=dfs4, parameter_name=param, title=param)
+# else:
+#     plot_min_max_avg(frames=dfs4, parameter_name=param, title=param, lim=[0.1, 0.4], scale="log")
+#
+# dir_name5 = "iris2_avmax_6" # 1
 # dfs5 =  read_all_frames_from_directory(rf"algo_tests\{dir_name5}")
-# plot_min_max_avg(frames=dfs5, parameter_name=param, title=param)
+# if nff:
+#     plot_min_max_avg(frames=dfs5, parameter_name=param, title=param)
+# else:
+#     plot_min_max_avg(frames=dfs5, parameter_name=param, title=param, lim=[0.1, 0.4], scale="log")
 
 plt.show()
 

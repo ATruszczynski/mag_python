@@ -99,12 +99,12 @@ def test_struct_mutation():
                                     desired_actFun=[None, ReLu(), TanH(), None, None],
                                     desired_aggr=TanH(),
                                     desired_maxit=2,
-                                    desired_mut_rad=-0.25782364,
-                                    desired_wb_prob=-0.22687510,
-                                    desired_s_prob=0.176091259,
-                                    desired_p_prob=-0.17788975,
-                                    desired_c_prob=-0.42450710,
-                                    desired_r_prob=-0.09559582)
+                                    desired_mut_rad=-0.5305919,
+                                    desired_wb_prob=-0.3566040,
+                                    desired_s_prob=0.17609125,
+                                    desired_p_prob=-0.12493873,
+                                    desired_c_prob=-0.52287874,
+                                    desired_r_prob=-0.091514981)
 
 def test_struct_mutation_2():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
@@ -194,12 +194,12 @@ def test_struct_mutation_2():
                                     desired_actFun=[None, GaussAct(), TanH(), GaussAct(), None, None],
                                     desired_aggr=Sigmoid(),
                                     desired_maxit=1,
-                                    desired_mut_rad=-0.4956634,
-                                    desired_wb_prob=-0.22375686,
-                                    desired_s_prob=0.6812745485,
-                                    desired_p_prob=-0.16303863,
-                                    desired_c_prob=-0.76943127,
-                                    desired_r_prob=-0.222210888)
+                                    desired_mut_rad=-0.405688206,
+                                    desired_wb_prob=-0.09691001,
+                                    desired_s_prob=2.0,
+                                    desired_p_prob=-0.126183892,
+                                    desired_c_prob=-1.0,
+                                    desired_r_prob=-0.22302233)
 
 def test_struct_mutation_3():
     hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
@@ -288,12 +288,12 @@ def test_struct_mutation_3():
                                     desired_actFun=[None, TanH(), Sigmoid(), GaussAct(), None, None],
                                     desired_aggr=Sigmoid(),
                                     desired_maxit=1,
-                                    desired_mut_rad=-0.522410350,
-                                    desired_wb_prob=-0.10412866,
-                                    desired_s_prob=1.14319451,
-                                    desired_p_prob=-0.1458257,
-                                    desired_c_prob=-0.62158282,
-                                    desired_r_prob=-0.22909079)
+                                    desired_mut_rad=-0.234027442,
+                                    desired_wb_prob=-0.1249387366,
+                                    desired_s_prob=3.0,
+                                    desired_p_prob=-0.12493873,
+                                    desired_c_prob=-0.8201796,
+                                    desired_r_prob=-0.22617377)
 
 
 
@@ -301,9 +301,6 @@ def test_struct_mutation_3():
 seed = 1112111
 random.seed(seed)
 np.random.seed(seed)
-
-
-
 
 hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 5), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(log10(0.25), log10(1)),
                              swap=(log10(0.4), log10(0.8)), multi=(log10(0.65), log10(1000)),
@@ -329,6 +326,8 @@ cn1 = ChaosNet(input_size=1, output_size=2, links=link1, weights=wei1, biases=bi
                aggrFun=TanH(), net_it=2, mutation_radius=log10(0.35), swap_prob=log10(0.75),
                multi=log10(99), p_prob=log10(0.74),
                c_prob=log10(0.15), p_rad=log10(0.595))
+
+
 aggr1 = cn1.aggrFun
 net_it = cn1.net_it
 input_size = cn1.input_size
@@ -365,17 +364,19 @@ maxn = min(hrange.max_it, net_it + 1)
 nnit = conditional_try_choose_different(dstr_mut_prob, net_it, list(range(minn, maxn + 1)))
 
 
-nmr = conditional_uniform_value_shift(p_mutation_prob, log10(mutation_radius), hrange.min_mut_radius, hrange.max_mut_radius, p_rad)
+# nmr = conditional_uniform_value_shift(p_mutation_prob, log10(mutation_radius), hrange.min_mut_radius, hrange.max_mut_radius, p_rad)
+# nsqr = conditional_uniform_value_shift(p_mutation_prob, log10(depr), hrange.min_swap, hrange.max_swap, p_rad)
+# nlin = conditional_uniform_value_shift(p_mutation_prob, log10(modi_nc), hrange.min_multi, hrange.max_multi, p_rad)
+# npp = conditional_uniform_value_shift(p_mutation_prob, log10(p_mutation_prob), hrange.min_p_prob, hrange.max_p_prob, p_rad)
+# ncp = conditional_uniform_value_shift(p_mutation_prob, log10(c_prob), hrange.min_c_prob, hrange.max_c_prob, p_rad)
+# ndstr = conditional_uniform_value_shift(p_mutation_prob, log10(p_rad), hrange.min_p_rad, hrange.max_p_rad, p_rad)
 
-nsqr = conditional_uniform_value_shift(p_mutation_prob, log10(depr), hrange.min_swap, hrange.max_swap, p_rad)
-
-nlin = conditional_uniform_value_shift(p_mutation_prob, log10(modi_nc), hrange.min_multi, hrange.max_multi, p_rad)
-
-npp = conditional_uniform_value_shift(p_mutation_prob, log10(p_mutation_prob), hrange.min_p_prob, hrange.max_p_prob, p_rad)
-
-ncp = conditional_uniform_value_shift(p_mutation_prob, log10(c_prob), hrange.min_c_prob, hrange.max_c_prob, p_rad)
-
-ndstr = conditional_uniform_value_shift(p_mutation_prob, log10(p_rad), hrange.min_p_rad, hrange.max_p_rad, p_rad)
+nmr = conditional_gaussian_value_shift(p_mutation_prob, log10(mutation_radius), hrange.min_mut_radius, hrange.max_mut_radius, p_rad)
+nsqr = conditional_gaussian_value_shift(p_mutation_prob, log10(depr), hrange.min_swap, hrange.max_swap, p_rad)
+nlin = conditional_gaussian_value_shift(p_mutation_prob, log10(modi_nc), hrange.min_multi, hrange.max_multi, p_rad)
+npp = conditional_gaussian_value_shift(p_mutation_prob, log10(p_mutation_prob), hrange.min_p_prob, hrange.max_p_prob, p_rad)
+ncp = conditional_gaussian_value_shift(p_mutation_prob, log10(c_prob), hrange.min_c_prob, hrange.max_c_prob, p_rad)
+ndstr = conditional_gaussian_value_shift(p_mutation_prob, log10(p_rad), hrange.min_p_rad, hrange.max_p_rad, p_rad)
 
 print("lf")
 print(lf)

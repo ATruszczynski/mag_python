@@ -24,49 +24,47 @@ def get_data():
     cols_to_norm = [1, 4, 12]
     cols_to_norm = data_frame.columns[:-1]
     data_frame[cols_to_norm] = StandardScaler().fit_transform(data_frame[cols_to_norm])
-
-    qualities = data_frame["quality"].unique()
-    tt = 250
-    frames = []
-    for i in qualities:
-        df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
-        if df.shape[0] >= 5:
-            frames.append(df)
-
-    data_frame = pd.concat(frames,ignore_index=True)
     data_frame = data_frame.sample(frac=1)
 
-    div = ceil(0.6 * data_frame.shape[0])
+    qualities = data_frame["quality"].unique()
+    tt = 200
+    frac = 0.6
 
-    train = data_frame.iloc[:div, :]
-    print(len(train["quality"].unique()))
-    test = data_frame.iloc[div:, :]
+    train_frames = []
+    test_frames = []
+    for i in qualities:
+        df = data_frame.loc[data_frame["quality"] == i].iloc[:tt, :]
+        div = ceil(frac * df.shape[0])
+        train_frames.append(df.iloc[:div, :])
+        test_frames.append(df.iloc[div:, :])
 
-    x = divide_frame_into_columns(train.iloc[:, :-1].transpose())
-    X = divide_frame_into_columns(test.iloc[:, :-1].transpose())
+    train_frame = pd.concat(train_frames, ignore_index=True)
+    test_frame = pd.concat(test_frames, ignore_index=True)
 
-    Ys = one_hot_endode(data_frame.iloc[:, -1].tolist())
-    # Ys = data_frame.iloc[:, [-1]].to_numpy()
-    y = Ys[:div]
-    Y = Ys[div:]
+    print(len(train_frame["quality"].unique()))
+
+    x = divide_frame_into_columns(train_frame.iloc[:, :-1].transpose())
+    X = divide_frame_into_columns(test_frame.iloc[:, :-1].transpose())
+
+    y = one_hot_endode(train_frame.iloc[:, -1].tolist())
+    Y = one_hot_endode(test_frame.iloc[:, -1].tolist())
 
     return (x, y, X, Y)
 
-def get_wines_hrange_soc():
-    d = 0.000
-    dd = (-d, d)
-    ddd = (-d*10, d*10)
-
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 30),
-                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-4, -1),
-                                 c_prob=(log10(0.01), log10(0.8)),
-                                 swap=(log10(0.01), log10(0.5)),
-                                 multi=(-5, 5),
-                                 p_prob=(log10(0.01), log10(1)),
-                                 p_rad=(log10(0.01), log10(0.1)))
-
-    return hrange
+# def get_wines_hrange_soc():
+#     d = 0.000
+#     dd = (-d, d)
+#     ddd = (-d*10, d*10)
+#
+#     hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 30),
+#                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
+#                                  mut_radius=(-4, -1),
+#                                  c_prob=(log10(0.5), log10(0.5)),
+#                                  multi=(-2, 2),
+#                                  p_prob=(log10(0.01), log10(1)),
+#                                  p_rad=(log10(0.01), log10(0.1)))
+#
+#     return hrange
 
 
 def get_wines_hrange_eff():
@@ -74,55 +72,52 @@ def get_wines_hrange_eff():
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    # hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 30),
-    #                              actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()],
-    #                              mut_radius=(-4, -1),
-    #                              c_prob=(log10(0.01), log10(0.8)),
-    #                              swap=(log10(0.01), log10(0.5)),
-    #                              multi=(-5, 5),
-    #                              p_prob=(log10(1), log10(1)),
-    #                              p_rad=(log10(0.01), log10(0.1)))
-
     hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
-                                 actFuns=[ReLu(), Sigmoid()],
-                                 mut_radius=(-2, -2),
-                                 c_prob=(log10(0.8), log10(0.8)),
-                                 swap=(-1.5, -1.5),
-                                 multi=(-1, -1),
-                                 p_prob=(log10(1), log10(1)),
-                                 p_rad=(-2, -1))
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, -0),
+                                 multi=(-2, 2),
+                                 c_prob=(log10(0.5), log10(0.5)),
+                                 swap=(log10(0.1), log10(0.1)),
+                                 p_prob=(log10(0.1), log10(0.1)),
+                                 p_rad=(log10(0.1), log10(0.1)),
+                                 aggrFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()])
 
     return hrange
 
 
-def get_wines_hrange_qd():
+def get_wines_hrange_avmax():
     d = 0.000
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
-    # hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
-    #                              # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
-    #                              actFuns=[ReLu(), TanH()],
-    #                              mut_radius=(-3, -1),
-    #                              c_prob=(log10(0.8), log10(0.8)),
-    #                              swap=(log10(0.1), log10(0.1)),
-    #                              multi=(0, 0),
-    #                              p_prob=(log10(1), log10(1)),
-    #                              p_rad=(log10(0.01), log10(1)),
-    #                              aggrFuns=[Identity()])#1209 for 100 nc
-
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 200),
-                                 # actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
-                                 actFuns=[ReLu(), Sigmoid(), Poly2()],
-                                 mut_radius=(-2, -2),
-                                 c_prob=(log10(0.8), log10(0.8)),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, -0),
+                                 multi=(-2, 2),
+                                 c_prob=(log10(0.5), log10(0.5)),
                                  swap=(log10(0.1), log10(0.1)),
-                                 multi=(log10(1), log10(1)),
-                                 p_prob=(-100, -100),
-                                 p_rad=(-100, -100),
+                                 p_prob=(log10(0.1), log10(0.1)),
+                                 p_rad=(log10(0.1), log10(0.1)),
                                  aggrFuns=[Identity()])
 
     return hrange
+
+def get_wines_hrange_mixff():
+    d = 0.000
+    dd = (-d, d)
+    ddd = (-d*10, d*10)
+
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
+                                 actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
+                                 mut_radius=(-4, -0),
+                                 multi=(-2, 2),
+                                 c_prob=(log10(0.5), log10(0.5)),
+                                 swap=(log10(0.1), log10(0.1)),
+                                 p_prob=(log10(0.1), log10(0.1)),
+                                 p_rad=(log10(0.1), log10(0.1)),
+                                 aggrFuns=[Identity()])
+    return hrange
+
 
 def test_suite_for_wine():
     if __name__ == '__main__':
@@ -134,12 +129,10 @@ def test_suite_for_wine():
 
         tests = []
 
-        repetitions = 2
+        repetitions = 5
         population_size = 1000
-        iterations = 50
-        # population_size = 250
-        # iterations = 100
-        starg = max(2, ceil(0.01 * population_size))
+        iterations = 200
+        starg = 10
         power = 12
         seed = 1001
 
@@ -147,27 +140,39 @@ def test_suite_for_wine():
         for i in range(5):
             seeds.append(random.randint(0, 10**6))
 
-        hrange = get_wines_hrange_qd()
-        tests.append(TupleForTest(name=f"QD_6", rep=repetitions, seed=seed, popSize=population_size,
+        hrange = get_wines_hrange_eff()
+        tests.append(TupleForTest(name=f"wines_EFF", rep=repetitions, seed=seed, popSize=population_size,
+                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
+
+        hrange = get_wines_hrange_avmax()
+        tests.append(TupleForTest(name=f"wines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
-        hrange = get_wines_hrange_qd()
-        hrange.min_mut_radius = -2.5
-        hrange.max_mut_radius = -2.5
-        tests.append(TupleForTest(name=f"QD_7", rep=repetitions, seed=seed, popSize=population_size,
+        hrange = get_wines_hrange_mixff()
+        tests.append(TupleForTest(name=f"wines_MIXFF", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
-
-        hrange = get_wines_hrange_qd()
-        hrange.min_mut_radius = -3
-        hrange.max_mut_radius = -3
-        tests.append(TupleForTest(name=f"QD_8", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        #
+        # hrange = get_wines_hrange_qd()
+        # hrange.min_mut_radius = -2.5
+        # hrange.max_mut_radius = -2.5
+        # tests.append(TupleForTest(name=f"QD_7", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        #
+        # hrange = get_wines_hrange_qd()
+        # hrange.min_mut_radius = -3
+        # hrange.max_mut_radius = -3
+        # tests.append(TupleForTest(name=f"QD_8", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
 
         # tests.append(TupleForTest(name=f"AT_wines_dco_10", rep=repetitions, seed=seed, popSize=population_size,
@@ -235,18 +240,9 @@ def test_suite_for_wine():
 
 
         try_check_if_all_tests_computable(tests, trash_can, power=power)
-        res = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)
-
-
+        # res = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)
+        res = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)
         net = res[0][0]
-
-        # print(net.run(x[0]))
-        # print(net.run(x[1]))
-        # print(net.run(x[2]))
-
-
-
-
         restr = net.test(test_input=x, test_output=y)
         print(restr[0])
         print(m_efficiency(restr[0]))
@@ -258,6 +254,6 @@ def test_suite_for_wine():
         print(efficiency(res[0]))
         if len(res) == 2:
             print(res[1])
-        # run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)
+
 
 test_suite_for_wine()

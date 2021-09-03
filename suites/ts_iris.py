@@ -12,7 +12,7 @@ from evolving_classifier.operators.SelectionOperator import TournamentSelection0
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_doc_hrange_qd, get_doc_hrange_eff
-
+import os
 
 def get_data():
     iris = datasets.load_iris()
@@ -50,10 +50,10 @@ def test_suite_for_iris():
 
         tests = []
 
-        repetitions = 4
+        repetitions = 5
         population_size = 1000
-        iterations = 150
-        starg = max(2, ceil(0.01 * population_size))
+        iterations = 200
+        starg = 4
         power = 12
         seed = 10011001
 
@@ -62,35 +62,25 @@ def test_suite_for_iris():
         #     seeds.append(random.randint(0, 10**6))
 
         hrange = get_doc_hrange_eff()
-        tests.append(TupleForTest(name=f"iris_doc_eff", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"iris_500_200_meff", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MEFF], fct=CNFitnessCalculator, reg=False))
 
         hrange = get_doc_hrange_qd()
-        tests.append(TupleForTest(name=f"iris_doc_avmax", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"iris_500_200_avmax", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         hrange = get_doc_hrange_qd()
-        tests.append(TupleForTest(name=f"iris_doc_mixmeff", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"iris_500_200_mixmeff", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
-        hrange = get_doc_hrange_qd()
-        tests.append(TupleForTest(name=f"iris_doc_eff_qd", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
 
-
-
-
-
-
-        try_check_if_all_tests_computable(tests, trash_can, power=power)
+        # try_check_if_all_tests_computable(tests, trash_can, power=power)
         net = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)[0][0]
         # net = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)[0][0]
         # for jjj in range(len(x)):

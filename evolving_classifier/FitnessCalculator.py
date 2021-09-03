@@ -39,6 +39,7 @@ class CNFitnessCalculator(FitnessCalculator):
             if np.isnan(results[i].ff[0]):
                 results[i].ff[0] = -np.inf
 
-        results = sorted(results, key=lambda x: x.ff[0], reverse=True)
+        for i in reversed(range(len(results[0].ff))):
+            results = sorted(results, key=lambda x: x.ff[i], reverse=True)
 
         return results

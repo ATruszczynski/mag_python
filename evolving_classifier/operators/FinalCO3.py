@@ -7,7 +7,7 @@ import numpy as np
 
 from utility.CNDataPoint import CNDataPoint
 from utility.Mut_Utility import conditional_value_swap, get_weight_mask
-from utility.Utility import choose_without_repetition
+from utility.Utility import choose_without_repetition, get_links
 
 
 class CrossoverOperator:
