@@ -199,13 +199,13 @@ def get_doc_hrange_eff():
 
     acts = [ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity()]
     aggrs = acts
-    hrange = HyperparameterRange(init_wei=dd, init_bia=dd, it=(1, 5), hidden_count=(1, 100),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=dd, it=(1, 5), hidden_count=(1, 15),
                                  # actFuns=[ReLu(), TanH()],
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
-                                 mut_radius=(-4, -0),
+                                 mut_radius=(-3, -1),
                                  c_prob=(log10(0.5), log10(0.5)),
                                  swap=(log10(0.1), log10(0.1)),
-                                 multi=(-2, 2),
+                                 multi=(-1, 1),
                                  p_prob=(log10(0.1), log10(0.1)),
                                  p_rad=(log10(0.1), log10(0.1)),
                                  aggrFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Softmax(), Identity(), Poly2(), Poly3()])
@@ -213,7 +213,7 @@ def get_doc_hrange_eff():
     return hrange
 # TODO - S - KIDY PAMIEC USUWANA DA SIE LE[IEJ?
 def get_doc_hrange_qd():
-    d = 0.000
+    d = 0.0001
     dd = (-d, d)
     ddd = (-d*10, d*10)
 
@@ -407,6 +407,28 @@ def translate_wines(data_frame: pd.DataFrame, fpath: str):
     data_frame.iloc[:, -1] = data_frame.iloc[:, -1] - data_frame.iloc[:, -1].max()
 
     ori = 1
+
+def are_ffs_ge(newFF: CNDataPoint, oldFF: CNDataPoint):
+    better = False
+    for i in range(len(newFF.ff)):
+        if newFF.ff[i] > oldFF.ff[i]:
+            better = True
+            break
+        elif newFF.ff[i] < oldFF.ff[i]:
+            better = False
+            break
+
+    better = better or are_ffs_eq(newFF, oldFF)
+
+    return better
+
+
+def are_ffs_eq(newFF: CNDataPoint, oldFF: CNDataPoint):
+    eq = True
+    for i in range(len(newFF.ff)):
+        eq = eq and newFF.ff[i] == oldFF.ff[i]
+
+    return eq
 
 
 

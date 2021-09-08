@@ -308,9 +308,10 @@ def test_mixed_meff_loss_1():
     ff = MIXFF(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 2
+    assert len(res[0]) == 3
     assert res[0][0] == pytest.approx(-3.410111209/16, abs=1e-3)
     assert res[0][1] == pytest.approx(-0.21313195, abs=1e-3)
+    assert res[0][2] == pytest.approx(-6, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -325,9 +326,10 @@ def test_mixed_meff_loss_2():
     ff = MIXFF(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 2
+    assert len(res[0]) == 3
     assert res[0][0] == pytest.approx(-3.355127113/16, abs=1e-3)
     assert res[0][1] == pytest.approx(-0.20969544, abs=1e-3)
+    assert res[0][2] == pytest.approx(-9, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -380,10 +382,9 @@ def test_MEFF_loss_1():
     ff = MEFF()
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 3
+    assert len(res[0]) == 2
     assert res[0][0] == pytest.approx(0.0, abs=1e-3)
     assert res[0][1] == pytest.approx(0.13333333, abs=1e-3)
-    assert res[0][2] == pytest.approx(-6, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -398,10 +399,9 @@ def test_MEFF_loss_2():
     ff = MEFF()
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 3
+    assert len(res[0]) == 2
     assert res[0][0] == pytest.approx(0.0, abs=1e-3)
     assert res[0][1] == pytest.approx(0.30681818, abs=1e-3)
-    assert res[0][2] == pytest.approx(-9, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],
@@ -418,10 +418,8 @@ def test_FFPUNEFF_loss_1():
     ff = FFPUNEFF()
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 3
+    assert len(res[0]) == 1
     assert res[0][0] == pytest.approx(-40.0, abs=1e-3)
-    assert res[0][1] == pytest.approx(0.33333333, abs=1e-3)
-    assert res[0][2] == pytest.approx(-54, abs=1e-3)
     assert np.array_equal(res[1], np.array([[8., 0.],
                                             [8., 0.]]))
 
@@ -435,10 +433,8 @@ def test_FFPUNEFF_loss_2():
     ff = FFPUNEFF()
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 3
+    assert len(res[0]) == 1
     assert res[0][0] == pytest.approx(-40.0, abs=1e-3)
-    assert res[0][1] == pytest.approx(0.33333333, abs=1e-3)
-    assert res[0][2] == pytest.approx(-37, abs=1e-3)
     assert np.array_equal(res[1], np.array([[8., 0.],
                                             [8., 0.]]))
 
@@ -455,9 +451,8 @@ def test_FFPUNQD_loss_1():
     ff = FFPUNQD(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 2
+    assert len(res[0]) == 1
     assert res[0][0] == pytest.approx(-8.52527802, abs=1e-3)
-    assert res[0][1] == pytest.approx(-6, abs=1e-3)
     assert np.array_equal(res[1], np.array([[4., 0., 0.],
                                             [8., 0., 0.],
                                             [4., 0., 0.]]))
@@ -472,9 +467,8 @@ def test_FFPUNQD_loss_2():
     ff = FFPUNQD(QuadDiff())
     res = ff.compute(point, i, o)
 
-    assert len(res[0]) == 2
+    assert len(res[0]) == 1
     assert res[0][0] == pytest.approx(-3.14543166, abs=1e-3)
-    assert res[0][1] == pytest.approx(-9, abs=1e-3)
     assert np.array_equal(res[1], np.array([[3., 0., 1., 0.],
                                             [3., 0., 1., 0.],
                                             [0., 0., 4., 0.],

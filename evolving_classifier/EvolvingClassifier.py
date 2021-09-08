@@ -11,6 +11,9 @@ np.seterr(over='ignore')
 
 # TODO - B - usunąć supervisora? Chyba nie jest używany
 # TODO - B - czy sortowanie jest w ogóle koniecznie poza wypisywaniem?
+
+tol = 20
+
 class EvolvingClassifier:
     def __init__(self):
 
@@ -84,7 +87,13 @@ class EvolvingClassifier:
         else:
             pool = None
 
-        best = [self.population[0], -math.inf]
+        # best = [self.population[0], -math.inf]
+        # best = CNDataPoint(self.population[0])
+        # best.add_data([-math.inf, -math.inf, -math.inf, -math.inf, -math.inf], new_conf_mat=None)
+        fake = CNDataPoint(self.population[0])
+        fake.add_data(new_ff=[-math.inf, -math.inf, -math.inf, -math.inf, -math.inf], new_conf_mat=np.zeros((0, 0)))
+        bests = [fake.copy()]
+
         for i in range(len(self.population)):
             self.population[i].conf_mat = np.ones((1, 1))
 
@@ -94,8 +103,26 @@ class EvolvingClassifier:
 
 
             self.history.add_it_hist(eval_pop)
-            if eval_pop[0].ff[0] >= best[1]:
-                best = [eval_pop[0].net.copy(), eval_pop[0].ff[0]]
+
+            curr_it_best = eval_pop[0]
+            if are_ffs_ge(curr_it_best, bests[-1]):
+                bests.append(curr_it_best.copy())
+            else:
+                bests.append(bests[-1].copy())
+
+            if len(bests) >= tol:
+                if are_ffs_eq(bests[0], bests[-1]):
+                    break
+                else:
+                    bests = bests[1:]
+
+
+
+            # isGE = True
+            # for ffind in range(len(curr_it_best.ff)):
+            #     isGE = isGE and curr_it_best.ff[i] >= best.ff[i]
+            # if isGE:
+            #     best = curr_it_best.copy()
 
             pc = 1
             lc = pc * 8
@@ -110,7 +137,7 @@ class EvolvingClassifier:
                 if i % pc == 0 or i == iterations - 1:
                     if i % lc != 0:
                         print(", ", end="")
-                    print(f"{i} - ({round((i + 1)/iterations * 100, 2)}%) - {round(best[1], 4)}", end="")
+                    print(f"{i} - ({round((i + 1)/iterations * 100, 2)}%) - {round(bests[-1].ff[0], 4)}", end="")
 
 
             crossed = []
@@ -140,11 +167,11 @@ class EvolvingClassifier:
         if power > 1:
             pool.close()
 
-        if eval_pop[0].ff[0] >= best[1]:
-            best = [eval_pop[0].net.copy(), eval_pop[0].ff[0]]
+        if are_ffs_ge(eval_pop[0], bests[-1]):
+            bests.append(eval_pop[0].copy())
 
         if not verbose:
             print()
 
-        return best[0]
+        return bests[-1].net
 

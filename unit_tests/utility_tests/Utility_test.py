@@ -755,7 +755,83 @@ def test_acts_same():
     else:
         assert False
 
+def test_ffs_ge():
+    cndp1 = CNDataPoint(np.zeros((0, 0)))
+    cndp2 = CNDataPoint(np.zeros((0, 0)))
+
+    cndp1.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert are_ffs_ge(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[0, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert are_ffs_ge(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[0, 2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert not are_ffs_ge(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[1, -2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, -1, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert not are_ffs_ge(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[1, -1, -3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, -1, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert not are_ffs_ge(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[0, 3, 2], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[0, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert are_ffs_ge(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[0, 3, 4], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[0, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert are_ffs_ge(cndp1, cndp2)
+
+def test_ffs_eq():
+    cndp1 = CNDataPoint(np.zeros((0, 0)))
+    cndp2 = CNDataPoint(np.zeros((0, 0)))
+
+    cndp1.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert are_ffs_eq(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[1, 2, 4], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert not are_ffs_eq(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[1, 3, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert not are_ffs_eq(cndp1, cndp2)
+
+
+    cndp1.add_data(new_ff=[1, 2, 3], new_conf_mat=np.zeros((0, 0)))
+    cndp2.add_data(new_ff=[2, 2, 3], new_conf_mat=np.zeros((0, 0)))
+
+    assert not are_ffs_eq(cndp1, cndp2)
+
+
 # test_acts_same()
 # test_copy_list_of_arrays()
 
 # test_generate_population_limits_aggr()
+
+test_ffs_ge()
+test_ffs_eq()

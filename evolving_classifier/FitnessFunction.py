@@ -87,7 +87,7 @@ class MIXFF(FitnessFunction):
 
         lf = test_results[1]
 
-        return [[-(1 - meff) * lf, -lf], cm]
+        return [[-(1 - meff) * lf, -lf, -net.neuron_count], cm]
 
 class FFPUNEFF(FitnessFunction):
     def __init__(self):
@@ -100,7 +100,7 @@ class FFPUNEFF(FitnessFunction):
 
         pun = cm[0, 1] + 5 * cm[1, 0]
 
-        return [[-pun, average_f1_score(cm), -net.neuron_count], cm]
+        return [[-pun], cm]
 
 class FFPUNQD(FitnessFunction):
     def __init__(self, lossFun: LossFun):
@@ -115,9 +115,9 @@ class FFPUNQD(FitnessFunction):
         result = (cm[0, 1] + 5 * cm[1, 0])
         result = -result * test_results[1]
 
-        return [[result, -net.neuron_count], cm]
+        return [[result], cm]
 
-# class CNFF9(FitnessFunction):
+# class GEREFF(FitnessFunction):
 #     def __init__(self):
 #         super().__init__()
 #
@@ -183,7 +183,7 @@ class MEFF(FitnessFunction):
 
         cm = test_results[0]
 
-        return [[m_efficiency(cm), average_f1_score(cm), -net.neuron_count], cm]
+        return [[m_efficiency(cm), average_f1_score(cm)], cm]
 
 class AVMAX(FitnessFunction):
     def __init__(self, lossFun: LossFun):

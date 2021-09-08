@@ -1,5 +1,7 @@
 from ann_point.Functions import *
 from neural_network.ChaosNet import ChaosNet
+import pandas as pd
+import os
 
 # hrange = HyperparameterRange((-1, 1), (-1, 1), (1, 5), (0, 10), [ReLu(), Sigmoid(), GaussAct(), TanH()], mut_radius=(0, 1),
 #                              sqr_mut_prob=(0.05, 0.1), lin_mut_prob=(0.6, 0.7), p_mutation_prob=(0.4, 0.6), c_prob=(0.6, 0.6),
@@ -55,6 +57,6 @@ from neural_network.ChaosNet import ChaosNet
 # ori = 1
 from suites.ts_wines import test_suite_for_wine, get_data
 
-d = get_data()
+data_frame = pd.read_csv(fr"data_sets{os.path.sep}winequality-white.csv")
 
-ori = 0
+print(data_frame.groupby("quality").count())

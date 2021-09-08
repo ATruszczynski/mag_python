@@ -51,7 +51,7 @@ def test_suite_for_iris():
         tests = []
 
         repetitions = 5
-        population_size = 1000
+        population_size = 500
         iterations = 200
         starg = 4
         power = 12
@@ -62,27 +62,27 @@ def test_suite_for_iris():
         #     seeds.append(random.randint(0, 10**6))
 
         hrange = get_doc_hrange_eff()
-        tests.append(TupleForTest(name=f"iris_500_200_meff", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"iris_500_200_15_meff", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MEFF], fct=CNFitnessCalculator, reg=False))
 
         hrange = get_doc_hrange_qd()
-        tests.append(TupleForTest(name=f"iris_500_200_avmax", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
-
-        hrange = get_doc_hrange_qd()
-        tests.append(TupleForTest(name=f"iris_500_200_mixmeff", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"iris_500_200_15_mixff", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        #
+        # hrange = get_doc_hrange_qd()
+        # tests.append(TupleForTest(name=f"iris_500_200_25_mixmeff", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
 
         # try_check_if_all_tests_computable(tests, trash_can, power=power)
-        net = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)[0][0]
-        # net = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)[0][0]
+        # net = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)[0][0]
+        net = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)[0][0]
         # for jjj in range(len(x)):
         #     print(f"{net.run(x[jjj]).T} - {y[jjj].T}")
         restr = net.test(test_input=x, test_output=y)

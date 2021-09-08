@@ -28,7 +28,7 @@ def get_data():
     data_frame = data_frame.sample(frac=1)
 
     qualities = data_frame["quality"].unique()
-    tt = 10000
+    tt = 200
     frac = 0.6
 
     train_frames = []
@@ -71,9 +71,9 @@ def get_data():
 def get_wines_hrange_eff():
     d = 0.000
     dd = (-d, d)
-    ddd = (-d*10, d*10)
+    ddd = (-d, d)
 
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 10),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-4, -0),
                                  multi=(-2, 2),
@@ -87,9 +87,9 @@ def get_wines_hrange_eff():
 
 
 def get_wines_hrange_avmax():
-    d = 0.000
+    d = 0.0001
     dd = (-d, d)
-    ddd = (-d*10, d*10)
+    ddd = (-d, d)
 
     hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
@@ -104,11 +104,11 @@ def get_wines_hrange_avmax():
     return hrange
 
 def get_wines_hrange_mixff():
-    d = 0.000
+    d = 0.0001
     dd = (-d, d)
-    ddd = (-d*10, d*10)
+    ddd = (-d, d)
 
-    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(1, 100),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=ddd, it=(1, 5), hidden_count=(20, 20),
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-4, -0),
                                  multi=(-2, 2),
@@ -133,7 +133,7 @@ def test_suite_for_wine():
         repetitions = 5
         population_size = 1000
         iterations = 200
-        starg = 10
+        starg = max(2, ceil(0.01 * population_size))
         power = 12
         seed = 1001
 
@@ -141,20 +141,20 @@ def test_suite_for_wine():
         for i in range(5):
             seeds.append(random.randint(0, 10**6))
 
-        hrange = get_wines_hrange_eff()
-        tests.append(TupleForTest(name=f"wwines_EFF", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
-
-        hrange = get_wines_hrange_avmax()
-        tests.append(TupleForTest(name=f"wwines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
-                                  data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
+        # hrange = get_wines_hrange_eff()
+        # tests.append(TupleForTest(name=f"wines_10_EFF", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[MEFF], fct=CNFitnessCalculator, reg=False))
+        #
+        # hrange = get_wines_hrange_avmax()
+        # tests.append(TupleForTest(name=f"wwwwines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
+        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
+        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
+        #                           fft=[AVMAX, QuadDiff], fct=CNFitnessCalculator, reg=False))
 
         hrange = get_wines_hrange_mixff()
-        tests.append(TupleForTest(name=f"wwines_MIXFF", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"wines_20_20_MIXFF", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
                                   fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
