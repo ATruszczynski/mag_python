@@ -218,7 +218,7 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md testu Iris/50/Eff"
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu Iris/50/Eff", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="iris_50_eff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="iris_50_eff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Iris/50/Eff", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="iris_50_eff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
@@ -256,7 +256,7 @@ plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Iri
 # plot_min_max_avg(frames=dfs, parameter_name="rec", title="rec")
 # plot_min_max_avg(frames=dfs, parameter_name="f1s", title="f1s")
 plot_min_max_avg(frames=dfs, parameter_name="ff1", title="Mieszana efektywność dla testu Iris/50/MixFf", xtitle="iteracja",
-                 ytitle="mieszana efektywność", lim=[0, 0.4], to_draw=[True, True, False, True], spath="iris_50_mixff_ff1")
+                 ytitle="mieszana efektywność", lim=[0, 0.4], to_draw=[True, False, False, True], spath="iris_50_mixff_ff1")
 # plot_min_max_avg(frames=dfs, parameter_name="ff2", title="ff2")
 # plot_min_max_avg(frames=dfs, parameter_name="ff3", title="ff3")
 
@@ -281,7 +281,7 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md dla testu Iris/15/
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu Iris/15/Eff", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="iris_15_eff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="iris_15_eff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Iris/15/Eff", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="iris_15_eff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
@@ -319,7 +319,7 @@ plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Iri
 # plot_min_max_avg(frames=dfs, parameter_name="rec", title="rec")
 # plot_min_max_avg(frames=dfs, parameter_name="f1s", title="f1s")
 plot_min_max_avg(frames=dfs, parameter_name="ff1", title="Mieszana efektywność dla testu Iris/15/MixFf", xtitle="iteracja",
-                 ytitle="mieszana efektywność", lim=[0, 0.4], to_draw=[True, True, False, True], spath="iris_15_mixff_ff1")
+                 ytitle="mieszana efektywność", lim=[0, 0.4], to_draw=[True, False, False, True], spath="iris_15_mixff_ff1")
 # plot_min_max_avg(frames=dfs, parameter_name="ff2", title="ff2")
 # plot_min_max_avg(frames=dfs, parameter_name="ff3", title="ff3")
 
@@ -343,7 +343,7 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md dla testu Wines/10
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu Wines/100/Eff", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="wines_100_eff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="wines_100_eff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Wines/100/Eff", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="wines_100_eff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
@@ -374,14 +374,14 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md dla testu Wines/10
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu Wines/100/MixFf", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="wines_100_mixff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="wines_100_mixff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Wines/100/MixFf", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="wines_100_mixff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
 # plot_min_max_avg(frames=dfs, parameter_name="rec", title="rec")
 # plot_min_max_avg(frames=dfs, parameter_name="f1s", title="f1s")
 plot_min_max_avg(frames=dfs, parameter_name="ff1", title="Mieszana efektywność dla testu Wines/100/MixFf", xtitle="iteracja",
-                 ytitle="mieszana efektywność", lim=[0.085, 0.15], to_draw=[True, False, False, True], spath="wines_100_mixff_ff1")
+                 ytitle="mieszana efektywność", lim=[0.0, 0.15], to_draw=[True, False, False, True], spath="wines_100_mixff_ff1")
 # plot_min_max_avg(frames=dfs, parameter_name="ff2", title="ff2")
 # plot_min_max_avg(frames=dfs, parameter_name="ff3", title="ff3")
 
@@ -409,7 +409,7 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md dla testu Wines/25
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu Wines/25/Eff", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="wines_25_eff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="wines_25_eff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Wines/25/Eff", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="wines_25_eff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
@@ -444,7 +444,7 @@ plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu Win
 # plot_min_max_avg(frames=dfs, parameter_name="rec", title="rec")
 # plot_min_max_avg(frames=dfs, parameter_name="f1s", title="f1s")
 plot_min_max_avg(frames=dfs, parameter_name="ff1", title="Mieszana efektywność dla testu Wines/25/MixFf", xtitle="iteracja",
-                 ytitle="mieszana efektywność", lim=[0.085, 0.15], to_draw=[True, False, False, True], spath="wines_25_mixff_ff1")
+                 ytitle="mieszana efektywność", lim=[0.0, 0.15], to_draw=[True, False, False, True], spath="wines_25_mixff_ff1")
 # plot_min_max_avg(frames=dfs, parameter_name="ff2", title="ff2")
 # plot_min_max_avg(frames=dfs, parameter_name="ff3", title="ff3")
 
@@ -472,7 +472,7 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md dla testu German/2
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu German/25/Eff", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="german_25_eff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="german_25_eff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu German/25/Eff", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="german_25_eff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
@@ -537,7 +537,7 @@ plot_min_max_avg(frames=dfs, parameter_name="mult", title="md dla testu German/1
 # plot_min_max_avg(frames=dfs, parameter_name="swp", title="swp")
 # plot_min_max_avg(frames=dfs, parameter_name="eff", title="eff", lim=[-0.01, 1.01])
 plot_min_max_avg(frames=dfs, parameter_name="meff", title="Efektywność dla testu German/100/Eff", xtitle="iteracja",
-                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, False], spath="german_100_eff_meff")
+                 ytitle="efektywność", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="german_100_eff_meff")
 plot_min_max_avg(frames=dfs, parameter_name="acc", title="accuracy dla testu German/100/Eff", xtitle="iteracja",
                  ytitle="accuracy", lim=[-0.01, 1.01], to_draw=[True, True, True, True], spath="german_100_eff_acc")
 # plot_min_max_avg(frames=dfs, parameter_name="prc", title="prc")
