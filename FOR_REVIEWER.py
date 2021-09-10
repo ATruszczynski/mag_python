@@ -46,7 +46,7 @@ if __name__ == '__main__':
     plot_min_max_avg(frames=data_frames, parameter_name="meff", title="Efektywność", xtitle="iteracje", ytitle="efektywność",
                      spath="review_eff")
     plot_min_max_avg(frames=data_frames, parameter_name="nc", title="Liczba neuronów", xtitle="iteracje", ytitle="liczba neuronów",
-                     spath="review_eff")
+                     spath="review_nc")
 
     plt.show()
 
