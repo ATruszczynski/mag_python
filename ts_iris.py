@@ -51,8 +51,8 @@ def test_suite_for_iris():
         tests = []
 
         repetitions = 5
-        population_size = 500
-        iterations = 200
+        population_size = 50
+        iterations = 20
         starg = 4
         power = 12
         seed = 10011001
@@ -72,7 +72,7 @@ def test_suite_for_iris():
 
 
 
-        net = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}review_tests", power=power)[0][0]
+        net = run_tests(tts=tests, directory_for_tests=f"review_tests", power=power)[0][0]
         restr = net.test(test_input=x, test_output=y)
         print(restr[0])
         print(m_efficiency(restr[0]))

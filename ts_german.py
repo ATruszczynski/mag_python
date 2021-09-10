@@ -19,7 +19,7 @@ import pandas as pd
 def get_data():
     div = 800
 
-    data_frame = pd.read_csv(fr"..{os.path.sep}data_sets{os.path.sep}translated_german.csv", header=None)
+    data_frame = pd.read_csv(fr"data_sets{os.path.sep}translated_german.csv", header=None)
     data_frame = data_frame.astype('float')
 
     cols_to_norm = list(range(18))

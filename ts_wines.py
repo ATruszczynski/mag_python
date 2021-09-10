@@ -19,7 +19,7 @@ import pandas as pd
 
 
 def get_data():
-    data_frame = pd.read_csv(fr"..{os.path.sep}data_sets{os.path.sep}winequality-white.csv")
+    data_frame = pd.read_csv(fr"data_sets{os.path.sep}winequality-white.csv")
 
     cols_to_norm = [1, 4, 12]
     cols_to_norm = data_frame.columns[:-1]
@@ -115,8 +115,8 @@ def test_suite_for_wine():
         tests = []
 
         repetitions = 5
-        population_size = 1000
-        iterations = 200
+        population_size = 10
+        iterations = 20
         starg = max(2, ceil(0.01 * population_size))
         power = 12
         seed = 1001
@@ -132,7 +132,7 @@ def test_suite_for_wine():
                                   fft=[MEFF], fct=LsmFitnessCalculator, reg=False))
 
         hrange = get_wines_hrange_avmax()
-        tests.append(TupleForTest(name=f"wwwwines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
+        tests.append(TupleForTest(name=f"wines_AVMAX", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
                                   ct=LsmCrossoverOperator, mt=LsmMutationOperator, st=[TournamentSelection95, starg],
                                   fft=[AVMAX, QuadDiff], fct=LsmFitnessCalculator, reg=False))
@@ -147,7 +147,7 @@ def test_suite_for_wine():
 
 
 
-        res = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}review_tests", power=power)
+        res = run_tests(tts=tests, directory_for_tests=f"review_tests", power=power)
         net = res[0][0]
         restr = net.test(test_input=x, test_output=y)
         print(restr[0])

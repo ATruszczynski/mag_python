@@ -127,7 +127,7 @@ def get_doc_hrange_eff():
     dd = (-d, d)
 
     acts = [ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity()]
-    hrange = HyperparameterRange(init_wei=dd, init_bia=dd, it=(1, 5), hidden_count=(1, 15),
+    hrange = HyperparameterRange(init_wei=dd, init_bia=dd, it=(1, 5), hidden_count=(1, 25),
                                  # actFuns=[ReLu(), TanH()],
                                  actFuns=[ReLu(), LReLu(), GaussAct(), SincAct(), TanH(), Sigmoid(), Identity(), Poly2(), Poly3()],
                                  mut_radius=(-3, -1),
