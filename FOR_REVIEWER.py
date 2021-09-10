@@ -25,11 +25,11 @@ if __name__ == '__main__':
     tests = []
 
     repetitions = 5
-    population_size = 10
-    iterations = 20
+    population_size = 200
+    iterations = 50
     starg = 4
-    power = 12
-    seed = 10011001
+    power = 4
+    seed = 1001
 
     directory = "iris_review"
 
