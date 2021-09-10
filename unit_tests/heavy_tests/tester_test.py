@@ -1,9 +1,9 @@
 from evolving_classifier.EvolvingClassifier import EvolvingClassifier
-from evolving_classifier.FitnessCalculator import CNFitnessCalculator
+from evolving_classifier.LsmFitnessCalculator import LsmFitnessCalculator
 from evolving_classifier.FitnessFunction import *
+from evolving_classifier.operators.LsmCrossoverOperator import LsmCrossoverOperator
 from evolving_classifier.operators.Rejects.FinalCO1 import *
-from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
-from evolving_classifier.operators.MutationOperators import *
+from evolving_classifier.operators.LsmMutationOperator import *
 from evolving_classifier.operators.SelectionOperator import *
 from tester import run_tests
 from TupleForTest import TupleForTest
@@ -38,8 +38,8 @@ def test_tester_same_as_ec_ind():
                                  p_rad=(-2, 0))
 
     test = TupleForTest(name="test_desu", rep=how_many, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                        ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
-                        fft=[CNFF], fct=CNFitnessCalculator, reg=False)
+                        ct=LsmCrossoverOperator, mt=LsmMutationOperator, st=[TournamentSelection, 2],
+                        fft=[CNFF], fct=LsmFitnessCalculator, reg=False)
 
     results = run_tests([test], trash_can, power=power)[0]
 
@@ -85,16 +85,16 @@ def test_tester_determinism():
                                      p_rad=(-2, 0))
 
         test = TupleForTest(name="deter_test_desu", rep=rep, seed=seed, popSize=popSize, data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                            ct=FinalCO1, mt=FinalMutationOperator, st=[TournamentSelection, 2],
-                            fft=[CNFF], fct=CNFitnessCalculator, reg=False)
+                            ct=LsmCrossoverOperator, mt=LsmMutationOperator, st=[TournamentSelection, 2],
+                            fft=[CNFF], fct=LsmFitnessCalculator, reg=False)
 
         hrange = HyperparameterRange((-2, 1), (-1, 2), (2, 6), (4, 20), [Poly2(), Softmax(), GaussAct(), LReLu(), SincAct()],
                                      mut_radius=(-2, 0), swap=(-3, 0), multi=(-2, 0), p_prob=(-2, 0), c_prob=(-2, 0),
                                      p_rad=(-3, 0))
 
         test2 = TupleForTest(name="deter_test_desu2", rep=2*rep, seed=2*seed, popSize=2*popSize, data=[x, y, X, Y], iterations=2*iterations, hrange=hrange,
-                            ct=FinalCO2, mt=FinalMutationOperator, st=[TournamentSelection, 3],
-                            fft=[CNFF4, QuadDiff], fct=CNFitnessCalculator, reg=False)
+                             ct=LsmCrossoverOperator, mt=LsmMutationOperator, st=[TournamentSelection, 3],
+                             fft=[CNFF4, QuadDiff], fct=LsmFitnessCalculator, reg=False)
 
         resultsss = []
         for i in range(ut_rep):
@@ -118,10 +118,6 @@ def test_tester_determinism():
                     net1 = results1[k]
                     net2 = results2[k]
                     assert_chaos_networks_same(net1, net2)
-
-
-# test_tester_same_as_ec_ind()
-# test_tester_determinism()
 
 
 

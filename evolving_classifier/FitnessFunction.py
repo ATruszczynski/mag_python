@@ -2,7 +2,7 @@ from math import sqrt
 from statistics import mean
 
 # from ann_point.AnnPoint2 import CrossEntropy, AnnPoint2, QuadDiff, Softmax
-from neural_network.ChaosNet import *
+from neural_network.LsmNetwork import *
 # from neural_network.FeedForwardNeuralNetwork import *
 import numpy as np
 from ann_point.Functions import *
@@ -13,14 +13,14 @@ class FitnessFunction:
     def __init__(self):
         pass
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         pass
 
 class CNFF(FitnessFunction):
     def __init__(self):
         super().__init__()
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
         eff = efficiency(test_results[0])
 
@@ -31,7 +31,7 @@ class CNFF2(FitnessFunction):
         super().__init__()
         self.lossFun = lossFun
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
         eff = efficiency(test_results[0])
 
@@ -42,7 +42,7 @@ class CNFF3(FitnessFunction):
         super().__init__()
         self.lossFun = lossFun
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
         eff = efficiency(test_results[0])
 
@@ -54,7 +54,7 @@ class CNFF4(FitnessFunction):
         super().__init__()
         self.lossFun = lossFun
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
 
         return [[-test_results[1], -net.neuron_count], test_results[0]]
@@ -63,7 +63,7 @@ class CNFF5(FitnessFunction):
     def __init__(self):
         super().__init__()
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
 
         cm = test_results[0]
@@ -79,7 +79,7 @@ class MIXFF(FitnessFunction):
         super().__init__()
         self.lossFun = lossFun
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
 
         cm = test_results[0]
@@ -93,7 +93,7 @@ class FFPUNEFF(FitnessFunction):
     def __init__(self):
         super().__init__()
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
 
         cm = test_results[0]
@@ -107,7 +107,7 @@ class FFPUNQD(FitnessFunction):
         super().__init__()
         self.lossFun = lossFun
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
 
         cm = test_results[0]
@@ -178,7 +178,7 @@ class MEFF(FitnessFunction):
     def __init__(self):
         super().__init__()
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs)
 
         cm = test_results[0]
@@ -190,7 +190,7 @@ class AVMAX(FitnessFunction):
         super().__init__()
         self.lossFun = lossFun
 
-    def compute(self, net: ChaosNet, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
+    def compute(self, net: LsmNetwork, trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [float, np.ndarray]:
         test_results = net.test(test_input=trainInputs, test_output=trainOutputs, lf=self.lossFun)
 
         cm = test_results[0]

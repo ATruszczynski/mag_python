@@ -2,11 +2,11 @@ from math import log10
 
 from ann_point.Functions import *
 from ann_point.HyperparameterRange import HyperparameterRange
-from neural_network.ChaosNet import ChaosNet, ActFun
+from neural_network.LsmNetwork import LsmNetwork, ActFun
 import numpy as np
 import pytest
 
-def assert_chaos_network_properties(net: ChaosNet,
+def assert_chaos_network_properties(net: LsmNetwork,
                                     desired_input_size: int,
                                     desired_output_size: int,
                                     desired_neuron_count: int,
@@ -63,11 +63,7 @@ def assert_chaos_network_properties(net: ChaosNet,
     assert net.c_prob == pytest.approx(desired_c_prob, 1e-4)
     assert net.p_rad == pytest.approx(desired_r_prob, 1e-4)
 
-    # desired_wb_prob = log10(1 / desired_neuron_count)
-    # desired_s_prob = log10(1 / desired_neuron_count)
-    # desired_r_prob = log10(1 / desired_neuron_count**2)
-
-def assert_chaos_networks_same(net: ChaosNet, net2: ChaosNet):
+def assert_chaos_networks_same(net: LsmNetwork, net2: LsmNetwork):
     assert_chaos_network_properties(net,
                                     desired_input_size=net2.input_size,
                                     desired_output_size=net2.output_size,

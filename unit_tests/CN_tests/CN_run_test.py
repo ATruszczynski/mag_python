@@ -1,11 +1,9 @@
 import numpy as np
 
 from ann_point.Functions import *
-from neural_network.ChaosNet import ChaosNet
+from neural_network.LsmNetwork import LsmNetwork
 from utility.TestingUtility import assert_chaos_network_properties
 from utility.Utility import *
-
-#TODO - C - CN constructor
 
 def test_cn_run():
     weights = np.array([[0, 0, 0.5, 0, 0, 0, 0],
@@ -24,8 +22,8 @@ def test_cn_run():
                         [0, 0, 0, 0, 0, 0, 0]])
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
-    net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+    net = LsmNetwork(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                     net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     result = net.run(np.array([[0], [0]]))
 
@@ -123,8 +121,8 @@ def test_cn_run2():
                         [0, 0, 0, 0, 0, 0, 0]])
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
-    net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+    net = LsmNetwork(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                     net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     result = net.run(np.array([[0], [1]]))
 
@@ -225,9 +223,9 @@ def test_multiple_runs():
                         [0, 0, 0, 0, 0, 0, 0]])
     bias = np.array([[0, 0, 0.5, 0.5, -0.5, -0.5, -0.5]])
     actFuns = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), None, None]
-    net = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
-                   net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5,
-                   p_rad=-6)
+    net = LsmNetwork(input_size=2, output_size=2, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Softmax(),
+                     net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5,
+                     p_rad=-6)
 
     results = []
 
@@ -261,8 +259,8 @@ def test_run_with_cycle_1_run():
 
     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
     actFun = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), None, None]
-    cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun, aggrFun=Softmax(), net_it=1,
-                  mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
+    cn = LsmNetwork(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun, aggrFun=Softmax(), net_it=1,
+                    mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5, p_rad=-6)
 
     res1 = cn.run(np.array([[-1, 0.5], [1, -2]]))
 
@@ -333,9 +331,9 @@ def test_run_with_cycle_2_run():
     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
     actFun = [None, None, Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), Sigmoid(), None, None]
-    cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun,
-                  aggrFun=Softmax(), net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4,
-                  c_prob=-5, p_rad=-6)
+    cn = LsmNetwork(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=actFun,
+                    aggrFun=Softmax(), net_it=2, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4,
+                    c_prob=-5, p_rad=-6)
 
     res1 = cn.run(np.array([[-1, 0.5], [1, -2]]))
 
@@ -396,40 +394,6 @@ def test_run_with_cycle_2_run():
                                                 [0.276454068, 0.276531542],
                                                 [0.723545932, 0.723468458]]))
 
-# def test_staggered_run():
-#     links = np.array([[0, 0, 1, 0, 0, 0, 0, 0, 0],
-#                       [0, 0, 0, 0, 1, 0, 0, 0, 0],
-#                       [0, 0, 0, 0, 0, 1, 0, 0, 0],
-#                       [0, 0, 0, 0, 1, 0, 0, 0, 0],
-#                       [0, 0, 0, 0, 0, 0, 1, 0, 0],
-#                       [0, 0, 0, 1, 0, 0, 0, 1, 0],
-#                       [0, 0, 0, 1, 0, 1, 0, 0, 1],
-#                       [0, 0, 0, 0, 0, 0, 0, 0, 0],
-#                       [0, 0, 0, 0, 0, 0, 0, 0, 0]])
-#     weights = np.array([[0, 0, -1, 0, 0, 0, 0, 0, 0],
-#                         [0, 0, 0, 0, 1, 0, 0, 0, 0],
-#                         [0, 0, 0, 0, 0, 1, 0, 0, 0],
-#                         [0, 0, 0, 0, -1, 0, 0, 0, 0],
-#                         [0, 0, 0, 0, 0, 0, -1, 0, 0],
-#                         [0, 0, 0, 1, 0, 0, 0, -1, 0],
-#                         [0, 0, 0, 1, 0, -1, 0, 0, 1],
-#                         [0, 0, 0, 0, 0, 0, 0, 0, 0],
-#                         [0, 0, 0, 0, 0, 0, 0, 0, 0]])
-#
-#     biases = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0]])
-#     cn = ChaosNet(input_size=2, output_size=2, links=links, weights=weights, biases=biases, actFuns=9 * [Sigmoid()], aggrFun=Softmax(), maxit=1)
-#
-#     res1 = cn.run(np.array([[-1], [1]]))
-#     # assert np.all(np.isclose(cn.inp, np.array([[0, 0, 1, 1, 1, 0.731058579, -0.731058579, -0.675037527, 0.324962473]])))
-#     # assert np.all(np.isclose(cn.act, np.array([[-1, 1, 0.731058579, 0.731058579, 0.731058579, 0.675037527, 0.324962473, 0.268941421, 0.731058579]])))
-#     assert np.all(np.isclose(res1, np.array([[0.268941421], [0.731058579]])))
-#
-#     res2 = cn.run(np.array([[-1], [1]]))
-    # assert np.all(np.isclose(cn.inp, np.array([[0, 0, 1, 0.9621193, 0.2689414, 0.4060961, -0.5668330, -0.6001514, 0.3619679]])))
-    # assert np.all(np.isclose(cn.act, np.array([[-1, 1, 0.7310586, 0.7235459, 0.5668330, 0.6001514, 0.3619679, 0.2764541, 0.7235459]])))
-    # assert np.all(np.isclose(res1, np.array([[0.2764541], [0.7235459]])))
-
-
 
 def test_faster_run():
     weights = np.array([[0, 0, 0, 1, 0, 0],
@@ -448,9 +412,9 @@ def test_faster_run():
 
     bias = np.array([[0, 0, 0, 0, 1, -0.5]])
     actFuns = [None, None, None, ReLu(), ReLu(), None]
-    net = ChaosNet(input_size=3, output_size=1, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Sigmoid(),
-                   net_it=1, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5,
-                   p_rad=-6)
+    net = LsmNetwork(input_size=3, output_size=1, links=links, weights=weights, biases=bias, actFuns=actFuns, aggrFun=Sigmoid(),
+                     net_it=1, mutation_radius=-1, swap_prob=-2, multi=-3, p_prob=-4, c_prob=-5,
+                     p_rad=-6)
 
     inputs = np.array([[0, 1], [1, 0], [0, 1]])
     expected = np.array([[0.377540669, 0.182425524]])
@@ -496,11 +460,3 @@ def test_faster_run():
 
     assert np.all(np.isclose(o1, expected[0, 0], atol=1e-5))
     assert np.all(np.isclose(o2, expected[0, 1], atol=1e-5))
-
-# test_cn_run()
-# test_run_with_cycle_1_run()
-# test_run_with_cycle_2_run()
-# test_faster_run()
-# test_faster_run()
-
-# test_cn_run2()

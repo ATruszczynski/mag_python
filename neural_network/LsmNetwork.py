@@ -8,9 +8,8 @@ import numpy as np
 from ann_point.Functions import *
 from utility.Utility2 import *
 
-# TODO - B - clean up file
 
-class ChaosNet:
+class LsmNetwork:
     def __init__(self, input_size: int, output_size: int, links: np.ndarray, weights: np.ndarray, biases: np.ndarray,
                  actFuns: [ActFun], aggrFun: ActFun, net_it: int, mutation_radius: float, swap_prob: float,
                  multi: float, p_prob: float, c_prob: float, p_rad: float):
@@ -25,12 +24,8 @@ class ChaosNet:
         check_cond_in_cn_const(biases.shape[1] == weights.shape[1])
         check_cond_in_cn_const(len(actFuns) == biases.shape[1])
         check_cond_in_cn_const(net_it >= 1)
-        # check_cond_in_cn_const(mutation_radius <= 0)
-        # check_cond_in_cn_const(sqr_mut_prob <= 0)
-        # check_cond_in_cn_const(lin_mut_prob <= 0)
         check_cond_in_cn_const(p_prob <= 0)
         check_cond_in_cn_const(c_prob <= 0)
-        # check_cond_in_cn_const(dstr_mut_prob <= 0)
 
         nonzl = np.where(links != 0)
         nonzw = np.where(weights != 0)
@@ -54,7 +49,6 @@ class ChaosNet:
                 self.actFuns.append(actFuns[i].copy())
         self.aggrFun = aggrFun
 
-        #TODO - C - make those private
         self.input_size = input_size
         self.output_size = output_size
         self.neuron_count = self.biases.shape[1]
@@ -102,25 +96,6 @@ class ChaosNet:
         # self.act[self.hidden_end_index:, :] = self.inp[self.hidden_end_index:, :]
 
         return self.act[self.hidden_end_index:]
-
-    # def run(self, inputs: np.ndarray) -> np.ndarray:
-    #     # if self.hidden_comp_order is None:
-    #     #     self.compute_comp_order()
-    #
-    #     self.act = np.zeros((self.neuron_count, inputs.shape[1]))
-    #     self.inp = np.zeros((self.neuron_count, inputs.shape[1]))
-    #
-    #     self.act[:self.input_size, :] = inputs
-    #
-    #     for i in range(self.net_it + 1):
-    #         self.inp = np.dot(self.weights.T, self.act) + self.biases.T
-    #         self.act = self.inp
-    #         for j in range(self.hidden_start_index, self.hidden_end_index):
-    #             self.act[j, :] = self.actFuns[j].compute(self.act[j, :])
-    #
-    #     self.act[self.hidden_end_index:, :] = self.aggrFun.compute(self.inp[self.hidden_end_index:, :])
-    #
-    #     return self.act[self.hidden_end_index:]
 
     def compute_comp_order(self):
         self.hidden_comp_order = []
@@ -170,52 +145,6 @@ class ChaosNet:
             test_res.extend([mean(resultt), max(resultt)])
         return test_res
 
-    # def set_internals(self, links: np.ndarray, weights: np.ndarray, biases: np.ndarray, actFuns: [ActFun], aggrFun: ActFun):
-    #     self.links = links.copy()
-    #     self.weights = weights.copy()
-    #     self.biases = biases.copy()
-    #     self.aggrFun = aggrFun.copy()
-    #
-    #     self.actFuns = []
-    #     for i in range(len(actFuns)):
-    #         if actFuns[i] is None:
-    #             self.actFuns.append(None)
-    #         else:
-    #             self.actFuns.append(actFuns[i].copy())
-    #
-    #     self.hidden_comp_order = None
-
-    # def size(self):
-    #     return -666
-
-    #TODO - B - dużo z tych funkcji jest do wyrzucenia prawd.
-
-    # def get_indices_of_neurons_with_output(self):
-    #     row_sum = np.sum(self.links, axis=1)
-    #     ones = list(np.where(row_sum[:self.hidden_end_index] > 0)[0])
-    #     ones.extend(list(range(self.hidden_end_index, self.neuron_count)))
-    #     return ones
-    #
-    # def get_indices_of_neurons_with_input(self):
-    #     col_sum = np.sum(self.links, axis=0)
-    #     ones = list(np.where(col_sum > 0)[0])
-    #     ones.extend(list(range(self.hidden_start_index)))
-    #     return ones
-
-    # def get_indices_of_connected_neurons(self):#TODO - C - can this be faster?
-    #     connected_neurons = []
-    #     with_input = self.get_indices_of_neurons_with_input()
-    #
-    #     for i in with_input:
-    #         connected_neurons.append(i)
-    #
-    #     with_output = self.get_indices_of_neurons_with_output()
-    #     for i in with_output:
-    #         if i not in connected_neurons:
-    #             connected_neurons.append(i)
-    #
-    #     return connected_neurons
-
     def get_indices_of_used_neurons(self):
         no_output = self.get_indices_of_no_output_neurons()
         used = []
@@ -250,7 +179,7 @@ class ChaosNet:
                 result.append(i)
         return result
 
-    def copy(self):#TODO test?
+    def copy(self):
         actFuns = []
         for i in range(len(self.actFuns)):
             if self.actFuns[i] is None:
@@ -258,11 +187,11 @@ class ChaosNet:
             else:
                 actFuns.append(self.actFuns[i].copy())
 
-        return ChaosNet(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
-                        links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
-                        , net_it=self.net_it, mutation_radius=self.mutation_radius, swap_prob=self.swap_prob,
-                        multi=self.multi, p_prob=self.p_prob, c_prob=self.c_prob,
-                        p_rad=self.p_rad)
+        return LsmNetwork(input_size=self.input_size, output_size=self.output_size, weights=self.weights.copy(),
+                          links=self.links.copy(), biases=self.biases.copy(), actFuns=actFuns, aggrFun=self.aggrFun.copy()
+                          , net_it=self.net_it, mutation_radius=self.mutation_radius, swap_prob=self.swap_prob,
+                          multi=self.multi, p_prob=self.p_prob, c_prob=self.c_prob,
+                          p_rad=self.p_rad)
 
     def get_edge_count(self):
         how_many = np.sum(self.links)
@@ -270,12 +199,6 @@ class ChaosNet:
 
     def get_max_edge_count(self):
         return np.sum(get_weight_mask(self.input_size, self.output_size, self.neuron_count))
-
-    # def density(self):
-    #     how_many = np.sum(self.links)
-    #     maxi = np.sum(get_weight_mask(self.input_size, self.output_size, self.neuron_count))
-    #
-    #     return how_many/maxi
 
     def get_act_fun_string(self):
         actFunsString = ""

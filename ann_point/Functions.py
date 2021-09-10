@@ -1,10 +1,6 @@
 import numpy as np
 
-# TODO - C - remake import stucture
-
 eps = 1e-10
-
-# TODO - C - clean up all files from commented code
 
 class ActFun:
     def compute(self, arg: np.ndarray) -> np.ndarray:

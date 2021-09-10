@@ -1,6 +1,5 @@
 import numpy as np
 
-# TODO - C - useless file?
 class MockCN:
     def __init__(self, neuron_count: float, mat: np.ndarray):
         self.neuron_count = neuron_count

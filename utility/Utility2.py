@@ -118,7 +118,6 @@ def assert_acts_same(acts1: [ActFun], acts2: [ActFun]):
         assert acts1 is None
         return
 
-
     assert len(acts1) == len(acts2)
 
     for i in range(len(acts1)):

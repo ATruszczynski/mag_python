@@ -14,7 +14,6 @@ mean_lc_id = "m.lc."
 round_prec_rh = 7
 mean_used_id="m.u."
 
-# TODO - B - remove useless code
 class RunHistory:
     def __init__(self):
         self.it_hist = []
@@ -29,35 +28,6 @@ class RunHistory:
             it_rec.append(dp)
         self.it_hist.append(it_rec)
 
-    # def get_it_best(self, iteration: int) -> CNDataPoint:
-    #     it = self.it_hist[iteration]
-    #
-    #     best_eval = None
-    #     for i in range(len(it)):
-    #         eval = it[i]
-    #         if best_eval is None or eval.ff > best_eval.ff:
-    #             best_eval = eval
-    #
-    #     return best_eval
-
-    # def get_it_summary_string(self, iteration: int):
-    #     evals = self.it_hist[iteration]
-    #
-    #     mean_ff = mean([eval.ff for eval in evals])
-    #     mean_acc = mean([eval.acc for eval in evals])
-    #     mean_prec = mean([eval.prec for eval in evals])
-    #     mean_rec = mean([eval.rec for eval in evals])
-    #     mean_eff = mean([eval.get_eff() for eval in evals])
-    #     mean_size = mean([eval.net.size() for eval in evals])
-    #     mean_used = mean([eval.net.get_number_of_used_neurons() for eval in evals])
-    #
-    #     result = f"{iteration} |{mean_ff_id}:{round(mean_ff, round_prec_rh)}|" + \
-    #              f"{mean_acc_id}:{round(mean_acc, round_prec_rh)}|" + \
-    #              f"{mean_prec_id}:{round(mean_prec, round_prec_rh)}|{mean_rec_id}:{round(mean_rec, round_prec_rh)}|" + \
-    #              f"{mean_size_id}:{round(mean_size,round_prec_rh)}|{mean_eff_id}:{round(mean_eff, round_prec_rh)}|" \
-    #              f"{mean_used_id}:{round(mean_used, round_prec_rh)}"
-    #
-    #     return result
 
     def to_csv_file(self, fpath: str, reg: bool):
         file = open(fpath, "w")

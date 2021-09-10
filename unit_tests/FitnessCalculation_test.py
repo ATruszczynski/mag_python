@@ -1,8 +1,8 @@
 import pytest
 
-from evolving_classifier.FitnessCalculator import *
+from evolving_classifier.LsmFitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
-from neural_network.ChaosNet import *
+from neural_network.LsmNetwork import *
 from utility.TestingUtility import assert_chaos_network_properties, assert_chaos_networks_same
 from utility.Utility import generate_population, HyperparameterRange
 from ann_point.Functions import *
@@ -24,7 +24,7 @@ def points():
 def test_fitness_calculator_with_pure_eff():
     random.seed(1002)
     np.random.seed(1002)
-    fc = CNFitnessCalculator()
+    fc = LsmFitnessCalculator()
     anns = points()
     i, o = get_io()
     res = fc.compute(None, to_compute=anns, fitnessFunc=CNFF(), trainInputs=i, trainOutputs=o)
@@ -54,40 +54,6 @@ def test_fitness_calculator_with_pure_eff():
     assert res[1].get_eff() == pytest.approx(0.1875, abs=1e-3)
     assert res[1].get_meff() == pytest.approx(0.0, abs=1e-3)
 
-
-
-# random.seed(1002)
-# np.random.seed(1002)
-#
-# nets = points()
-# i, o = get_io()
-#
-# cff = CNFF()
-#
-# res1 = cff.compute(nets[0], i, o)
-# cm1 = res1[1]
-# print(f"f: {res1[0]}")
-# print(f"acc: {accuracy(cm1)}")
-# print(f"prec: {average_precision(cm1)}")
-# print(f"rec: {average_recall(cm1)}")
-# print(f"f1: {average_f1_score(cm1)}")
-# print(f"eff: {efficiency(cm1)}")
-# print(f"meff: {m_efficiency(cm1)}")
-#
-# print("\n\n")
-#
-# res2 = cff.compute(nets[1], i, o)
-# cm2 = res2[1]
-# print(f"f: {res2[0]}")
-# print(f"acc: {accuracy(cm2)}")
-# print(f"prec: {average_precision(cm2)}")
-# print(f"rec: {average_recall(cm2)}")
-# print(f"f1: {average_f1_score(cm2)}")
-# print(f"eff: {efficiency(cm2)}")
-# print(f"meff: {m_efficiency(cm2)}")
-#
-#
-# test_fitness_calculator_with_pure_eff()
 
 
 

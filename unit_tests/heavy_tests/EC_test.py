@@ -1,5 +1,5 @@
 from evolving_classifier.EvolvingClassifier import *
-from evolving_classifier.operators.MutationOperators import *
+from evolving_classifier.operators.LsmMutationOperator import *
 from evolving_classifier.operators.SelectionOperator import *
 
 
@@ -53,23 +53,3 @@ def test_sync_async_determinism():
                 t2 = tests[j]
 
                 assert np.array_equal(t1[0], t2[0])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# test_determinism()

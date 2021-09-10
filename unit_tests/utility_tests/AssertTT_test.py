@@ -2,12 +2,12 @@ import numpy as np
 
 from TupleForTest import TupleForTest, assert_tts_same
 from ann_point.Functions import QuadDiff, CrossEntropy
-from evolving_classifier.FitnessCalculator import CNFitnessCalculator
+from evolving_classifier.LsmFitnessCalculator import LsmFitnessCalculator
 from evolving_classifier.FitnessFunction import CNFF2, CNFF, CNFF4
-from evolving_classifier.operators.Rejects.FinalCO1 import FinalCO1
-from evolving_classifier.operators.Rejects.FinalCO2 import FinalCO2
-from evolving_classifier.operators.MutationOperators import FinalMutationOperator
+from evolving_classifier.operators.LsmCrossoverOperator import LsmCrossoverOperator
+from evolving_classifier.operators.LsmMutationOperator import LsmMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
+from utility.MockCrossOp import MockCO
 from utility.MockFC import MockFC
 from utility.MockMutOp import MockMO
 from utility.Utility import get_testing_hrange
@@ -22,11 +22,11 @@ def get_testing_tt():
         data=[np.zeros((4, 4)), np.zeros((5, 5)), np.zeros((6, 6)), np.zeros((7, 7))],
         iterations=8,
         hrange=get_testing_hrange(),
-        ct=FinalCO1,
-        mt=FinalMutationOperator,
+        ct=LsmCrossoverOperator,
+        mt=LsmMutationOperator,
         st=[TournamentSelection, 9],
         fft=[CNFF2, QuadDiff],
-        fct=CNFitnessCalculator,
+        fct=LsmFitnessCalculator,
         reg=False
     )
 
@@ -204,7 +204,7 @@ def test_different_ct():
 
     assert_tts_same(tt1, tt2)
 
-    tt2.ct = FinalCO2
+    tt2.ct = MockCO
 
     try:
         assert_tts_same(tt1, tt2)

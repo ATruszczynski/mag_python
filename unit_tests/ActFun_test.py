@@ -1,26 +1,9 @@
 import pytest
 from ann_point.Functions import *
 
-# TODO - C - remake test structure
 allActFun = [ReLu(), Sigmoid(), TanH(), Softmax(), LReLu(), GaussAct(), SincAct(), Poly2(), Poly3(), Identity()]
 
 def test_relu():
-    # rl = ReLu()
-    #
-    # arg = np.array([[9], [1], [0], [-1]])
-    # exp = np.array([[9], [1], [0], [0]])
-    #
-    # assert np.array_equal(exp, rl.compute(arg))
-    #
-    # arg = np.array([[9], [0], [0.25], [-1]])
-    # exp = np.array([[1, 0, 0, 0], [0, 0, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0]])
-    #
-    # assert np.array_equal(exp, rl.computeDer(arg))
-    #
-    # assert rl.to_string() == "RL"
-    #
-    # assert isinstance(rl.copy(), ReLu)
-
     rl = ReLu()
 
     arg = np.array([[9, 1, 0],
@@ -48,11 +31,6 @@ def test_leaky_relu():
 
     assert np.array_equal(exp, lrl.compute(arg))
 
-    # arg = np.array([[9], [0], [0.25], [-1]])
-    # exp = np.array([[1, 0, 0, 0], [0, 0.01, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0.01]])
-    #
-    # assert np.array_equal(exp, lrl.computeDer(arg))
-
     assert lrl.to_string() == "L0.01"
 
     cp = lrl.copy()
@@ -76,7 +54,6 @@ def test_gauss():
                     [0.00012341, 0, 0]])
 
     assert np.all(np.isclose(gauss.compute(arg), exp, atol=1e-6))
-    # assert np.all(np.isclose(gauss.computeDer(arg), np.array([[-0.735758882, 0, 0], [0, 0.073262556, 0], [0, 0, -0.778800783]]), atol=1e-6))
     assert gauss.to_string() == "GS"
     assert isinstance(gauss.copy(), GaussAct)
 
@@ -92,8 +69,6 @@ def test_sinc():
     sinc = SincAct()
 
     assert np.all(np.isclose(sinc.compute(arg), exp, atol=1e-6))
-    # assert np.all(np.isclose(sinc.computeDer(arg), np.array([[0.116110749 , 0, 0, 0, 0], [0, 0.435397775, 0, 0, 0], [0, 0, 0, 0, 0],
-    #                                                          [0, 0, 0, -0.162537031, 0], [0, 0, 0, 0, -0.301168679]]), atol=1e-6))
     assert sinc.to_string() == "SC"
     assert isinstance(sinc.copy(), SincAct)
 
@@ -108,7 +83,6 @@ def test_sigma():
     sigma = Sigmoid()
 
     assert np.all(np.isclose(sigma.compute(arg), exp, atol=1e-6))
-    # assert np.all(np.isclose(sigma.computeDer(arg), np.array([[0.25, 0, 0], [0, 0.196611933, 0], [0, 0, 0.104993585]]), atol=1e-6))
     assert sigma.to_string() == "SG"
     assert isinstance(sigma.copy(), Sigmoid)
 
@@ -124,9 +98,6 @@ def test_softmax():
     sm = Softmax()
 
     assert np.all(np.isclose(sm.compute(arg), exp, atol=1e-5))
-    # assert np.all(np.isclose(sm.computeDer(arg), np.array([[0.177759407, -0.145331554, -0.032427853],
-    #                                         [-0.145331554, 0.233479597, -0.088148043],
-    #                                         [-0.032427853, -0.088148043, 0.120575896]]), atol=1e-5))
     assert sm.to_string() == "SM"
     assert isinstance(sm.copy(), Softmax)
 
@@ -141,9 +112,6 @@ def test_tanh():
     tanh = TanH()
 
     assert np.all(np.isclose(tanh.compute(arg), exp))
-    # assert np.all(np.isclose(tanh.computeDer(arg), np.array([[0.419974342, 0, 0],
-    #                                         [0, 0.070650825, 0],
-    #                                         [0, 0, 0.786447733]]), atol=1e-5))
     assert tanh.to_string() == "TH"
     assert isinstance(tanh, TanH)
 

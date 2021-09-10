@@ -2,7 +2,7 @@ import random
 from math import ceil
 
 from ann_point import HyperparameterRange
-from neural_network.ChaosNet import ChaosNet
+from neural_network.LsmNetwork import LsmNetwork
 import numpy as np
 
 from utility.CNDataPoint import CNDataPoint
@@ -14,23 +14,21 @@ class CrossoverOperator:
     def __init__(self):
         pass
 
-    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
+    def crossover(self, pointA: LsmNetwork, pointB: LsmNetwork) -> [LsmNetwork, LsmNetwork]:
         pass
 
-# TODO - B - remove needless code from here
-# TODO - A - jeszcze przejrzyj to
-class FinalCO3(CrossoverOperator):
+class LsmCrossoverOperator(CrossoverOperator):
     def __init__(self, hrange: HyperparameterRange):
         super().__init__()
         self.hrange = hrange.copy()
 
-    def crossover(self, pointA: ChaosNet, pointB: ChaosNet) -> [ChaosNet, ChaosNet]:
-        possible_cuts = find_possible_cuts99(pointA, pointB, self.hrange)
+    def crossover(self, pointA: LsmNetwork, pointB: LsmNetwork) -> [LsmNetwork, LsmNetwork]:
+        possible_cuts = find_possible_cuts(pointA, pointB, self.hrange)
 
         cuts = choose_without_repetition(options=possible_cuts, count=2)
 
-        new_A_links, new_A_weights, new_A_biases, new_A_func = get_link_weights_biases_acts7(pointA=pointA, pointB=pointB, cut=cuts[0])
-        new_B_links, new_B_weights, new_B_biases, new_B_func = get_link_weights_biases_acts7(pointA=pointA, pointB=pointB, cut=cuts[1])
+        new_A_links, new_A_weights, new_A_biases, new_A_func = get_link_weights_biases_acts(pointA=pointA, pointB=pointB, cut=cuts[0])
+        new_B_links, new_B_weights, new_B_biases, new_B_func = get_link_weights_biases_acts(pointA=pointA, pointB=pointB, cut=cuts[1])
 
         swap_pm = 10 ** pointA.swap_prob
 
@@ -68,20 +66,20 @@ class FinalCO3(CrossoverOperator):
 
         # new_A_act_prob, new_B_act_prob = conditional_value_swap(pointA.p_mutation_prob, pointA.act_mut_prob, pointB.act_mut_prob)
 
-        pointA = ChaosNet(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
-                          biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_net_it, mutation_radius=new_A_mut_rad,
-                          swap_prob=new_A_swap_prob, multi=new_A_multi_prob, p_prob=new_A_p_prob,
-                          c_prob=new_A_c_prob, p_rad=new_A_p_rad)
+        pointA = LsmNetwork(input_size=pointA.input_size, output_size=pointA.output_size, links=new_A_links, weights=new_A_weights,
+                            biases=new_A_biases, actFuns=new_A_func, aggrFun=new_A_aggr, net_it=new_A_net_it, mutation_radius=new_A_mut_rad,
+                            swap_prob=new_A_swap_prob, multi=new_A_multi_prob, p_prob=new_A_p_prob,
+                            c_prob=new_A_c_prob, p_rad=new_A_p_rad)
 
-        pointB = ChaosNet(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
-                          biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_net_it, mutation_radius=new_B_mut_rad,
-                          swap_prob=new_B_swap_prob, multi=new_B_multi_prob, p_prob=new_B_p_prob,
-                          c_prob=new_B_c_prob, p_rad=new_B_p_rad)
+        pointB = LsmNetwork(input_size=pointB.input_size, output_size=pointB.output_size, links=new_B_links, weights=new_B_weights,
+                            biases=new_B_biases, actFuns=new_B_func, aggrFun=new_B_aggr, net_it=new_B_net_it, mutation_radius=new_B_mut_rad,
+                            swap_prob=new_B_swap_prob, multi=new_B_multi_prob, p_prob=new_B_p_prob,
+                            c_prob=new_B_c_prob, p_rad=new_B_p_rad)
 
         return pointA, pointB
 
 
-def find_possible_cuts99(pointA: ChaosNet, pointB: ChaosNet, hrange: HyperparameterRange):
+def find_possible_cuts(pointA: LsmNetwork, pointB: LsmNetwork, hrange: HyperparameterRange):
     possible_cuts = []
     maxh = hrange.max_hidden
     minh = hrange.min_hidden
@@ -106,26 +104,27 @@ def find_possible_cuts99(pointA: ChaosNet, pointB: ChaosNet, hrange: Hyperparame
 
     return possible_cuts
 
-def cut_into_puzzles99(matrix: np.ndarray, i: int, o: int, ync: int, onc: int, left: bool) -> [np.ndarray]:
+
+def cut_into_puzzles(matrix: np.ndarray, i: int, o: int, your_nc: int, other_nc: int, left: bool) -> [np.ndarray]:
     currnc = matrix.shape[0]
 
     if left:
-        tt = min(currnc - o, i+ync+onc)
-        P1 = matrix[i:tt, i:i+ync]
-        P2 = matrix[:i, i:i+ync]
-        P3 = matrix[i:i+ync, -o:]
-        P4 = matrix[i:i+ync, i+ync:tt]
+        tt = min(currnc - o, i + your_nc + other_nc)
+        P1 = matrix[i:tt, i:i + your_nc]
+        P2 = matrix[:i, i:i + your_nc]
+        P3 = matrix[i:i + your_nc, -o:]
+        P4 = matrix[i:i + your_nc, i + your_nc:tt]
     else:
-        tt = max(i, currnc - o - ync - onc)
-        P1 = matrix[tt:-o, -(o+ync):-o]
-        P2 = matrix[:i, -(o+ync):-o]
-        P3 = matrix[-(o+ync):-o, -o:]
-        P4 = matrix[-(o + ync):-o, tt:-(o + ync)]
+        tt = max(i, currnc - o - your_nc - other_nc)
+        P1 = matrix[tt:-o, -(o + your_nc):-o]
+        P2 = matrix[:i, -(o + your_nc):-o]
+        P3 = matrix[-(o + your_nc):-o, -o:]
+        P4 = matrix[-(o + your_nc):-o, tt:-(o + your_nc)]
 
     return P1, P2, P3, P4
 
 
-def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], right_puzzles: [np.ndarray]):
+def piece_together_from_puzzles(i: int, o: int, left_puzzles: [np.ndarray], right_puzzles: [np.ndarray]):
     left_nc = left_puzzles[0].shape[1]
     right_nc = right_puzzles[0].shape[1]
 
@@ -154,22 +153,22 @@ def piece_together_from_puzzles7(i: int, o: int, left_puzzles: [np.ndarray], rig
 
     return result
 
-def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]):
+def get_link_weights_biases_acts(pointA: LsmNetwork, pointB: LsmNetwork, cut: [int]):
     input_size = pointA.input_size
     output_size = pointA.output_size
 
-    links = piece_together_from_puzzles7(i=input_size, o=output_size,
-                                         left_puzzles=cut_into_puzzles99(matrix=pointA.links, i=input_size, o=output_size,
-                                                                         ync=cut[1], onc=cut[3], left=True),
-                                         right_puzzles=cut_into_puzzles99(matrix=pointB.links, i=input_size, o=output_size,
-                                                                          ync=cut[3], onc=cut[1], left=False))
+    links = piece_together_from_puzzles(i=input_size, o=output_size,
+                                        left_puzzles=cut_into_puzzles(matrix=pointA.links, i=input_size, o=output_size,
+                                                                      your_nc=cut[1], other_nc=cut[3], left=True),
+                                        right_puzzles=cut_into_puzzles(matrix=pointB.links, i=input_size, o=output_size,
+                                                                       your_nc=cut[3], other_nc=cut[1], left=False))
     links = np.multiply(links, get_weight_mask(pointA.input_size, pointA.output_size, links.shape[0]))
 
-    weights = piece_together_from_puzzles7(i=input_size, o=output_size,
-                                           left_puzzles=cut_into_puzzles99(matrix=pointA.weights, i=input_size, o=output_size,
-                                                                           ync=cut[1], onc=cut[3], left=True),
-                                           right_puzzles=cut_into_puzzles99(matrix=pointB.weights, i=input_size, o=output_size,
-                                                                            ync=cut[3], onc=cut[1], left=False))
+    weights = piece_together_from_puzzles(i=input_size, o=output_size,
+                                          left_puzzles=cut_into_puzzles(matrix=pointA.weights, i=input_size, o=output_size,
+                                                                        your_nc=cut[1], other_nc=cut[3], left=True),
+                                          right_puzzles=cut_into_puzzles(matrix=pointB.weights, i=input_size, o=output_size,
+                                                                         your_nc=cut[3], other_nc=cut[1], left=False))
     weights = np.multiply(weights, get_weight_mask(pointA.input_size, pointA.output_size, links.shape[0]))
     nc = input_size + output_size + cut[1] + cut[3]
 
@@ -183,7 +182,6 @@ def get_link_weights_biases_acts7(pointA: ChaosNet, pointB: ChaosNet, cut: [int]
     biases[0, input_size:input_size+cut[1]] = pointA.biases[0, input_size:cut[0]]
     biases[0, input_size+cut[1]:input_size+cut[1]+cut[3]] = pointB.biases[0, cut[2]:-output_size]
 
-    # TODO - C - logika losowania jest odwrócona
     for i in range(output_size):
         swap = random.random()
         if swap <= 0.5:

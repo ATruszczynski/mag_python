@@ -1,6 +1,6 @@
 import pytest
 
-from neural_network.ChaosNet import *
+from neural_network.LsmNetwork import *
 # from neural_network.FeedForwardNeuralNetwork import *
 
 def test_accuracy():

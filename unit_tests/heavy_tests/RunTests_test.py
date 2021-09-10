@@ -1,8 +1,8 @@
 from TupleForTest import TupleForTest
-from evolving_classifier.FitnessCalculator import CNFitnessCalculator
+from evolving_classifier.LsmFitnessCalculator import LsmFitnessCalculator
 from evolving_classifier.FitnessFunction import CNFF
-from evolving_classifier.operators.Rejects.FinalCO1 import FinalCO1
-from evolving_classifier.operators.MutationOperators import FinalMutationOperator
+from evolving_classifier.operators.LsmCrossoverOperator import LsmCrossoverOperator
+from evolving_classifier.operators.LsmMutationOperator import LsmMutationOperator
 from evolving_classifier.operators.SelectionOperator import TournamentSelection
 from suites.suite_utility import try_check_if_all_tests_computable
 import os
@@ -22,11 +22,11 @@ def test_check_different():
     data = [x, y, X, Y]
     iterations = 8
     hrange = get_default_hrange_ga()
-    ct=FinalCO1
-    mt=FinalMutationOperator
+    ct=LsmCrossoverOperator
+    mt=LsmMutationOperator
     st=[TournamentSelection, 4]
     fft=[CNFF]
-    fct=CNFitnessCalculator
+    fct=LsmFitnessCalculator
     reg=False
 
     tests.append(TupleForTest(name="iris_01", rep=repetitions, seed=seed, popSize=population_size,
@@ -52,11 +52,11 @@ def test_check_same_names():
     data = [x, y, X, Y]
     iterations = 8
     hrange = get_default_hrange_ga()
-    ct=FinalCO1
-    mt=FinalMutationOperator
+    ct=LsmCrossoverOperator
+    mt=LsmMutationOperator
     st=[TournamentSelection, 4]
     fft=[CNFF]
-    fct=CNFitnessCalculator
+    fct=LsmFitnessCalculator
     reg=False
 
     tests.append(TupleForTest(name="iris_01", rep=repetitions, seed=seed, popSize=population_size,
@@ -87,11 +87,11 @@ def test_check_same_params_diff_names():
     data = [x, y, X, Y]
     iterations = 8
     hrange = get_default_hrange_ga()
-    ct=FinalCO1
-    mt=FinalMutationOperator
+    ct=LsmCrossoverOperator
+    mt=LsmMutationOperator
     st=[TournamentSelection, 4]
     fft=[CNFF]
-    fct=CNFitnessCalculator
+    fct=LsmFitnessCalculator
     reg=False
 
     tests.append(TupleForTest(name="iris_01", rep=repetitions, seed=seed, popSize=population_size,
@@ -110,8 +110,3 @@ def test_check_same_params_diff_names():
         assert True
     else:
         assert False
-
-
-# test_check_different()
-# test_check_same_names()
-# test_check_same_params_diff_names()

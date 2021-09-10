@@ -68,8 +68,3 @@ def test_generate_counting_problem_unique():
     assert np.array_equal(y[13], np.array([[0], [0], [0], [1], [0]]))
     assert np.array_equal(y[14], np.array([[0], [0], [0], [1], [0]]))
     assert np.array_equal(y[15], np.array([[0], [0], [0], [0], [1]]))
-
-
-
-# test_generate_counting_problem()
-# test_generate_counting_problem_unique()

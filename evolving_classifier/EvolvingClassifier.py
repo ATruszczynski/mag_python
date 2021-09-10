@@ -1,16 +1,14 @@
-from evolving_classifier.FitnessCalculator import *
+from evolving_classifier.LsmFitnessCalculator import *
 from evolving_classifier.FitnessFunction import *
+from evolving_classifier.operators.LsmCrossoverOperator import LsmCrossoverOperator
 from evolving_classifier.operators.Rejects.FinalCO1 import *
-from evolving_classifier.operators.MutationOperators import *
+from evolving_classifier.operators.LsmMutationOperator import *
 from evolving_classifier.operators.SelectionOperator import *
 from utility.RunHistory import RunHistory
 from utility.Utility import *
 
 logs = "logs"
 np.seterr(over='ignore')
-
-# TODO - B - usunąć supervisora? Chyba nie jest używany
-# TODO - B - czy sortowanie jest w ogóle koniecznie poza wypisywaniem?
 
 tol = 20
 
@@ -31,7 +29,6 @@ class EvolvingClassifier:
 
         self.history = None
 
-    #TODO - C - ziarno nieobowiązkowe?
     def prepare(self, popSize: int, nn_data: ([np.ndarray], [np.ndarray]),
                 seed: int, hrange: HyperparameterRange = None, ct: type = None, mt: type = None, st: [Any] = None, fft: [Any] = None,
                 fct: type = None):
@@ -41,12 +38,12 @@ class EvolvingClassifier:
             self.hrange = hrange
 
         if ct == None:
-            self.co = FinalCO1(self.hrange)
+            self.co = LsmCrossoverOperator(self.hrange)
         else:
             self.co = ct(self.hrange)
 
         if mt == None:
-            self.mo = FinalMutationOperator(self.hrange)
+            self.mo = LsmMutationOperator(self.hrange)
         else:
             self.mo = mt(self.hrange)
 
@@ -65,7 +62,7 @@ class EvolvingClassifier:
             self.ff = fft[0](fft[1]())
 
         if fct == None:
-            self.fc = CNFitnessCalculator()
+            self.fc = LsmFitnessCalculator()
         else:
             self.fc = fct()
 
@@ -81,15 +78,12 @@ class EvolvingClassifier:
 
         self.history = RunHistory()
 
-    def run(self, iterations: int, power: int = 1, verbose: bool = False) -> ChaosNet:
+    def run(self, iterations: int, power: int = 1, verbose: bool = False) -> LsmNetwork:
         if power > 1:
             pool = mp.Pool(power)
         else:
             pool = None
 
-        # best = [self.population[0], -math.inf]
-        # best = CNDataPoint(self.population[0])
-        # best.add_data([-math.inf, -math.inf, -math.inf, -math.inf, -math.inf], new_conf_mat=None)
         fake = CNDataPoint(self.population[0])
         fake.add_data(new_ff=[-math.inf, -math.inf, -math.inf, -math.inf, -math.inf], new_conf_mat=np.zeros((0, 0)))
         bests = [fake.copy()]
@@ -115,14 +109,6 @@ class EvolvingClassifier:
                     break
                 else:
                     bests = bests[1:]
-
-
-
-            # isGE = True
-            # for ffind in range(len(curr_it_best.ff)):
-            #     isGE = isGE and curr_it_best.ff[i] >= best.ff[i]
-            # if isGE:
-            #     best = curr_it_best.copy()
 
             pc = 1
             lc = pc * 8

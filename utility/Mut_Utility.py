@@ -2,12 +2,10 @@ import random
 # from neural_network.ChaosNet import ChaosNet
 
 from utility.Utility import *
-# from utility.Utility2 import *
-# from ann_point.HyperparameterRange import HyperparameterRange
 
 # TODO - B - remove needless functions
 
-def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hidden: int):
+def change_neuron_count(net: LsmNetwork, hrange: HyperparameterRange, demanded_hidden: int):
     current_hidden = net.hidden_count
     change_hidden = demanded_hidden - current_hidden
 
@@ -21,7 +19,7 @@ def change_neuron_count(net: ChaosNet, hrange: HyperparameterRange, demanded_hid
 
     return result
 
-def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: int):
+def increase_neuron_count(net: LsmNetwork, hrange: HyperparameterRange, to_add: int):
     input_size = net.input_size
     output_size = net.output_size
     new_hidden_count = net.hidden_count + to_add
@@ -48,18 +46,18 @@ def increase_neuron_count(net: ChaosNet, hrange: HyperparameterRange, to_add: in
     new_biases[0, -output_size:] = net.biases[0, -output_size:]
 
     new_af = net.actFuns[:net.hidden_end_index]
-    for i in range(to_add): #TODO - C - generate sequence of afs could be a function
+    for i in range(to_add):
         new_af.append(hrange.actFunSet[random.randint(0, len(hrange.actFunSet) - 1)].copy())
 
     new_af.extend(net.actFuns[net.hidden_end_index:])
 
-    return ChaosNet(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
-                    swap_prob=net.swap_prob, multi=net.multi, p_prob=net.p_prob,
-                    c_prob=net.c_prob, p_rad=net.p_rad)
+    return LsmNetwork(input_size=input_size, output_size=output_size, links=new_links, weights=new_weights,
+                      biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
+                      swap_prob=net.swap_prob, multi=net.multi, p_prob=net.p_prob,
+                      c_prob=net.c_prob, p_rad=net.p_rad)
 
 
-def decrease_neuron_count(net: ChaosNet, to_remove: int):
+def decrease_neuron_count(net: LsmNetwork, to_remove: int):
     options = list(range(net.hidden_start_index, net.hidden_end_index))
     ind_to_remove = choose_without_repetition(options, to_remove)
     ind_to_preserve = list(range(net.neuron_count))
@@ -75,64 +73,10 @@ def decrease_neuron_count(net: ChaosNet, to_remove: int):
     for i in range(ind_to_preserve.shape[1]):
         new_af.append(net.actFuns[ind_to_preserve[0, i]])
 
-    return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-                    biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
-                    swap_prob=net.swap_prob, multi=net.multi, p_prob=net.p_prob,
-                    c_prob=net.c_prob, p_rad=net.p_rad)
-
-# def inflate_network(net: ChaosNet, to_add: int): #TODO - D - tests missed wrong maxit
-#     new_neuron_count = net.neuron_count + to_add
-#
-#     new_links = np.zeros((new_neuron_count, new_neuron_count))
-#     new_weights = np.zeros((new_neuron_count, new_neuron_count))
-#     new_biases = np.zeros((1, new_neuron_count))
-#
-#
-#     new_links[:net.hidden_end_index, :net.hidden_end_index] = net.links[:net.hidden_end_index, :net.hidden_end_index]
-#     new_links[:net.hidden_end_index, -net.output_size:] = net.links[:net.hidden_end_index, -net.output_size:]
-#
-#     new_weights[:net.hidden_end_index, :net.hidden_end_index] = net.weights[:net.hidden_end_index, :net.hidden_end_index]
-#     new_weights[:net.hidden_end_index, -net.output_size:] = net.weights[:net.hidden_end_index, -net.output_size:]
-#
-#     new_biases[0, :net.hidden_end_index] = net.biases[0, :net.hidden_end_index]
-#     new_biases[0, -net.output_size:] = net.biases[0, -net.output_size:]
-#
-#     new_actFun = []
-#     for i in range(net.hidden_end_index):
-#         af = net.actFuns[i]
-#         if af is None:
-#             new_actFun.append(None)
-#         else:
-#             new_actFun.append(af.copy())
-#
-#     for i in range(to_add):
-#         af = new_actFun[net.input_size + i]
-#         new_actFun.append(af.copy())
-#
-#     for i in range(net.hidden_end_index, net.neuron_count):
-#         new_actFun.append(None)
-#
-#     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-#                     biases=new_biases, actFuns=new_actFun, aggrFun=net.aggrFun.copy(), maxit=net.maxit, mutation_radius=net.mutation_radius,
-#                     wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
-#                     c_prob=net.c_prob, r_prob=net.r_prob)
-
-# def deflate_network(net: ChaosNet):
-#     ind_to_preserve = net.get_indices_of_connected_neurons()
-#     ind_to_preserve = sorted(ind_to_preserve)
-#     ind_to_preserve = np.array(ind_to_preserve).reshape(1, -1)
-#
-#     new_links = net.links[ind_to_preserve[0, :, None], ind_to_preserve]
-#     new_weights = net.weights[ind_to_preserve[0, :, None], ind_to_preserve]
-#     new_biases = net.biases[0, ind_to_preserve]
-#     new_af = []
-#     for i in range(ind_to_preserve.shape[1]):
-#         new_af.append(net.actFuns[ind_to_preserve[0, i]])
-#
-#     return ChaosNet(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
-#                     biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, maxit=net.maxit, mutation_radius=net.mutation_radius,
-#                     wb_mutation_prob=net.wb_mutation_prob, s_mutation_prob=net.s_mutation_prob, p_mutation_prob=net.p_mutation_prob,
-#                     c_prob=net.c_prob, r_prob=net.r_prob)
+    return LsmNetwork(input_size=net.input_size, output_size=net.output_size, links=new_links, weights=new_weights,
+                      biases=new_biases, actFuns=new_af, aggrFun=net.aggrFun, net_it=net.net_it, mutation_radius=net.mutation_radius,
+                      swap_prob=net.swap_prob, multi=net.multi, p_prob=net.p_prob,
+                      c_prob=net.c_prob, p_rad=net.p_rad)
 
 
 def gaussian_shift(matrix: np.ndarray, mask: np.ndarray, prob: float, radius: float) -> np.ndarray:
@@ -183,14 +127,7 @@ def zero_matrix(matrix: np.ndarray, mask: np.ndarray, prob: float):
     result = np.multiply(result, mask)
 
     return result
-#
-# def reroll_value(p: float, value: float, minV: float, maxV: float):
-#     result = value
-#
-#     if random.random() <= p:
-#         result = random.uniform(minV, maxV)
-#
-#     return result
+
 
 def conditional_try_choose_different(p: float, current, options):
     result = current
@@ -222,7 +159,6 @@ def conditional_uniform_value_shift(p: float, value: float, minV: float, maxV: f
 
     return value
 
-# TODO - B - make a mut op using that?
 def conditional_gaussian_value_shift(p: float, value: float, minV: float, maxV: float, frac: float):
     if random.random() <= p:
         spectrum = maxV - minV
@@ -240,8 +176,6 @@ def add_or_remove_edges(s_pm: float, links: np.ndarray, weights: np.ndarray, mas
     swap_links[to_change] = 1 - swap_links[to_change]
     new_links = swap_links
 
-    # new_links = links.copy()
-    # new_links[i:-o, i:-o] = swap_links[i:-o, i:-o]
 
     new_links = np.multiply(new_links, mask)
 

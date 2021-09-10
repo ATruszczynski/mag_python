@@ -5,7 +5,7 @@ from math import ceil
 from evolving_classifier import FitnessFunction
 import numpy as np
 
-from neural_network.ChaosNet import ChaosNet
+from neural_network.LsmNetwork import LsmNetwork
 from utility.CNDataPoint import CNDataPoint
 
 
@@ -13,15 +13,15 @@ class FitnessCalculator:
     def __init__(self):
         pass
 
-    def compute(self, pool: mp.Pool, to_compute: [ChaosNet], fitnessFunc: FitnessFunction,
+    def compute(self, pool: mp.Pool, to_compute: [LsmNetwork], fitnessFunc: FitnessFunction,
                 trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [CNDataPoint]:
         pass
 
-class CNFitnessCalculator(FitnessCalculator):
+class LsmFitnessCalculator(FitnessCalculator):
     def __init__(self):
         super().__init__()
 
-    def compute(self, pool: mp.Pool, to_compute: [ChaosNet], fitnessFunc: FitnessFunction,
+    def compute(self, pool: mp.Pool, to_compute: [LsmNetwork], fitnessFunc: FitnessFunction,
                 trainInputs: [np.ndarray], trainOutputs: [np.ndarray]) -> [CNDataPoint]:
         results = [CNDataPoint(point) for point in to_compute]
 

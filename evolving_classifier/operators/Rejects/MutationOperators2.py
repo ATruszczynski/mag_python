@@ -14,7 +14,6 @@
 #     def mutate(self, point: ChaosNet) -> ChaosNet:
 #         pass
 #
-# # TODO - B - remove needless code from here
 #
 # class FinalMutationOperator(MutationOperator):
 #     def __init__(self, hrange: HyperparameterRange):
@@ -36,7 +35,6 @@
 #
 #         point.aggrFun = conditional_try_choose_different(lin_pm, point.aggrFun, self.hrange.actFunSet)
 #
-#         # TODO - C - this could prob just be a separate function
 #         rad_frac = 0.1
 #         spectrum = self.hrange.max_hidden - self.hrange.min_hidden
 #         h_rad = max(1, round(spectrum * rad_frac))

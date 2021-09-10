@@ -1,10 +1,10 @@
 import numpy as np
 
-from neural_network.ChaosNet import *
+from neural_network.LsmNetwork import *
 from ann_point.Functions import *
 
 class CNDataPoint():
-    def __init__(self, net: ChaosNet):
+    def __init__(self, net: LsmNetwork):
         self.net = net.copy()
         self.ff = [0]
         self.conf_mat = None

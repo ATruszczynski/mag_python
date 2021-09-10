@@ -4,11 +4,11 @@ from math import ceil
 from sklearn import datasets
 
 from TupleForTest import TupleForTest
-from evolving_classifier.FitnessCalculator import CNFitnessCalculator
+from evolving_classifier.LsmFitnessCalculator import LsmFitnessCalculator
 from evolving_classifier.FitnessFunction import *
-from evolving_classifier.operators.FinalCO3 import FinalCO3
-from evolving_classifier.operators.MutationOperators import FinalMutationOperator
-from evolving_classifier.operators.SelectionOperator import TournamentSelection05
+from evolving_classifier.operators.LsmCrossoverOperator import LsmCrossoverOperator
+from evolving_classifier.operators.LsmMutationOperator import LsmMutationOperator
+from evolving_classifier.operators.SelectionOperator import TournamentSelection95
 from suites.suite_utility import try_check_if_all_tests_computable, trash_can, directory_for_tests
 from tester import run_tests
 from utility.Utility import one_hot_endode, get_doc_hrange_qd, get_doc_hrange_eff
@@ -57,34 +57,22 @@ def test_suite_for_iris():
         power = 12
         seed = 10011001
 
-        # seeds = []
-        # for i in range(4):
-        #     seeds.append(random.randint(0, 10**6))
 
         hrange = get_doc_hrange_eff()
         tests.append(TupleForTest(name=f"iris_500_200_15_meff", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[MEFF], fct=CNFitnessCalculator, reg=False))
+                                  ct=LsmCrossoverOperator, mt=LsmMutationOperator, st=[TournamentSelection95, starg],
+                                  fft=[MEFF], fct=LsmFitnessCalculator, reg=False))
 
         hrange = get_doc_hrange_qd()
         tests.append(TupleForTest(name=f"iris_500_200_15_mixff", rep=repetitions, seed=seed, popSize=population_size,
                                   data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-                                  ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-                                  fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
-        #
-        # hrange = get_doc_hrange_qd()
-        # tests.append(TupleForTest(name=f"iris_500_200_25_mixmeff", rep=repetitions, seed=seed, popSize=population_size,
-        #                           data=[x, y, X, Y], iterations=iterations, hrange=hrange,
-        #                           ct=FinalCO3, mt=FinalMutationOperator, st=[TournamentSelection05, starg],
-        #                           fft=[MIXFF, QuadDiff], fct=CNFitnessCalculator, reg=False))
+                                  ct=LsmCrossoverOperator, mt=LsmMutationOperator, st=[TournamentSelection95, starg],
+                                  fft=[MIXFF, QuadDiff], fct=LsmFitnessCalculator, reg=False))
 
 
-        # try_check_if_all_tests_computable(tests, trash_can, power=power)
-        # net = run_tests(tts=tests, directory_for_tests=directory_for_tests, power=power)[0][0]
-        net = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}final_tests", power=power)[0][0]
-        # for jjj in range(len(x)):
-        #     print(f"{net.run(x[jjj]).T} - {y[jjj].T}")
+
+        net = run_tests(tts=tests, directory_for_tests=f"..{os.path.sep}review_tests", power=power)[0][0]
         restr = net.test(test_input=x, test_output=y)
         print(restr[0])
         print(m_efficiency(restr[0]))

@@ -138,15 +138,3 @@ def test_Measures():
     assert FN == pytest.approx(0.75, abs=1e-4)
     assert FP == pytest.approx(0.4, abs=1e-4)
     assert TN == pytest.approx(0.6, abs=1e-4)
-
-
-
-
-
-# test_copy_2()
-
-
-# test_cndp_constructor()
-# test_add_data()
-# test_gets()
-# test_copy()
