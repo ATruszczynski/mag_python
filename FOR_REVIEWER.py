@@ -13,6 +13,7 @@ import ts_german
 import random
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     seed = 1001
@@ -24,7 +25,7 @@ if __name__ == '__main__':
     tests = []
 
     repetitions = 5
-    population_size = 100
+    population_size = 10
     iterations = 20
     starg = 4
     power = 12
@@ -46,4 +47,6 @@ if __name__ == '__main__':
                      spath="review_eff")
     plot_min_max_avg(frames=data_frames, parameter_name="nc", title="Liczba neuronów", xtitle="iteracje", ytitle="liczba neuronów",
                      spath="review_eff")
+
+    plt.show()
 
